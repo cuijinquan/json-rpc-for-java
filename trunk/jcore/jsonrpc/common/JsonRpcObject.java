@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.yinhai.webframework.session.UserSession;
-
 /***
  * JSON-RPC 服务对象
  * @author 夏天
