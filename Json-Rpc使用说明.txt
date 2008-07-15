@@ -1,3 +1,10 @@
+{{{
+
+继《JavaScript高级应用与实践》之后推出的开源代码：
+http://blog.csdn.net/jxpath
+http://blog.sina.com.cn/jcore
+http://m9m.3322.org
+
 json-rpc-for-java，是仅仅不到100行的javascript代码和不到10个java文件实现的超级轻量级的通过javaScript快速调用java对象并返回任意对象的轻量级框架，并且支持级联调用，也就是说不需要额外的JavaScript编程，就可以通过javascript调用被注册的java对象并返回java对象，如果被返回的对象还有方法，这个在javascript中返回的java对象的变量，你还可以继续调用它的方法.....这就是这个轻量级json-rpc-for-java的神奇之处。
 当返回的是java对象List的时候，在javascript中体现为ArrayList，如果是Map，着体现为js中的Object，其他的和java中的调用基本相同。
 特殊的地方是，通过JS调用java对象方法的时候只能传入简单类型的参数，比如：String,int,float,long等。
@@ -73,3 +80,4 @@ if("dto(aac001)" === o.name && 0 === "aab001".getValue().length)
 //--><!]]></script>
 
  
+}}}
