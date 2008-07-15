@@ -1,5 +1,7 @@
 #labels Featured,演示,示例
-{{{1、根据自己的项目情况，我们重新做了扩展：
+{{{
+
+1、根据自己的项目情况，我们重新做了扩展：
 // Yhsi2JsonRpcObj extends JsonRpcObject
 
 package com.yinhai.yhsi2.web.common;
@@ -524,4 +526,6 @@ fnAddOnload(
 	         r[i].cells[8].style.display = "none", 0 < i && 0 < r[i].cells[0].innerText.trim().length && fnSetAtbt(r[i].cells[7].childNodes[0], 1);
 	   }
 	}
-);}}}
+);
+
+}}}
