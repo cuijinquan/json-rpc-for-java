@@ -1,6 +1,6 @@
 /*
- * 版权所有归《JavaScript高级应用与实践》(电子工业出版社.博文视点)的作者所有
- * V1.2
+ * 版权所有归《JavaScript高级应用与实践》(电子工业出版社.博文视点)的作者夏天所有
+ * V1.3 支持任何语言编码
  * */
 function JsonRpcClient(url) {
 	url || (url = ("undefined" === typeof contextPath ? "." : contextPath) + "/JRPC");
@@ -32,7 +32,10 @@ function JsonRpcClient(url) {
 					200 === _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText), delete _this.xml.onreadystatechange, delete _this.xml;
 				}
 			};
-			this.xml.send(o.data || "");
+			this.xml.send(o.data && o.data.replace(/[\u4E00-\u9FA5]/gm, function()
+			{
+			   return "&#" + arguments[0].charCodeAt(0) + ";";
+			}) || "");
 		}
 	};
 	AJAX({url:url, bAsync:false, clbkFun:function () {
