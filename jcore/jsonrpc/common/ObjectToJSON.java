@@ -87,6 +87,7 @@ public class ObjectToJSON implements Serializable{
 	        return sb.toString();
 	}
 	
+	// 判断对象o实现的所有接口中是否有szInterface
 	public boolean isInterface(String szInterface)
 	{
 		Class []face = o.getClass().getInterfaces();
