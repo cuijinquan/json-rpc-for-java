@@ -5,12 +5,20 @@ http://blog.csdn.net/jxpath
 http://blog.sina.com.cn/jcore
 http://m9m.3322.org
 
-json-rpc-for-java，是仅仅不到100行的javascript代码和不到10个java文件实现的超级轻量级的通过javaScript快速调用java对象并返回任意对象的轻量级框架，并且支持级联调用，也就是说不需要额外的JavaScript编程，就可以通过javascript调用被注册的java对象并返回java对象，如果被返回的对象还有方法，这个在javascript中返回的java对象的变量，你还可以继续调用它的方法.....这就是这个轻量级json-rpc-for-java的神奇之处。
-当返回的是java对象List的时候，在javascript中体现为ArrayList，如果是Map，着体现为js中的Object，其他的和java中的调用基本相同。
-特殊的地方是，通过JS调用java对象方法的时候只能传入简单类型的参数，比如：String,int,float,long等。
+工程svn下载地址：
+http://json-rpc-for-java.googlecode.com/svn/trunk/
+
+json-rpc-for-java，是仅仅不到100行的javascript代码和不到10个java文件实现的超级轻量级的通过
+javaScript快速调用java对象并返回任意对象的轻量级框架，并且支持级联调用，也就是说不需要额外
+的JavaScript编程，就可以通过javascript调用被注册的java对象并返回java对象，如果被返回的对象
+还有方法，这个在javascript中返回的java对象的变量，你还可以继续调用它的方法.....这就是这个轻
+量级json-rpc-for-java的神奇之处。
+当返回的是java对象List的时候，在javascript中体现为ArrayList，如果是Map，着体现为js中的
+Object，其他的和java中的调用基本相同。
+特殊的地方是，通过JS调用java对象方法的时候只能传入简单类型的参数，比
+如：String,int,float,long等。
 
 json rpc for java的使用
-
 0、项目中web.xml需要加入：
 <servlet>
 		<servlet-name>JSONRPCServlet</servlet-name>
@@ -23,7 +31,6 @@ json rpc for java的使用
 		<servlet-name>JSONRPCServlet</servlet-name>
 		<url-pattern>/JRPC</url-pattern>
 </servlet-mapping>
-
 
 1、需要在工程中引入JSON-RPC.jar：
    并在需要使用json-rpc功能的jsp中引入JsonRpcClient.js
@@ -60,7 +67,8 @@ public abstract class JsonRpcObj extends JsonRpcObject {
 
 3、如何在Action中注册用于异步的类对象：
 JsonRpcRegister.registerObject(us, "ac01", JsonRpcObj .class);
-// 其中ac01是我们注册到内存的名字，不能同名，注册的一个对象可以有N个方法，可以用作不同用途的异步处理
+// 其中ac01是我们注册到内存的名字，不能同名，注册的一个对象可以有N个方法，可以用作不同用途
+的异步处理
 // 每个对象只需要注册一次
 
 4、注意点：用于异步的类的方法可以返回任意类型的对象，但是入口参数只能是String、int、Integer
