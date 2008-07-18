@@ -139,6 +139,43 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
+	 * 编码码字符串为html方式编码的中文汉字，例如将：
+	 *  "异常" 编码为 "&#24322;&#24120;" 
+	 * 符合的汉字正则表达式范围是：[\u4E00-\u9FA5]
+	 * @param szStr
+	 * @return
+	 */
+	public String encodeUnicodeHtm(String szStr)
+	{
+		Pattern p = Pattern.compile("[\u4E00-\u9FA5]", Pattern.MULTILINE);
+		Matcher m = p.matcher(szStr);
+		StringBuffer buf = new StringBuffer();
+		while(m.find())
+			m.appendReplacement(buf, "&#" + (int)m.group(0).toCharArray()[0] + ";");
+		m.appendTail(buf);
+		return buf.toString();
+	}
+	
+	/***
+	 * 解码html方式编码的中文汉字
+	 * ，例如将：
+	 *  "&#24322;&#24120;" 解码为 "异常" 
+	 * 符合的汉字正则表达式范围是：[\u4E00-\u9FA5]
+	 * @param szStr
+	 * @return
+	 */
+	public String decodeUnicodeHtm(String szStr)
+	{
+		Pattern p = Pattern.compile("&#(\\d+);", Pattern.MULTILINE);
+		Matcher m = p.matcher(szStr);
+		StringBuffer buf = new StringBuffer();
+		while(m.find())
+			m.appendReplacement(buf, (char)Integer.valueOf(m.group(1)).intValue() + "");
+		m.appendTail(buf);
+		return buf.toString();
+	}
+	
+	/***
 	 * 执行JSON-RPC请求的方法，并返回JSON格式的结果
 	 * @param szParm
 	 * @return
@@ -146,6 +183,7 @@ public class JSONRPCBridge implements Serializable{
 	public String ExecObjectMethod(HttpServletRequest request, String szParm)
 	{
 		try {
+			szParm = decodeUnicodeHtm(szParm);
 			JSONObject oJson = new JSONObject(szParm);
 			String szName = oJson.getString("id"), 
 			       szMeshod = oJson.getString("method");
