@@ -11,6 +11,20 @@ json-rpc-for-java，是仅仅不到100行的javascript代码和不到10个java文件实现的超级轻
 
 json rpc for java的使用
 
+0、项目中web.xml需要加入：
+<servlet>
+		<servlet-name>JSONRPCServlet</servlet-name>
+		<servlet-class>
+			jcore.jsonrpc.servlet.JSONRPCServlet
+		</servlet-class>
+		<load-on-startup>2</load-on-startup>
+</servlet>
+<servlet-mapping>
+		<servlet-name>JSONRPCServlet</servlet-name>
+		<url-pattern>/JRPC</url-pattern>
+</servlet-mapping>
+
+
 1、需要在工程中引入JSON-RPC.jar：
    并在需要使用json-rpc功能的jsp中引入JsonRpcClient.js
 
