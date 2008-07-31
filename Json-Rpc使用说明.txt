@@ -39,7 +39,7 @@ json rpc for javaµÄÊ¹ÓÃ
 package com.jcore.web.common;
 import jcore.jsonrpc.common.JsonRpcObject;
 
-public abstract class JsonRpcObj extends JsonRpcObject {
+public class JsonRpcObj extends JsonRpcObject {
 
 	 public JsonRpcObj() {
 		super();
