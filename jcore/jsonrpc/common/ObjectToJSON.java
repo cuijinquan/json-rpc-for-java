@@ -210,6 +210,7 @@ public class ObjectToJSON implements Serializable{
     	    	}
     	    	return "[" + buf.append("]").toString();
 			}
+			// 如果是其它复合对象，就对其反射并生成其方法信息、属性信息
 			brige.registerObject(this.o.hashCode(), this.o);
 			// 成员方法的处理
 			Method []oMs = c.getMethods();
@@ -253,6 +254,8 @@ public class ObjectToJSON implements Serializable{
 					// 如果不是第一次
 					if(0 < nPos)buf.append(",");
 					// 属性名
+					if("request".equals(f[i].getName()))
+						continue;
 				    buf.append("\"").append(f[i].getName()).append("\":");
 				    // 类型
 				    String szType = f[i].getType().toString();
