@@ -210,6 +210,7 @@ public class JSONRPCBridge implements Serializable{
 						try{setReqeust = cTmp.getDeclaredMethod("setRequest", new Class[]{javax.servlet.http.HttpServletRequest.class});}catch(Exception e){}
 						if(null != cTmp)
 							cTmp = cTmp.getSuperclass();
+						else break;
 					}
 					if(null != setReqeust)
 						setReqeust.invoke(o, new Object[]{request});
