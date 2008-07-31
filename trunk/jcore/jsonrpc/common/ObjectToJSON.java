@@ -118,6 +118,8 @@ public class ObjectToJSON implements Serializable{
 			// 特殊对象的处理
 			if(szClassName.equals("java.lang.String"))
 				return buf.append(quote(o.toString())).toString();
+			else if(szClassName.equals("java.lang.Object"))
+				return buf.append(quote(o.toString())).toString();
 			else if(szClassName.equals("java.util.Date") || szClassName.equals("java.sql.Timestamp"))
 			{
 				Date oDate = (Date)o;
