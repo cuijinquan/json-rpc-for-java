@@ -124,6 +124,7 @@ public class ObjectToJSON implements Serializable{
 			{
 				Date oDate = (Date)o;
 				int m = oDate.getMonth() + 1;
+				// 来看需要返回JavaScript Date类型，就将下面的注释打开
 				// return buf.append("new Date(").append(((Date)o).getTime()).append(")").toString();
 
 				buf.append("'").append(oDate.getYear() + 1900)
