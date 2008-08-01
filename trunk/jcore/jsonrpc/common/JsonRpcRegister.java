@@ -15,7 +15,7 @@ public class JsonRpcRegister {
 	 * @param szKeyName
 	 * @param o
 	 */
-	public static void registerObject(HttpServletRequest request, String szKeyName, Object o)
+	public static void registerObject(HttpServletRequest request, String szKeyName, Class o)
 	{
 		HttpSession session = request.getSession(false);
 		if(null == session)session = request.getSession(true);
@@ -23,6 +23,10 @@ public class JsonRpcRegister {
 		// 如果是第一次就注册对象
 		if(null == brg)
 			 session.setAttribute(Content.RegSessionJSONRPCName, brg = new JSONRPCBridge().setSession(session));
-		brg.registerObject(szKeyName, o);
+		try
+		{
+			brg.registerObject(szKeyName, o.newInstance());
+		}catch(Exception e)
+		{}
 	}
 }
