@@ -379,7 +379,10 @@ public class ObjectToJSON implements Serializable{
 						    // 对象类型
 						    else
 						    {
-						    	buf.append(new ObjectToJSON(oValue, brige).toJSON(null));
+						    	if("sun.reflect.ReflectionFactory".equals(oValue.getClass().getName()))
+						    		buf.append("null");
+						    	else
+						    		buf.append(new ObjectToJSON(oValue, brige).toJSON(null));
 						    }
 					    }
 				    }
