@@ -25,7 +25,9 @@ public class JsonRpcRegister {
 			 session.setAttribute(Content.RegSessionJSONRPCName, brg = new JSONRPCBridge().setSession(session));
 		try
 		{
-			brg.registerObject(szKeyName, o.newInstance());
+			// 防止对象o多次实例化和注册
+			if(null == brg.getObject(szKeyName))
+				brg.registerObject(szKeyName, o.newInstance());
 		}catch(Exception e)
 		{}
 	}
