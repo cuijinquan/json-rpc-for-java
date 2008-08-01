@@ -379,6 +379,7 @@ public class ObjectToJSON implements Serializable{
 						    // 对象类型
 						    else
 						    {
+						    	// 防止使用者不知情的情况下注册一个非实例化的class文件导致堆栈溢出
 						    	if("sun.reflect.ReflectionFactory".equals(oValue.getClass().getName()))
 						    		buf.append("null");
 						    	else
