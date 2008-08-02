@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
  */
 public class JSONRPCBridge implements Serializable{
 	private static final long serialVersionUID = 1L;
+	// 为了集群中使用内存复制使用
 	private HttpSession session = null;
 	// 注册中的对象
 	private Map globalMap = Collections.synchronizedMap(new HashMap());
@@ -55,7 +56,8 @@ public class JSONRPCBridge implements Serializable{
 				// szTmp = szTmp.replaceFirst("\\{", "{name:\"" + oKey.getKey() + "\",");
 				cache.put(oKey.getKey(), szTmp);
 				// 再次调用，以便集群环境下能正常工作
-				session.setAttribute(Content.RegSessionJSONRPCName, this);
+				if(null != session)
+					session.setAttribute(Content.RegSessionJSONRPCName, this);
 			}
 			n++;
 			buf.append(szTmp);
@@ -87,7 +89,7 @@ public class JSONRPCBridge implements Serializable{
 	public JSONRPCBridge registerObject(int nHashCodeName, Object o)
 	{
 		String szKeyName = nHashCodeName + "";
-		if(null != session && null != szKeyName && 0 < szKeyName.trim().length())
+		if(null != szKeyName && 0 < szKeyName.trim().length())
 		{
 			if(null == globalMap.get(szKeyName))
 			{
@@ -95,14 +97,15 @@ public class JSONRPCBridge implements Serializable{
 				globalMap.put(szKeyName, o);
 			}
 			// 再次调用，以便集群环境下能正常工作
-			session.setAttribute(Content.RegSessionJSONRPCName, this);
+			if(null != session)
+				session.setAttribute(Content.RegSessionJSONRPCName, this);
 		}
 		return this;
 	}
 	
 	public JSONRPCBridge registerObject(String szKeyName, Object o)
 	{
-		if(null != session && null != szKeyName && 0 < szKeyName.trim().length())
+		if(null != szKeyName && 0 < szKeyName.trim().length())
 		{
 			if(null == topNms.get(szKeyName))
 				topNms.put(szKeyName, o.hashCode() + "");
@@ -110,6 +113,45 @@ public class JSONRPCBridge implements Serializable{
 		}
 		return this;
 	}
+	
+	/***
+	 * 移除注册的对象
+	 * @param nHashCodeName 利用hashcode注册对象，防止同一实例注册多次
+	 * @return this
+	 */
+	public JSONRPCBridge removeObject(int nHashCodeName)
+	{
+		String szKeyName = nHashCodeName + "";
+		if(null != szKeyName && 0 < szKeyName.trim().length())
+		{
+			if(null == globalMap.get(szKeyName))
+			{
+				// 移除
+				globalMap.remove(szKeyName);
+			}
+			// 再次调用，以便集群环境下能正常工作
+			if(null != session)
+				session.setAttribute(Content.RegSessionJSONRPCName, this);
+		}
+		return this;
+	}
+	
+	/***
+	 * 移除对象
+	 * @param szKeyName
+	 * @param o
+	 * @return
+	 */
+	public JSONRPCBridge removeObject(String szKeyName, Object o)
+	{
+		if(null != szKeyName && 0 < szKeyName.trim().length())
+		{
+			if(null == topNms.get(szKeyName))
+				topNms.remove(szKeyName);
+			return removeObject(o.hashCode());
+		}
+		return this;
+	}	
 	
 	/***
 	 * 判断对象o是否是为不需要注册的"简单"对象
@@ -189,9 +231,26 @@ public class JSONRPCBridge implements Serializable{
 			       szMeshod = oJson.getString("method");
 			JSONArray oParams = (JSONArray)oJson.get("params");
 			
+			// 如果是要求释放对象内存资源
+			if("release".equals(szMeshod))
+			{
+				removeObject(Integer.parseInt(szName));
+				Iterator oIt = topNms.entrySet().iterator();
+				while(oIt.hasNext())
+				{
+					Map.Entry oKey = (Map.Entry)oIt.next();
+					if(szName.equals(oKey.getValue()))
+					{
+						topNms.remove(oKey.getKey());
+						break;
+					}
+				}
+				return "true";
+			}
+			
+			
 			// 对Map和List的注册和获取做特殊处理，因为集合中的每个元素可能是不同的对象，
 			// 因此注册名必须区分开来
-			
 			Object o = getObject(szName);
 			if(null != o)
 			{
@@ -241,7 +300,25 @@ public class JSONRPCBridge implements Serializable{
 							}
 							oTyps = null;
 							oParams = null;
-							Object oRst = m[i].invoke(o, aParam);
+							Object oRst = null;
+							try
+							{
+								oRst = m[i].invoke(o, aParam);
+							} catch (Exception e) {
+								// 如果发生异常，这里自动调用： setErrMsg  填写错误消息
+								Method setErrMsg = null;
+								Class cTmp = o.getClass();
+								while(null == setErrMsg && 0 < i--)
+								{
+									try{setErrMsg = cTmp.getDeclaredMethod("setRequest", new Class[]{java.lang.String.class});}catch(Exception e1){}
+									if(null != cTmp)
+										cTmp = cTmp.getSuperclass();
+									else break;
+								}
+								if(null != setErrMsg)
+									setErrMsg.invoke(o, new Object[]{e.getMessage()});
+								setErrMsg = null;
+							}
 							aParam = null;
 							if(null != oRst)
 							{
