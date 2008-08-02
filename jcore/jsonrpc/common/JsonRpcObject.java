@@ -33,4 +33,29 @@ public abstract class JsonRpcObject implements Serializable
 	{
 		return this.request;
 	}
+	
+	private String errMsg = "";
+	
+	 /***
+	  * 获取异常、错误消息使用
+	  * @return
+	  */
+	public String getErrMsg()
+	{
+		String s = errMsg;
+		errMsg = "";
+		return s;
+	}
+	
+	// 设置异常错误消息
+	public void setErrMsg(String s)
+	{
+		errMsg = s;
+	}
+
+	/* 释放资源
+	 */
+	public void release(){
+	}
+
 }
