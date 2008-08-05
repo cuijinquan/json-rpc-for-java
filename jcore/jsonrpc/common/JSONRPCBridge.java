@@ -29,6 +29,8 @@ public class JSONRPCBridge implements Serializable{
 	
 	// 缓存顶级的被注册对象的JSON格式
 	private Map cache = Collections.synchronizedMap(new HashMap());
+	// 顶级对象链路
+	private Map links = Collections.synchronizedMap(new HashMap());
 	// 顶级被注册的名字
 	private Map topNms = Collections.synchronizedMap(new HashMap());
 	
@@ -81,6 +83,42 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
+	 * 注册父亲对象链路
+	 * @param nSelfHashCode
+	 * @param nParentHashCode
+	 * @return
+	 */
+	public JSONRPCBridge registerParentObject(int nSelfHashCode, int nParentHashCode)
+	{
+		String szKeyName = nSelfHashCode + "";
+		if(null == links.get(szKeyName))
+		{
+			// 注册
+			links.put(szKeyName, nParentHashCode + "");
+		}
+		// 再次调用，以便集群环境下能正常工作
+		if(null != session)
+			session.setAttribute(Content.RegSessionJSONRPCName, this);
+		return this;
+	}
+	
+	public Object getParentObject(int nSelfHashCode)
+	{
+		String szKeyName = nSelfHashCode + "";
+		int nRst = 0;
+		while(0 == nRst)
+		{
+			Object o = links.get(szKeyName);
+			if(null == o)
+				break;
+			nRst = Integer.parseInt((String)o);
+		}
+		if(0 < nRst)
+			return this.getObject(nRst + "");
+		return null;
+	}
+	
+	/***
 	 * 注册对象
 	 * @param nHashCodeName 利用hashcode注册对象，防止同一实例注册多次
 	 * @param o
@@ -89,17 +127,14 @@ public class JSONRPCBridge implements Serializable{
 	public JSONRPCBridge registerObject(int nHashCodeName, Object o)
 	{
 		String szKeyName = nHashCodeName + "";
-		if(null != szKeyName && 0 < szKeyName.trim().length())
+		if(null == globalMap.get(szKeyName))
 		{
-			if(null == globalMap.get(szKeyName))
-			{
-				// 注册
-				globalMap.put(szKeyName, o);
-			}
-			// 再次调用，以便集群环境下能正常工作
-			if(null != session)
-				session.setAttribute(Content.RegSessionJSONRPCName, this);
+			// 注册
+			globalMap.put(szKeyName, o);
 		}
+		// 再次调用，以便集群环境下能正常工作
+		if(null != session)
+			session.setAttribute(Content.RegSessionJSONRPCName, this);
 		return this;
 	}
 	
@@ -235,8 +270,15 @@ public class JSONRPCBridge implements Serializable{
 			// 对Map和List的注册和获取做特殊处理，因为集合中的每个元素可能是不同的对象，
 			// 因此注册名必须区分开来
 			Object o = getObject(szName);
+			
 			if(null != o)
 			{
+				int nParentHashCode = o.hashCode();	
+				
+				Object oParent = this.getParentObject(nParentHashCode);
+				if(null != oParent)
+					nParentHashCode = oParent.hashCode();
+				else oParent = o;
 				
 				Class c = o.getClass();
 				Method []m = c.getMethods();
@@ -290,7 +332,7 @@ public class JSONRPCBridge implements Serializable{
 							} catch (Exception e) {
 								// 如果发生异常，这里自动调用： setErrMsg  填写错误消息
 								Method setErrMsg = null;
-								Class cTmp = o.getClass();
+								Class cTmp = oParent.getClass();
 								while(null == setErrMsg && 0 < i--)
 								{
 									try{setErrMsg = cTmp.getDeclaredMethod("setRequest", new Class[]{java.lang.String.class});}catch(Exception e1){}
@@ -299,7 +341,7 @@ public class JSONRPCBridge implements Serializable{
 									else break;
 								}
 								if(null != setErrMsg)
-									setErrMsg.invoke(o, new Object[]{e.getMessage()});
+									setErrMsg.invoke(oParent, new Object[]{e.getMessage()});
 								setErrMsg = null;
 							}
 							aParam = null;
@@ -307,7 +349,10 @@ public class JSONRPCBridge implements Serializable{
 							{
 								// 不是简单类型就注册他
 								if(!isSimpleType(oRst))
-									registerObject(oRst.hashCode(), oRst);
+								{
+									// 设置顶级对象
+									registerObject(oRst.hashCode(), oRst).registerParentObject(oRst.hashCode(), nParentHashCode);
+								}
 								String szOut = new ObjectToJSON(oRst, this).toJSON(null);
 								return szOut;
 							}
