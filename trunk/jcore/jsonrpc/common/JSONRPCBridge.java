@@ -333,6 +333,7 @@ public class JSONRPCBridge implements Serializable{
 								// 如果发生异常，这里自动调用： setErrMsg  填写错误消息
 								Method setErrMsg = null;
 								Class cTmp = oParent.getClass();
+								i = 20;
 								while(null == setErrMsg && 0 < i--)
 								{
 									try{setErrMsg = cTmp.getDeclaredMethod("setRequest", new Class[]{java.lang.String.class});}catch(Exception e1){}
