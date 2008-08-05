@@ -5,6 +5,8 @@ import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -69,6 +71,26 @@ public class JSONRPCServlet extends HttpServlet {
 		}
 		
 	}
+	
+	/***
+	 * 编码码字符串为html方式编码的中文汉字，例如将：
+	 *  "异常" 编码为 "&#24322;&#24120;" 
+	 * 符合的汉字正则表达式范围是：[\u4E00-\u9FA5]
+	 * @param szStr
+	 * @return
+	 */
+	public String encodeUnicodeHtm(String szStr)
+	{
+		if(null == szStr || 0 == szStr.trim().length())
+			return szStr;
+		Pattern p = Pattern.compile("[\u4E00-\u9FA5]", Pattern.MULTILINE);
+		Matcher m = p.matcher(szStr);
+		StringBuffer buf = new StringBuffer();
+		while(m.find())
+			m.appendReplacement(buf, "&#" + (int)m.group(0).toCharArray()[0] + ";");
+		m.appendTail(buf);
+		return buf.toString();
+	}
 
     public void service(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ClassCastException {
@@ -98,7 +120,7 @@ public class JSONRPCServlet extends HttpServlet {
             String szData = data.toString();
             byte[] bout = null;
             if(null != szData && 0 < szData.length())
-            	bout = brg.ExecObjectMethod(request, szData).toString().getBytes("UTF-8");
+            	bout = encodeUnicodeHtm(brg.ExecObjectMethod(request, szData).toString()).getBytes("UTF-8");
             // 返回注册中的对象
             else
             {
