@@ -102,6 +102,24 @@ public class JSONRPCBridge implements Serializable{
 		return this;
 	}
 	
+	/***
+	 * 移除对象对应的顶级对象的注册信息
+	 * @param nSelfHashCode
+	 */
+	public void removeParentRegInfo(int nSelfHashCode)
+	{
+		String szKeyName = nSelfHashCode + "";
+		links.remove(szKeyName);
+		// 再次调用，以便集群环境下能正常工作
+		if(null != session)
+			session.setAttribute(Content.RegSessionJSONRPCName, this);
+	}
+	
+	/***
+	 * 获取对象的顶级对象
+	 * @param nSelfHashCode
+	 * @return
+	 */
 	public Object getParentObject(int nSelfHashCode)
 	{
 		String szKeyName = nSelfHashCode + "";
@@ -249,9 +267,12 @@ public class JSONRPCBridge implements Serializable{
 			       szMeshod = oJson.getString("method");
 			JSONArray oParams = (JSONArray)oJson.get("params");
 			
+			Object o = getObject(szName);
+			
 			// 如果是要求释放对象内存资源
 			if("release".equals(szMeshod))
 			{
+				// 移除对象注册信息
 				removeObject(Integer.parseInt(szName));
 				Iterator oIt = topNms.entrySet().iterator();
 				while(oIt.hasNext())
@@ -263,13 +284,11 @@ public class JSONRPCBridge implements Serializable{
 						break;
 					}
 				}
+				// 移除顶级对象注册信息
+				if(null != o)
+					removeParentRegInfo(o.hashCode());
 				return "true";
 			}
-			
-			
-			// 对Map和List的注册和获取做特殊处理，因为集合中的每个元素可能是不同的对象，
-			// 因此注册名必须区分开来
-			Object o = getObject(szName);
 			
 			if(null != o)
 			{
