@@ -7,8 +7,16 @@
 
 [http://m9m.3322.org 作者网站]
 
+= 支持的浏览器 =
+IE4、IE5、IE6、IE7、IE8、
+FireFox、Opera、Safari等等
+
 == 工程svn下载地址 ==
 http://json-rpc-for-java.googlecode.com/svn/trunk/
+== 示例工程下载地址 ==
+测试环境：MyEclipse、Jre1.4、tomcat 5.0
+如果你要测试，可以采用相应的环境，不一定要那么高版本的环境
+http://json-rpc-for-java.googlecode.com/files/JsonRpcExample2008-08-05.rar
 
 = 概述 =
 json-rpc-for-java，是仅仅不到100行的javascript代码和不到10个java文件实现的超级轻量级的通过
@@ -100,9 +108,9 @@ if("dto(aac001)" === o.name && 0 === "aab001".getValue().length)
 		  ;
 	  }
   }
+// 2008-08-02 增加自动拦截异常消息功能，因此在你写的代码中不需要编写try catch
 // 如果有异常消息，可以在js中调用rpc.getErrMsg()获得
 // 如果需要释放被注册名为ac01的对象JsonRpcObj，可以在js中调用rpc.release();
 
 //--><!]]></script>
 }}}
-
