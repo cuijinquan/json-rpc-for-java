@@ -180,23 +180,6 @@ public class JSONRPCBridge implements Serializable{
 		return false;
 	}
 	
-	/***
-	 * 编码码字符串为html方式编码的中文汉字，例如将：
-	 *  "异常" 编码为 "&#24322;&#24120;" 
-	 * 符合的汉字正则表达式范围是：[\u4E00-\u9FA5]
-	 * @param szStr
-	 * @return
-	 */
-	public String encodeUnicodeHtm(String szStr)
-	{
-		Pattern p = Pattern.compile("[\u4E00-\u9FA5]", Pattern.MULTILINE);
-		Matcher m = p.matcher(szStr);
-		StringBuffer buf = new StringBuffer();
-		while(m.find())
-			m.appendReplacement(buf, "&#" + (int)m.group(0).toCharArray()[0] + ";");
-		m.appendTail(buf);
-		return buf.toString();
-	}
 	
 	/***
 	 * 解码html方式编码的中文汉字

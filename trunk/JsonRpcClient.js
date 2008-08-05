@@ -1,6 +1,6 @@
 /*
- * °æÈ¨ËùÓĞ¹é¡¶JavaScript¸ß¼¶Ó¦ÓÃÓëÊµ¼ù¡·(µç×Ó¹¤Òµ³ö°æÉç.²©ÎÄÊÓµã)µÄ×÷ÕßÏÄÌìËùÓĞ
- * V1.3 Ö§³ÖÈÎºÎÓïÑÔ±àÂë
+ * ç‰ˆæƒæ‰€æœ‰å½’ã€ŠJavaScripté«˜çº§åº”ç”¨ä¸å®è·µã€‹(ç”µå­å·¥ä¸šå‡ºç‰ˆç¤¾.åšæ–‡è§†ç‚¹)çš„ä½œè€…å¤å¤©æ‰€æœ‰
+ * V1.3 æ”¯æŒä»»ä½•è¯­è¨€ç¼–ç 
  * */
 function JsonRpcClient(url) {
 	url || (url = ("undefined" === typeof contextPath ? "." : contextPath) + "/JRPC");
@@ -29,7 +29,10 @@ function JsonRpcClient(url) {
 			this.xml.setRequestHeader("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; Alexa Toolbar; Maxthon 2.0)");
 			this.xml.onreadystatechange = function () {
 				if (4 === _this.xml.readyState) {
-					200 === _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText), delete _this.xml.onreadystatechange, delete _this.xml;
+					200 === _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText.replace(/&#(\d+);/gm, function()
+			        {
+			           return String.fromCharCode(arguments[1]);
+			        })), delete _this.xml.onreadystatechange, delete _this.xml;
 				}
 			};
 			this.xml.send(o.data && o.data.replace(/[\u4E00-\u9FA5]/gm, function()
