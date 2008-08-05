@@ -177,11 +177,8 @@ public class JSONRPCBridge implements Serializable{
 		String szKeyName = nHashCodeName + "";
 		if(null != szKeyName && 0 < szKeyName.trim().length())
 		{
-			if(null == globalMap.get(szKeyName))
-			{
-				// 移除
-				globalMap.remove(szKeyName);
-			}
+			// 移除
+			globalMap.remove(szKeyName);
 			// 再次调用，以便集群环境下能正常工作
 			if(null != session)
 				session.setAttribute(Content.RegSessionJSONRPCName, this);
@@ -199,8 +196,7 @@ public class JSONRPCBridge implements Serializable{
 	{
 		if(null != szKeyName && 0 < szKeyName.trim().length())
 		{
-			if(null == topNms.get(szKeyName))
-				topNms.remove(szKeyName);
+			topNms.remove(szKeyName);
 			return removeObject(o.hashCode());
 		}
 		return this;
