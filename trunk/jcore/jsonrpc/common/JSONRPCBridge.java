@@ -120,7 +120,7 @@ public class JSONRPCBridge implements Serializable{
 			if(szKeyName.equals(szChildId))
 			{
 				links.remove(szChildId);
-				removeObject(Integer.parseInt(szChildId));
+				removeObject(Integer.parseInt((String)oKey.getKey()));
 			}
 		}
 
