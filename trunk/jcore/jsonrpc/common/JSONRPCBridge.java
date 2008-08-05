@@ -110,6 +110,21 @@ public class JSONRPCBridge implements Serializable{
 	{
 		String szKeyName = nSelfHashCode + "";
 		links.remove(szKeyName);
+		
+		// 移除子对象
+		Iterator oIt = links.entrySet().iterator();
+		while(oIt.hasNext())
+		{
+			Map.Entry oKey = (Map.Entry)oIt.next();
+			String szChildId = (String)oKey.getValue();
+			if(szKeyName.equals(szChildId))
+			{
+				links.remove(szChildId);
+				removeObject(Integer.parseInt(szChildId));
+			}
+		}
+
+		
 		// 再次调用，以便集群环境下能正常工作
 		if(null != session)
 			session.setAttribute(Content.RegSessionJSONRPCName, this);
@@ -262,35 +277,33 @@ public class JSONRPCBridge implements Serializable{
 			
 			Object o = getObject(szName);
 			
-			// 如果是要求释放对象内存资源
-			if("release".equals(szMeshod))
-			{
-				// 移除对象注册信息
-				removeObject(o.hashCode());
-				Iterator oIt = topNms.entrySet().iterator();
-				while(oIt.hasNext())
-				{
-					Map.Entry oKey = (Map.Entry)oIt.next();
-					if(szName.equals(oKey.getValue()))
-					{
-						topNms.remove(oKey.getKey());
-						break;
-					}
-				}
-				// 移除顶级对象注册信息
-				if(null != o)
-					removeParentRegInfo(o.hashCode());
-				return "true";
-			}
-			
 			if(null != o)
 			{
-				int nParentHashCode = o.hashCode();	
-				
+				int nParentHashCode = o.hashCode();
 				Object oParent = this.getParentObject(nParentHashCode);
 				if(null != oParent)
 					nParentHashCode = oParent.hashCode();
 				else oParent = o;
+				
+				// 如果是要求释放对象内存资源
+				if("release".equals(szMeshod))
+				{
+					// 移除对象注册信息
+					removeObject(oParent.hashCode());
+					Iterator oIt = topNms.entrySet().iterator();
+					while(oIt.hasNext())
+					{
+						Map.Entry oKey = (Map.Entry)oIt.next();
+						if(szName.equals(oKey.getValue()))
+						{
+							topNms.remove(oKey.getKey());
+							break;
+						}
+					}
+					// 移除顶级对象注册信息
+					removeParentRegInfo(oParent.hashCode());
+					return "true";
+				}
 				
 				Class c = o.getClass();
 				Method []m = c.getMethods();
