@@ -336,13 +336,18 @@ public class JSONRPCBridge implements Serializable{
 								i = 20;
 								while(null == setErrMsg && 0 < i--)
 								{
-									try{setErrMsg = cTmp.getDeclaredMethod("setRequest", new Class[]{java.lang.String.class});}catch(Exception e1){}
+									try{setErrMsg = cTmp.getDeclaredMethod("setErrMsg", new Class[]{java.lang.String.class});}catch(Exception e1){}
 									if(null != cTmp)
 										cTmp = cTmp.getSuperclass();
 									else break;
 								}
 								if(null != setErrMsg)
-									setErrMsg.invoke(oParent, new Object[]{e.getMessage()});
+								{
+									String szErrMsg = e.getMessage();
+									if(null == szErrMsg && null != e.getCause())
+										szErrMsg = e.getCause().getMessage();
+									setErrMsg.invoke(oParent, new Object[]{szErrMsg});
+								}
 								setErrMsg = null;
 							}
 							aParam = null;
