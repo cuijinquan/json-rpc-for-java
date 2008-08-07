@@ -217,10 +217,6 @@ public class JSONObject {
      */
     public Object get(String key) throws NoSuchElementException {
         Object o = opt(key);
-//        if (o == null) {
-//            throw new NoSuchElementException("JSONObject[" +
-//                quote(key) + "] not found.");
-//        }
         return o;
     }
 
