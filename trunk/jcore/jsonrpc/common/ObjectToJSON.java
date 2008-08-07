@@ -12,6 +12,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import test.ITest;
+import test.Test1;
+import test.Test2;
+import test.Test3;
+
 /***
  * 对象转换为json的串形式
  * @author 夏天
@@ -88,8 +93,18 @@ public class ObjectToJSON implements Serializable{
 	}
 	
 	/***************************************************************************
-	 * 判断对象o实现的所有接口中是否有szInterface 2008-08-07 修正多继承中判断接口的功能，以及修正接口继承后的判断功能
+	 * 判断对象o实现的所有接口中是否有szInterface 
+	 * 2008-08-07 修正多继承中判断接口的功能，
+	 * 以及修正接口继承后的判断功能
+	 * package test;
 	 * 
+	 * public interface ITest extends Serializable
+	 * public class Test1 implements ITest
+	 * public class Test2 extends Test1
+	 * public class Test3 extends Test2 
+	 * 
+	 * isInterface(Test3.class, "java.io.Serializable") = true
+	 * isInterface(Test3.class, "test.ITest") = true
 	 * @param c
 	 * @param szInterface
 	 * @return
