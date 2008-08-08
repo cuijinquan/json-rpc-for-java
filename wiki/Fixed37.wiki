@@ -22,21 +22,35 @@ jcore\jsonrpc\common\ObjectToJSON.java
 	 * @param szInterface
 	 * @return
 	 */
-	public boolean isInterface(Class c, String szInterface) {
+	public boolean isInterface(Class c, String szInterface)
+	{
 		Class[] face = c.getInterfaces();
-		for (int i = 0, j = face.length; i < j; i++) {
-			if (face[i].getName().equals(szInterface)) {
+		for (int i = 0, j = face.length; i < j; i++) 
+		{
+			if(face[i].getName().equals(szInterface))
+			{
 				return true;
-			} else {
+			}
+			else
+			{ 
 				Class[] face1 = face[i].getInterfaces();
-				for (int x = 0; x < face1.length; x++)
-					if (face1[x].getName().equals(szInterface)) {
+				for(int x = 0; x < face1.length; x++)
+				{
+					if(face1[x].getName().equals(szInterface))
+					{
 						return true;
 					}
+					else if(isInterface(face1[x], szInterface))
+					{
+						return true;
+					}
+				}
 			}
 		}
 		if (null != c.getSuperclass())
+		{
 			return isInterface(c.getSuperclass(), szInterface);
+		}
 		return false;
 	}
 }}}
