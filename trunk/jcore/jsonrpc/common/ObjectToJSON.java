@@ -99,12 +99,14 @@ public class ObjectToJSON implements Serializable{
 	 * package test;
 	 * 
 	 * public interface ITest extends Serializable
-	 * public class Test1 implements ITest
+	 * public interface ITest1 extends ITest
+	 * public class Test1 implements ITest1
 	 * public class Test2 extends Test1
 	 * public class Test3 extends Test2 
 	 * 
 	 * isInterface(Test3.class, "java.io.Serializable") = true
 	 * isInterface(Test3.class, "test.ITest") = true
+	 * isInterface(Test3.class, "test.ITest1") = true
 	 * @param c
 	 * @param szInterface
 	 * @return
