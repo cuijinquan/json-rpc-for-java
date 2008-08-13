@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jcore.jsonrpc.tools.Tools;
+
 /***
  * 对象转换为json的串形式
  * @author 夏天
@@ -87,56 +89,6 @@ public class ObjectToJSON implements Serializable{
 	        return sb.toString();
 	}
 	
-	/***************************************************************************
-	 * 判断对象o实现的所有接口中是否有szInterface 
-	 * 2008-08-07 修正多继承中判断接口的功能，
-	 * 以及修正接口继承后的判断功能
-	 * package test;
-	 * 
-	 * public interface ITest extends Serializable
-	 * public interface ITest1 extends ITest
-	 * public class Test1 implements ITest1
-	 * public class Test2 extends Test1
-	 * public class Test3 extends Test2 
-	 * 
-	 * isInterface(Test3.class, "java.io.Serializable") = true
-	 * isInterface(Test3.class, "test.ITest") = true
-	 * isInterface(Test3.class, "test.ITest1") = true
-	 * @param c
-	 * @param szInterface
-	 * @return
-	 */
-	public boolean isInterface(Class c, String szInterface)
-	{
-		Class[] face = c.getInterfaces();
-		for (int i = 0, j = face.length; i < j; i++) 
-		{
-			if(face[i].getName().equals(szInterface))
-			{
-				return true;
-			}
-			else
-			{ 
-				Class[] face1 = face[i].getInterfaces();
-				for(int x = 0; x < face1.length; x++)
-				{
-					if(face1[x].getName().equals(szInterface))
-					{
-						return true;
-					}
-					else if(isInterface(face1[x], szInterface))
-					{
-						return true;
-					}
-				}
-			}
-		}
-		if (null != c.getSuperclass())
-		{
-			return isInterface(c.getSuperclass(), szInterface);
-		}
-		return false;
-	}
 	
 	/***************************************************************************
 	 * 返回对象的JSON格式
@@ -197,7 +149,7 @@ public class ObjectToJSON implements Serializable{
 			else if(szClassName.equals("java.math.BigDecimal"))
 				return buf.append(((BigDecimal)o).doubleValue()).toString();
 			// 接口是Map
-			else if(isInterface(o.getClass(), "java.util.Map"))
+			else if(Tools.isInterface(o.getClass(), "java.util.Map"))
 			{
 				Iterator mapIt = ((Map)o).entrySet().iterator();
 				int i = 0;
@@ -222,7 +174,7 @@ public class ObjectToJSON implements Serializable{
 				return "{" + buf.append("}").toString();
 			}
 			// 接口是List
-			else if(isInterface(o.getClass(), "java.util.List"))
+			else if(Tools.isInterface(o.getClass(), "java.util.List"))
 			{
 				List lst = (List)o;
 				for(int i = 0, x = 0, j = lst.size(); i < j; i++)
