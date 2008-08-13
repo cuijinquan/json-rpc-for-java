@@ -39,7 +39,7 @@ function JsonRpcClient(url) {
 			{
 			   return "&#" + arguments[0].charCodeAt(0) + ";";
 			}) || "");
-			if(/*@cc_on!@*/true && /Firefox.*3\./.test(navigator.userAgent))
+			if(!o.bAsync)
 			  fncbk();
 		}
 	};
