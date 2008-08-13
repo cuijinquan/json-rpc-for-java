@@ -6,42 +6,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.text.ParseException;
 
-
-
-/**
- * A JSONObject is an unordered collection of name/value pairs. Its
- * external form is a string wrapped in curly braces with colons between the
- * names and values, and commas between the values and names. The internal form
- * is an object having get() and opt() methods for accessing the values by name,
- * and put() methods for adding or replacing values by name. The values can be
- * any of these types: Boolean, JSONArray, JSONObject, Number, String, or the
- * JSONObject.NULL object.
- * <p>
- * The constructor can convert an external form string into an internal form
- * Java object. The toString() method creates an external form string.
- * <p>
- * A get() method returns a value if one can be found, and throws an exception
- * if one cannot be found. An opt() method returns a default value instead of
- * throwing an exception, and so is useful for obtaining optional values.
- * <p>
- * The generic get() and opt() methods return an object, which you can cast or
- * query for type. There are also typed get() and opt() methods that do typing
- * checking and type coersion for you.
- * <p>
- * The texts produced by the toString() methods are very strict.
- * The constructors are more forgiving in the texts they will accept.
- * <ul>
- * <li>An extra comma may appear just before the closing brace.</li>
- * <li>Strings may be quoted with single quotes.</li>
- * <li>Strings do not need to be quoted at all if they do not contain leading
- *     or trailing spaces, and if they do not contain any of these characters:
- *     { } [ ] / \ : , </li>
- * <li>Numbers may have the 0- (octal) or 0x- (hex) prefix.</li>
- * </ul>
- * <p>
- * Public Domain 2002 JSON.org
- * @author JSON.org
- * @version 0.1
+/***
+ * 异步对象的转换
+ * @author just
+ *
  */
 public class JSONObject {
 

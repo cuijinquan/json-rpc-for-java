@@ -2,10 +2,8 @@ package jcore.jsonrpc.common;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,6 +12,8 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import jcore.jsonrpc.tools.Tools;
 
 /***
  * 
@@ -261,6 +261,7 @@ public class JSONRPCBridge implements Serializable{
 		return buf.toString();
 	}
 	
+
 	/***
 	 * 执行JSON-RPC请求的方法，并返回JSON格式的结果
 	 * @param szParm
@@ -307,48 +308,37 @@ public class JSONRPCBridge implements Serializable{
 				}
 				
 				Class c = o.getClass();
+				// 获取对象的方法列表
 				Method []m = c.getMethods();
 				
 				// 注入 reqeust 对象 start
 				try
 				{
-					Class cTmp = c.getSuperclass();
-					int i = 10;
-					Method setReqeust = null;
-					while(null == setReqeust && 0 < i--)
-					{
-						try{setReqeust = cTmp.getDeclaredMethod("setRequest", new Class[]{javax.servlet.http.HttpServletRequest.class});}catch(Exception e){}
-						if(null != cTmp)
-							cTmp = cTmp.getSuperclass();
-						else break;
-					}
+					Method setReqeust = Tools.getSpecifyNameMethod(c, new Class[]{javax.servlet.http.HttpServletRequest.class}, "setRequest");
 					if(null != setReqeust)
 						setReqeust.invoke(o, new Object[]{request});
 					setReqeust = null;
 				}catch(Exception e){e.printStackTrace();}
 				// 注入 reqeust 对象 end
 				
+				// 这里不能采用getSpecifyNameMethod获取方法的原因是，因为参数可能有复合对象
 				for(int i = 0; i < m.length; i++)
 				{
+					// 函数名匹配，参数个数也必须同时匹配，才进行执行
 					if(szMeshod.equals(m[i].getName()) && oParams.length() == m[i].getParameterTypes().length)
 					{
 						try {
 							// 构造参数
 							Object []aParam = new Object[oParams.length()];
+							// 函数参数类型
 							Class []oTyps = m[i].getParameterTypes();
+							// 构造参数对象
 							for(int j = 0; j < aParam.length; j++)
 							{
-								aParam[j] = oParams.get(j);
-								String szNm = oTyps[j].getName();
-								if(!szNm.equals(aParam[j].getClass().getName()))
-								{
-									if(szNm.equals("java.util.Date"))
-										aParam[j] = (Object)new Date(Long.parseLong(aParam[j].toString()));
-									else if(szNm.equals("java.math.BigDecimal"))
-										aParam[j] = (Object)new BigDecimal(aParam[j].toString());
-									else if(szNm.equals("java.lang.Float"))
-										aParam[j] = (Object)new Float(aParam[j].toString());
-								}
+								
+//								// 如果类型不匹配，就进行一系列转换
+								// 将整数向日期进行转换
+								aParam[j] = Tools.convertObject(oTyps[j], aParam[j] = oParams.get(j));
 							}
 							oTyps = null;
 							oParams = null;
@@ -357,23 +347,15 @@ public class JSONRPCBridge implements Serializable{
 							{
 								oRst = m[i].invoke(o, aParam);
 							} catch (Exception e) {
-								// 如果发生异常，这里自动调用： setErrMsg  填写错误消息
-								Method setErrMsg = null;
-								Class cTmp = oParent.getClass();
-								i = 20;
-								while(null == setErrMsg && 0 < i--)
-								{
-									try{setErrMsg = cTmp.getDeclaredMethod("setErrMsg", new Class[]{java.lang.String.class});}catch(Exception e1){}
-									if(null != cTmp)
-										cTmp = cTmp.getSuperclass();
-									else break;
-								}
+								// 如果发生异常，这里自动调用： setErrMsg  注入异常错误消息
+								Method setErrMsg = Tools.getSpecifyNameMethod(oParent.getClass(),new Class[]{java.lang.String.class},"setErrMsg");
 								if(null != setErrMsg)
 								{
 									String szErrMsg = e.getMessage();
 									if(null == szErrMsg && null != e.getCause())
 										szErrMsg = e.getCause().getMessage();
-									setErrMsg.invoke(oParent, new Object[]{szErrMsg});
+									// 注入异常消息
+									try{setErrMsg.invoke(oParent, new Object[]{szErrMsg});} catch (Exception e1) {}
 								}
 								setErrMsg = null;
 							}
