@@ -50,14 +50,26 @@ function JsonRpcClient(url) {
 		var params = _A(arguments), cbk = params[0], bAsync = "function" === typeof (cbk || ""), oRst = {};
 		bAsync && params.shift();
 		AJAX({url:this.url, bAsync:bAsync, data:"{\"method\":\"" + this.methodName + "\",id:\"" + this.id + "\",\"params\":" + (function (arg) {
-			var b = [], szTp;
-			for (var i = 0; i < arg.length; i++) {
-				if ("number" === (szTp = typeof arg[i]) || "boolean" === szTp) {
-					b.push(arg[i]);
-				} else {
-					b.push("\"" + (arg[i] || "").toString().replace(/([\r\n\t\b\f"])/gm, "\\$1") + "\"");
-				}
-			}
+			var b = [], szTp ,o2json = function(oTmp1)
+			{
+			   var k, aTmp = [], fnTmp = function(oTmp)
+			   {
+				   if ("number" === (szTp = typeof oTmp))
+				       return isFinite(oTmp) ? oTmp : 0;
+				   else if("boolean" === szTp || null == oTmp)
+						return oTmp;
+				   else return "\"" + (arg[i] || "").toString().replace(/([\r\n\t\b\f"])/gm, "\\$1") + "\"";
+			   };// 限制只处理一级深度的对象
+			   if("object" === typeof oTmp1 && oTmp1)
+			   {
+			      for(k in oTmp1)
+			         aTmp.push(fnTmp(oTmp1[k]));
+			      return "\"{" + aTmp.join(",").replace(/([\r\n\t\b\f"])/gm, "\\$1") + "}\"";			
+			   }
+			   else return fnTmp(oTmp1);
+			};
+			for (var i = 0; i < arg.length; i++)
+			    b.push(o2json(arg[i]));
 			return "[" + b.join(",") + "]";
 		})(params) + "}", clbkFun:function () {
 			try {
@@ -65,19 +77,12 @@ function JsonRpcClient(url) {
 				if (null != oTmp && "object" === typeof oTmp) {
 					if (Array === (oTmp["constructor"] || "")) {
 						oRst = [];
-						for (var i = 0; i < oTmp.length; i++) {
-							if ("object" === typeof oTmp[i]) {
+						for (var i = 0; i < oTmp.length; i++)
+							if ("object" === typeof oTmp[i])
 								_this.fnMakeObj(oTmp[i], oRst[i] = {});
-							} else {
-								oRst[i] = oTmp[i];
-							}
-						}
-					} else {
-						_this.fnMakeObj(oTmp, oRst);
-					}
-				} else {
-					oRst = oTmp;
-				}
+							else oRst[i] = oTmp[i];
+					} else _this.fnMakeObj(oTmp, oRst);
+				} else oRst = oTmp;
 				bAsync && cbk.apply(oRst, [oRst]);
 			}catch (e){}
 		}});
@@ -92,11 +97,9 @@ function JsonRpcClient(url) {
 					oT[o[k][i]] = bind(fnRpcCall, {url:_this.url, methodName:o[k][i], id:o.id});
 				delete o[k];
 			} else {
-				if (o[k] && "object" === o[k]["constructor"]) {
+				if (o[k] && "object" === o[k]["constructor"])
 					o[k]["name"] = k, _this.fnMakeObj(o[k], oT);
-				} else {
-					oT[k] = o[k];
-				}
+				else oT[k] = o[k];
 			}
 		}
 	};
