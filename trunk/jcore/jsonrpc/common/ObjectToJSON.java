@@ -12,11 +12,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import test.ITest;
-import test.Test1;
-import test.Test2;
-import test.Test3;
-
 /***
  * 对象转换为json的串形式
  * @author 夏天
