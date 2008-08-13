@@ -254,7 +254,7 @@ public class ObjectToJSON implements Serializable{
 	    	    	for(int j = 1; j < tmp09.length; j++)
 	    	    	{
 	    	    		if(null != tmp09[j])
-	    	    		buf.append(",").append(new ObjectToJSON(tmp09[j], brige).toJSON(null));
+	    	    			buf.append(",").append(new ObjectToJSON(tmp09[j], brige).toJSON(null));
 	    	    	}
     	    	}
     	    	return "[" + buf.append("]").toString();

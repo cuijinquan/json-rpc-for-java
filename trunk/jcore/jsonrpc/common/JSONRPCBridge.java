@@ -308,7 +308,7 @@ public class JSONRPCBridge implements Serializable{
 				Class c = o.getClass();
 				Method []m = c.getMethods();
 				
-				// 注入 reqeust 对象
+				// 注入 reqeust 对象 start
 				try
 				{
 					Class cTmp = c.getSuperclass();
@@ -325,6 +325,7 @@ public class JSONRPCBridge implements Serializable{
 						setReqeust.invoke(o, new Object[]{request});
 					setReqeust = null;
 				}catch(Exception e){e.printStackTrace();}
+				// 注入 reqeust 对象 end
 				
 				for(int i = 0; i < m.length; i++)
 				{
