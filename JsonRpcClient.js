@@ -106,6 +106,7 @@ function JsonRpcClient(url) {
 			}
 		}
 	};
+	if(obj)
 	for (var i = 0; i < obj.length; i++) {
 		this.fnMakeObj(obj[i], _this);
 	}
