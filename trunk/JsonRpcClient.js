@@ -32,9 +32,9 @@ function JsonRpcClient(url) {
 			this.xml.open("POST", o.url, o.bAsync, "", "");
 			this.xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 			this.xml.setRequestHeader("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; Alexa Toolbar; Maxthon 2.0)");
-			this.xml.onreadystatechange = function () {
+			o.bAsync && (this.xml.onreadystatechange = function () {
 				fncbk();
-			};
+			});
 			this.xml.send(o.data && o.data.replace(/[\u4E00-\u9FA5]/gm, function()
 			{
 			   return "&#" + arguments[0].charCodeAt(0) + ";";
