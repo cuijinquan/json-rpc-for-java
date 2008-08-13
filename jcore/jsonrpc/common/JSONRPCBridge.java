@@ -274,12 +274,13 @@ public class JSONRPCBridge implements Serializable{
 			String szName = oJson.getString("id"), 
 			       szMeshod = oJson.getString("method");
 			JSONArray oParams = (JSONArray)oJson.get("params");
-			
+			// 获取代理的对象
 			Object o = getObject(szName);
 			
 			if(null != o)
 			{
 				int nParentHashCode = o.hashCode();
+				// 获取对象的顶级对象
 				Object oParent = this.getParentObject(nParentHashCode);
 				if(null != oParent)
 					nParentHashCode = oParent.hashCode();
