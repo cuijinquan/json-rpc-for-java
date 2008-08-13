@@ -58,12 +58,12 @@ function JsonRpcClient(url) {
 				       return isFinite(oTmp) ? oTmp : 0;
 				   else if("boolean" === szTp || null == oTmp)
 						return oTmp;
-				   else return "\"" + (arg[i] || "").toString().replace(/([\r\n\t\b\f"])/gm, "\\$1") + "\"";
+				   else return "\"" + (oTmp || "").toString().replace(/([\r\n\t\b\f"])/gm, "\\$1") + "\"";
 			   };// 限制只处理一级深度的对象
 			   if("object" === typeof oTmp1 && oTmp1)
 			   {
 			      for(k in oTmp1)
-			         aTmp.push(fnTmp(oTmp1[k]));
+			         aTmp.push("'" + k + "':" + fnTmp(oTmp1[k]));
 			      return "\"{" + aTmp.join(",").replace(/([\r\n\t\b\f"])/gm, "\\$1") + "}\"";			
 			   }
 			   else return fnTmp(oTmp1);
