@@ -22,23 +22,25 @@ function JsonRpcClient(url) {
 		if (window === this) {
 			return new AJAX(o);
 		}
-		var _this = this;
+		var _this = this, fncbk = function(){if (4 === _this.xml.readyState) {
+					200 === _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText.replace(/&#(\d+);/gm, function()
+			        {
+			           return String.fromCharCode(arguments[1]);
+			        })), delete _this.xml.onreadystatechange, delete _this.xml;
+				}};
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
 			this.xml.open("POST", o.url, o.bAsync, "", "");
 			this.xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 			this.xml.setRequestHeader("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; Alexa Toolbar; Maxthon 2.0)");
 			this.xml.onreadystatechange = function () {
-				if (4 === _this.xml.readyState) {
-					200 === _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText.replace(/&#(\d+);/gm, function()
-			        {
-			           return String.fromCharCode(arguments[1]);
-			        })), delete _this.xml.onreadystatechange, delete _this.xml;
-				}
+				fncbk();
 			};
 			this.xml.send(o.data && o.data.replace(/[\u4E00-\u9FA5]/gm, function()
 			{
 			   return "&#" + arguments[0].charCodeAt(0) + ";";
 			}) || "");
+			if(/*@cc_on!@*/true && /Firefox.*3\./.test(navigator.userAgent))
+			  fncbk();
 		}
 	};
 	AJAX({url:url, bAsync:false, clbkFun:function () {
@@ -106,7 +108,6 @@ function JsonRpcClient(url) {
 			}
 		}
 	};
-	if(obj)
 	for (var i = 0; i < obj.length; i++) {
 		this.fnMakeObj(obj[i], _this);
 	}
