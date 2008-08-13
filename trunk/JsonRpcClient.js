@@ -4,9 +4,8 @@
  * */
 function JsonRpcClient(url) {
 	url || (url = ("undefined" === typeof contextPath ? "." : contextPath) + "/JRPC");
-	if (this === window) {
+	if (this === window)
 		return JsonRpcClient._cache || (JsonRpcClient._cache = new JsonRpcClient(url));
-	}
 	this["url"] = url;
 	var _this = this, obj = {}, bind = function (f, o) {
 		return function () {
@@ -14,14 +13,12 @@ function JsonRpcClient(url) {
 		};
 	}, _A = function (p) {
 		var r = [], i = 0, j = p.length;
-		for (; i < j; i++) {
+		for (; i < j; i++)
 			r.push(p[i]);
-		}
 		return r;
 	}, AJAX = function (o) {
-		if (window === this) {
+		if (window === this)
 			return new AJAX(o);
-		}
 		var _this = this, fncbk = function(){if (4 === _this.xml.readyState) {
 					200 === _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText.replace(/&#(\d+);/gm, function()
 			        {
@@ -46,9 +43,7 @@ function JsonRpcClient(url) {
 	AJAX({url:url, bAsync:false, clbkFun:function () {
 		try {
 			eval("obj = " + arguments[0]);
-		}
-		catch (e) {
-		}
+		}catch (e) {}
 	}});
 	obj = obj.result;
 	var fnRpcCall = function () {
@@ -84,9 +79,7 @@ function JsonRpcClient(url) {
 					oRst = oTmp;
 				}
 				bAsync && cbk.apply(oRst, [oRst]);
-			}
-			catch (e) {
-			}
+			}catch (e){}
 		}});
 		return oRst;
 	};
@@ -95,9 +88,8 @@ function JsonRpcClient(url) {
 		o.name && (oT = (oRstObj[o.name] = {}));
 		for (var k in o) {
 			if ("methods" === k) {
-				for (var i = o[k].length - 1; i >= 0; i--) {
+				for (var i = o[k].length - 1; i >= 0; i--)
 					oT[o[k][i]] = bind(fnRpcCall, {url:_this.url, methodName:o[k][i], id:o.id});
-				}
 				delete o[k];
 			} else {
 				if (o[k] && "object" === o[k]["constructor"]) {
@@ -108,7 +100,5 @@ function JsonRpcClient(url) {
 			}
 		}
 	};
-	for (var i = 0; i < obj.length; i++) {
-		this.fnMakeObj(obj[i], _this);
-	}
+	if(obj)for (var i = 0; i < obj.length; i++)this.fnMakeObj(obj[i], _this);
 }
