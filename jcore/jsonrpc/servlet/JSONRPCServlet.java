@@ -54,7 +54,7 @@ public class JSONRPCServlet extends HttpServlet {
 				{
 					String []aT = arrTmp[i].split("[\\|:]");
 					try {
-						Object o = Class.forName(aT[1]).newInstance();
+						Object o = Class.forName(aT[1]);
 						brg.registerObject(aT[0], o);
 						o = null;
 					} catch (InstantiationException e) {
