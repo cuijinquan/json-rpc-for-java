@@ -15,24 +15,7 @@ public abstract class Yhsi2JsonRpcObj extends JsonRpcObject {
 		super();
 	}
 
-	 private String errMsg = "";
-		
-	 /***
-	  * 获取异常、错误消息使用
-	  * @return
-	  */
-	public String getErrMsg()
-	{
-		String s = errMsg;
-		errMsg = "";
-		return s;
-	}
-	public Yhsi2JsonRpcObj setErrMsg(String s)
-	{
-		errMsg = s;
-		return this;
-	}
-		
+			
 	/***
 	 * 
 	 * @return
