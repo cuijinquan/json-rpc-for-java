@@ -57,11 +57,7 @@ public class JSONRPCServlet extends HttpServlet {
 						Object o = Class.forName(aT[1]);
 						brg.registerObject(aT[0], o);
 						o = null;
-					} catch (InstantiationException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (ClassNotFoundException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					aT = null;
