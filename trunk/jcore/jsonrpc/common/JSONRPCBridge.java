@@ -7,12 +7,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import jcore.jsonrpc.common.face.IJsonRpcObject;
+import jcore.jsonrpc.common.face.IResultObject;
 import jcore.jsonrpc.tools.Tools;
 
 /***
@@ -215,54 +215,6 @@ public class JSONRPCBridge implements Serializable{
 	}	
 	
 	/***
-	 * 判断对象o是否是为不需要注册的"简单"对象
-	 * @param o
-	 * @return
-	 */
-	private boolean isSimpleType(Object o)
-	{
-		if(null == o)return false;
-		String szType = o.getClass().getName();
-		Pattern pa = Pattern.compile("^class \\[[ZBCISJFDL]");
-		Matcher m = pa.matcher(szType);
-		
-		if(-1 < ",java.lang.String,java.util.Date,java.sql.Timestamp,java.lang.Boolean,java.lang.Character,java.lang.Short,java.lang.Integer,java.lang.Long,java.lang.Float,java.lang.Double,boolean,char,byte,short,int,long,float,double,".indexOf("," + szType + ",") || m.find())
-		{
-			// 清除对象使用关联关系，便于内存的有效利用
-			m = null;
-			pa = null;
-			szType = null;
-			return true;
-		}
-		// 清除对象使用关联关系，便于内存的有效利用
-		m = null;
-		pa = null;
-		szType = null;
-		return false;
-	}
-	
-	
-	/***
-	 * 解码html方式编码的中文汉字
-	 * ，例如将：
-	 *  "&#24322;&#24120;" 解码为 "异常" 
-	 * 符合的汉字正则表达式范围是：[\u4E00-\u9FA5]
-	 * @param szStr
-	 * @return
-	 */
-	public String decodeUnicodeHtm(String szStr)
-	{
-		Pattern p = Pattern.compile("&#(\\d+);", Pattern.MULTILINE);
-		Matcher m = p.matcher(szStr);
-		StringBuffer buf = new StringBuffer();
-		while(m.find())
-			m.appendReplacement(buf, (char)Integer.valueOf(m.group(1)).intValue() + "");
-		m.appendTail(buf);
-		return buf.toString();
-	}
-	
-
-	/***
 	 * 执行JSON-RPC请求的方法，并返回JSON格式的结果
 	 * @param szParm
 	 * @return
@@ -270,7 +222,7 @@ public class JSONRPCBridge implements Serializable{
 	public String ExecObjectMethod(HttpServletRequest request, String szParm)
 	{
 		try {
-			szParm = decodeUnicodeHtm(szParm);
+			szParm = Tools.decodeUnicodeHtm(szParm);
 			JSONObject oJson = new JSONObject(szParm);
 			String szName = oJson.getString("id"), 
 			       szMeshod = oJson.getString("method");
@@ -312,13 +264,12 @@ public class JSONRPCBridge implements Serializable{
 				Method []m = c.getMethods();
 				
 				// 注入 reqeust 对象 start
-				try
+				IJsonRpcObject json = null;
+				if(Tools.isInterface(o.getClass(), IJsonRpcObject.class.getName()))
 				{
-					Method setReqeust = Tools.getSpecifyNameMethod(c, new Class[]{javax.servlet.http.HttpServletRequest.class}, "setRequest");
-					if(null != setReqeust)
-						setReqeust.invoke(o, new Object[]{request});
-					setReqeust = null;
-				}catch(Exception e){e.printStackTrace();}
+					json =(IJsonRpcObject)o;
+					json.setRequest(request);
+				}
 				// 注入 reqeust 对象 end
 				
 				// 这里不能采用getSpecifyNameMethod获取方法的原因是，因为参数可能有复合对象
@@ -335,8 +286,7 @@ public class JSONRPCBridge implements Serializable{
 							// 构造参数对象
 							for(int j = 0; j < aParam.length; j++)
 							{
-								
-//								// 如果类型不匹配，就进行一系列转换
+								// 如果类型不匹配，就进行一系列转换
 								// 将整数向日期进行转换
 								aParam[j] = Tools.convertObject(oTyps[j], aParam[j] = oParams.get(j));
 							}
@@ -346,24 +296,22 @@ public class JSONRPCBridge implements Serializable{
 							try
 							{
 								oRst = m[i].invoke(o, aParam);
-							} catch (Exception e) {
-								// 如果发生异常，这里自动调用： setErrMsg  注入异常错误消息
-								Method setErrMsg = Tools.getSpecifyNameMethod(oParent.getClass(),new Class[]{java.lang.String.class},"setErrMsg");
-								if(null != setErrMsg)
+							} catch (Exception e) 
+							{
+								if(null != json)
 								{
 									String szErrMsg = e.getMessage();
 									if(null == szErrMsg && null != e.getCause())
 										szErrMsg = e.getCause().getMessage();
-									// 注入异常消息
-									try{setErrMsg.invoke(oParent, new Object[]{szErrMsg});} catch (Exception e1) {}
+									json.setErrMsg(szErrMsg);
+									szErrMsg = null;
 								}
-								setErrMsg = null;
 							}
 							aParam = null;
 							if(null != oRst)
 							{
 								// 不是简单类型就注册他
-								if(!isSimpleType(oRst))
+								if(!Tools.isSimpleType(oRst))
 								{
 									// 设置顶级对象
 									registerObject(oRst.hashCode(), oRst).registerParentObject(oRst.hashCode(), nParentHashCode);

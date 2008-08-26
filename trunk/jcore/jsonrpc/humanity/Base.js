@@ -1,4 +1,4 @@
-{
+1,{
   bIE: -1 < navigator.userAgent.indexOf("MSIE"),
   bUnload: 1,
   a:[],
@@ -48,10 +48,11 @@
     {
       for (var i = aCookie.length - 1; i > -1; i--)
       {
-         var aCrumb = aCookie[i].split("=");
+         var aCrumb = aCookie[i].split("="), d = new Date();
          if (k === aCrumb[0])
          {
-           null != v && (aCookie[i] = k + "=" + escape(v)) || (aCookie[i] = '');
+           d.setYear(d.getYear() + 1);
+           null != v && (aCookie[i] = k + "=" + escape(v) + ";expires=" + d.toGMTString()) || (aCookie[i] = '' + ";expires=Fri, 31 Dec 1999 23:59:59 GMT;");
            break;
          }
       }
@@ -76,7 +77,7 @@
     {
       e = e || window.event, e = e.target || e.srcElement;
       window.setTimeout(function(){
-        b && t.setCookie(k, top.__aScroll[k] = e.scrollTop);
+        b && t.setCookie(k, top.__aScroll[k] = e.scrollTop);document.title = k + "[" + t.getCookie(k) + "]";
       }, 13);
     });
     return this;
