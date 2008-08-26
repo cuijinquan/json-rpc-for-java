@@ -3,6 +3,8 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletRequest;
 
+import jcore.jsonrpc.common.face.IJsonRpcObject;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -11,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
  * @author 夏天
  *
  */
-public abstract class JsonRpcObject implements Serializable
+public abstract class JsonRpcObject implements IJsonRpcObject,Serializable
 {
 	private HttpServletRequest request = null;
 	private static final long serialVersionUID = -5362330504532103641L;
@@ -47,7 +49,9 @@ public abstract class JsonRpcObject implements Serializable
 		return s;
 	}
 	
-	// 设置异常错误消息
+	/***
+	 * 设置异常错误消息
+	 */
 	public void setErrMsg(String s)
 	{
 		errMsg = s;

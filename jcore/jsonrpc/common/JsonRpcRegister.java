@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
  * @author just
  *
  */
-public class JsonRpcRegister {
+public class JsonRpcRegister{
 	
 	/***
 	 * 通过request来注册对象
