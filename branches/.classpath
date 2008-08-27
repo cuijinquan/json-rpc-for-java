@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="javacode/test"/>
+	<classpathentry kind="src" path="Json-Rpc"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/j2sdk1.4.2_15"/>
+	<classpathentry kind="con" path="com.genuitec.eclipse.j2eedt.core.J2EE14_CONTAINER"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/commons-logging-api.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/JSON-RPC.jar"/>
+	<classpathentry kind="output" path="webapp/WEB-INF/classes"/>
+</classpath>
