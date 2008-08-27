@@ -17,6 +17,8 @@ import javax.servlet.http.HttpSession;
 
 import jcore.jsonrpc.common.Content;
 import jcore.jsonrpc.common.JSONRPCBridge;
+import jcore.jsonrpc.common.JsonRpcRegister;
+import jcore.jsonrpc.humanity.LoadJsObj;
 
 /***
  * JSON-RPC对web的服务通道
@@ -95,6 +97,7 @@ public class JSONRPCServlet extends HttpServlet {
     	 if(null == session)session = request.getSession(true);
     	 if(null != session)
     	 {
+    		 JsonRpcRegister.registerObject(request, "_LoadJsObj", LoadJsObj.class);
     		 JSONRPCBridge brg = (JSONRPCBridge)session.getAttribute(Content.RegSessionJSONRPCName);
     		 // 如果是第一次就注册对象
 			 if(null == brg)
