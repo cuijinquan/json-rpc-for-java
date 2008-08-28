@@ -20,11 +20,11 @@ function JsonRpcClient(url) {
 		if (window === this)
 			return new AJAX(o);
 		var _this = this, fncbk = function(){if (4 === _this.xml.readyState) {
-					200 === _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText.replace(/&#(\d+);/gm, function()
-			        {
-			           return String.fromCharCode(arguments[1]);
-			        })), delete _this.xml.onreadystatechange, delete _this.xml;
-				}};
+			200 === _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText.replace(/&#(\d+);/gm, function()
+			{
+			   return String.fromCharCode(arguments[1]);
+			})), delete _this.xml.onreadystatechange, delete _this.xml;
+	    }};
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
 			this.xml.open("POST", o.url, o.bAsync, "", "");
 			// this.bGzip || (this.bGzip = false);if(this.bGzip)this.xml.setRequestHeader("Accept-Encoding","gzip, deflate"),this.xml.setRequestHeader("JSONAccept-Encoding",1);
