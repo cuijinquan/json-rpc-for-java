@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -29,6 +30,8 @@ public class JSONRPCServlet extends HttpServlet {
 	private final static int buf_size = 4096;
 	private final static long serialVersionUID = 2;
 	private String charset = "UTF-8";
+	// 支持Gzip，默认不支持
+	private boolean bGzip = false;
 	private ServletConfig config = null;
 	
 	public void init(ServletConfig config)throws ServletException
@@ -45,6 +48,8 @@ public class JSONRPCServlet extends HttpServlet {
 		
 		String szPam = null;
 		charset = "UTF-8"; 
+		// 配置中指定默认支持gzip
+		bGzip = "true".equals(config.getInitParameter("gzip"));
 		szPam = config.getInitParameter("regAppClassNames");
 		if(null != szPam && 0 < szPam.trim().length())
 		{
@@ -105,9 +110,21 @@ public class JSONRPCServlet extends HttpServlet {
 				 session.setAttribute(Content.RegSessionJSONRPCName, brg = new JSONRPCBridge().setSession(session));
 				 myInit(this.config, brg);
 			 }
-    		 response.setContentType("text/plain;charset=" + charset);
-	        OutputStream out = response.getOutputStream();
-	        BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream(), charset));
+			 OutputStream out = null;
+			 String szGzip = request.getHeader("Accept-Encoding");
+			 if(null != szGzip && -1 < szGzip.indexOf("gzip") && (bGzip || "1".equals("JSONAccept-Encoding")))
+			 {
+				 response.setContentType("text/plain;charset=" + charset);
+				 response.setHeader("Content-Encoding", "GZIP");
+				 out = new GZIPOutputStream(response.getOutputStream());
+			 }
+			 else
+		     {
+				 response.setContentType("text/plain;charset=" + charset);
+				 out = response.getOutputStream();
+		     }
+	         
+	         BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream(), charset));
 
 	        // 读取request中的JSON对象
 	        CharArrayWriter data = new CharArrayWriter();

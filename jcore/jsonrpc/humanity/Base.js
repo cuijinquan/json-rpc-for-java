@@ -1,7 +1,7 @@
 1,{
   bIE: -1 < navigator.userAgent.indexOf("MSIE"),
   bUnload: 1,
-  a:[],
+  a:[],nDatetime:24 * 60 * 60 * 1000,
   A:function(a)
   {
     var i = 0, b = [];
@@ -32,33 +32,22 @@
   },
   getCookie:function(k)
   {
-    var aCookie = (document.cookie || '').split(";");
-    for (var i = 0; i < aCookie.length; i++)
+    var a = (document.cookie || '').split(";");
+    for (var i = 0; i < a.length; i++)
     {
-       var aCrumb = aCookie[i].split("=");
-       if (k === aCrumb[0])
-         return unescape(aCrumb[1]);
+       var b = a[i].split("=");
+       if(k == b[0].replace(/(^\s*)|(\s*$)/g, ''))
+         return unescape(b[1]);
     }
     return "";
   },
   setCookie: function(k, v)
   {
-    var aCookie = (document.cookie || '').split(";");
-    if(0 < aCookie.length)
-    {
-      for (var i = aCookie.length - 1; i > -1; i--)
-      {
-         var aCrumb = aCookie[i].split("="), d = new Date();
-         if (k === aCrumb[0])
-         {
-           d.setYear(d.getYear() + 1);
-           null != v && (aCookie[i] = k + "=" + escape(v) + ";expires=" + d.toGMTString()) || (aCookie[i] = '' + ";expires=Fri, 31 Dec 1999 23:59:59 GMT;");
-           break;
-         }
-      }
-      document.cookie = aCookie.join(";");
-    }
-    else document.cookie = k + "=" + escape(v) + ";" + aCookie.join(";");
+    var d = new Date(), s = k + "=" + escape(v) + ";expires=";
+    d.setTime(d.getTime() + 365 * this.nDatetime);
+    if(!v)s += "Fri, 31 Dec 1999 23:59:59 GMT;";
+    else s += d.toGMTString();
+    document.cookie = s;
     return this;
   },
   clearScroll:function(o)
@@ -71,13 +60,13 @@
   {
     top.__aScroll || (top.__aScroll = []);
     o = this.id(o);
-    var t = this, k = o.id, s = t.getCookie(k) || top.__aScroll[k], b = true;
-    s && t.addEvent(window, 'load', function(e){b = false,o.scrollTop = s,t.setCookie(k, null),delete top.__aScroll[k]});
+    var t = this, k = o.id, s = t.getCookie(k) || top.__aScroll[k];
+    s && t.addEvent(window, 'load', function(e){o.scrollTop = s,t.setCookie(k, null),delete top.__aScroll[k]});
     t.addEvent(o, 'scroll', function(e)
     {
       e = e || window.event, e = e.target || e.srcElement;
       window.setTimeout(function(){
-        b && t.setCookie(k, top.__aScroll[k] = e.scrollTop);document.title = k + "[" + t.getCookie(k) + "]";
+        t.setCookie(k, top.__aScroll[k] = e.scrollTop);
       }, 13);
     });
     return this;
