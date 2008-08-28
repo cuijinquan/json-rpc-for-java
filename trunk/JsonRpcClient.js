@@ -27,8 +27,9 @@ function JsonRpcClient(url) {
 				}};
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
 			this.xml.open("POST", o.url, o.bAsync, "", "");
+			// this.bGzip || (this.bGzip = false);if(this.bGzip)this.xml.setRequestHeader("Accept-Encoding","gzip, deflate"),this.xml.setRequestHeader("JSONAccept-Encoding",1);
 			this.xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-			this.xml.setRequestHeader("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; Alexa Toolbar; Maxthon 2.0)");
+			this.xml.setRequestHeader("user-agent", navigator.userAgent);
 			o.bAsync && (this.xml.onreadystatechange = function () {
 				fncbk();
 			});
