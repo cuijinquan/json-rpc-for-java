@@ -17,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jcore.jsonrpc.common.JSONObject;
-import sun.security.util.Resources;
 
 public class Tools {
 

@@ -50,7 +50,7 @@ function JsonRpcClient(url) {
 	var fnRpcCall = function () {
 		var params = _A(arguments), cbk = params[0], bAsync = "function" === typeof (cbk || ""), oRst = {};
 		bAsync && params.shift();
-		AJAX({url:this.url, bAsync:bAsync, data:"{\"method\":\"" + this.methodName + "\",id:\"" + this.id + "\",\"params\":" + (function (arg) {
+		AJAX({url:this.url, bAsync:bAsync, data:"{\"method\":\"" + this.methodName + "\",_id_:\"" + this.id + "\",\"params\":" + (function (arg) {
 			var b = [], szTp ,o2json = function(oTmp1)
 			{
 			   var k, aTmp = [], fnTmp = function(oTmp)

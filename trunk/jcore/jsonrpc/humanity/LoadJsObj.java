@@ -1,6 +1,5 @@
 package jcore.jsonrpc.humanity;
 
-import java.io.FileInputStream;
 import java.io.Reader;
 
 import jcore.jsonrpc.common.JsonRpcObject;

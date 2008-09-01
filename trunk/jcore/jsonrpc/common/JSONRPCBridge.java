@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import jcore.jsonrpc.common.face.IJsonRpcObject;
-import jcore.jsonrpc.common.face.IResultObject;
 import jcore.jsonrpc.tools.Tools;
 
 /***
@@ -224,7 +223,7 @@ public class JSONRPCBridge implements Serializable{
 		try {
 			szParm = Tools.decodeUnicodeHtm(szParm);
 			JSONObject oJson = new JSONObject(szParm);
-			String szName = oJson.getString("id"), 
+			String szName = oJson.getString("_id_"), 
 			       szMeshod = oJson.getString("method");
 			JSONArray oParams = (JSONArray)oJson.get("params");
 			// 获取代理的对象
