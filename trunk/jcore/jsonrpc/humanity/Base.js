@@ -71,15 +71,16 @@
     });
     return this;
   },
-  updateUi(o)
+  updateUi:function(o)
   {
-    var s = '';alert(o.data.each)
+    var s = [];
     if(!o.data)return alert("updateUi调用参数不正确，没有指定参数data");
-    o.data.each(function(){ s += this.join(",") + '|'});
+    o.data.each(function(){ s.push(this.join(","))});
     JsonRpcClient().AJAX({
-       data: "__ajaxParam_=" + s,
-       url: o.url || document.location, 
-       bAsync: !!o.fn, clbkFun:o.fn || function () {
+       data: "__ajaxParam_=" + s.join('|'),
+       url: o.url || document.location.href, 
+       bAsync: !!o.fn, 
+       clbkFun: o.fn || function () {
 		try {
 			alert(arguments[0]);
 		}catch (e) {}

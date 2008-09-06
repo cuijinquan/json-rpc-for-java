@@ -27,7 +27,8 @@ function JsonRpcClient(url) {
 	    }};
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
 			this.xml.open("POST", o.url + (-1 < o.url.indexOf("?") ? '&' : '?') + new Date().getTime(), o.bAsync, "", "");
-			// this.bGzip || (this.bGzip = false);if(this.bGzip)this.xml.setRequestHeader("Accept-Encoding","gzip, deflate"),this.xml.setRequestHeader("JSONAccept-Encoding",1);
+			// this.bGzip || (this.bGzip = false);if(this.bGzip)this.xml.setRequestHeader("Accept-Encoding","gzip, deflate"),
+			this.xml.setRequestHeader("XUIAJAX",1);
 			this.xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 			this.xml.setRequestHeader("user-agent", navigator.userAgent);
 			o.bAsync && (this.xml.onreadystatechange = function () {
@@ -108,6 +109,6 @@ function JsonRpcClient(url) {
 	if(obj)for (var i = 0; i < obj.length; i++)this.fnMakeObj(obj[i], _this);
 	this.cacheObj = [];this.LoadJsObj = function(s)
 	{
-	   return _this.cacheObj[s] || (_this.cacheObj[s] = eval(_this.LoadJsObj.getJsObj(s).getResult()));
+	   return _this.cacheObj[s] || (_this.cacheObj[s] = eval(_this._LoadJsObj.getJsObj(s).getResult()));
 	};
 }
