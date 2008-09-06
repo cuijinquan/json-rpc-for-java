@@ -1,6 +1,6 @@
 1,{
   bIE: -1 < navigator.userAgent.indexOf("MSIE"),
-  bUnload: 1,
+  bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
   a:[],nDatetime:24 * 60 * 60 * 1000,
   A:function(a)
   {
@@ -70,5 +70,19 @@
       }, 13);
     });
     return this;
+  },
+  updateUi(o)
+  {
+    var s = '';alert(o.data.each)
+    if(!o.data)return alert("updateUi调用参数不正确，没有指定参数data");
+    o.data.each(function(){ s += this.join(",") + '|'});
+    JsonRpcClient().AJAX({
+       data: "__ajaxParam_=" + s,
+       url: o.url || document.location, 
+       bAsync: !!o.fn, clbkFun:o.fn || function () {
+		try {
+			alert(arguments[0]);
+		}catch (e) {}
+	}});
   }
 }
