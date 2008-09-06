@@ -40,7 +40,8 @@ function JsonRpcClient(url) {
 			if(!o.bAsync)
 			  fncbk();
 		}
-	};
+	};this.AJAX = AJAX;
+	
 	AJAX({url:url, bAsync:false, clbkFun:function () {
 		try {
 			eval("obj = " + arguments[0]);
@@ -107,6 +108,6 @@ function JsonRpcClient(url) {
 	if(obj)for (var i = 0; i < obj.length; i++)this.fnMakeObj(obj[i], _this);
 	this.cacheObj = [];this.LoadJsObj = function(s)
 	{
-	   return _this.cacheObj[s] || (_this.cacheObj[s] = eval(_this._LoadJsObj.getJsObj(s).getResult()));
+	   return _this.cacheObj[s] || (_this.cacheObj[s] = eval(_this.LoadJsObj.getJsObj(s).getResult()));
 	};
 }
