@@ -1,17 +1,24 @@
-1,{
+{
   bIE: -1 < navigator.userAgent.indexOf("MSIE"),
   bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
   a:[],nDatetime:24 * 60 * 60 * 1000,
-  A:function(a)
+  A:function(a)/*将对象a转换为有效的Array*/
   {
     var i = 0, b = [];
     for(; i < a.length; i++)
        b.push(a[i]);
     return b;
-  },
+  },/*根据ID获取对象*/
   id:function(s)
   {
     return String == s['constructor'] ? document.getElementById(s) : s
+  },/*将对象o绑定到fn作为他的上下文this*/
+  bind:function(fn, o)
+  {
+     return function(e)
+     {
+        fn.apply(o, arguments);
+     }
   },
   unLoad:function(o, t, f)
   {
@@ -19,7 +26,7 @@
     if(_this.bIE)for(; i > -1; i--)a[i][0].detachEvent(a[i][1], a[i][2]);
     else for(; i > -1; i--)a[i][0].removeEventListener(a[i][1], a[i][2], false);
     delete a, delete this.a;
-  },
+  },/*绑定对象*/
   addEvent:function()
   {
     var o = arguments[0], t = arguments[1], f = arguments[2], _this = this, fn = function(){
@@ -29,7 +36,7 @@
     };
     'load' != t && window.setTimeout(fn, 13) || fn();
     return this;
-  },
+  },/*获取cookie*/
   getCookie:function(k)
   {
     var a = (document.cookie || '').split(";");
@@ -40,7 +47,7 @@
          return unescape(b[1]);
     }
     return "";
-  },
+  },/*设置cookie*/
   setCookie: function(k, v)
   {
     var d = new Date(), s = k + "=" + escape(v) + ";expires=";
@@ -49,13 +56,13 @@
     else s += d.toGMTString();
     document.cookie = s;
     return this;
-  },
+  },/*清除保留滚动条的标志*/
   clearScroll:function(o)
   {
     var k = this.id(o).id;
     delete top.__aScroll[k];
     this.setCookie(k, null);
-  },
+  },/*自动保存滚动条位置*/
   autoSaveScroll: function(o)
   {
     top.__aScroll || (top.__aScroll = []);
@@ -78,12 +85,85 @@
     o.data.each(function(){ s.push(this.join(","))});
     JsonRpcClient().AJAX({
        data: "__ajaxParam_=" + s.join('|'),
-       url: o.url || document.location.href, 
-       bAsync: !!o.fn, 
+       url: o.url || document.location.href,
+       bAsync: !!o.fn,
        clbkFun: o.fn || function () {
-		try {
-			alert(arguments[0]);
-		}catch (e) {}
-	}});
+    try {
+      alert(arguments[0]);
+    }catch (e) {}
+  }});
+  },/*创建div对象*/
+  createDiv:function()
+  {
+     var o = document.createElement("div"), b = !!arguments[0] || false,
+         p = arguments[0], k;
+     if(b)
+     {
+       for(k in p)
+          o[k] = p[k];
+     }
+     return o;
+  },/*一个Timer定时器*/
+  regTimer:function(fn)
+  {
+    var nTime = setInterval(function()
+    {
+      if(fn())clearInterval(nTime);
+    }, 13);
+  },/*获取对象的*/
+  getOffset:function(o)
+  {
+    var a = [o.offsetLeft, o.offsetTop, o.offsetWidth,o.offsetHeight, 0, 0], r;
+    if(o.getBoundingClientRect)
+    {
+       r = o.getBoundingClientRect();
+       a[0] = r.left + Math.max(document.documentElement.scrollLeft, document.body.scrollLeft) - document.documentElement.clientLeft;
+       a[1] = r.top + Math.max(document.documentElement.scrollTop, document.body.scrollTop) - document.documentElement.clientTop;
+    }
+    else
+    {
+        while(o = o.offsetParent)
+        {
+          a[0] += (o.offsetLeft || 0) - (o.scrollLeft || 0);
+          a[1] += (o.offsetTop || 0) - (o.scrollTop || 0);
+          a[4] += o.scrollLeft || 0;
+          a[5] += o.scrollTop || 0;
+          if(document.body == o)break;
+        }
+     }
+     return a;
+   },
+  /*事件发生的对象*/
+  _oFromEvent: function(e){return (e = e || window.event).target || e.srcElement},
+  /*显示下拉列表*/
+  showSelectDiv: function(e, obj)
+  {
+    var _t = this, szId = "_Xui_SelectDiv", o = this.id(szId), 
+        oE = _t._oFromEvent(e), oR = _t.getOffset(oE),h = oR[3], w = oR[2], 
+        p = {left: oR[0], top: oR[1] + h, display:'block', width: (obj||{}).width || oE.clientWidth || w}, k;
+    if(!o)
+    {
+       o = this.createDiv({className:"selectInput_FloatDiv", id: szId}),
+       document.body.appendChild(o);
+    }
+    /* 如果上方的空间大于现实高度就在上面显示*/
+    if(190 < p.top - document.body.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;
+    /* 离开的时候隐藏*/
+    !oE[szId] && _t.addEvent(oE, 'blur', _t.bind(_t.hiddenSelectDiv, _t)), oE[szId] = o.id;
+    for(k in p)
+      o.style[k] = p[k];
+    this.stopPropagation(e);
+  },/*隐藏selectInput*/
+  hiddenSelectDiv:function()
+  {
+    this.id('_Xui_SelectDiv').style.display = 'none';
+  },/*事件返回false*/
+  preventDefault:function(e)
+  {
+      return e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+  },/*停止事件往父亲对象传递事件*/
+  stopPropagation:function(e)
+  {
+     return e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
   }
 }
