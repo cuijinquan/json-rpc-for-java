@@ -138,7 +138,7 @@
   /*获取事件下的输入对象*/ 
   getSelectDataStr:function(oE)
   { 
-   	var _t = this, a = slctIptData[oE.id]["collection"], a1 = ["<table style=\"width:100%;\">"], i, j, o, k,
+   	var _t = this, a = slctIptData[oE.id]["collection"], a1 = ["<table style=\"width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
              b = slctIptData[oE.id]["displayFields"], bDisp = !b;
     !bDisp && (b = b.split(/[,;\|\/]/));
    	for(i = 0; i < a.length; i++)
