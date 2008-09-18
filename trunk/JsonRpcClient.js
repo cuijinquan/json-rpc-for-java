@@ -52,7 +52,7 @@ function JsonRpcClient(url) {
 	var fnRpcCall = function () {
 		var params = _A(arguments), cbk = params[0], bAsync = "function" === typeof (cbk || ""), oRst = {};
 		bAsync && params.shift();
-		AJAX({url:this.url, bAsync:bAsync, data:"{\"method\":\"" + this.methodName + "\",_id_:\"" + this._id_ + "\",\"params\":" + (function (arg) {
+		AJAX({url:this.url, bAsync:bAsync, data:"{\"method\":\"" + this.methodName + "\",\"_id_\":\"" + this["_id_"] + "\",\"params\":" + (function (arg) {
 			var b = [], szTp ,o2json = function(oTmp1)
 			{
 			   var k, aTmp = [], fnTmp = function(oTmp)
@@ -97,7 +97,7 @@ function JsonRpcClient(url) {
 		for (var k in o) {
 			if ("methods" === k) {
 				for (var i = o[k].length - 1; i >= 0; i--)
-					oT[o[k][i]] = bind(fnRpcCall, {url:_this.url, methodName:o[k][i], _id_:o._id_});
+					oT[o[k][i]] = bind(fnRpcCall, {url:_this.url, methodName:o[k][i], "_id_":o["_id_"]});
 				delete o[k];
 			} else {
 				if (o[k] && "object" === o[k]["constructor"])
@@ -109,7 +109,9 @@ function JsonRpcClient(url) {
 	if(obj)for (var i = 0; i < obj.length; i++)this.fnMakeObj(obj[i], _this);
 	this.cacheObj = [];this.LoadJsObj = function(s)
 	{
-	   return _this.cacheObj[s] || (_this.cacheObj[s] = eval("1,"+_this._LoadJsObj.getJsObj(s).getResult()));
+	  try{var s = '';
+	   return _this.cacheObj[s] || (_this.cacheObj[s] = eval("1,"+(s=_this._LoadJsObj.getJsObj(s).getResult())));
+	   }catch(e){alert(e.message + s)}
 	};
 }
 var rpc = JsonRpcClient();

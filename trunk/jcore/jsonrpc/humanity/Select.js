@@ -7,7 +7,7 @@
   },/*高亮显示指定的行*/
   lightRow:function(n)
   {
-    var r = this.base.id(Select.id).childNodes[0].rows;
+    var r = this.base.id(this.id).childNodes[0].rows;
     if(0 <= n && r.length > n)
          this.base.fireEvent(r[n],"mouseover");
     else this.base.fireEvent(r[0],"mouseout");
