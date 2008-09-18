@@ -48,6 +48,7 @@
      	o.value = s;/*checkbox 的处理*/
      	"checkbox" == (o.type || "") && (o.checked=true);
      	base.fireEvent(o, "change");
+     	szId = o.id;
      }
      i = o;
      o = document.getElementsByName(szId);
@@ -79,10 +80,11 @@
      this.hiddenSelectDiv();
   },
   /*显示下拉列表图层*/
-  showSelectDiv: function(e, obj)
+  showSelectDiv: function(e, obj, oE)
   {
+    if(oE.readonly || oE.disabled)return false;
     var base = this.base,_t = this, szId = this.id, o = base.id(szId), 
-        oE = base.FromEventObj(e), oR = base.getOffset(oE),h = oR[3] - 1, w = oR[2], 
+        oR = base.getOffset(oE),h = oR[3] - 1, w = oR[2], 
         p = {height:'1px',left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block', 
         width: ((base.bIE ? 2 : 0) + ((obj||{}).width || oE.clientWidth || w)) + "px"}, 
         k, fns = [base.bind(function(){this.id(Select.id)["_over"] = 1}, base),
