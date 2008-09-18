@@ -104,12 +104,12 @@
      }
      return o;
   },/*一个Timer定时器*/
-  regTimer:function(fn)
+  regTimer:function(fn, n)
   {
     var nTime = setInterval(function()
     {
       if(fn())clearInterval(nTime);
-    }, 13);
+    }, n || 13);
   },/*获取对象的*/
   getOffset:function(o)
   {
