@@ -139,8 +139,13 @@
   showSelectDiv: function(e, obj)
   {
     var _t = this, szId = "_Xui_SelectDiv", o = this.id(szId), 
-        oE = _t._oFromEvent(e), oR = _t.getOffset(oE),h = oR[3], w = oR[2], 
-        p = {left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block', width: ((obj||{}).width || oE.clientWidth || w) + "px"}, k;
+        oE = _t._oFromEvent(e), oR = _t.getOffset(oE),h = oR[3] - 1, w = oR[2], 
+        p = {left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block', width: ((_t.bIE ? 2 : 0) + ((obj||{}).width || oE.clientWidth || w)) + "px"}, 
+        k, a;
+    // 显示内容的处理
+    if(!(a = slctIptData[oE.id]) || !(a = a.collection))return false;
+    ;
+    
     if(!o)
     {
        o = this.createDiv({className:"selectInput_FloatDiv", id: szId}),

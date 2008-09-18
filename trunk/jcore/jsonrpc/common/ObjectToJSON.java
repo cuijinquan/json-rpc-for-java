@@ -170,7 +170,7 @@ public class ObjectToJSON implements Serializable{
 				    buf.append("name:\"").append(szObjName).append("\"");
 				}
 				if(1 < buf.length())buf.append(",");
-				buf.append("id:\"").append(this.o.hashCode()).append("\"");
+				buf.append("_id_:\"").append(this.o.hashCode()).append("\"");
 				return "{" + buf.append("}").toString();
 			}
 			// ½Ó¿ÚÊÇList
@@ -394,7 +394,7 @@ public class ObjectToJSON implements Serializable{
 		    buf.append("name:\"").append(szObjName).append("\"");
 		}
 		if(1 < buf.length())buf.append(",");
-		buf.append("id:\"").append(this.o.hashCode()).append("\"");
+		buf.append("_id_:\"").append(this.o.hashCode()).append("\"");
 		return "{" + buf.append("}").toString();
 	}
 
