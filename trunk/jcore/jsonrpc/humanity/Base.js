@@ -140,7 +140,7 @@
   {
     var _t = this, szId = "_Xui_SelectDiv", o = this.id(szId), 
         oE = _t._oFromEvent(e), oR = _t.getOffset(oE),h = oR[3], w = oR[2], 
-        p = {left: oR[0], top: oR[1] + h, display:'block', width: (obj||{}).width || oE.clientWidth || w}, k;
+        p = {left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block', width: ((obj||{}).width || oE.clientWidth || w) + "px"}, k;
     if(!o)
     {
        o = this.createDiv({className:"selectInput_FloatDiv", id: szId}),
