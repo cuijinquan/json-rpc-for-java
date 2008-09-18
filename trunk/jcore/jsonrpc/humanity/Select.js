@@ -81,7 +81,7 @@
   },
   /*显示下拉列表图层*/
   showSelectDiv: function(e, obj, oE)
-  {
+  {alert([oE.readonly , oE.disabled].join("\n"))
     if(oE.readonly || oE.disabled)return false;
     var base = this.base,_t = this, szId = this.id, o = base.id(szId), 
         oR = base.getOffset(oE),h = oR[3] - 1, w = oR[2], 
@@ -109,10 +109,10 @@
        oE[szId] = o.id,
        base.addEvent(oE, "blur", base.bind(_t.hiddenSelectDiv, _t))
            .addEvent(oE, "mousemove", fns[0])
-           .addEvent(oE, "mouseout", base.bind(function(e)
+           .addEvent(oE, "mouseout", function(e)
            {
-             this.lightRow(-1)
-           }, _t));
+             _t.lightRow(-1)
+           });
     }
     for(k in p)
       o.style[k] = p[k];
