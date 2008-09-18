@@ -81,7 +81,8 @@
   /*显示下拉列表图层*/
   showSelectDiv: function(e, obj, oE)
   {
-    if(oE.readonly || oE.disabled)return false;
+    oE = arguments[arguments.length - 1];
+    if(oE.readOnly || oE.disabled)return false;
     var _t = this, szId = "_Xui_SelectDiv", o = Base.id(szId), 
         oR = Base.getOffset(oE),h = oR[3] - 1, w = oR[2], 
         p = {height:'1px',left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block', 
