@@ -1,16 +1,15 @@
 {
-  base: rpc.LoadJsObj("Base"),
-  id: "_Xui_SelectDiv",
+  base: (window.Base = rpc.LoadJsObj("Base"),alert(Base.id),Base),
   getData:function(szId)/*获取下拉列表数据*/
   {
     return slctIptData[szId]["collection"]
   },/*高亮显示指定的行*/
   lightRow:function(n)
   {
-    var r = this.base.id(this.id).childNodes[0].rows;
+    var r = Base.id("_Xui_SelectDiv").childNodes[0].rows;
     if(0 <= n && r.length > n)
-         this.base.fireEvent(r[n],"mouseover");
-    else this.base.fireEvent(r[0],"mouseout");
+         Base.fireEvent(r[n],"mouseover");
+    else Base.fireEvent(r[0],"mouseout");
   },
   /*获取要显示的内容*/ 
   getSelectDataStr:function(oE, w)
@@ -42,12 +41,12 @@
   },/*给对象设置value*/
   setValue:function(szId,s)
   {
-     var o = this.base.id(szId), i, base = this.base;;
+     var o = Base.id(szId), i;
      if(o)
      {
      	o.value = s;/*checkbox 的处理*/
      	"checkbox" == (o.type || "") && (o.checked=true);
-     	base.fireEvent(o, "change");
+     	Base.fireEvent(o, "change");
      	szId = o.id;
      }
      i = o;
@@ -59,7 +58,7 @@
         if((o[i].value || '') == s)
         {
            o[i].checked=true;
-           base.fireEvent(o[i], "change");
+           Base.fireEvent(o[i], "change");
            break;
         }
      }
@@ -67,7 +66,7 @@
   },/*选择的处理*/
   onSelect:function(e, oTr)
   {
-     var base = this.base, id = this.id, o = base.id(id), oIpt = base.id(o[id]),
+     var base = this.base, id = "_Xui_SelectDiv", o = base.id(id), oIpt = base.id(o[id]),
          n = oTr.rowIndex, oT = slctIptData[oIpt.id], data = this.getData(oIpt.id), 
          cbk = oT['selectCallBack'];
      /* 处理选择*/
@@ -81,14 +80,14 @@
   },
   /*显示下拉列表图层*/
   showSelectDiv: function(e, obj, oE)
-  {alert([oE.readonly , oE.disabled].join("\n"))
+  {
     if(oE.readonly || oE.disabled)return false;
-    var base = this.base,_t = this, szId = this.id, o = base.id(szId), 
+    var base = this.base,_t = this, szId = "_Xui_SelectDiv", o = base.id(szId), 
         oR = base.getOffset(oE),h = oR[3] - 1, w = oR[2], 
         p = {height:'1px',left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block', 
         width: ((base.bIE ? 2 : 0) + ((obj||{}).width || oE.clientWidth || w)) + "px"}, 
-        k, fns = [base.bind(function(){this.id(Select.id)["_over"] = 1}, base),
-                  base.bind(function(){this.id(Select.id)["_over"] = null}, base)];
+        k, fns = [base.bind(function(){this.id(szId)["_over"] = 1}, base),
+                  base.bind(function(){this.id(szId)["_over"] = null}, base)];
     if(!o)
     {
        o = base.createDiv({className:"selectInput_FloatDiv", id: szId}),
@@ -123,7 +122,7 @@
   },/*隐藏图层的方法*/
   hiddenSelectDiv:function()
   {
-    var base = this.base, _t = this, o = base.id(this.id);
+    var base = this.base, _t = this, o = base.id("_Xui_SelectDiv");
     o["_over"] = null;
     // 注册自动关闭
     base.regTimer(function(e)
