@@ -2,6 +2,16 @@
   bIE: -1 < navigator.userAgent.indexOf("MSIE"),
   bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
   a:[],nDatetime:24 * 60 * 60 * 1000,
+  /*获取父亲对象*/
+  p:function(o,szTagName)
+  {
+    var i = 0;
+    while(o && i++ < 500)
+    {
+      if((o = o.parentNode).nodeName === szTagName)
+        return o;
+    }
+  },
   A:function(a)/*将对象a转换为有效的Array*/
   {
     var i = 0, b = [];
@@ -12,7 +22,18 @@
   id:function(s)
   {
     return String == s['constructor'] ? document.getElementById(s) : s
-  },/*将对象o绑定到fn作为他的上下文this*/
+  },/*触发事件*/
+  fireEvent:function(szElement,szEvent)
+  {  
+    if(document.all)
+       this.id(szElement).fireEvent('on' + szEvent);  
+    else{  
+      var evt = document.createEvent('HTMLEvents');  
+      evt.initEvent(szEvent,true,true);
+      this.id(szElement).dispatchEvent(evt);
+    }
+   },
+  /*将对象o绑定到fn作为他的上下文this*/
   bind:function(fn, o)
   {
      return function(e)
