@@ -6,9 +6,6 @@ import jcore.jsonrpc.common.JsonRpcObject;
 import jcore.jsonrpc.common.ResultObject;
 import jcore.jsonrpc.tools.Tools;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /***
  * 获取JS对象
  * @author 夏天
@@ -16,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class LoadJsObj extends JsonRpcObject{
 	private static final long serialVersionUID = -1988214985561562945L;
-	public static Log log = LogFactory.getLog(LoadJsObj.class);
 	/***
 	 * 通过js对象名获取对象，区分大小写
 	 * @param szName
