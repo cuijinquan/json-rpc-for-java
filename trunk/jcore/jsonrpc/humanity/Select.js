@@ -88,7 +88,7 @@
        e && (Base.preventDefault(e), Base.stopPropagation(e));
        this.hiddenSelectDiv();
        o["_lstNum"] = n;
-     }else Base.id(szId)["_over"] = 1;
+     }else Base.id(o.id)["_over"] = 1;
   },/*检查当前输入对象的显示图层是否正在显示*/
   isShow: function(e, obj, oE)
   {
@@ -105,10 +105,14 @@
        o["_inInput"] = true, this.data = null;
        /* 检索过滤处理 */
        if(0 < s.length)
-       {  
+       {
           for(n = 0; n < a.length; n++)
              for(k in a[n])
-              if(-1 < a[n][k].indexOf(s))b.push(a[n]); 
+              if("_id_" != k && -1 < a[n][k].indexOf(s))
+              {
+                 b.push(a[n]); 
+                 break;
+              }
           this.data = b;
        }
        this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
@@ -170,7 +174,7 @@
     if(!oE[szId])
     {
        oE[szId] = o.id,
-       Base.addEvent(oE, "blur", _t.hiddenSelectDiv).addEvent(oE, "mousemove", fns[0])
+       Base.addEvent(oE, "blur", function(){o["_in"] = false,_t.hiddenSelectDiv()}).addEvent(oE, "mousemove", fns[0])
            .addEvent(oE, "mouseout", function(e)
            {
              _t.lightRow(-2)
@@ -184,8 +188,10 @@
     }
     if(0 < oE.value.length)this.onInput(e, oE);
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
-    o.style["height"] = Math.min(170, k = 2 + (o.scrollHeight || o.childNodes[0].clientHeight)) + "px";
-    
+    setTimeout(function(){
+      o.style["height"] = Math.min(170, k = 2 + (o.scrollHeight || o.childNodes[0].clientHeight)) + "px";
+    }, 33);
+    document.title = k;
     this.lightRow(0);
     Base.stopPropagation(e);
     Base.preventDefault(e);
@@ -198,7 +204,7 @@
         防止重入，如果重入就回启动多个timer服务定时器 */
     if(o && !o["_in"])
     {
-        o["_over"] = null;
+      o["_over"] = null;
       o["_in"] = true;
       Base.regTimer(function(e)
       {
