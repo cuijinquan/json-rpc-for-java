@@ -71,6 +71,7 @@
          cbk = oT['selectCallBack'];
      if(0 <= n)
      {
+         o["_tm"] = 13;
 	     /* 处理选择*/
 	     if(oT['valueField'])
 	       this.setValue(oIpt, data[n][oT['valueField']]);
@@ -94,19 +95,20 @@
         oR = Base.getOffset(oE),h = oR[3] - 1, w = oR[2], 
         p = {height:'1px',left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block', 
         width: ((Base.bIE ? 2 : 0) + ((obj||{}).width || oE.clientWidth || w)) + "px"}, 
-        k, fns = [function(){Base.id(szId)["_over"] = 1},
-                  function(){Base.id(szId)["_over"] = null}];
+        k, fns = [function(){o["_over"] = 1, o["_tm"] = 3000},
+                  function(){o["_over"] = null,o["_tm"] = 13}];
     if(!o)
     {
        o = Base.createDiv({className:"selectInput_FloatDiv", id: szId}),
        document.body.appendChild(o);
        Base.addEvent(o, "mousemove", fns[0])
            .addEvent(o, "mousedown", fns[0])
+           .addEvent(o, "mouseup", fns[0])
            .addEvent(o, "mouseout", fns[1]);
     }
     
     // 状态的处理: 输入对象的id保留
-    o[szId] = oE.id, o["_over"] = 1;
+    o[szId] = oE.id, o["_over"] = 1, o["_tm"] = 13;
     
     /* 修正显示图层的上下位置 */
     if(190 < p.top - document.body.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;
@@ -132,18 +134,18 @@
   hiddenSelectDiv:function()
   {
     var o = Base.id("_Xui_SelectDiv");
-    o["_over"] = null;
     // 注册自动关闭
     // 防止重入
     if(!o["_in"])
     {
+        o["_over"] = null;
 	    o["_in"] = true;
 	    Base.regTimer(function(e)
 	    {
 	       if(!o["_over"])
 	          return o["_in"] = false, o.style.display = 'none', true;
 	       return false
-	    },133);
+	    },o["_tm"]);
     }
   }
 }  
