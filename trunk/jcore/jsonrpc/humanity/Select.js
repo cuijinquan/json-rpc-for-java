@@ -1,15 +1,19 @@
-{
-  base: (window.Base = rpc.LoadJsObj("Base")),
+{base: (window.Base = rpc.LoadJsObj("Base")),
   getData:function(szId)/*获取下拉列表数据*/
   {
     return slctIptData[szId]["collection"]
   },/*高亮显示指定的行*/
   lightRow:function(n)
   {
-    var r = Base.id("_Xui_SelectDiv").childNodes[0].rows;
-    if(0 <= n && r.length > n)
-         Base.fireEvent(r[n],"mouseover");
-    else Base.fireEvent(r[0],"mouseout");
+    var o = Base.id("_Xui_SelectDiv"), r = o.childNodes[0].rows;
+    r[o["_lstNum"] || 0].className='slcthand';
+    if(r.length < n || 0 > n)
+    {
+       return r[0].className='slcthand slctOver', r[0].scrollIntoView(true), 0;
+    }
+    else if(0 <= n)
+       return r[n].className='slcthand', r[n].scrollIntoView(true), n;
+    return 0;
   },
   /*获取要显示的内容*/ 
   getSelectDataStr:function(oE, w)
@@ -20,7 +24,7 @@
    	for(i = 0; i < a.length; i++)
     {
       o = a[i];
-      a1.push("<tr onclick=\"Select.onSelect(event, this)\" class=\"slcthand\" onmouseover=\"this.title=this.innerText||this.textContent;this.className='slcthand slctOver'\" onmouseout=\"this.className='slcthand'\">");
+      a1.push("<tr onclick=\"Select.onSelect(event, this)\" class=\"slcthand\" onmouseover=\"this.title=this.innerText||this.textContent;Select.lightRow(this.rowIndex)\"\">");
       if(bDisp)
       {
           for(k in o)
@@ -67,7 +71,7 @@
   onSelect:function(e, oTr)
   {
      var id = "_Xui_SelectDiv", o = Base.id(id), oIpt = Base.id(o[id]),
-         n = oTr.rowIndex, oT = slctIptData[oIpt.id], data = this.getData(oIpt.id), 
+         n = oTr.rowIndex || oTr, oT = slctIptData[oIpt.id], data = this.getData(oIpt.id), 
          cbk = oT['selectCallBack'];
      if(0 <= n)
      {
@@ -77,15 +81,39 @@
 	       this.setValue(oIpt, data[n][oT['valueField']]);
 	     /* 回调处理 */
 	     cbk && cbk(data[n], oIpt);
-	     Base.preventDefault(e);
-	     Base.stopPropagation(e);
+	     e && (Base.preventDefault(e), Base.stopPropagation(e));
 	     this.hiddenSelectDiv();
+	     o["_lstNum"] = n;
      }else Base.id(szId)["_over"] = 1;
-  },
+  },/*检查当前输入对象的显示图层是否正在显示*/
   isShow: function(e, obj, oE)
   {
      var szId, o = Base.id(szId = "_Xui_SelectDiv");
      return(o && "block" == o.style.display && o[szId] == oE.id);     
+  },/*键盘事件处理*/
+  onInput:function(e, o)
+  {document.title = 1 + " | " + new Date().getTime();
+     e = e || window.event;
+     var n = e.charCode || e.keyCode, o = Base.id("_Xui_SelectDiv"), oT = slctIptData[o.id], i = o["_lstNum"];
+     
+     switch(n)
+     {
+        /* 接受连续退格键 */
+        case 8:if(e.repeat)return true;
+        /*Esc 关闭图层*/
+        case 27:o["_tm"] = 13, this.hiddenSelectDiv();return true;
+        /* 回车选择 */
+        case 13:
+           this.onSelect(null, i);
+           return true;
+        case 38: /* 上 */
+           o["_lstNum"] = i = this.lightRow(i + 1);
+           return true;
+        case 40: /* 下 */
+           o["_lstNum"] = i = this.lightRow(i - 1);
+           return true;
+        default:;
+     }
   },
   /*显示下拉列表图层*/
   showSelectDiv: function(e, obj, oE)
@@ -108,7 +136,7 @@
     }
     
     // 状态的处理: 输入对象的id保留
-    o[szId] = oE.id, o["_over"] = 1, o["_tm"] = 13;
+    o[szId] = oE.id, o["_over"] = 1, o["_tm"] = 13, o["_lstNum"] = 0;
     
     /* 修正显示图层的上下位置 */
     if(190 < p.top - document.body.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;
@@ -122,6 +150,7 @@
            {
              _t.lightRow(-1)
            });
+       Base.bIE ? Base.addEvent(oE, "propertychange", function(e){Select.onInput(e,oE)}) : Base.addEvent(oE, "input", function(e){Select.onInput(e,oE)});
     }
     for(k in p)
       o.style[k] = p[k];
@@ -135,7 +164,7 @@
   {
     var o = Base.id("_Xui_SelectDiv");
     // 注册自动关闭
-    // 防止重入
+    // 防止重入，如果重入就回启动多个timer服务定时器
     if(!o["_in"])
     {
         o["_over"] = null;
@@ -148,4 +177,4 @@
 	    },o["_tm"]);
     }
   }
-}  
+}
