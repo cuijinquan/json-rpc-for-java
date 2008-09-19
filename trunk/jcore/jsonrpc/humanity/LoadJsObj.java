@@ -40,7 +40,6 @@ public class LoadJsObj extends JsonRpcObject{
 				oRst.setResult(new String(buf.toString().getBytes(), "UTF-8"));
 			}
 			else oRst.setErrMsg("指定的对象不存在，请确认大小写是否正确。");
-			log.debug(szName + " Ok!");
 		}catch(Exception e)
 		{
 			log.debug(e);
