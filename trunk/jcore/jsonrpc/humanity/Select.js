@@ -1,19 +1,18 @@
-{base: (window.Base = rpc.LoadJsObj("Base")),
+{base: (window.Base = rpc.LoadJsObj("Base")),data:null,
   getData:function(szId)/*获取下拉列表数据*/
   {
-    return slctIptData[szId]["collection"]
+    return this.data || slctIptData[szId]["collection"]
   },/*高亮显示指定的行*/
   lightRow:function(n)
   {
     var o = Base.id("_Xui_SelectDiv"), r = o.childNodes[0].rows;
     r[o["_lstNum"] || 0].className='slcthand';
-    if(r.length < n || 0 > n)
-    {
-       return r[0].className='slcthand slctOver', r[0].scrollIntoView(true), 0;
-    }
+    if(-1 == n)n = r.length - 1;
+    if(r.length <= n || 0 > n)
+       return r[0].className='slcthand slctOver', r[0].scrollIntoView(true), o["_lstNum"] = 0;
     else if(0 <= n)
-       return r[n].className='slcthand', r[n].scrollIntoView(true), n;
-    return 0;
+       return r[n].className='slcthand slctOver', r[n].scrollIntoView(true), o["_lstNum"] = n;
+    return o["_lstNum"] = 0;
   },
   /*获取要显示的内容*/ 
   getSelectDataStr:function(oE, w)
@@ -90,12 +89,28 @@
   {
      var szId, o = Base.id(szId = "_Xui_SelectDiv");
      return(o && "block" == o.style.display && o[szId] == oE.id);     
-  },/*键盘事件处理*/
-  onInput:function(e, o)
-  {document.title = 1 + " | " + new Date().getTime();
+  },/*检索过滤处理*/
+  onInput:function(e, oIpt)
+  {
+     var n = 0, o = Base.id("_Xui_SelectDiv"), oT = slctIptData[oIpt.id], i = o["_lstNum"], 
+         s = oIpt.value.replace(/(^\s+)|(\s+$)/g, ""), a = oT["collection"], b = [];
+     this.data=null;
+     /* 检索过滤处理 */
+     if(0 < s.length)
+     {
+        for(n = 0; n < a.length; n++)
+        {
+           if(-1 < a[n].toString().indexOf(s))b.push(a[n]);
+        }
+        this.data = b;
+     }
+     this.update(o, oIpt, null);
+  },
+  /*键盘事件处理*/
+  onkeydown:function(e, oIpt)
+  {
      e = e || window.event;
-     var n = e.charCode || e.keyCode, o = Base.id("_Xui_SelectDiv"), oT = slctIptData[o.id], i = o["_lstNum"];
-     
+     var n = e.which || e.keyCode, o = Base.id("_Xui_SelectDiv"), oT = slctIptData[oIpt.id], i = o["_lstNum"];
      switch(n)
      {
         /* 接受连续退格键 */
@@ -105,12 +120,15 @@
         /* 回车选择 */
         case 13:
            this.onSelect(null, i);
+           o["_tm"] = 13;
+           Base.bIE ? (e.keyCode = 9) : (e.which = 9);
+           this.hiddenSelectDiv();
            return true;
         case 38: /* 上 */
-           o["_lstNum"] = i = this.lightRow(i + 1);
+           i = this.lightRow(i - 1);
            return true;
         case 40: /* 下 */
-           o["_lstNum"] = i = this.lightRow(i - 1);
+           i = this.lightRow(i + 1);
            return true;
         default:;
      }
@@ -129,14 +147,12 @@
     {
        o = Base.createDiv({className:"selectInput_FloatDiv", id: szId}),
        document.body.appendChild(o);
-       Base.addEvent(o, "mousemove", fns[0])
-           .addEvent(o, "mousedown", fns[0])
-           .addEvent(o, "mouseup", fns[0])
-           .addEvent(o, "mouseout", fns[1]);
+       Base.addEvent(o, "mousemove", fns[0]).addEvent(o, "mousedown", fns[0])
+           .addEvent(o, "mouseup", fns[0]).addEvent(o, "mouseout", fns[1]);
     }
     
     // 状态的处理: 输入对象的id保留
-    o[szId] = oE.id, o["_over"] = 1, o["_tm"] = 13, o["_lstNum"] = 0;
+    o[szId] = oE.id, o["_over"] = 1, o["_tm"] = 13, o["_lstNum"] = 0, o["_in"] = false;
     
     /* 修正显示图层的上下位置 */
     if(190 < p.top - document.body.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;
@@ -144,22 +160,25 @@
     if(!oE[szId])
     {
        oE[szId] = o.id,
-       Base.addEvent(oE, "blur", _t.hiddenSelectDiv)
-           .addEvent(oE, "mousemove", fns[0])
+       Base.addEvent(oE, "blur", _t.hiddenSelectDiv).addEvent(oE, "mousemove", fns[0])
            .addEvent(oE, "mouseout", function(e)
            {
-             _t.lightRow(-1)
+             _t.lightRow(-2)
            });
-       Base.bIE ? Base.addEvent(oE, "propertychange", function(e){Select.onInput(e,oE)}) : Base.addEvent(oE, "input", function(e){Select.onInput(e,oE)});
     }
     for(k in p)
       o.style[k] = p[k];
-    o.innerHTML = _t.getSelectDataStr(oE, p.width);
+    this.update(o, oE, p.width);
     o.style["height"] = Math.min(170, k = 2 + (o.scrollHeight || o.childNodes[0].clientHeight)) + "px";
     this.lightRow(0);
     Base.stopPropagation(e);
     Base.preventDefault(e);
-  },/*隐藏图层的方法*/
+  },/*更新显示内容*/
+  update:function(o, oE, w)
+  {
+     o.innerHTML = _t.getSelectDataStr(oE, w);
+  },
+  /*隐藏图层的方法*/
   hiddenSelectDiv:function()
   {
     var o = Base.id("_Xui_SelectDiv");
