@@ -69,19 +69,27 @@
      var id = "_Xui_SelectDiv", o = Base.id(id), oIpt = Base.id(o[id]),
          n = oTr.rowIndex, oT = slctIptData[oIpt.id], data = this.getData(oIpt.id), 
          cbk = oT['selectCallBack'];
-     /* 处理选择*/
-     if(oT['valueField'])
-       this.setValue(oIpt, data[n][oT['valueField']]);
-     /* 回调处理 */
-     cbk && cbk(data[n], oIpt);
-     Base.preventDefault(e);
-     Base.stopPropagation(e);
-     this.hiddenSelectDiv();
+     if(0 <= n)
+     {
+	     /* 处理选择*/
+	     if(oT['valueField'])
+	       this.setValue(oIpt, data[n][oT['valueField']]);
+	     /* 回调处理 */
+	     cbk && cbk(data[n], oIpt);
+	     Base.preventDefault(e);
+	     Base.stopPropagation(e);
+	     this.hiddenSelectDiv();
+     }else Base.id(szId)["_over"] = 1;
+  },
+  isShow: function(e, obj, oE)
+  {
+     var szId, o = Base.id(szId = "_Xui_SelectDiv");
+     return(o && "block" == o.style.display && o[szId] == oE.id);     
   },
   /*显示下拉列表图层*/
   showSelectDiv: function(e, obj, oE)
   {
-    if(oE.readOnly || oE.disabled)return false;
+    if(oE.readOnly || oE.disabled || this.isShow(e, obj, oE))return false;
     var _t = this, szId = "_Xui_SelectDiv", o = Base.id(szId), 
         oR = Base.getOffset(oE),h = oR[3] - 1, w = oR[2], 
         p = {height:'1px',left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block', 
@@ -93,7 +101,7 @@
        o = Base.createDiv({className:"selectInput_FloatDiv", id: szId}),
        document.body.appendChild(o);
        Base.addEvent(o, "mousemove", fns[0])
-           .addEvent(o, "click", fns[0])
+           .addEvent(o, "mousedown", fns[0])
            .addEvent(o, "mouseout", fns[1]);
     }
     
@@ -117,19 +125,25 @@
       o.style[k] = p[k];
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
     o.style["height"] = Math.min(170, k = 2 + (o.scrollHeight || o.childNodes[0].clientHeight)) + "px";
-    Base.stopPropagation(e);
     this.lightRow(0);
+    Base.stopPropagation(e);
+    Base.preventDefault(e);
   },/*隐藏图层的方法*/
   hiddenSelectDiv:function()
   {
     var o = Base.id("_Xui_SelectDiv");
     o["_over"] = null;
     // 注册自动关闭
-    Base.regTimer(function(e)
+    // 防止重入
+    if(!o["_in"])
     {
-       if(!o["_over"])
-          return o.style.display = 'none', true;
-       return false
-    }, 333);
+	    o["_in"] = true;
+	    Base.regTimer(function(e)
+	    {
+	       if(!o["_over"])
+	          return o["_in"] = false, o.style.display = 'none', true;
+	       return false
+	    },133);
+    }
   }
 }  

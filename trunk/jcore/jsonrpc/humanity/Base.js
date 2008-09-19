@@ -14,6 +14,8 @@
   },
   A:function(a)/*将对象a转换为有效的Array*/
   {
+   if(0 == arguments.length)
+     a = this.A.caller.arguments;
     var i = 0, b = [];
     for(; i < a.length; i++)
        b.push(a[i]);
@@ -36,9 +38,10 @@
   /*将对象o绑定到fn作为他的上下文this*/
   bind:function(fn, o)
   {
+     var _t = this, a = _t.A(arguments);a.shift();a.shift();
      return function(e)
      {
-        fn.apply(o, arguments);
+        fn.apply(o, _t.A(arguments).concat(a));
      }
   },
   unLoad:function(o, t, f)
