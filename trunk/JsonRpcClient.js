@@ -109,9 +109,7 @@ function JsonRpcClient(url) {
 	if(obj)for (var i = 0; i < obj.length; i++)this.fnMakeObj(obj[i], _this);
 	this.cacheObj = [];this.LoadJsObj = function(s)
 	{
-	  try{var s = '';
-	   return _this.cacheObj[s] || (_this.cacheObj[s] = eval("1,"+(s=_this._LoadJsObj.getJsObj(s).getResult())));
-	   }catch(e){alert(e.message + s)}
+	  try{return _this.cacheObj[s] || (_this.cacheObj[s] = eval("1,"+(s=_this._LoadJsObj.getJsObj(s).getResult())))}catch(e){return null}
 	};
 }
 var rpc = JsonRpcClient();

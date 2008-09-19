@@ -43,6 +43,7 @@ public class LoadJsObj extends JsonRpcObject{
 			log.debug(szName + " Ok!");
 		}catch(Exception e)
 		{
+			log.debug(e);
 			oRst.setErrMsg(e.getMessage());
 		}
 		finally
