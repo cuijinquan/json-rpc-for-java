@@ -149,7 +149,7 @@
   onkeydown:function(e, oIpt)
   {
      e = e || window.event;
-     var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getObj(oIpt.id), i = o["_lstNum"];
+     var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getObj(oIpt.id), i = o["_lstNum"] || 0;
      switch(n)
      {
         /* 接受连续退格键 e.repeat, 8 */
@@ -158,7 +158,7 @@
         /* 回车选择 */
         case 13:
            this.onSelect(null, i);
-           o["_tm"] = 1;
+           o["_tm"] = i;
            Base.bIE ? (e.keyCode = 9) : (e.which = 9);
            this.xuiSelectShdow.style.display = o.style.display = 'none';
            break;
@@ -209,7 +209,7 @@
     if(!oE[szId])
     {
        oE[szId] = o.id,
-       Base.addEvent(oE, "blur", function(){o["_in"] = false,_t.hiddenSelectDiv()}).addEvent(oE, "mousemove", fns[0])
+       Base.addEvent(oE, "blur", _t.hiddenSelectDiv).addEvent(oE, "mousemove", fns[0])
            .addEvent(oE, "mouseout", function(e)
            {
              _t.lightRow(-2)
