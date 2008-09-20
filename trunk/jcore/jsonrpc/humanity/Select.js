@@ -27,8 +27,8 @@
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 3, zIndex = o.zIndex - 1;
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
-     obj.zIndex = zIndex;
-     obj.position = "absolute";
+     obj.zIndex = zIndex, obj.position = "absolute", obj.display = "block";
+     
      Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width = 
      Base.id("xuislctsd1").style.width = (w - 12) + "px";
      obj = Base.id("xuislctsd2");
