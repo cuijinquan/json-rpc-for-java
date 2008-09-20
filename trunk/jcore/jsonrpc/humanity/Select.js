@@ -22,14 +22,14 @@
   showShadow:function(o)
   {
      if("none" == o.display)return;
-     var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2, 
+     var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2,
          obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 3, zIndex = o.zIndex - 1;
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
      obj.zIndex = zIndex, obj.position = "absolute", obj.display = "block";
-     
-     Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width = 
+
+     Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width =
      Base.id("xuislctsd1").style.width = (w - 12) + "px";
      obj = Base.id("xuislctsd2");
      obj.style.height = (h - 12) + "px";
@@ -178,7 +178,7 @@
     if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
     var _t = this, o = this.SelectDiv, szId,
         oR = Base.getOffset(oE),h = oR[3] - 1, w = oR[2],
-        p = {height:'1px',left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block',
+        p = {height:'1px',left: (oR[0] - (Base.bIE ? 2 : 0)) + "px", top: (oR[1] + h) + "px", display:'block',
         position: "absolute",
         width: ((Base.bIE ? 2 : 0) + parseInt((obj||{}).width || oE.clientWidth || w)) + "px"},
         k, fns = [function(){o["_over"] = 1, o["_tm"] = 3000},
