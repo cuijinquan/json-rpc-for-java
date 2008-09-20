@@ -158,7 +158,7 @@
         /* 回车选择 */
         case 13:
            this.onSelect(null, i);
-           o["_tm"] = 13;
+           o["_tm"] = 1;
            Base.bIE ? (e.keyCode = 9) : (e.which = 9);
            this.xuiSelectShdow.style.display = o.style.display = 'none';
            break;
