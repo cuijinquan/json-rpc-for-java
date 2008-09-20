@@ -14,47 +14,52 @@
     r[o["_lstNum"] || 0].className='slcthand';
     if(-1 == n)n = r.length - 1;
     if(r.length <= n || 0 > n)n = 0;
-    r[n].className='slcthand slctOver';
+    r[n].className='cursor slctOver';
     if(!flg)r[n].scrollIntoView(true);
     o["_lstNum"] = n;
     return n;
   },
-  showShadow:function(o) /* 处理阴影图层 */
+  showShadow:function(o)
   {
-     var w = parseInt(o.width) + 10, h = parseInt(o.height) + 2, 
+     if("none" == o.display)return;
+     document.title = [o.cssText];
+     var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2, 
          obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
-         left = parseInt(o.left) - 4, top = parseInt(o.top) + 3, zIndex = parseInt(o.zIndex) - 1;
-         obj.width = w + "px", obj.height = h + "px", obj.top = top + "px", obj.left = left + "px",
-         obj.zIndex = zIndex;
-  }
-  , /* 获取要显示的内容 */
+         left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 3, zIndex = o.zIndex - 1;
+     obj.width = w + "px", obj.height = h + "px",
+     obj.top = top + "px", obj.left = left + "px",
+     obj.zIndex = zIndex;
+     obj.position = "absolute";
+     Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width = 
+     Base.id("xuislctsd1").style.width = (w - 12) + "px";
+     obj = Base.id("xuislctsd2");
+     obj.style.height = (h - 12) + "px";obj = 
+     o = obj.getElementsByTagName("div");
+     for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
+  },
   getSelectDataStr:function(oE, w)
   {
-    var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
+    var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
         b = this.getObj(oE.id)["displayFields"], bDisp = !b;
     !bDisp && (b = b.split(/[,;\|\/]/));
     for(i = 0; i < a.length; i++)
     {
       o = a[i];
-      a1.push("<tr onclick=\"Select.onSelect(event, this)\" class=\"slcthand\" onmouseover=\"this.title=this.innerText||this.textContent;Select.lightRow(this.rowIndex, true)\"\">");
+      a1.push("<tr onclick=\"Select.onSelect(event, this)\" class=\"cursor\" onmouseover=\"this.title=this.innerText||this.textContent;Select.lightRow(this.rowIndex, true)\"\">");
       if(bDisp)
       {
           for(k in o)
-        if("_id_" != k)
+           if("_id_" != k)
              a1.push("<td><nobr>"), a1.push(o[k]), a1.push("</nobr></td>");
       }
       else
       {
         for(j = 0; j < b.length; j++)
-        {
           a1.push("<td><nobr>"), a1.push(o[b[j]]), a1.push("</nobr></td>");
-        }
       }
       a1.push("</tr>");
     }
-    a1.push("</table>");
-    al.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\" style=\"z-index: 10999; left: 16px; top: 209px; width: 152px; height: 302px; display: block;\"><div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" style=\"width: 140px;\"></div><div class=\"xstr\"></div></div><div class=\"xsc\" style=\"height: 290px;\"><div class=\"xsml\"></div><div class=\"xsmc\" style=\"width: 140px;\"></div><div class=\"xsmr\"></div></div><div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" style=\"width: 140px;\"></div><div class=\"xsbr\"></div></div></div>");
-    al.push("</div>");
+    a1.push("</table></div>");
     return a1.join("")
   }, /* 给对象设置value */
   setValue:function(szId,s)
@@ -175,6 +180,7 @@
     var _t = this, o = this.SelectDiv, szId,
         oR = Base.getOffset(oE),h = oR[3] - 1, w = oR[2],
         p = {height:'1px',left: oR[0] + "px", top: (oR[1] + h) + "px", display:'block',
+        position: "absolute",
         width: ((Base.bIE ? 2 : 0) + parseInt((obj||{}).width || oE.clientWidth || w)) + "px"},
         k, fns = [function(){o["_over"] = 1, o["_tm"] = 3000},
                   function(){o["_over"] = null,o["_tm"] = 13}];
@@ -184,6 +190,15 @@
        document.body.appendChild(o);
        Base.addEvent(o, "mousemove", fns[0]).addEvent(o, "mousedown", fns[0])
            .addEvent(o, "mouseup", fns[0]).addEvent(o, "mouseout", fns[1]);
+       var a1 = [];
+       a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\" style=\"display: block;\">");
+       a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
+       a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
+       a1.push("<div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" id=\"xuislctsd4\"></div><div class=\"xsbr\"></div></div></div>");
+       var oTmp = Base.createDiv();
+       oTmp.innerHTML = a1.join("");
+       document.body.appendChild(oTmp);
+       oTmp = a1 = null;
     }
     szId = o.id;
     /* 状态的处理: 输入对象的id保留 */
@@ -225,7 +240,7 @@
       Base.regTimer(function(e)
       {
          if(!o["_over"])
-            return o["_in"] = false, o.style.display = 'none', true;
+            return o["_in"] = false, o.style.display = 'block', true;
          return false
       },o["_tm"]);
     }
