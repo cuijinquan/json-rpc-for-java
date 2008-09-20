@@ -24,7 +24,7 @@
      if("none" == o.display)return;
      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2,
          obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
-         left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 3, zIndex = o.zIndex - 1;
+         left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 2, zIndex = o.zIndex - 1;
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
      obj.zIndex = zIndex, obj.position = "absolute", obj.display = "block";
