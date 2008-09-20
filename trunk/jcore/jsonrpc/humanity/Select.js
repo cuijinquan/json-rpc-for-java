@@ -142,7 +142,12 @@
               }
           this.data = b;
        }
-       this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
+       if(0 == b.length)
+       {
+          o.style.display = 'none';
+          if(this.xuiSelectShdow)this.xuiSelectShdow.style.display = o.style.display;
+       }
+       else this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
        o["_inInput"] = false;
      }
   }, /* 键盘事件处理 */
