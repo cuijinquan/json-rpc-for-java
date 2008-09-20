@@ -22,7 +22,6 @@
   showShadow:function(o)
   {
      if("none" == o.display)return;
-     document.title = [o.cssText];
      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2, 
          obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 3, zIndex = o.zIndex - 1;
@@ -115,7 +114,7 @@
        cbk && cbk(dt[n], oIpt);
        if(e)Base.preventDefault(e), Base.stopPropagation(e);
        o["_lstNum"] = n;
-       o.style.display = 'none';
+       this.xuiSelectShdow.style.display = o.style.display = 'none';
      }else o["_over"] = 1;
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
@@ -155,13 +154,13 @@
      {
         /* 接受连续退格键 e.repeat, 8 */
         /*Esc 关闭图层*/
-        case 27:o["_tm"] = 13, o.style.display = 'none';break;
+        case 27:o["_tm"] = 13, this.xuiSelectShdow.style.display = o.style.display = 'none';break;
         /* 回车选择 */
         case 13:
            this.onSelect(null, i);
            o["_tm"] = 13;
            Base.bIE ? (e.keyCode = 9) : (e.which = 9);
-           o.style.display = 'none';
+           this.xuiSelectShdow.style.display = o.style.display = 'none';
            break;
         case 38: /* 上 */
            i = this.lightRow(i - 1);
