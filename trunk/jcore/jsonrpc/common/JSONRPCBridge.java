@@ -342,6 +342,16 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
+	 * 获取被注册的对象
+	 * @param szKeyName
+	 * @return
+	 */
+	public Object getRegObject(String szKeyName)
+	{
+		return globalMap.get(topNms.get(szKeyName));
+	}
+	
+	/***
 	 * 设置session对象
 	 * @param session
 	 * @return
