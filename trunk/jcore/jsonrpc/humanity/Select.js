@@ -1,4 +1,4 @@
-﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,
+﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,xuiSelectShdow:null,
   getObj:function(szId)
   {
     return slctIptData[szId]||{};
@@ -9,7 +9,7 @@
   }, /* 高亮显示指定的行 */
   lightRow:function(n,flg)
   {
-    var o = this.SelectDiv, b = 0 < o.childNodes.length && 0 < o.childNodes[0].rows.length, r = b ? o.childNodes[0].rows : null;
+    var o = this.SelectDiv, tb = o.getElementsByTagName("table"), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
     if(!b)return false;
     r[o["_lstNum"] || 0].className='slcthand';
     if(-1 == n)n = r.length - 1;
@@ -18,10 +18,19 @@
     if(!flg)r[n].scrollIntoView(true);
     o["_lstNum"] = n;
     return n;
-  }, /* 获取要显示的内容 */
+  },
+  showShadow:function(o) /* 处理阴影图层 */
+  {
+     var w = parseInt(o.width) + 10, h = parseInt(o.height) + 2, 
+         obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
+         left = parseInt(o.left) - 4, top = parseInt(o.top) + 3, zIndex = parseInt(o.zIndex) - 1;
+         obj.width = w + "px", obj.height = h + "px", obj.top = top + "px", obj.left = left + "px",
+         obj.zIndex = zIndex;
+  }
+  , /* 获取要显示的内容 */
   getSelectDataStr:function(oE, w)
   {
-    var _t = this, a = this.getData(oE.id), a1 = ["<table cellPadding=\"0\" border=\"0\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
+    var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
         b = this.getObj(oE.id)["displayFields"], bDisp = !b;
     !bDisp && (b = b.split(/[,;\|\/]/));
     for(i = 0; i < a.length; i++)
@@ -44,6 +53,8 @@
       a1.push("</tr>");
     }
     a1.push("</table>");
+    al.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\" style=\"z-index: 10999; left: 16px; top: 209px; width: 152px; height: 302px; display: block;\"><div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" style=\"width: 140px;\"></div><div class=\"xstr\"></div></div><div class=\"xsc\" style=\"height: 290px;\"><div class=\"xsml\"></div><div class=\"xsmc\" style=\"width: 140px;\"></div><div class=\"xsmr\"></div></div><div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" style=\"width: 140px;\"></div><div class=\"xsbr\"></div></div></div>");
+    al.push("</div>");
     return a1.join("")
   }, /* 给对象设置value */
   setValue:function(szId,s)
@@ -169,7 +180,7 @@
                   function(){o["_over"] = null,o["_tm"] = 13}];
     if(!o)
     {
-       this.SelectDiv = o = Base.createDiv({className:"selectInput_FloatDiv", id:"_Xui_SelectDiv"});
+       this.SelectDiv = o = Base.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
        document.body.appendChild(o);
        Base.addEvent(o, "mousemove", fns[0]).addEvent(o, "mousedown", fns[0])
            .addEvent(o, "mouseup", fns[0]).addEvent(o, "mouseout", fns[1]);
@@ -196,7 +207,8 @@
     if(0 < oE.value.length)this.onInput(e, oE);
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
     setTimeout(function(){
-      o.style["height"] = Math.min(170, k = 2 + (o.scrollHeight || o.childNodes[0].clientHeight)) + "px";
+      o.childNodes[0].style["height"] = o.style["height"] = Math.min(170, k = 2 + (o.scrollHeight || o.getElementsByTagName("table")[0].clientHeight)) + "px";
+      _t.showShadow(o.style);
     }, 33);
     this.lightRow(0);
     Base.stopPropagation(e);
