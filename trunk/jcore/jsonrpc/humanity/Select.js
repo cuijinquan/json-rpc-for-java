@@ -22,19 +22,20 @@
   showShadow:function(o)
   {
      if("none" == o.display)return;
-     var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2,
+     var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2, oTmp,
          obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 2, zIndex = o.zIndex - 1;
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
-     obj.zIndex = zIndex, obj.position = "absolute", obj.display = "block";
-
+     obj.zIndex = zIndex, obj.position = "absolute";
+     oTmp = obj;
      Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width =
      Base.id("xuislctsd1").style.width = (w - 12) + "px";
      obj = Base.id("xuislctsd2");
      obj.style.height = (h - 12) + "px";
      o = obj.getElementsByTagName("div");
      for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
+     oTmp.display = "block"
   },
   getSelectDataStr:function(oE, w)
   {
@@ -102,7 +103,6 @@
          cbk = oT['selectCallBack'];
      if(0 <= n && dt.length > n)
      {
-        o["_tm"] = 13;
        /* 处理选择 */
        if(oT['valueField'])
        {
@@ -154,11 +154,10 @@
      {
         /* 接受连续退格键 e.repeat, 8 */
         /*Esc 关闭图层*/
-        case 27:o["_tm"] = 13, this.xuiSelectShdow.style.display = o.style.display = 'none';break;
+        case 27:this.xuiSelectShdow.style.display = o.style.display = 'none';break;
         /* 回车选择 */
         case 13:
            this.onSelect(null, i);
-           o["_tm"] = i;
            Base.bIE ? (e.keyCode = 9) : (e.which = 9);
            this.xuiSelectShdow.style.display = o.style.display = 'none';
            break;
@@ -181,16 +180,15 @@
         p = {height:'1px',left: (oR[0] - (Base.bIE ? 2 : 0)) + "px", top: (oR[1] + h) + "px", display:'block',
         position: "absolute",
         width: ((Base.bIE ? 2 : 0) + parseInt((obj||{}).width || oE.clientWidth || w)) + "px"},
-        k, fns = [function(){o["_over"] = 1, o["_tm"] = 3000},
-                  function(){o["_over"] = null,o["_tm"] = 13}];
+        k, fns = function(){o["_in_"] = true};
     if(!o)
     {
        this.SelectDiv = o = Base.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
        document.body.appendChild(o);
-       Base.addEvent(o, "mousemove", fns[0]).addEvent(o, "mousedown", fns[0])
-           .addEvent(o, "mouseup", fns[0]).addEvent(o, "mouseout", fns[1]);
+       Base.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
+           .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.hiddenSelectDiv);
        var a1 = [];
-       a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\" style=\"display: block;\">");
+       a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
        a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
        a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
        a1.push("<div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" id=\"xuislctsd4\"></div><div class=\"xsbr\"></div></div></div>");
@@ -201,7 +199,7 @@
     }
     szId = o.id;
     /* 状态的处理: 输入对象的id保留 */
-    o[szId] = oE.id, o["_over"] = 1, o["_tm"] = 13, o["_lstNum"] = 0, o["_in"] = false;
+    o[szId] = oE.id, o["_lstNum"] = 0, fns();
 
     /* 修正显示图层的上下位置 */
     if(190 < p.top - document.body.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;
@@ -209,11 +207,7 @@
     if(!oE[szId])
     {
        oE[szId] = o.id,
-       Base.addEvent(oE, "blur", _t.hiddenSelectDiv).addEvent(oE, "mousemove", fns[0])
-           .addEvent(oE, "mouseout", function(e)
-           {
-             _t.lightRow(-2)
-           });
+       Base.addEvent(oE, "blur", _t.hiddenSelectDiv).addEvent(oE, "mousemove", fns);
     }
     for(k in p)o.style[k] = p[k];
     if(b3) /* 清除过滤显示数据 */
@@ -230,18 +224,16 @@
   }, /* 隐藏图层的方法 */
   hiddenSelectDiv:function()
   {
-    var o = this.SelectDiv;
+    var o = Select.SelectDiv;
+    o["_tm_"] = new Date().getTime();
+    o["_in_"] = false;
     /* 注册自动关闭,防止重入，如果重入就回启动多个timer服务定时器 */
-    if(o && !o["_in"])
+    Base.regTimer(function(e)
     {
-      o["_over"] = null;
-      o["_in"] = true;
-      Base.regTimer(function(e)
-      {
-         if(!o["_over"])
-            return o["_in"] = false, o.style.display = 'block', true;
-         return false
-      },o["_tm"]);
-    }
+       if(o["_in_"])return true;
+       if(333 < new Date().getTime() - o["_tm_"])
+          return o["_in_"] = false, Select.xuiSelectShdow.style.display = o.style.display = 'none', true;
+       return false
+    });
   }
 }
