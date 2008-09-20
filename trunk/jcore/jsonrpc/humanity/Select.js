@@ -1,4 +1,4 @@
-﻿{ data:null,SelectDiv:false,
+﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,
   getObj:function(szId)
   {
     return slctIptData[szId]||{};
@@ -49,7 +49,7 @@
   },/*给对象设置value*/
   setValue:function(szId,s)
   {
-     var o = Base.id(szId), i;
+     var o = Base.id(szId), i,old;
      if(o)
      {
       o.value = s;/*checkbox 的处理*/
@@ -57,24 +57,33 @@
       Base.fireEvent(o, "change");
       szId = o.id;
      }
-     i = o;
+     old = o;
      o = document.getElementsByName(szId);
-     if(o == i)return this;
+     if(old == i)return this;
+
      if(o.length)/* radio box的处理*/
-     for(i = 0; i < o.length; i++)
      {
-        if((o[i].value || '') === s)
-        {
-           o[i].checked=true;
-           Base.fireEvent(o[i], "change");
-           break;
-        }
+       for(i = 0; i < o.length; i++)
+       {
+          if((o[i].value || '') === s)
+          {
+             o[i].checked=true;
+             Base.fireEvent(o[i], "change");
+             break;
+          }
+       }
+     }
+     else
+     {
+        o = old.parentNode.getElementsByTagName("input");
+        if(1 < o.length && "hidden" == (o[1].type || ''))
+           o[1].value = s;
      }
      return this;
   },/*选择的处理*/
   onSelect:function(e, oTr)
   {
-     var o = this.SelectDiv, id = o.id, oIpt = Base.id(o[id]),
+     var o = this.SelectDiv, id = o.id, oIpt = Base.id(o[id]),a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getObj(oIpt.id), dt = this.getData(oIpt.id),
          cbk = oT['selectCallBack'];
      if(0 <= n && dt.length > n)
@@ -82,7 +91,12 @@
         o["_tm"] = 13;
        /* 处理选择*/
        if(oT['valueField'])
-         this.setValue(oIpt, dt[n][oT['valueField']]);
+       {
+         /* value处理 */
+         a = oT['valueField'].split(/[,; ]/);
+         this.setValue(oIpt, dt[n][a[0]]);
+         if(1 < a.length)oIpt.value = dt[n][a[1]];
+       }
        /* 回调处理 */
        cbk && cbk(dt[n], oIpt);
        if(e)Base.preventDefault(e), Base.stopPropagation(e);
@@ -100,7 +114,6 @@
      var n = 0, o = this.SelectDiv, oT = this.getObj(oIpt.id), k,
          s = oIpt.value.replace(/(^\s+)|(\s+$)/g, ""), a = oT["collection"], b = [];
      /* _inInput 防止重入*/
-     document.title=o && !o["_inInput"]
      if(o && !o["_inInput"])
      {
        o["_inInput"] = true, this.data = null;
@@ -115,7 +128,7 @@
                  break;
               }
           this.data = b;
-       }document.title=b.length
+       }
        this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
        o["_inInput"] = false;
      }
