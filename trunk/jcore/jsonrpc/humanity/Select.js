@@ -33,7 +33,7 @@
      Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width = 
      Base.id("xuislctsd1").style.width = (w - 12) + "px";
      obj = Base.id("xuislctsd2");
-     obj.style.height = (h - 12) + "px";obj = 
+     obj.style.height = (h - 12) + "px";
      o = obj.getElementsByTagName("div");
      for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
   },
