@@ -22,7 +22,7 @@
   }, 
   id:function(s)
   {
-    return String == s['constructor'] ? document.getElementById(s) : s
+    return s && s['constructor'] && String == s['constructor'] ? document.getElementById(s) : s
   },
   fireEvent:function(szElement,szEvent)
   {  

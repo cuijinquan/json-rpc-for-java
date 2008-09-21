@@ -33,13 +33,13 @@
   },
   showShadow:function(o)
   {
-     if("none" == o.display)return;
+     if(!this.xuiSelectShdow)return;
      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2, oTmp,
          obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 2, zIndex = o.zIndex - 1;
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
-     obj.zIndex = zIndex, obj.position = "absolute";
+     obj.zIndex = zIndex, obj.position = "absolute", obj.display = "block";
      oTmp = obj;
      Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width =
      Base.id("xuislctsd1").style.width = (w - 12) + "px";
@@ -111,7 +111,7 @@
      return this;
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
-  {
+  {try{
      var o = this.SelectDiv, id = o.id, oIpt = Base.id(o[id]),a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getObj(oIpt.id), dt = this.getData(oIpt.id),
          cbk = oT['selectCallBack'];
@@ -119,8 +119,7 @@
      {
        /* 处理选择 */
        if(oT['valueField'])
-       {
-         /* value处理 */
+       { /* value处理 */
          a = oT['valueField'].split(/[,; ]/);
          this.setValue(oIpt, dt[n][a[0]]);
          if(1 < a.length)oIpt.value = dt[n][a[1]];
@@ -128,8 +127,10 @@
        cbk && cbk(dt[n], oIpt);
        if(e)Base.preventDefault(e), Base.stopPropagation(e);
        o["_lstNum"] = n;
-       this.xuiSelectShdow.style.display = o.style.display = 'none';
+       o.style.display = 'none'
+       if(this.xuiSelectShdow)this.xuiSelectShdow.style.display = o.style.display;
      }else o["_over"] = 1;
+     }catch(e1){alert(e1.message)}
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
   {
@@ -153,12 +154,13 @@
                b.push(a[n]);
           this.data = b;
        }
-       if(0 == b.length && 0 < s.length)
+       if(0 < this.getData(oIpt.id).length)
+          this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
+       else 
        {
           o.style.display = 'none';
           if(this.xuiSelectShdow)this.xuiSelectShdow.style.display = o.style.display;
        }
-       else this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
        o["_inInput"] = false;
      }
   }, /* 键盘事件处理 */
@@ -190,16 +192,24 @@
   showSelectDiv: function(e, obj, oE)
   {
     var b3 = (3 == arguments.length);
+    e = e || window.event;
     if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
     var _t = this, o = this.SelectDiv, szId,
         oR = Base.getOffset(oE),h = oR[3] - 1, w = oR[2],
         p = {height:'1px',left: (oR[0] - (Base.bIE ? 2 : 0)) + "px", top: (oR[1] + h) + "px", display:'block',
         position: "absolute",
         width: ((Base.bIE ? 2 : 0) + parseInt((obj||{}).width || oE.clientWidth || w)) + "px"},
-        k,show = function()
+        k,show = function(event)
         {
           o["tmer"] && Base.clearTimer(o["tmer"]);
-          o.style.display = 'block';if(Select.xuiSelectShdow)Select.xuiSelectShdow.style.display = 'block'
+	      o.style.display = 'block';
+          if(0 < (Select.getData(oE.id) || []).length)
+          {
+	          var oTmp = Select.xuiSelectShdow;
+	          if(oTmp)
+	            (oTmp = oTmp.style || {}).display = 'block', 
+	            o.style.height && (oTmp.height = o.style.height);
+          }
         },
         fns = function(){show(),o["_in_"] = true};
     if(!o)
@@ -227,7 +237,8 @@
     if(!oE[szId])
     {
        oE[szId] = o.id,
-       Base.addEvent(oE, "blur", function(){o["_blur_"]=true,_t.hiddenSelectDiv()}).addEvent(oE, "mousemove", fns);
+       Base.addEvent(oE, "blur", function(){o["_blur_"]=true,_t.hiddenSelectDiv()})
+           .addEvent(oE, "mousemove", function(e){oE.focus();Base.fireEvent(oE, "focus")});
     }
     for(k in p)o.style[k] = p[k];
     if(b3) /* 清除过滤显示数据 */
@@ -254,7 +265,7 @@
        {
 	       if(o["_in_"])return true;
 	       if(333 < new Date().getTime() - o["_tm_"])
-	          return Select.xuiSelectShdow.style.display = o.style.display = 'none', true;
+	          return o.style.display = 'none', Select.xuiSelectShdow && (Select.xuiSelectShdow.style.display = o.style.display), true;
        }
        return false
     }, 333);
