@@ -239,7 +239,7 @@
     {
        oE[szId] = o.id,
        Base.addEvent(oE, "blur", function(){o["_blur_"]=true,_t.hiddenSelectDiv()})
-           .addEvent(oE, "mousemove", function(e){oE.focus();Base.fireEvent(oE, "focus")});
+           .addEvent(oE, "mousemove", function(e){_t.data=null,oE.focus();Base.fireEvent(oE, "focus")});
     }
     for(k in p)o.style[k] = p[k];
     if(b3) /* 清除过滤显示数据 */
