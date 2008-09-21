@@ -142,7 +142,7 @@
               }
           this.data = b;
        }
-       if(0 == b.length)
+       if(0 == b.length && 0 < s.length)
        {
           o.style.display = 'none';
           if(this.xuiSelectShdow)this.xuiSelectShdow.style.display = o.style.display;
@@ -197,10 +197,8 @@
        a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
        a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
        a1.push("<div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" id=\"xuislctsd4\"></div><div class=\"xsbr\"></div></div></div>");
-       var oTmp = Base.createDiv();
-       oTmp.innerHTML = a1.join("");
-       document.body.appendChild(oTmp);
-       oTmp = a1 = null;
+       Base.insertHtml(document.body, "beforeend", a1.join(""));
+       a1 = null;
     }
     szId = o.id;
     /* 状态的处理: 输入对象的id保留 */

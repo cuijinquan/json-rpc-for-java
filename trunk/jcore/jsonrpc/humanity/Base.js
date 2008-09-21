@@ -52,6 +52,10 @@
 	    else for(; i > -1; i--)b[i][0].removeEventListener(b[i][1], b[i][2], false);
 	    delete b, delete this.a;
     }
+  },detachEvent:function(o, type, fn)
+  {
+    o = o || document.body;
+    o.detachEvent ? o.detachEvent("on" + type, fn) : o.removeEventListener(type, fn, false);
   },
   addEvent:function()
   {
@@ -97,7 +101,7 @@
     s && t.addEvent(window, 'load', function(e){o.scrollTop = s,t.setCookie(k, null),delete top.__aScroll[k]});
     t.addEvent(o, 'scroll', function(e)
     {
-      e = e || window.event, e = e.target || e.srcElement;
+      e = t.FromEventObj(e);
       window.setTimeout(function(){
         t.setCookie(k, top.__aScroll[k] = e.scrollTop);
       }, 13);
@@ -167,5 +171,56 @@
   stopPropagation:function(e)
   {
      return e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
+  },insertHtml:function(el, where, html){
+  where = where.toLowerCase();
+  if(el.insertAdjacentHTML){
+      switch(where){
+          case "beforebegin":
+              el.insertAdjacentHTML('BeforeBegin', html);
+              return el.previousSibling;
+          case "afterbegin":
+              el.insertAdjacentHTML('AfterBegin', html);
+              return el.firstChild;
+          case "beforeend":
+              el.insertAdjacentHTML('BeforeEnd', html);
+              return el.lastChild;
+          case "afterend":
+              el.insertAdjacentHTML('AfterEnd', html);
+              return el.nextSibling;
+      }
+  }
+  var range = el.ownerDocument.createRange(), frag;
+  switch(where){
+       case "beforebegin":
+          range.setStartBefore(el);
+          frag = range.createContextualFragment(html);
+          el.parentNode.insertBefore(frag, el);
+          return el.previousSibling;
+       case "afterbegin":
+          if(el.firstChild){
+              range.setStartBefore(el.firstChild);
+              frag = range.createContextualFragment(html);
+              el.insertBefore(frag, el.firstChild);
+              return el.firstChild;
+          }else{
+              el.innerHTML = html;
+              return el.firstChild;
+          }
+      case "beforeend":
+          if(el.lastChild){
+              range.setStartAfter(el.lastChild);
+              frag = range.createContextualFragment(html);
+              el.appendChild(frag);
+              return el.lastChild;
+          }else{
+              el.innerHTML = html;
+              return el.lastChild;
+          }
+      case "afterend":
+          range.setStartAfter(el);
+          frag = range.createContextualFragment(html);
+          el.parentNode.insertBefore(frag, el.nextSibling);
+          return el.nextSibling;
+      }
   }
 }
