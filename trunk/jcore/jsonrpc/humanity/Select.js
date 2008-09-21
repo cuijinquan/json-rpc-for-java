@@ -33,13 +33,12 @@
   },
   showShadow:function(o)
   {
-     if(!this.xuiSelectShdow)return;
      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2, oTmp,
          obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 2, zIndex = o.zIndex - 1;
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
-     obj.zIndex = zIndex, obj.position = "absolute", obj.display = "block";
+     obj.zIndex = zIndex, obj.position = "absolute", obj.display = o.display = "block";
      oTmp = obj;
      Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width =
      Base.id("xuislctsd1").style.width = (w - 12) + "px";
@@ -47,7 +46,6 @@
      obj.style.height = (h - 12) + "px";
      o = obj.getElementsByTagName("div");
      for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
-     oTmp.display = "block"
   },
   getSelectDataStr:function(oE, w)
   {
