@@ -190,6 +190,9 @@
         default:;
      }
      return n;
+  },onResize:function()
+  {
+    this.showShadow(Base.id("_Xui_SelectDiv"));
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
@@ -219,7 +222,7 @@
        this.SelectDiv = o = Base.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
        document.body.appendChild(o);
        Base.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
-           .addEvent(o, "scroll", fns)
+           .addEvent(o, "scroll", fns).addEvent(o, "resize", _t.onResize)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.hiddenSelectDiv);
        var a1 = [];
        a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
