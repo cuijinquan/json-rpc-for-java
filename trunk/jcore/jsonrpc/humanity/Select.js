@@ -126,7 +126,7 @@
          Select.setValue(oIpt, dt[n][a[0]]);
          if(1 < a.length)oIpt.value = dt[n][a[1]];
        } /* 回调处理 */
-       cbk && cbk(dt[n], oIpt);
+       cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
        if(e)Base.preventDefault(e), Base.stopPropagation(e);
        o["_lstNum"] = n;
        o.style.display = 'none';
