@@ -115,29 +115,34 @@
   onSelect:function(e, oTr)
   {
      var o = this.SelectDiv, id = o.id, oIpt = o[id] && Base.id(o[id]) || null,a,
-         n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = Select.getObj(oIpt.id) || {},
-         dt = Select.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
+         n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getObj(oIpt.id) || {},
+         dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
      if(0 <= n && dt.length > n)
      {
        /* 处理选择 */
        if(oT['valueField'])
        { /* value处理 */
          a = (oT['valueField'] || "").split(/[,; ]/);
-         Select.setValue(oIpt, dt[n][a[0]]);
+         this.setValue(oIpt, dt[n][a[0]]);
          if(1 < a.length)oIpt.value = dt[n][a[1]];
        } /* 回调处理 */
        cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
        if(e)Base.preventDefault(e), Base.stopPropagation(e);
        o["_lstNum"] = n;
-       o.style.display = 'none';
-       if(Select.xuiSelectShdow)Select.xuiSelectShdow.style.display = o.style.display;
+       this.hidden();
      }else o["_over"] = 1;     
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
   {
      var o = this.SelectDiv, szId = o.id;
      return(o && "block" == o.style.display && o[szId] == oE.id);
-  }, /* 检索过滤处理 */
+  },
+  hidden: function()
+  {
+     Base.id("_Xui_SelectDiv").style.display = 'none';
+     if(this.xuiSelectShdow)this.xuiSelectShdow.style.display = 'none';
+  }
+  , /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
      this.getData(oIpt.id);
@@ -157,11 +162,7 @@
        }
        if(0 < this.getData(oIpt.id).length)
           this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
-       else 
-       {
-          o.style.display = 'none';
-          if(this.xuiSelectShdow)this.xuiSelectShdow.style.display = o.style.display;
-       }
+       else this.hidden();
        o["_inInput"] = false;
      }
   }, /* 键盘事件处理 */
@@ -173,12 +174,12 @@
      {
         /* 接受连续退格键 e.repeat, 8 */
         /*Esc 关闭图层*/
-        case 27:this.xuiSelectShdow.style.display = o.style.display = 'none';break;
+        case 27:this.hidden();break;
         /* 回车选择 */
         case 13:
            this.onSelect(null, i);
            Base.bIE ? (e.keyCode = 9) : (e.which = 9);
-           this.xuiSelectShdow.style.display = o.style.display = 'none';
+           this.hidden();
            break;
         case 38: /* 上 */
            i = this.lightRow(i - 1);
@@ -273,7 +274,7 @@
        {
 	       if(o["_in_"])return true;
 	       if(333 < new Date().getTime() - o["_tm_"])
-	          return o.style.display = 'none', Select.xuiSelectShdow && (Select.xuiSelectShdow.style.display = o.style.display), true;
+	          return Select.hidden(), true;
        }
        return false
     }, 333);
