@@ -23,7 +23,8 @@
   {
     var o = this.SelectDiv, tb = o.getElementsByTagName("table"), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
     if(!b)return false;
-    r[o["_lstNum"] || 0].className='slcthand';
+    if(r.length > o["_lstNum"])
+       r[o["_lstNum"] || 0].className='slcthand';
     if(-1 == n)n = r.length - 1;
     if(r.length <= n || 0 > n)n = 0;
     r[n].className='cursor slctOver';
@@ -43,7 +44,8 @@
      Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width =
      Base.id("xuislctsd1").style.width = (w - 12) + "px";
      obj = Base.id("xuislctsd2");
-     obj.style.height = (h - 12) + "px";
+     if(12 < h)
+        obj.style.height = (h - 12) + "px";
      o = obj.getElementsByTagName("div");
      for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
   },
@@ -79,8 +81,8 @@
      var o = Base.id(szId), i,old;
      if(o)
      {
-      o.value = s; /* checkbox 的处理 */
-      if("checkbox" === (o.type || ""))o.checked=true;
+      o["value"] = s; /* checkbox 的处理 */
+      if("checkbox" === (o.type || ""))o["checked"]=true;
       Base.fireEvent(o, "change");
       szId = o.id;
      }
@@ -88,47 +90,46 @@
      o = document.getElementsByName(szId);
      if(old == i)return this;
 
-     if(o.length) /* radio box的处理 */
+     if(o && o["length"]) /* radio box的处理 */
      {
        for(i = 0; i < o.length; i++)
        {
-          if((o[i].value || '') === s)
+          if((o[i]["value"] || '') === s)
           {
-             o[i].checked=true;
+             o[i]["checked"]=true;
              Base.fireEvent(o[i], "change");
              break;
           }
        }
      }
-     else
+     else if(old)
      {
         o = old.parentNode.getElementsByTagName("input");
         if(1 < o.length && "hidden" == (o[1].type || ''))
-           o[1].value = s;
+           o[1]["value"] = s;
      }
      return this;
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
-  {try{
-     var o = this.SelectDiv, id = o.id, oIpt = Base.id(o[id]),a,
-         n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getObj(oIpt.id), dt = this.getData(oIpt.id),
-         cbk = oT['selectCallBack'];
+  {
+     var o = this.SelectDiv, id = o.id, oIpt = o[id] && Base.id(o[id]) || null,a,
+         n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = Select.getObj(oIpt.id) || {},
+         dt = Select.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
      if(0 <= n && dt.length > n)
      {
        /* 处理选择 */
        if(oT['valueField'])
        { /* value处理 */
-         a = oT['valueField'].split(/[,; ]/);
-         this.setValue(oIpt, dt[n][a[0]]);
+         a = (oT['valueField'] || "").split(/[,; ]/);
+         Select.setValue(oIpt, dt[n][a[0]]);
          if(1 < a.length)oIpt.value = dt[n][a[1]];
        } /* 回调处理 */
        cbk && cbk(dt[n], oIpt);
        if(e)Base.preventDefault(e), Base.stopPropagation(e);
        o["_lstNum"] = n;
-       o.style.display = 'none'
-       if(this.xuiSelectShdow)this.xuiSelectShdow.style.display = o.style.display;
-     }else o["_over"] = 1;
-     }catch(e1){alert(e1.message)}
+       o.style.display = 'none';
+       if(Select.xuiSelectShdow)Select.xuiSelectShdow.style.display = o.style.display;
+     }else o["_over"] = 1;     
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
   {
@@ -243,10 +244,17 @@
 	   _t.data  = null;
     if(0 < oE.value.length)this.onInput(e, oE);
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
-    setTimeout(function(){
-      o.childNodes[0].style["height"] = o.style["height"] = Math.min(170, k = 2 + (o.scrollHeight || o.getElementsByTagName("table")[0].clientHeight)) + "px";
-      _t.showShadow(o.style);
-    }, 33);
+    Base.regTimer(function()
+    {
+       var n = Math.min(170, k = 2 + (o.scrollHeight || o.getElementsByTagName("table")[0].clientHeight));
+       if(15 < n)
+       {
+         o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = (n - 2)  + "px";
+         _t.showShadow(o.style);
+         return true;
+       }
+       return false
+    });
     this.lightRow(0);
     Base.stopPropagation(e);
     Base.preventDefault(e);
