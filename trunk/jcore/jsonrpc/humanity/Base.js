@@ -140,7 +140,8 @@
     {
       if(fn())clearInterval(nTime);
     }, n || 13);
-  },
+    return nTime;
+  },clearTimer:function(n){clearInterval(n)},
   getOffset:function(o)
   {
     var a = [o.offsetLeft, o.offsetTop, o.offsetWidth,o.offsetHeight, 0, 0], r;

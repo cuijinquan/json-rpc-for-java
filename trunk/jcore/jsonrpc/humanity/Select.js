@@ -196,12 +196,18 @@
         p = {height:'1px',left: (oR[0] - (Base.bIE ? 2 : 0)) + "px", top: (oR[1] + h) + "px", display:'block',
         position: "absolute",
         width: ((Base.bIE ? 2 : 0) + parseInt((obj||{}).width || oE.clientWidth || w)) + "px"},
-        k, fns = function(){o["_in_"] = true};
+        k,show = function()
+        {
+          o["tmer"] && Base.clearTimer(o["tmer"]);
+          o.style.display = 'block';if(Select.xuiSelectShdow)Select.xuiSelectShdow.style.display = 'block'
+        },
+        fns = function(){show(),o["_in_"] = true};
     if(!o)
     {
        this.SelectDiv = o = Base.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
        document.body.appendChild(o);
        Base.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
+           .addEvent(o, "scroll", fns)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.hiddenSelectDiv);
        var a1 = [];
        a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
@@ -213,7 +219,7 @@
     }
     szId = o.id;
     /* 状态的处理: 输入对象的id保留 */
-    o[szId] = oE.id, o["_lstNum"] = 0, fns();
+    o[szId] = oE.id, o["_lstNum"] = 0, o["_blur_"]= false, fns();
 
     /* 修正显示图层的上下位置 */
     if(190 < p.top - document.body.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;
@@ -221,7 +227,7 @@
     if(!oE[szId])
     {
        oE[szId] = o.id,
-       Base.addEvent(oE, "blur", _t.hiddenSelectDiv).addEvent(oE, "mousemove", fns);
+       Base.addEvent(oE, "blur", function(){o["_blur_"]=true,_t.hiddenSelectDiv()}).addEvent(oE, "mousemove", fns);
     }
     for(k in p)o.style[k] = p[k];
     if(b3) /* 清除过滤显示数据 */
@@ -242,12 +248,15 @@
     o["_tm_"] = new Date().getTime();
     o["_in_"] = false;
     /* 注册自动关闭,防止重入，如果重入就回启动多个timer服务定时器 */
-    Base.regTimer(function(e)
+    o["tmer"] = Base.regTimer(function(e)
     {
-       if(o["_in_"])return true;
-       if(333 < new Date().getTime() - o["_tm_"])
-          return o["_in_"] = false, Select.xuiSelectShdow.style.display = o.style.display = 'none', true;
+       if(o["_blur_"])
+       {
+	       if(o["_in_"])return true;
+	       if(333 < new Date().getTime() - o["_tm_"])
+	          return Select.xuiSelectShdow.style.display = o.style.display = 'none', true;
+       }
        return false
-    });
+    }, 333);
   }
 }
