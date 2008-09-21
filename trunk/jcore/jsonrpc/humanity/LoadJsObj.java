@@ -37,8 +37,12 @@ public class LoadJsObj extends JsonRpcObject{
 					buf.append(b, 0, j);
 				}
 				if(0 < j)
-					buf.append(b, 0, j);				
-				oRst.setResult(new String(Content.JS(buf.toString().trim().replaceAll("\\/\\*[^\\*]+\\*\\/", "")).getBytes(), "UTF-8"));
+					buf.append(b, 0, j);
+				String s = buf.toString().trim().replaceAll("\\/\\*[^\\*]+\\*\\/", "");
+				s = Content.JS(new String(s.getBytes(), "UTF-8"));
+				s = s.replaceFirst("^\\\\ufeff", "");
+				oRst.setResult(s);
+				System.out.println(oRst.getResult());
 			}
 			else oRst.setErrMsg("指定的对象不存在，请确认大小写是否正确。");
 		}catch(Exception e)
