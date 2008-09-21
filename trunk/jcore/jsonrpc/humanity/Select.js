@@ -19,7 +19,7 @@
     }
     return this.data || this.getObj(szId)["collection"]
   }, /* 高亮显示指定的行 */
-  lightRow:function(n,flg)
+  lightRow:function(n,flg,e)
   {
     var o = this.SelectDiv, tb = o.getElementsByTagName("table"), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
     if(!b)return false;
@@ -30,6 +30,8 @@
     r[n].className='cursor slctOver';
     if(!flg)r[n].scrollIntoView(true);
     o["_lstNum"] = n;
+    if(3 == arguments.length)
+      return Base.stopPropagation(e),Base.preventDefault(e), false;
     return n;
   },
   showShadow:function(o)
@@ -59,7 +61,7 @@
       o = a[i];
       a1.push("<tr title=\"");
       a1.push(o[key]);
-      a1.push("\" onclick=\"Select.onSelect(event, this)\" class=\"cursor\" onmouseover=\"Select.lightRow(this.rowIndex, true)\"\">");
+      a1.push("\" onclick=\"Select.onSelect(event, this)\" class=\"cursor\" onmouseover=\"return Select.lightRow(this.rowIndex,true,event)\"\">");
       if(bDisp)
       {
           for(k in o)
@@ -207,7 +209,7 @@
 	          var oTmp = Select.xuiSelectShdow;
 	          if(oTmp)
 	            (oTmp = oTmp.style || {}).display = 'block', 
-	            o.style.height && (oTmp.height = o.style.height);
+	            o.style.height && (oTmp.height = (parseInt(o.style.height) + 2)+ "px");
           }
         },
         fns = function(){show(),o["_in_"] = true};
