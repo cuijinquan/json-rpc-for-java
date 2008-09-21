@@ -5,6 +5,18 @@
   },
   getData:function(szId) /* 获取下拉列表数据 */
   {
+    var rst = this.getObj(szId)["collection"], i, s, o, k, key = "_id_";
+    if(0 < rst.length && "" == rst[0][key].replace(/\d/g, ""))
+    {
+        for(i = 0; i < rst.length; i++)
+        {
+          s = [], o = rst[i];
+          for(k in o)
+             if(key != k)
+                s.push(o[k]);
+          rst[i][key] = s.join("\t");
+        }
+    }
     return this.data || this.getObj(szId)["collection"]
   }, /* 高亮显示指定的行 */
   lightRow:function(n,flg)
@@ -40,16 +52,18 @@
   getSelectDataStr:function(oE, w)
   {
     var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
-        b = this.getObj(oE.id)["displayFields"], bDisp = !b;
+        b = this.getObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
     !bDisp && (b = b.split(/[,;\|\/]/));
     for(i = 0; i < a.length; i++)
     {
       o = a[i];
-      a1.push("<tr onclick=\"Select.onSelect(event, this)\" class=\"cursor\" onmouseover=\"this.title=this.innerText||this.textContent;Select.lightRow(this.rowIndex, true)\"\">");
+      a1.push("<tr title=\"");
+      a1.push(o[key]);
+      a1.push("\" onclick=\"Select.onSelect(event, this)\" class=\"cursor\" onmouseover=\"Select.lightRow(this.rowIndex, true)\"\">");
       if(bDisp)
       {
           for(k in o)
-           if("_id_" != k)
+           if(key != k)
              a1.push("<td><nobr>"), a1.push(o[k]), a1.push("</nobr></td>");
       }
       else
@@ -124,6 +138,7 @@
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
+     this.getData(oIpt.id);
      var n = 0, o = this.SelectDiv, oT = this.getObj(oIpt.id), k,
          s = oIpt.value.replace(/(^\s+)|(\s+$)/g, ""), a = oT["collection"], b = [];
      /* _inInput 防止重入 */
@@ -134,12 +149,8 @@
        if(0 < s.length)
        {
           for(n = 0; n < a.length; n++)
-             for(k in a[n])
-              if("_id_" != k && -1 < a[n][k].indexOf(s))
-              {
-                 b.push(a[n]);
-                 break;
-              }
+            if(-1 < a[n]["_id_"].indexOf(s))
+               b.push(a[n]);
           this.data = b;
        }
        if(0 == b.length && 0 < s.length)
