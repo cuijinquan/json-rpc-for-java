@@ -42,7 +42,6 @@ public class LoadJsObj extends JsonRpcObject{
 				s = Content.JS(new String(s.getBytes(), "UTF-8"));
 				s = s.replaceFirst("^\\\\ufeff", "");
 				oRst.setResult(s);
-				System.out.println(oRst.getResult());
 			}
 			else oRst.setErrMsg("指定的对象不存在，请确认大小写是否正确。");
 		}catch(Exception e)
