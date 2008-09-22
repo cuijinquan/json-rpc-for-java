@@ -36,6 +36,7 @@
   },
   showShadow:function(o)
   {
+     if(Base.bIE && -1 < navigator.userAgent.indexOf("6.0"))return;
      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2, oTmp,
          obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 2, zIndex = o.zIndex - 1;
@@ -53,7 +54,7 @@
   },
   getSelectDataStr:function(oE, w)
   {
-    var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
+    var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
         b = this.getObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
     !bDisp && (b = b.split(/[,;\|\/]/));
     for(i = 0; i < a.length; i++)
@@ -200,11 +201,12 @@
     var b3 = (3 == arguments.length);
     e = e || window.event;
     if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
-    var _t = this, o = this.SelectDiv, szId,
-        oR = Base.getOffset(oE),h = oR[3] - 1, w = oR[2],
-        p = {height:'1px',left: (oR[0] - (Base.bIE ? 2 : 0)) + "px", top: (oR[1] + h) + "px", display:'block',
-        position: "absolute",
-        width: ((Base.bIE ? 2 : 0) + parseInt((obj||{}).width || oE.clientWidth || w)) + "px"},
+    var _t = this, o = this.SelectDiv, szId, oTable = Base.p(oE,"TABLE"),
+        oR = Base.getOffset(oTable),h = oR[3], w = oR[2],
+        p = { height:'1px', left: oR[0] + "px", 
+              top: (oR[1] + h - (Base.bIE ? 3 : 2)) + "px", display:'block',
+              position: "absolute",
+              width: ((Base.bIE ? 2 : 0) + parseInt((obj||{}).width || oTable.clientWidth || w)) + "px"},
         k,show = function(event)
         {
           o["tmer"] && Base.clearTimer(o["tmer"]);
@@ -223,7 +225,7 @@
        this.SelectDiv = o = Base.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
        document.body.appendChild(o);
        Base.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
-           .addEvent(o, "scroll", fns)
+           .addEvent(o, "scroll", fns).addEvent(o, "resize", _t.onResize)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.hiddenSelectDiv);
        var a1 = [];
        a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
