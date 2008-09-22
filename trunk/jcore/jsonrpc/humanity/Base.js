@@ -1,5 +1,6 @@
 {
   bIE: -1 < navigator.userAgent.indexOf("MSIE"),
+  nVer: this.bIE ? parseFloat(/MSIE\s*(\d\.\d)/.exec(navigator.userAgent)[1]): 0,
   bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
   a:[],nDatetime:24 * 60 * 60 * 1000,
   p:function(o,szTagName)

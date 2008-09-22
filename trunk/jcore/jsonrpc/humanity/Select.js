@@ -203,7 +203,7 @@
     if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
     var _t = this, o = this.SelectDiv, szId, oTable = Base.p(oE,"TABLE"),
         oR = Base.getOffset(oTable),h = oR[3], w = oR[2],
-        p = { height:'1px', left: oR[0] + "px", 
+        p = { height:'1px', left: (oR[0] - (8 <= Base.nVer ? 6 : 0)) + "px", 
               top: (oR[1] + h - (Base.bIE ? 3 : 2)) + "px", display:'block',
               position: "absolute",
               width: ((Base.bIE ? 2 : 0) + parseInt((obj||{}).width || oTable.clientWidth || w)) + "px"},
