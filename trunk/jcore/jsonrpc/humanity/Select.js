@@ -127,10 +127,10 @@
          if(1 < a.length)oIpt.value = dt[n][a[1]];
        } /* 回调处理 */
        cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
-       if(e)Base.preventDefault(e), Base.stopPropagation(e);
        o["_lstNum"] = n;
        this.hidden();
-     }else o["_over"] = 1;     
+     }else o["_over"] = 1;
+     if(e)Base.preventDefault(e), Base.stopPropagation(e);
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
   {
@@ -162,7 +162,7 @@
        }
        if(0 < this.getData(oIpt.id).length)
           this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
-       else this.hidden();
+       else this.setValue(oIpt,""),this.hidden();
        o["_inInput"] = false;
      }
   }, /* 键盘事件处理 */
@@ -192,7 +192,8 @@
      return n;
   },onResize:function()
   {
-    this.showShadow(Base.id("_Xui_SelectDiv"));
+    var o = Base.id("_Xui_SelectDiv");
+    o && Select.showShadow(o.style);
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
@@ -222,7 +223,7 @@
        this.SelectDiv = o = Base.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
        document.body.appendChild(o);
        Base.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
-           .addEvent(o, "scroll", fns).addEvent(o, "resize", _t.onResize)
+           .addEvent(o, "scroll", fns)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.hiddenSelectDiv);
        var a1 = [];
        a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
@@ -250,10 +251,11 @@
 	   _t.data  = null;
     if(0 < oE.value.length)this.onInput(e, oE);
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
+     var nTm = new Date().getTime();
     Base.regTimer(function()
     {
        var n = Math.min(170, k = 2 + (o.scrollHeight || o.getElementsByTagName("table")[0].clientHeight));
-       if(15 < n)
+       if(15 < n || 1000 < new Date().getTime() - nTm)
        {
          o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = (n - 2)  + "px";
          _t.showShadow(o.style);
@@ -261,6 +263,7 @@
        }
        return false
     });
+   
     this.lightRow(0);
     Base.stopPropagation(e);
     Base.preventDefault(e);
