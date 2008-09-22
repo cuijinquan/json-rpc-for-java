@@ -163,7 +163,7 @@
        }
        if(0 < this.getData(oIpt.id).length)
           this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
-       else this.setValue(oIpt,""),this.hidden();
+       else this.setValue(oIpt,""),oIpt.value=s,this.hidden();
        o["_inInput"] = false;
      }
   }, /* 键盘事件处理 */
