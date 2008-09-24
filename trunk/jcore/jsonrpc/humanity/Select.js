@@ -161,13 +161,14 @@
                b.push(a[n]);
           this.data = b;
        }
+       if(oT["allowEdit"])
+          this.setValue(oIpt,s);
+       else if(oIpt.getAttribute("oldValue") != s)
+          this.setValue(oIpt,""),oIpt.value=s;
        if(0 < this.getData(oIpt.id).length)
           this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
        else
-       {
-          oT["allowEdit"] ? this.setValue(oIpt,s) : this.setValue(oIpt,""),oIpt.value=s;
           this.hidden();
-       }
        o["_inInput"] = false;
      }
   }, /* 键盘事件处理 */
@@ -271,8 +272,7 @@
     });
    
     this.lightRow(0);
-    Base.stopPropagation(e);
-    Base.preventDefault(e);
+    Base.stopPropagation(e),Base.preventDefault(e);
   }, /* 隐藏图层的方法 */
   hiddenSelectDiv:function()
   {
