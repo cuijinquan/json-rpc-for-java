@@ -126,12 +126,24 @@
   },
   createDiv:function()
   {
-     var o = document.createElement("div"), b = !!arguments[0] || false,
-         p = arguments[0], k;
+     var o = null, b = !!arguments[0] || false,
+         p = arguments[0], k, a1 = [];
+     if(p && p["id"] && (o = this.id(p["id"])))return o;
+     o = document.createElement("div")
      if(b)
      {
        for(k in p)
           o[k] = p[k];
+     }
+     document.body.appendChild(o);
+     if(!this.id("xuiSelectShdow"))
+     {
+       a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
+       a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
+       a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
+       a1.push("<div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" id=\"xuislctsd4\"></div><div class=\"xsbr\"></div></div></div>");
+       this.insertHtml(document.body, "beforeend", a1.join(""));
+       a1 = null;
      }
      return o;
   },

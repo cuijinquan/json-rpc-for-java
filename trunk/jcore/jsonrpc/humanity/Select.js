@@ -81,22 +81,22 @@
   }, /* 给对象设置value */
   setValue:function(szId,s)
   {
-     var o = Base.id(szId), i,old;
+     var o = Base.id(szId), i,old, oT, a;
      if(o)
      {
       o["value"] = s; /* checkbox 的处理 */
       if("checkbox" === (o.type || ""))o["checked"]=true;
       Base.fireEvent(o, "change");
-      szId = o.id;
+      szId = o.id || szId;
      }
      old = o;
      o = document.getElementsByName(szId);
-     if(old == i)return this;
-
-     if(o && o["length"]) /* radio box的处理 */
+     if(1 < o["length"]) 
      {
+       /* radio box的处理 */
        for(i = 0; i < o.length; i++)
        {
+          if("checkbox" != o[i]["type"])break;
           if((o[i]["value"] || '') === s)
           {
              o[i]["checked"]=true;
@@ -106,10 +106,30 @@
        }
      }
      else if(old)
-     {
+     { 
         o = old.parentNode.getElementsByTagName("input");
         if(1 < o.length && "hidden" == (o[1].type || ''))
            o[1]["value"] = s;
+        /* 下拉列表的处理 */
+        if(2 == arguments.length)
+        {
+	        oT = this.getObj(old.id), dt = this.getData(old.id);
+	        if(oT['valueField'])
+	        {
+	          a = (oT['valueField'] || "").split(/[,; ]/);
+	          i = s;
+	          if(2 == a.length)
+	          for(n = 0; n < dt.length; n++)
+	          {
+	            if(s == dt[n][a[0]])
+	            {
+	              i = dt[n][a[1]];break;
+	            }
+	          }
+	          if(i != s)
+	             this.setValue(old, i, true);
+	        }
+        }
      }
      return this;
   }, /* 选择的处理 */
@@ -228,17 +248,9 @@
     if(!o)
     {
        this.SelectDiv = o = Base.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
-       document.body.appendChild(o);
        Base.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
            .addEvent(o, "scroll", fns).addEvent(o, "resize", _t.onResize)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.hiddenSelectDiv);
-       var a1 = [];
-       a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
-       a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
-       a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
-       a1.push("<div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" id=\"xuislctsd4\"></div><div class=\"xsbr\"></div></div></div>");
-       Base.insertHtml(document.body, "beforeend", a1.join(""));
-       a1 = null;
     }
     szId = o.id;
     /* 状态的处理: 输入对象的id保留 */
