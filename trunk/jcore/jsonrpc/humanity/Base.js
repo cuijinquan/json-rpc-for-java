@@ -236,5 +236,44 @@
           el.parentNode.insertBefore(frag, el.nextSibling);
           return el.nextSibling;
       }
+  },/* 操作输入对象o上的选择、光标位置，e为事件对象，没有时为null */
+  fnMvIstPoint: function(o, e, n1, n2)
+  {
+    try{
+     e = e || window.event || null;
+     o = o || e.target || e.srcElement;
+     var bErr = false;
+     o.focus && o.focus();
+     if(document.selection)
+     {
+      try{
+        /* To get cursor position, get empty selection range*/
+        var oSel = document.selection.createRange();
+        /* Move selection start to 0 position */
+        oSel.moveStart ('character', -o.value.length);
+        /* Move selection start and end to desired position */
+        oSel.moveStart('character', n1);
+        oSel.moveEnd('character', n2 || 0);
+        r.select();
+        }catch(e){bErr=true}
+     }
+     
+     if(bErr && o.createTextRange)
+     {
+  	    var r = o.createTextRange();
+  	    r.moveStart('character', n1);
+  	    r.moveEnd('character', n2 || 0);
+  	    if(r.collapse)
+  	       r.collapse(true);
+  	    r.select();
+     }
+     else
+     {
+         o.startSelection = n1;
+         o.selectionEnd = n2 || n1 || 0;
+         o.focus();
+         o.select();
+     }
+    }catch(e){alert(e.message)}
   }
 }

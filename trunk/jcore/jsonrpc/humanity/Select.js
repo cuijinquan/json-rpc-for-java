@@ -190,6 +190,7 @@
        else
           this.hidden();
        o["_inInput"] = false;
+       Base.fnMvIstPoint(oIpt, e, oIpt.value.length, oIpt.value.length);
      }
   }, /* 键盘事件处理 */
   onkeydown:function(e, oIpt)
