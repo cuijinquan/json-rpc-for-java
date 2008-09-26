@@ -124,7 +124,7 @@
   },
   show: function()
   {
-     Base.showShadow(Base.id("_Xui_SelectDiv"), this.oFrom);
+     Base.showShadow(Base.id("_Xui_SelectDiv"));
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
@@ -176,7 +176,7 @@
   },onResize:function()
   {
     var o = Base.id("_Xui_SelectDiv");
-    o && Base.showShadow(o, this.oFrom);
+    o && Base.showShadow(o);
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
@@ -238,7 +238,7 @@
        if(0 < oTable.length && (15 < n || 1000 < new Date().getTime() - nTm))
        {
          o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = n + "px";
-         Base.showShadow(o, oTable);
+         Base.showShadow(o);
          return true;
        }
        return false
