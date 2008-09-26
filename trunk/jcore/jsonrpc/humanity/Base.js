@@ -28,11 +28,11 @@
     return s && s['constructor'] && String == s['constructor'] ? document.getElementById(s) : s
   }, /* 触发事件，例如: Base.fireEvent(o, 'click') */
   fireEvent:function(szElement,szEvent)
-  {  
+  {
     if(document.all)
-       this.id(szElement).fireEvent('on' + szEvent);  
-    else{  
-      var evt = document.createEvent('HTMLEvents');  
+       this.id(szElement).fireEvent('on' + szEvent);
+    else{
+      var evt = document.createEvent('HTMLEvents');
       evt.initEvent(szEvent,true,true);
       this.id(szElement).dispatchEvent(evt);
     }
@@ -158,7 +158,7 @@
       o = o.currentStyle || o.runtimeStyle || o.style || null;
       var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 7,oTmp = this.id("xuiSelectShdow") || {},
          obj = oTmp.style,
-         left = parseFloat(o.left) - 4, top = parseFloat(o.top) - 2 , zIndex = o.zIndex - 1;
+         left = parseFloat(o.left) - 4, top = parseFloat(o.top) - 2 , zIndex = (o.zIndex || 11000) - 1;
      if(!oTmp || !h || !w)return false;
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
@@ -288,7 +288,7 @@
         oSel.moveEnd('character', n2 || 0);
         r.select();
         }catch(e){bErr=true;}
-     }     
+     }
      if(bErr && o.createTextRange)
      {
   	    var r = o.createTextRange();
@@ -308,7 +308,7 @@
      isLeapYear:function(n)
      {
         return(0 == n % 400 || (0 == n % 4 && 0 != n % 100))
-     }, /**/
+     }, /* 保证fn只能在一个线程里执行 */
      RunOne: function(fn, o)
      {
         if(this._RunOne)return o || this;
