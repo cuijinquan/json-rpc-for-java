@@ -1,8 +1,10 @@
 {
   bIE: -1 < navigator.userAgent.indexOf("MSIE"),
   nVer: -1 < navigator.userAgent.indexOf("MSIE") ? parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]): 0,
+  /* 一些初始化动作 */
   bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
   a:[],nDatetime:24 * 60 * 60 * 1000,
+  /* 获取对象o的父亲节点 ，例如 Base.p(o, 'TR') */
   p:function(o,szTagName)
   {
     var i = 0;
@@ -11,7 +13,7 @@
       if((o = o.parentNode).nodeName === szTagName)
         return o;
     }
-  },
+  }, /* 将a转换为有效的Array */
   A:function(a)
   {
    if(0 == arguments.length)
@@ -20,11 +22,11 @@
     for(; i < a.length; i++)
        b.push(a[i]);
     return b;
-  }, 
+  }, /* 获取id为s的对象 */
   id:function(s)
   {
     return s && s['constructor'] && String == s['constructor'] ? document.getElementById(s) : s
-  },
+  }, /* 触发事件，例如: Base.fireEvent(o, 'click') */
   fireEvent:function(szElement,szEvent)
   {  
     if(document.all)
@@ -34,7 +36,7 @@
       evt.initEvent(szEvent,true,true);
       this.id(szElement).dispatchEvent(evt);
     }
-  },
+  }, /* 将对象o绑定给fn函数 */
   bind:function(fn, o)
   {
      var _t = this, a = _t.A(arguments);a.shift();a.shift();
@@ -42,7 +44,7 @@
      {
         fn.apply(o, _t.A(arguments).concat(a));
      }
-  },
+  }, /* unLoad窗口无效时卸载事件绑定 */
   unLoad:function(o, t, f)
   {
     var b = this.a, i;
@@ -53,11 +55,12 @@
 	    else for(; i > -1; i--)b[i][0].removeEventListener(b[i][1], b[i][2], false);
 	    delete b, delete this.a;
     }
-  },detachEvent:function(o, type, fn)
+  }, /* 卸载事件,例如：Base.detachEvent(o, 'click', fn) */
+  detachEvent:function(o, type, fn)
   {
     o = o || document.body;
     o.detachEvent ? o.detachEvent("on" + type, fn) : o.removeEventListener(type, fn, false);
-  },
+  }, /* 绑定事件,例如：Base.addEvent(o, 'click', fn) */
   addEvent:function()
   {
     var o = arguments[0], t = arguments[1], f = arguments[2], _this = this, fn = function(){
@@ -67,7 +70,7 @@
     };
     'load' != t && window.setTimeout(fn, 13) || fn();
     return this;
-  },
+  }, /* 获取名字为k的cookie,例如：Base.getCookie('myVar') */
   getCookie:function(k)
   {
     var a = (document.cookie || '').split(";");
@@ -78,7 +81,7 @@
          return unescape(b[1]);
     }
     return "";
-  },
+  }, /* 设置名字为k的cookie,例如：Base.setCookie(k,'myVar') */
   setCookie: function(k, v)
   {
     var d = new Date(), s = k + "=" + escape(v) + ";expires=";
@@ -87,13 +90,13 @@
     else s += d.toGMTString();
     document.cookie = s;
     return this;
-  },
+  }, /* 清楚保留的o滚动条信息,例如：Base.clearScroll(o) */
   clearScroll:function(o)
   {
     var k = this.id(o).id;
     delete top.__aScroll[k];
     this.setCookie(k, null);
-  },
+  }, /* 设置对象o自动保存滚动条信息,例如：Base.autoSaveScroll(o) */
   autoSaveScroll: function(o)
   {
     top.__aScroll || (top.__aScroll = []);
@@ -108,7 +111,7 @@
       }, 13);
     });
     return this;
-  },
+  }, /* 异步刷新区域的封装，还没有实现完整 */
   updateUi:function(o)
   {
     var s = [];
@@ -123,7 +126,7 @@
       alert(arguments[0]);
     }catch (e) {}
   }});
-  },
+  }, /* 创建图层 */
   createDiv:function()
   {
      var o = null, b = !!arguments[0] || false,
@@ -204,14 +207,16 @@
      return a;
    },
   FromEventObj: function(e){return (e = e || window.event).target || e.srcElement},
+  /* 事件返回false */
   preventDefault:function(e)
   {
       return e.preventDefault ? e.preventDefault() : (e.returnValue = false);
-  },
+  }, /* 停止事件往上层传递 */
   stopPropagation:function(e)
   {
      return e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
-  },insertHtml:function(el, where, html){
+  },  /* 在对象el中插入html代码 */
+  insertHtml:function(el, where, html){
   where = where.toLowerCase();
   if(el.insertAdjacentHTML){
       switch(where){
@@ -303,5 +308,12 @@
      isLeapYear:function(n)
      {
         return(0 == n % 400 || (0 == n % 4 && 0 != n % 100))
+     }, /**/
+     RunOne: function(fn, o)
+     {
+        if(this._RunOne)return o || this;
+        this._RunOne = true;
+        fn.call(o || this);
+        this._RunOne = false;
      }
 }

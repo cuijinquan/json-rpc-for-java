@@ -98,8 +98,8 @@
        } /* 回调处理 */
        cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
        o["_lstNum"] = n;
-       this.hidden();
      }else o["_over"] = 1;
+     this.hidden();
      if(e)Base.preventDefault(e), Base.stopPropagation(e);
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
@@ -110,30 +110,31 @@
   hidden: function()
   {
      Base.hiddenShadow(Base.id("_Xui_SelectDiv"));
-     this.data = null ;
+     this.updata((this.descObj || {}).value || "");
+  }, /* 更新data数据 */
+  updata:function(s)
+  {
+    if(!this.descObj)return this;
+    if(0 == s.length)return this.data = null, this;
+    var n, id = this.descObj.id, b = [], a = (this.getData(id), this.getObj(id)["collection"]);
+    for(n = 0; n < a.length; n++)
+      if(-1 < a[n]["_id_"].indexOf(s))
+         b.push(a[n]);
+    this.data = 0 < b.length ? b : null;
   },
   show: function()
   {
      Base.showShadow(Base.id("_Xui_SelectDiv"));
-  }
-  , /* 检索过滤处理 */
+  }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
-     this.getData(oIpt.id);
-     var n = 0, o = this.SelectDiv, oT = this.getObj(oIpt.id), k,
-         s = oIpt.value.replace(/(^\s+)|(\s+$)/g, ""), a = oT["collection"], b = [];
-     /* _inInput 防止重入 */
-     if(o && !o["_inInput"])
+     return Base.RunOne(function()
      {
-       o["_inInput"] = true, this.data = null;
+       this.getData(oIpt.id);
+       var n = 0, o = this.SelectDiv, oT = this.getObj(oIpt.id),
+           s = oIpt.value.replace(/(^\s+)|(\s+$)/g, "");
        /* 检索过滤处理 */
-       if(0 < s.length)
-       {
-          for(n = 0; n < a.length; n++)
-            if(-1 < a[n]["_id_"].indexOf(s))
-               b.push(a[n]);
-          this.data = b;
-       } 
+       this.updata(s);
        n = this.getData(oIpt.id).length;
        if(oT["allowEdit"] || 1 == n)
        {
@@ -143,11 +144,10 @@
        else if(oIpt.getAttribute("oldValue") != s || 0 == n)
           this.setValue("", 2, e);
        if(0 < n)
-          this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
+          this.showSelectDiv(e, {width: o.style.width}, oIpt, this.data);
        else this.hidden();
-       o["_inInput"] = false;
-     }
-    Base.stopPropagation(e),Base.preventDefault(e);
+       Base.stopPropagation(e),Base.preventDefault(e);
+     }, this);
   }, /* 键盘事件处理 */
   onkeydown:function(e, oIpt)
   {
@@ -220,12 +220,15 @@
     {
        oE[szId] = o.id,
        Base.addEvent(oE, "blur", function(){o["_blur_"]=true,_t.hiddenSelectDiv()})
-           .addEvent(oE, "mousemove", function(e){o["tmer"] && Base.clearTimer(o["tmer"]),_t.data=null,
-                Base.fnMvIstPoint(oE, oE.value.length, oE.value.length, e);});
+           .addEvent(oE, "mousemove", function(e)
+               {
+                 o["tmer"] && Base.clearTimer(o["tmer"]),
+                 _t.updata(oE.value),
+                 Base.fnMvIstPoint(oE, oE.value.length, oE.value.length, e);
+               });
     }
     for(k in p)o.style[k] = p[k];
-    if(b3) /* 清除过滤显示数据 */
-	   _t.data  = null;
+    _t.updata(oE.value);
     if(0 < oE.value.length)this.onInput(e, oE);
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
     var nTm = new Date().getTime();
