@@ -237,6 +237,7 @@
           return el.nextSibling;
       }
   },/* 操作输入对象o上的选择、光标位置，e为事件对象，没有时为null */
+  /* FireFox下n2等于光标位置 */
   fnMvIstPoint: function(o, e, n1, n2)
   {
     try{
@@ -257,23 +258,27 @@
         r.select();
         }catch(e){bErr=true}
      }
-     
-     if(bErr && o.createTextRange)
+     if(bErr)
      {
-  	    var r = o.createTextRange();
-  	    r.moveStart('character', n1);
-  	    r.moveEnd('character', n2 || 0);
-  	    if(r.collapse)
-  	       r.collapse(true);
-  	    r.select();
-     }
-     else
-     {
-         o.startSelection = n1;
-         o.selectionEnd = n2 || n1 || 0;
-         o.focus();
-         o.select();
+	     if(o.createTextRange)
+	     {
+	  	    var r = o.createTextRange();
+	  	    r.moveStart('character', n1);
+	  	    r.moveEnd('character', n2 || 0);
+	  	    r.select();
+	     }
+	     else
+	     {
+	         o.startSelection = n1;
+	         o.selectionEnd = n2 || n1 || 0;
+	         o.focus();
+	         /*o.select();*/
+	     }
      }
     }catch(e){alert(e.message)}
-  }
+  }, /* 判断n是否为闰年 */
+     isLeapYear:function(n)
+     {
+        return(0 == n % 400 || (0 == n % 4 && 0 != n % 100))
+     }
 }
