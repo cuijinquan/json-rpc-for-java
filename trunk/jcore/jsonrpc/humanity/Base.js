@@ -1,6 +1,6 @@
 {
   bIE: -1 < navigator.userAgent.indexOf("MSIE"),
-  nVer: this.bIE ? parseFloat(/MSIE\s*(\d\.\d)/.exec(navigator.userAgent)[1]): 0,
+  nVer: -1 < navigator.userAgent.indexOf("MSIE") ? parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]): 0,
   bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
   a:[],nDatetime:24 * 60 * 60 * 1000,
   p:function(o,szTagName)
@@ -140,10 +140,12 @@
      {
        a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
        a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
-       a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
+       a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\" id=\"showdxsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
        a1.push("<div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" id=\"xuislctsd4\"></div><div class=\"xsbr\"></div></div></div>");
        this.insertHtml(document.body, "beforeend", a1.join(""));
        a1 = null;
+       if(this.bIE && 5 < this.nVer && 7 > this.nVer)
+       	  this.id("xuiSelectShdow").style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=30) progid:DXImageTransform.Microsoft.Blur(pixelradius=4)";
      }
      return o;
   },

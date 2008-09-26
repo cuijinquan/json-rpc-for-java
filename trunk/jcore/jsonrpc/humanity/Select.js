@@ -36,7 +36,7 @@
   },
   showShadow:function(o)
   {
-     if(Base.bIE && -1 < navigator.userAgent.indexOf("6.0"))return;
+     // if(Base.bIE && -1 < navigator.userAgent.indexOf("6.0"))return;
      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2, oTmp,
          obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 2 , zIndex = 10999;
