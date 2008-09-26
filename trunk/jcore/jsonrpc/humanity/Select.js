@@ -106,7 +106,7 @@
        }
      }
      else if(old)
-     { 
+     {
         o = old.parentNode.getElementsByTagName("input");
         if(1 < o.length && "hidden" == (o[1].type || ''))
            o[1]["value"] = s;
@@ -189,8 +189,8 @@
           this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
        else
           this.hidden();
+       Base.fnMvIstPoint(oIpt, oIpt.value.length, oIpt.value.length, e);
        o["_inInput"] = false;
-       Base.fnMvIstPoint(oIpt, e, oIpt.value.length, oIpt.value.length);
      }
   }, /* 键盘事件处理 */
   onkeydown:function(e, oIpt)
@@ -264,7 +264,8 @@
     {
        oE[szId] = o.id,
        Base.addEvent(oE, "blur", function(){o["_blur_"]=true,_t.hiddenSelectDiv()})
-           .addEvent(oE, "mousemove", function(e){o["tmer"] && Base.clearTimer(o["tmer"]),_t.data=null,oE.focus();Base.fireEvent(oE, "focus")});
+           .addEvent(oE, "mousemove", function(e){o["tmer"] && Base.clearTimer(o["tmer"]),_t.data=null,
+                Base.fnMvIstPoint(oE, oE.value.length, oE.value.length, e);});
     }
     for(k in p)o.style[k] = p[k];
     if(b3) /* 清除过滤显示数据 */

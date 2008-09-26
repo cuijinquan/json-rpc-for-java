@@ -238,44 +238,42 @@
       }
   },/* 操作输入对象o上的选择、光标位置，e为事件对象，没有时为null */
   /* FireFox下n2等于光标位置 */
-  fnMvIstPoint: function(o, e, n1, n2)
+  fnMvIstPoint: function(o, n1, n2, e)
   {
     try{
      e = e || window.event || null;
-     o = o || e.target || e.srcElement;
+     o = o || e.target || e.srcElement || null;
      var bErr = false;
-     o.focus && o.focus();
-     if(document.selection)
+     if("undefined" != typeof document.selection)
      {
       try{
         /* To get cursor position, get empty selection range*/
         var oSel = document.selection.createRange();
         /* Move selection start to 0 position */
         oSel.moveStart ('character', -o.value.length);
+        oSel.moveEnd("character", -o.value.length);
         /* Move selection start and end to desired position */
         oSel.moveStart('character', n1);
         oSel.moveEnd('character', n2 || 0);
         r.select();
-        }catch(e){bErr=true}
-     }
-     if(bErr)
+        }catch(e){bErr=true;}
+     }     
+     if(bErr && o.createTextRange)
      {
-	     if(o.createTextRange)
-	     {
-	  	    var r = o.createTextRange();
-	  	    r.moveStart('character', n1);
-	  	    r.moveEnd('character', n2 || 0);
-	  	    r.select();
-	     }
-	     else
-	     {
-	         o.startSelection = n1;
-	         o.selectionEnd = n2 || n1 || 0;
-	         o.focus();
-	         /*o.select();*/
-	     }
+  	    var r = o.createTextRange();
+  	    r.moveStart('character', -o.value.length);
+  	    r.moveEnd('character', -o.value.length);  	    
+  	    r.moveStart('character', n1);
+  	    r.moveEnd('character', n2 || 0);
+  	    r.collapse(true);
+  	    r.select();
+     }else
+     {
+         o.startSelection = n1 - 1;
+         o.selectionEnd = n2 || n1 || 0;
+         o.focus();
      }
-    }catch(e){alert(e.message)}
+    }catch(e){}
   }, /* 判断n是否为闰年 */
      isLeapYear:function(n)
      {
