@@ -148,6 +148,30 @@
        	  this.id("xuiSelectShdow").style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=30) progid:DXImageTransform.Microsoft.Blur(pixelradius=4)";
      }
      return o;
+  },/* 显示阴影图层 */
+  showShadow:function(o)
+  {
+      o.display = "block";
+      o = o.currentStyle || o.runtimeStyle || o.style || null;
+      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 7,oTmp = this.id("xuiSelectShdow") || {},
+         obj = oTmp.style,
+         left = parseFloat(o.left) - 4, top = parseFloat(o.top) - 2 , zIndex = o.zIndex - 1;
+     if(!oTmp || !h || !w)return false;
+     obj.width = w + "px", obj.height = h + "px",
+     obj.top = top + "px", obj.left = left + "px",
+     obj.zIndex = zIndex, obj.position = "absolute", obj.display = "block";
+     oTmp = obj;
+     this.id("xuislctsd4").style.width = this.id("xuislctsd3").style.width =
+     this.id("xuislctsd1").style.width = (w - 12) + "px";
+     obj = this.id("xuislctsd2");
+     if(12 < h)
+        obj.style.height = (h - 12) + "px";
+     o = obj.getElementsByTagName("div");
+     for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
+  },hiddenShadow:function(o)
+  {
+    o.style.display = 'none',o.innerHTML = "";
+    if(o = this.id("xuiSelectShdow"))o.style.display='none'
   },
   regTimer:function(fn, n)
   {

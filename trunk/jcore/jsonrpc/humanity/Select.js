@@ -1,4 +1,4 @@
-﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,xuiSelectShdow:null,inputObj:null,descObj:null,
+﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,inputObj:null,descObj:null,
   getObj:function(szId)
   {
     return slctIptData[szId]||{};
@@ -34,24 +34,6 @@
       return Base.stopPropagation(e),Base.preventDefault(e), false;
     return n;
   },
-  showShadow:function(o)
-  {
-     // if(Base.bIE && -1 < navigator.userAgent.indexOf("6.0"))return;
-     var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 2, oTmp,
-         obj = (this.xuiSelectShdow || (this.xuiSelectShdow = Base.id("xuiSelectShdow"))).style,
-         left = parseFloat(o.left) - 4, top = parseFloat(o.top) + 2 , zIndex = 10999;
-     obj.width = w + "px", obj.height = h + "px",
-     obj.top = top + "px", obj.left = left + "px",
-     obj.zIndex = zIndex, obj.position = "absolute", obj.display = o.display = "block";
-     oTmp = obj;
-     Base.id("xuislctsd4").style.width = Base.id("xuislctsd3").style.width =
-     Base.id("xuislctsd1").style.width = (w - 12) + "px";
-     obj = Base.id("xuislctsd2");
-     if(12 < h)
-        obj.style.height = (h - 12) + "px";
-     o = obj.getElementsByTagName("div");
-     for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
-  },
   getSelectDataStr:function(oE, w)
   {
     var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
@@ -79,14 +61,26 @@
     a1.push("</table></div>");
     return a1.join("")
   }, /* 给对象设置value */
-  setValue:function(s, n)
+  setValue:function(s, n,e)
   {
      var descObj = this.descObj, inputObj = this.inputObj;
      if(1 == n && descObj)descObj.value = s;
      else if(2 == n && inputObj)inputObj.value = s;
      else if(descObj && inputObj)
         inputObj.value = descObj.value = s;
+     if(e)Base.preventDefault(e), Base.stopPropagation(e);
      return this;
+  },/* 通过描述得到value */
+  getValueByDesc:function(s)
+  {
+     var oT = this.getObj(this.descObj.id), a = oT["collection"], i, b = (oT['valueField'] || "").split(/[,; ]/), b2 = 1 < b.length;
+     if(oT['valueField'] && b2)
+     for(i = 0; i < a.length; i++)
+     {
+        if(s == a[i][b[1]])
+          return a[i][b[0]];
+     }
+     return null;
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
   {
@@ -99,7 +93,7 @@
        if(oT['valueField'])
        { /* value处理 */
          a = (oT['valueField'] || "").split(/[,; ]/);
-         this.setValue(dt[n][a[0]], 2);
+         this.setValue(dt[n][a[0]], 2, e);
          oIpt.value = (1 < a.length ? dt[n][a[1]] : dt[n][a[0]]);
        } /* 回调处理 */
        cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
@@ -115,9 +109,12 @@
   },
   hidden: function()
   {
-     var o = Base.id("_Xui_SelectDiv");
-     if(this.xuiSelectShdow)this.xuiSelectShdow.style.display = 'none';
-     o.style.display = 'none',o.innerHTML = "";
+     Base.hiddenShadow(Base.id("_Xui_SelectDiv"));
+     this.data = null ;
+  },
+  show: function()
+  {
+     Base.showShadow(Base.id("_Xui_SelectDiv"));
   }
   , /* 检索过滤处理 */
   onInput:function(e, oIpt)
@@ -136,18 +133,21 @@
             if(-1 < a[n]["_id_"].indexOf(s))
                b.push(a[n]);
           this.data = b;
+       } 
+       n = this.getData(oIpt.id).length;
+       if(oT["allowEdit"] || 1 == n)
+       {
+          s = this.getValueByDesc(s);
+          s && this.setValue(s, 2, e);
        }
-       if(oT["allowEdit"])
-          this.setValue(s, 2);
-       else if(oIpt.getAttribute("oldValue") != s)
-          this.setValue("", 2);
-       if(0 < this.getData(oIpt.id).length)
+       else if(oIpt.getAttribute("oldValue") != s || 0 == n)
+          this.setValue("", 2, e);
+       if(0 < n)
           this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
-       else
-          this.hidden();
+       else this.hidden();
        o["_inInput"] = false;
      }
-     Base.stopPropagation(e),Base.preventDefault(e);
+    Base.stopPropagation(e),Base.preventDefault(e);
   }, /* 键盘事件处理 */
   onkeydown:function(e, oIpt)
   {
@@ -176,7 +176,7 @@
   },onResize:function()
   {
     var o = Base.id("_Xui_SelectDiv");
-    o && Select.showShadow(o.style);
+    o && Base.showShadow(o);
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
@@ -195,10 +195,8 @@
 	      o.style.display = 'block';
           if(0 < (Select.getData(oE.id) || []).length)
           {
-	          var oTmp = Select.xuiSelectShdow;
-	          if(oTmp)
-	            (oTmp = oTmp.style || {}).display = 'block', 
-	            o.style.height && (oTmp.height = (parseInt(o.style.height) + 2)+ "px");
+              if(o.style.height)              
+                 _t.show();
           }
         },
         fns = function(){show(),o["_in_"] = true};
@@ -230,14 +228,14 @@
 	   _t.data  = null;
     if(0 < oE.value.length)this.onInput(e, oE);
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
-     var nTm = new Date().getTime();
+    var nTm = new Date().getTime();
     Base.regTimer(function()
     {
        var oTable = o.getElementsByTagName("table"),n = Math.min(170, k = 2 + (o.scrollHeight || 0 < oTable.length && oTable[0].clientHeight || 0));
        if(0 < oTable.length && (15 < n || 1000 < new Date().getTime() - nTm))
        {
-         o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = (n - 2)  + "px";
-         _t.showShadow(o.style);
+         o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = n + "px";
+         Base.showShadow(o);
          return true;
        }
        return false
