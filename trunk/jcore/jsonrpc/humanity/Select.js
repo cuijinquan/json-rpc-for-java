@@ -1,4 +1,4 @@
-﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,inputObj:null,descObj:null,
+﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,inputObj:null,descObj:null,oFrom:null,
   getObj:function(szId)
   {
     return slctIptData[szId]||{};
@@ -124,7 +124,7 @@
   },
   show: function()
   {
-     Base.showShadow(Base.id("_Xui_SelectDiv"));
+     Base.showShadow(Base.id("_Xui_SelectDiv"), this.oFrom);
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
@@ -176,14 +176,14 @@
   },onResize:function()
   {
     var o = Base.id("_Xui_SelectDiv");
-    o && Base.showShadow(o);
+    o && Base.showShadow(o, this.oFrom);
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
     var b3 = (3 == arguments.length);
     e = e || window.event;
     if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
-    var _t = this, o = this.SelectDiv, szId, oTable = Base.p(oE,"TABLE"),
+    var _t = this, o = this.SelectDiv, szId, oTable = (this.oFrom = Base.p(oE,"TABLE")),
         oR = Base.getOffset(oTable),h = oR[3], w = oR[2],
         p = { height:'1px', left: (oR[0] - (8 <= Base.nVer ? 6 : 0)) + "px", 
               top: (oR[1] + h - (Base.bIE ? 3 : 2)) + "px", display:'block',
@@ -238,7 +238,7 @@
        if(0 < oTable.length && (15 < n || 1000 < new Date().getTime() - nTm))
        {
          o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = n + "px";
-         Base.showShadow(o);
+         Base.showShadow(o, oTable);
          return true;
        }
        return false
