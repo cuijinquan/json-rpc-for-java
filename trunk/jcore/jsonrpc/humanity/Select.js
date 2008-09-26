@@ -1,4 +1,4 @@
-﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,xuiSelectShdow:null,
+﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,xuiSelectShdow:null,inputObj:null,descObj:null,
   getObj:function(szId)
   {
     return slctIptData[szId]||{};
@@ -79,58 +79,13 @@
     a1.push("</table></div>");
     return a1.join("")
   }, /* 给对象设置value */
-  setValue:function(szId,s)
+  setValue:function(s, n)
   {
-     var o = Base.id(szId), i,old, oT, a;
-     if(o)
-     {
-      o["value"] = s; /* checkbox 的处理 */
-      if("checkbox" === (o.type || ""))o["checked"]=true;
-      Base.fireEvent(o, "change");
-      szId = o.id || szId;
-     }
-     old = o;
-     o = document.getElementsByName(szId);
-     if(1 < o["length"]) 
-     {
-       /* radio box的处理 */
-       for(i = 0; i < o.length; i++)
-       {
-          if("checkbox" != o[i]["type"])break;
-          if((o[i]["value"] || '') === s)
-          {
-             o[i]["checked"]=true;
-             Base.fireEvent(o[i], "change");
-             break;
-          }
-       }
-     }
-     else if(old)
-     {
-        o = old.parentNode.getElementsByTagName("input");
-        if(1 < o.length && "hidden" == (o[1].type || ''))
-           o[1]["value"] = s;
-        /* 下拉列表的处理 */
-        if(2 == arguments.length)
-        {
-	        oT = this.getObj(old.id), dt = this.getData(old.id);
-	        if(oT['valueField'])
-	        {
-	          a = (oT['valueField'] || "").split(/[,; ]/);
-	          i = s;
-	          if(2 == a.length)
-	          for(n = 0; n < dt.length; n++)
-	          {
-	            if(s == dt[n][a[0]])
-	            {
-	              i = dt[n][a[1]];break;
-	            }
-	          }
-	          if(i != s)
-	             this.setValue(old, i, true);
-	        }
-        }
-     }
+     var descObj = this.descObj, inputObj = this.inputObj;
+     if(1 == n && descObj)descObj.value = s;
+     else if(2 == n && inputObj)inputObj.value = s;
+     else if(descObj && inputObj)
+        inputObj.value = descObj.value = s;
      return this;
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
@@ -144,8 +99,8 @@
        if(oT['valueField'])
        { /* value处理 */
          a = (oT['valueField'] || "").split(/[,; ]/);
-         this.setValue(oIpt, dt[n][a[0]]);
-         if(1 < a.length)oIpt.value = dt[n][a[1]];
+         this.setValue(dt[n][a[0]], 2);
+         oIpt.value = (1 < a.length ? dt[n][a[1]] : dt[n][a[0]]);
        } /* 回调处理 */
        cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
        o["_lstNum"] = n;
@@ -160,8 +115,9 @@
   },
   hidden: function()
   {
-     Base.id("_Xui_SelectDiv").style.display = 'none';
+     var o = Base.id("_Xui_SelectDiv");
      if(this.xuiSelectShdow)this.xuiSelectShdow.style.display = 'none';
+     o.style.display = 'none',o.innerHTML = "";
   }
   , /* 检索过滤处理 */
   onInput:function(e, oIpt)
@@ -182,16 +138,16 @@
           this.data = b;
        }
        if(oT["allowEdit"])
-          this.setValue(oIpt,s);
+          this.setValue(s, 2);
        else if(oIpt.getAttribute("oldValue") != s)
-          this.setValue(oIpt,""),oIpt.value=s;
+          this.setValue("", 2);
        if(0 < this.getData(oIpt.id).length)
           this.showSelectDiv(e, {width:o.style.width}, oIpt, b);
        else
           this.hidden();
-       Base.fnMvIstPoint(oIpt, oIpt.value.length, oIpt.value.length, e);
        o["_inInput"] = false;
      }
+     Base.stopPropagation(e),Base.preventDefault(e);
   }, /* 键盘事件处理 */
   onkeydown:function(e, oIpt)
   {
@@ -216,7 +172,7 @@
            break;
         default:;
      }
-     return n;
+     return true;
   },onResize:function()
   {
     var o = Base.id("_Xui_SelectDiv");
@@ -246,6 +202,8 @@
           }
         },
         fns = function(){show(),o["_in_"] = true};
+    /* 输入对象 */
+    _t.inputObj = (_t.descObj = oE).parentNode.getElementsByTagName("input")[1];
     if(!o)
     {
        this.SelectDiv = o = Base.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
@@ -275,8 +233,8 @@
      var nTm = new Date().getTime();
     Base.regTimer(function()
     {
-       var n = Math.min(170, k = 2 + (o.scrollHeight || o.getElementsByTagName("table")[0].clientHeight));
-       if(15 < n || 1000 < new Date().getTime() - nTm)
+       var oTable = o.getElementsByTagName("table"),n = Math.min(170, k = 2 + (o.scrollHeight || 0 < oTable.length && oTable[0].clientHeight || 0));
+       if(0 < oTable.length && (15 < n || 1000 < new Date().getTime() - nTm))
        {
          o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = (n - 2)  + "px";
          _t.showShadow(o.style);

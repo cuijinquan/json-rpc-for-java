@@ -261,10 +261,9 @@
      if(bErr && o.createTextRange)
      {
   	    var r = o.createTextRange();
-  	    r.moveStart('character', -o.value.length);
-  	    r.moveEnd('character', -o.value.length);  	    
+  	    /* r.moveStart('character', -o.value.length), r.moveEnd('character', -o.value.length); */
   	    r.moveStart('character', n1);
-  	    r.moveEnd('character', n2 || 0);
+  	    /* r.moveEnd('character', n2 || 0); */
   	    r.collapse(true);
   	    r.select();
      }else
