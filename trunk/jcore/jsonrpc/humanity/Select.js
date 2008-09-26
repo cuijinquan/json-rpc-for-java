@@ -1,4 +1,5 @@
-﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,inputObj:null,descObj:null,oFrom:null,
+﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,inputObj:null,descObj:null,
+  oFrom:null, oShdow:null,
   getObj:function(szId)
   {
     return slctIptData[szId]||{};
@@ -208,6 +209,7 @@
        Base.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
            .addEvent(o, "scroll", fns).addEvent(o, "resize", _t.onResize)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.hiddenSelectDiv);
+       this.oShdow = Base.id("xuiSelectShdow");
     }
     szId = o.id;
     /* 状态的处理: 输入对象的id保留 */
@@ -228,8 +230,8 @@
                });
     }
     for(k in p)o.style[k] = p[k];
+    _t.oShdow.style.height = p.height + "px";
     _t.updata(oE.value);
-    if(0 < oE.value.length)this.onInput(e, oE);
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
     var nTm = new Date().getTime();
     Base.regTimer(function()
