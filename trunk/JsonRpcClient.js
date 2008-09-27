@@ -109,13 +109,27 @@ function JsonRpcClient(url) {
 	if(obj)for (var i = 0; i < obj.length; i++)this.fnMakeObj(obj[i], _this);
 	this.cacheObj = [];this.LoadJsObj = function(s)
 	{
-	  try{return _this.cacheObj[s] || (_this.cacheObj[s] = eval("window." + s + "=("+_this._LoadJsObj.getJsObj(s).getResult() + ").init();"))}catch(e){alert(e.message)}
+	  var o = null;
+	  try{o = _this.cacheObj[s] || (_this.cacheObj[s] = eval("1," + _this._LoadJsObj.getJsObj(s).getResult()))}catch(e){alert(e.message)};
+	  if(o)
+	  {
+	     if(!o.init)o.init = function()
+	     {
+	        var o = JsonRpcClient().LoadJsObj("Base"), a = o.A(arguments).concat([o]), k, i;
+            for(i = 0; i < a.length; i++)
+              for(k in a[i])this[k] = a[i][k];
+	        return this
+	     };
+	     _this.cacheObj[s] = o = o.init();
+	     eval("window." + s + "=o;");
+	  }
+	  return o
 	};
 }
-var rpc = JsonRpcClient(),
+var rpc = JsonRpcClient(), Base = rpc.LoadJsObj("Base"),
     XUI = function()
     {
-        var o = rpc.LoadJsObj("Base"), a = o.A(arguments), k, i;
+        var o = Base, a = o.A(arguments), k, i;
         for(i = 0; i < a.length; i++)
            for(k in a[i])o[k] = a[i][k];
         return o;
