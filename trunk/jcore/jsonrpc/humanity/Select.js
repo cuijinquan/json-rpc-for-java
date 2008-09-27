@@ -4,13 +4,6 @@
   descObj:null,    /* 存放描述的输入对象 */
   oFrom:null,      /* 计算图层宽度的对象 */
   oShdow:null,     /* 阴影图层对象 */
-  init: function()
-  {
-     var o = rpc.LoadJsObj("Base"), a = o.A(arguments).concat([o]), k, i;
-     for(i = 0; i < a.length; i++)
-        for(k in a[i])this[k] = a[i][k];
-     return this;
-  },
   getObj:function(szId)
   {
     return slctIptData[szId]||{};
