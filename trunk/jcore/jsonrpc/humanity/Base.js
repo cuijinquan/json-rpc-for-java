@@ -155,8 +155,7 @@
      if(b)
      {
        p["className"] || (p["className"] = "x-combo-list");
-       for(k in p)
-          o[k] = p[k];
+       for(k in p)o[k] = p[k];
      }
      document.body.appendChild(o);
      if(!this.id("xuiSelectShdow"))
@@ -232,10 +231,12 @@
   /* 事件返回false */
   preventDefault:function(e)
   {
+      e = e || window.event;
       return e.preventDefault ? e.preventDefault() : (e.returnValue = false);
   }, /* 停止事件往上层传递 */
   stopPropagation:function(e)
   {
+     e = e || window.event;
      return e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
   },  /* 在对象el中插入html代码 */
   insertHtml:function(el, where, html){
@@ -330,7 +331,22 @@
      isLeapYear:function(n)
      {
         return(0 == n % 400 || (0 == n % 4 && 0 != n % 100))
-     }, /* 保证fn只能在一个线程里执行 */
+     },/* 获取对象o，或者今天是星期几，返回0是星期天，或者getWeek(2009,12,30) */
+    getWeek:function(o)
+    {
+       if(3 == arguments.length)arguments[1]--,o = new Date(arguments[0], arguments[1], arguments[2]);
+       return o.getDay();
+       /* 两种计算星期几的公式 
+       var y = o.getFullYear(), m = o.getMonth() + 1, day = o.getDate(),
+           ds = day, i,
+           a = this.pkData = [31,(this.isLeapYear(y) ? 29 : 28),31,30,31,30,31,31,30,31,30,31];
+       this.year = y, this.month = m, this.day = day;
+           for(i = 0; i < m - 1; i++)
+              ds += a[i];
+       // return parseInt((ds + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7);
+       return y--, parseInt((y + y / 4 - y / 100 + y / 400 + ds) % 7)
+       */
+    }, /* 保证fn只能在一个线程里执行 */
      RunOne: function(fn, o)
      {
         var _t = this;
@@ -340,5 +356,15 @@
 	        fn.call(o || _t);
 	        this._RunOne = false;
         }
-     }
+     },/* 显示图层，包含阴影图层；o为参照定位图层显示位置的对象，oDiv为要显示的图层对象，w为宽度，默认为o的宽度就设置为0，h为显示高度 */
+	showDiv: function(o, oDiv, w, h)
+	{
+	  var oR = this.getOffset(o), style = oDiv.style, k, 
+	  p = { height: (h || 1) + 'px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
+              top: (oR[1] + oR[3] - (this.bIE ? 5 : 2)) + "px", display:'block',
+              position: "absolute",
+              width: ((this.bIE ? 2 : 0) + parseInt(w || o.clientWidth || oR[2])) + "px"};
+      for(k in p)style[k] = p[k];
+      this.showShadow(oDiv);
+	}
 }

@@ -129,8 +129,8 @@ function JsonRpcClient(url) {
 var rpc = JsonRpcClient(), Base = rpc.LoadJsObj("Base"),
     XUI = function()
     {
-        var o = Base, a = o.A(arguments), k, i;
-        for(i = 0; i < a.length; i++)
-           for(k in a[i])o[k] = a[i][k];
-        return o;
+        var o = Base, a = o.A(arguments).concat([o]), k, i, p = a[0];
+        for(i = 1; i < a.length; i++)
+           for(k in a[i])p[k] = a[i][k];
+        return p;
     };
