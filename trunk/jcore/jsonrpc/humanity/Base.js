@@ -7,7 +7,8 @@
      if(this.bIE)
      {
        this.nVer = parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]) ||  0;
-       try{document.execCommand("BackgroundImageCache", false, true)}catch(e){}
+       if(7 > this.nVer)
+         try{document.execCommand("BackgroundImageCache", false, true)}catch(e){}
      }
      return this;
   },
