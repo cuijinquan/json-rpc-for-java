@@ -154,6 +154,7 @@
      o = document.createElement("div")
      if(b)
      {
+       p["className"] || (p["className"] = "x-combo-list");
        for(k in p)
           o[k] = p[k];
      }

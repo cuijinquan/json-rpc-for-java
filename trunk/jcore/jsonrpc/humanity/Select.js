@@ -192,26 +192,28 @@
     if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
     var _t = this, o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
         oR = this.getOffset(oTable),h = oR[3], w = oR[2],
-        p = { height:'1px', left: (oR[0] - (8 <= this.nVer ? 6 : 0)) + "px", 
+        p = { height:'1px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] + h - (this.bIE ? 3 : 2)) + "px", display:'block',
               position: "absolute",
               width: ((this.bIE ? 2 : 0) + parseInt((obj||{}).width || oTable.clientWidth || w)) + "px"},
-        k,show = function(event)
+        k,
+        fns = _t.bind(function()
         {
+          var o = this.SelectDiv;
           o["tmer"] && _t.clearTimer(o["tmer"]);
 	      o.style.display = 'block';
-          if(0 < (Select.getData(oE.id) || []).length)
+          if(0 < (this.getData(oE.id) || []).length)
           {
               if(o.style.height)              
-                 _t.show();
+                 this.show();
           }
-        },
-        fns = function(){show(),o["_in_"] = true};
+          o["_in_"] = true
+        });
     /* 输入对象 */
     _t.inputObj = (_t.descObj = oE).parentNode.getElementsByTagName("input")[1];
     if(!o)
     {
-       this.SelectDiv = o = this.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
+       this.SelectDiv = o = this.createDiv({id:"_Xui_SelectDiv"});
        this.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
            .addEvent(o, "scroll", fns)/*.addEvent(o, "resize", _t.bind(_t.onResize,_t))*/
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.bind(_t.hiddenSelectDiv));
