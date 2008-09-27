@@ -230,7 +230,7 @@
                });
     }
     for(k in p)o.style[k] = p[k];
-    _t.oShdow.style.height = p.height + "px";
+    _t.oShdow.style.height = p.height;
     _t.updata(oE.value);
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
     var nTm = new Date().getTime();
