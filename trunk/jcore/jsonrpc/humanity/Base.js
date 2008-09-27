@@ -36,6 +36,14 @@
   id:function(s)
   {
     return s && s['constructor'] && String == s['constructor'] ? document.getElementById(s) : s
+  },
+  getByTagName: function(s,o)
+  {
+     return (o || document).getElementsByTagName(s)
+  },
+  getByName: function(s, o)
+  {
+     return (o || document).getElementsByName(s)
   }, /* 触发事件，例如: Base.fireEvent(o, 'click') */
   fireEvent:function(szElement,szEvent)
   {

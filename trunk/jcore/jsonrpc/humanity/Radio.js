@@ -1,6 +1,6 @@
 {
     radioOver:function (o) {
-	var radio = o.getElementsByTagName("input")[0];
+	var radio = this.getByTagName("input", o)[0];
 	if (radio.readOnly || radio.disabled) {
 		return false;
 	}
@@ -8,7 +8,7 @@
 		o.className = "x-form-radio-wrap-inner x-form-check-over";
 	}
 }, radioOut:function (o) {
-	var radio = o.getElementsByTagName("input")[0];
+	var radio = this.getByTagName("input", o)[0];
 	if (radio.readOnly || radio.disabled) {
 		return false;
 	}
@@ -16,13 +16,13 @@
 		o.className = "x-form-radio-wrap-inner";
 	}
 }, radioPress:function (o) {
-	var radio = o.getElementsByTagName("input")[0];
+	var radio = this.getByTagName("input", o)[0];
 	if (radio.readOnly || radio.disabled) {
 		return false;
 	}
 	o.className = "x-form-radio-wrap-inner x-form-check-checked";
 	radio.checked = true;
-	var a = document.getElementsByName(radio.name);
+	var a = this.getByName(radio.name);
 	for (i = 0; i < a.length; i++) {
 		if (a[i] != radio) {
 			if (a[i].readOnly || a[i].disabled) {
