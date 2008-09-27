@@ -257,7 +257,7 @@
   }, /* 隐藏图层的方法 */
   hiddenSelectDiv:function()
   {
-    var o = Select.SelectDiv, _t = Select;
+    var _t = Select, o = _t.SelectDiv;
     o["_tm_"] = new Date().getTime();
     o["_in_"] = false;
     /* 注册自动关闭,防止重入，如果重入就回启动多个timer服务定时器 */
