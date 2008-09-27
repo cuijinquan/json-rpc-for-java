@@ -42,7 +42,6 @@ function JsonRpcClient(url) {
 			  fncbk();
 		}
 	};this.AJAX = AJAX;
-	
 	AJAX({url:url, bAsync:false, clbkFun:function () {
 		try {
 			eval("obj = " + arguments[0]);
@@ -109,13 +108,14 @@ function JsonRpcClient(url) {
 	if(obj)for (var i = 0; i < obj.length; i++)this.fnMakeObj(obj[i], _this);
 	this.cacheObj = [];this.LoadJsObj = function(s)
 	{
+	  if("undefined" == typeof _this._LoadJsObj)return this;
 	  var o = null;
 	  try{o = _this.cacheObj[s] || (_this.cacheObj[s] = eval("1," + _this._LoadJsObj.getJsObj(s).getResult()))}catch(e){alert(e.message)};
 	  if(o)
 	  {
 	     if(!o.init)o.init = function()
 	     {
-	        var o = JsonRpcClient().LoadJsObj("Base"), a = o.A(arguments).concat([o]), k, i;
+	        var o = Base, a = o.A(arguments).concat([o]), k, i;
             for(i = 0; i < a.length; i++)
               for(k in a[i])this[k] = a[i][k];
 	        return this
@@ -125,8 +125,9 @@ function JsonRpcClient(url) {
 	  }
 	  return o
 	};
+	this.LoadJsObj("Base");
 }
-var rpc = JsonRpcClient(), Base = rpc.LoadJsObj("Base"),
+var rpc = JsonRpcClient(),
     XUI = function()
     {
         var o = Base, a = o.A(arguments).concat([o]), k, i, p = a[0];
