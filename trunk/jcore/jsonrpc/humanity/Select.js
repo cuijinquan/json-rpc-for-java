@@ -1,5 +1,16 @@
-﻿{ data:(window.Base = rpc.LoadJsObj("Base"),null),SelectDiv:false,inputObj:null,descObj:null,
-  oFrom:null, oShdow:null,
+﻿{ data:null,
+  SelectDiv:false, /* 下拉列表图层 */
+  inputObj:null,   /* 存放value值输入对象 */
+  descObj:null,    /* 存放描述的输入对象 */
+  oFrom:null,      /* 计算图层宽度的对象 */
+  oShdow:null,     /* 阴影图层对象 */
+  init: function()
+  {
+     var o = rpc.LoadJsObj("Base"), a = o.A(arguments).concat([o]), k, i;
+     for(i = 0; i < a.length; i++)
+        for(k in a[i])this[k] = a[i][k];
+     return this;
+  },
   getObj:function(szId)
   {
     return slctIptData[szId]||{};
@@ -32,7 +43,7 @@
     if(!flg)r[n].scrollIntoView(true);
     o["_lstNum"] = n;
     if(3 == arguments.length)
-      return Base.stopPropagation(e),Base.preventDefault(e), false;
+      return this.stopPropagation(e),this.preventDefault(e), false;
     return n;
   },
   getSelectDataStr:function(oE, w)
@@ -69,7 +80,7 @@
      else if(2 == n && inputObj)inputObj.value = s;
      else if(descObj && inputObj)
         inputObj.value = descObj.value = s;
-     if(e)Base.preventDefault(e), Base.stopPropagation(e);
+     if(e)this.preventDefault(e), this.stopPropagation(e);
      return this;
   },/* 通过描述得到value */
   getValueByDesc:function(s)
@@ -85,7 +96,7 @@
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
   {
-     var o = this.SelectDiv, id = o.id, oIpt = o[id] && Base.id(o[id]) || null,a,
+     var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.id(o[id]) || null,a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
      if(0 <= n && dt.length > n)
@@ -101,7 +112,7 @@
        o["_lstNum"] = n;
      }else o["_over"] = 1;
      this.hidden();
-     if(e)Base.preventDefault(e), Base.stopPropagation(e);
+     if(e)this.preventDefault(e), this.stopPropagation(e);
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
   {
@@ -110,7 +121,7 @@
   },
   hidden: function()
   {
-     Base.hiddenShadow(Base.id("_Xui_SelectDiv"));
+     this.hiddenShadow(this.id("_Xui_SelectDiv"));
      this.updata((this.descObj || {}).value || "");
   }, /* 更新data数据 */
   updata:function(s)
@@ -125,30 +136,32 @@
   },
   show: function()
   {
-     Base.showShadow(Base.id("_Xui_SelectDiv"));
+     this.showShadow(this.id("_Xui_SelectDiv"));
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
-     return Base.RunOne(function()
-     {
-       this.getData(oIpt.id);
-       var n = 0, o = this.SelectDiv, oT = this.getObj(oIpt.id),
+     return this.RunOne(function()
+     { 
+       var _t = Select;
+       _t.getData(oIpt.id);
+       var n = 0, o = _t.SelectDiv, oT = _t.getObj(oIpt.id),
            s = oIpt.value.replace(/(^\s+)|(\s+$)/g, "");
+       if(!o)return _t;
        /* 检索过滤处理 */
-       this.updata(s);
-       n = this.getData(oIpt.id).length;
+       _t.updata(s);
+       n = _t.getData(oIpt.id).length;
        if(oT["allowEdit"] || 1 == n)
        {
-          s = this.getValueByDesc(s);
-          s && this.setValue(s, 2, e);
+          s = _t.getValueByDesc(s);
+          s && _t.setValue(s, 2, e);
        }
        else if(oIpt.getAttribute("oldValue") != s || 0 == n)
-          this.setValue("", 2, e);
+          _t.setValue("", 2, e);
        if(0 < n)
-          this.showSelectDiv(e, {width: o.style.width}, oIpt, this.data);
-       else this.hidden();
-       Base.stopPropagation(e),Base.preventDefault(e);
-     }, this);
+          _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
+       else _t.hidden();
+       _t.stopPropagation(e),_t.preventDefault(e);
+     }, Select);
   }, /* 键盘事件处理 */
   onkeydown:function(e, oIpt)
   {
@@ -162,7 +175,7 @@
         /* 回车选择 */
         case 13:
            this.onSelect(null, i);
-           Base.bIE ? (e.keyCode = 9) : (e.which = 9);
+           this.bIE ? (e.keyCode = 9) : (e.which = 9);
            this.hidden();
            break;
         case 38: /* 上 */
@@ -176,23 +189,23 @@
      return true;
   },onResize:function()
   {
-    var o = Base.id("_Xui_SelectDiv");
-    o && Base.showShadow(o);
+     var o = Select.id("_Xui_SelectDiv");
+     o && Select.showShadow(o);
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
     var b3 = (3 == arguments.length);
     e = e || window.event;
     if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
-    var _t = this, o = this.SelectDiv, szId, oTable = (this.oFrom = Base.p(oE,"TABLE")),
-        oR = Base.getOffset(oTable),h = oR[3], w = oR[2],
-        p = { height:'1px', left: (oR[0] - (8 <= Base.nVer ? 6 : 0)) + "px", 
-              top: (oR[1] + h - (Base.bIE ? 3 : 2)) + "px", display:'block',
+    var _t = this, o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
+        oR = this.getOffset(oTable),h = oR[3], w = oR[2],
+        p = { height:'1px', left: (oR[0] - (8 <= this.nVer ? 6 : 0)) + "px", 
+              top: (oR[1] + h - (this.bIE ? 3 : 2)) + "px", display:'block',
               position: "absolute",
-              width: ((Base.bIE ? 2 : 0) + parseInt((obj||{}).width || oTable.clientWidth || w)) + "px"},
+              width: ((this.bIE ? 2 : 0) + parseInt((obj||{}).width || oTable.clientWidth || w)) + "px"},
         k,show = function(event)
         {
-          o["tmer"] && Base.clearTimer(o["tmer"]);
+          o["tmer"] && _t.clearTimer(o["tmer"]);
 	      o.style.display = 'block';
           if(0 < (Select.getData(oE.id) || []).length)
           {
@@ -205,11 +218,11 @@
     _t.inputObj = (_t.descObj = oE).parentNode.getElementsByTagName("input")[1];
     if(!o)
     {
-       this.SelectDiv = o = Base.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
-       Base.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
+       this.SelectDiv = o = this.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
+       this.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
            .addEvent(o, "scroll", fns).addEvent(o, "resize", _t.onResize)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.hiddenSelectDiv);
-       this.oShdow = Base.id("xuiSelectShdow");
+       this.oShdow = this.id("xuiSelectShdow");
     }
     szId = o.id;
     /* 状态的处理: 输入对象的id保留 */
@@ -221,12 +234,12 @@
     if(!oE[szId])
     {
        oE[szId] = o.id,
-       Base.addEvent(oE, "blur", function(){o["_blur_"]=true,_t.hiddenSelectDiv()})
+       this.addEvent(oE, "blur", function(){o["_blur_"]=true,_t.hiddenSelectDiv()})
            .addEvent(oE, "mousemove", function(e)
                {
-                 o["tmer"] && Base.clearTimer(o["tmer"]),
+                 o["tmer"] && _t.clearTimer(o["tmer"]),
                  _t.updata(oE.value),
-                 Base.fnMvIstPoint(oE, oE.value.length, oE.value.length, e);
+                 _t.fnMvIstPoint(oE, oE.value.length, oE.value.length, e);
                });
     }
     for(k in p)o.style[k] = p[k];
@@ -234,34 +247,34 @@
     _t.updata(oE.value);
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
     var nTm = new Date().getTime();
-    Base.regTimer(function()
+    this.regTimer(function()
     {
        var oTable = o.getElementsByTagName("table"),n = Math.min(170, k = 2 + (o.scrollHeight || 0 < oTable.length && oTable[0].clientHeight || 0));
        if(0 < oTable.length && (15 < n || 1000 < new Date().getTime() - nTm))
        {
          o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = n + "px";
-         Base.showShadow(o);
+         _t.showShadow(o);
          return true;
        }
        return false
     });
    
     this.lightRow(0);
-    Base.stopPropagation(e),Base.preventDefault(e);
+    this.stopPropagation(e),this.preventDefault(e);
   }, /* 隐藏图层的方法 */
   hiddenSelectDiv:function()
   {
-    var o = Select.SelectDiv;
+    var o = Select.SelectDiv, _t = Select;
     o["_tm_"] = new Date().getTime();
     o["_in_"] = false;
     /* 注册自动关闭,防止重入，如果重入就回启动多个timer服务定时器 */
-    o["tmer"] = Base.regTimer(function(e)
+    o["tmer"] = _t.regTimer(function(e)
     {
        if(o["_blur_"])
        {
 	       if(o["_in_"])return true;
 	       if(333 < new Date().getTime() - o["_tm_"])
-	          return Select.hidden(), true;
+	          return _t.hidden(), true;
        }
        return false
     }, 333);

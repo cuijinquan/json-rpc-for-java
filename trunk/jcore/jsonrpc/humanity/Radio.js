@@ -1,4 +1,5 @@
-{radioOver:function (o) {
+{
+    radioOver:function (o) {
 	var radio = o.getElementsByTagName("input")[0];
 	if (radio.readOnly || radio.disabled) {
 		return false;

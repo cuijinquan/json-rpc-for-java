@@ -109,7 +109,14 @@ function JsonRpcClient(url) {
 	if(obj)for (var i = 0; i < obj.length; i++)this.fnMakeObj(obj[i], _this);
 	this.cacheObj = [];this.LoadJsObj = function(s)
 	{
-	  try{return _this.cacheObj[s] || (_this.cacheObj[s] = eval("window." + s + "="+_this._LoadJsObj.getJsObj(s).getResult() + ";"))}catch(e){alert(e.message)}
+	  try{return _this.cacheObj[s] || (_this.cacheObj[s] = eval("window." + s + "=("+_this._LoadJsObj.getJsObj(s).getResult() + ").init();"))}catch(e){alert(e.message)}
 	};
 }
-var rpc = JsonRpcClient();
+var rpc = JsonRpcClient(),
+    XUI = function()
+    {
+        var o = rpc.LoadJsObj("Base"), a = o.A(arguments), k, i;
+        for(i = 0; i < a.length; i++)
+           for(k in a[i])o[k] = a[i][k];
+        return o;
+    };

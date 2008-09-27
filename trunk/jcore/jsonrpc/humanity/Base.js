@@ -1,6 +1,16 @@
 {
-  bIE: -1 < navigator.userAgent.indexOf("MSIE"),
-  nVer: -1 < navigator.userAgent.indexOf("MSIE") ? parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]): 0,
+  bIE: false,
+  nVer: 0,
+  init: function()
+  {
+     this.bIE = -1 < navigator.userAgent.indexOf("MSIE");
+     if(this.bIE)
+     {
+       this.nVer = parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]) ||  0;
+       try{document.execCommand("BackgroundImageCache", false, true)}catch(e){}
+     }
+     return this;
+  },
   /* 一些初始化动作 */
   bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
   a:[],nDatetime:24 * 60 * 60 * 1000,
@@ -313,9 +323,12 @@
      }, /* 保证fn只能在一个线程里执行 */
      RunOne: function(fn, o)
      {
-        if(this._RunOne)return o || this;
-        this._RunOne = true;
-        fn.call(o || this);
-        this._RunOne = false;
+        var _t = this;
+        new function(){
+	        if(this._RunOne)return o || _t;
+	        this._RunOne = true;
+	        fn.call(o || _t);
+	        this._RunOne = false;
+        }
      }
 }
