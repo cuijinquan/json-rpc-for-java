@@ -182,8 +182,8 @@
      return true;
   },onResize:function()
   {
-     var o = Select.id("_Xui_SelectDiv");
-     o && Select.showShadow(o);
+     var o = this.id("_Xui_SelectDiv");
+     o && this.showShadow(o);
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
@@ -213,8 +213,8 @@
     {
        this.SelectDiv = o = this.createDiv({className:"x-combo-list", id:"_Xui_SelectDiv"});
        this.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
-           .addEvent(o, "scroll", fns).addEvent(o, "resize", _t.onResize)
-           .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.hiddenSelectDiv);
+           .addEvent(o, "scroll", fns)/*.addEvent(o, "resize", _t.bind(_t.onResize,_t))*/
+           .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.bind(_t.hiddenSelectDiv));
        this.oShdow = this.id("xuiSelectShdow");
     }
     szId = o.id;

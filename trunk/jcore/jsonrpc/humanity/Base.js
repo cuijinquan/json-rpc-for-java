@@ -52,7 +52,7 @@
      var _t = this, a = _t.A(arguments);a.shift();a.shift();
      return function(e)
      {
-        fn.apply(o, _t.A(arguments).concat(a));
+        fn.apply(o || _t, _t.A(arguments).concat(a));
      }
   }, /* unLoad窗口无效时卸载事件绑定 */
   unLoad:function(o, t, f)
