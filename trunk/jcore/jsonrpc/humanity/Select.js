@@ -36,9 +36,9 @@
     var oSD = this.getByTagName("DIV",o)[0], a = [ r[n].offsetLeft, r[n].offsetTop, 
         r[n].clientWidth, r[n].clientHeight, 
         oSD.scrollLeft, oSD.scrollTop, 
-        o.clientWidth, o.clientHeight];
-    oSD.scrollTop  = a[1] + a[3] - a[7];
-    oSD.scrollLeft = a[0] + a[2] - a[6];
+        o.clientWidth, o.clientHeight], n1 = 0, n2 = a[3] * 2;
+    oSD.scrollTop  = a[5] < (n1 = a[1] + a[3] - a[7]) ? n1 + n2: n1 - n2;
+    oSD.scrollLeft = a[4] < (n1 = a[0] + a[2] - a[6]) ? n1 + n2: n1 - n2;
     o["_lstNum"] = n;
     if(3 == arguments.length)
       return this.stopPropagation(e),this.preventDefault(e), false;
@@ -217,7 +217,7 @@
     {
        this.SelectDiv = o = this.createDiv({id:"_Xui_SelectDiv"});
        this.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
-           .addEvent(o, "scroll", fns)/*.addEvent(o, "resize", _t.bind(_t.onResize,_t))*/
+           .addEvent(o, "scroll", fns)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.bind(_t.hiddenSelectDiv));
        this.oShdow = this.getDom("xuiSelectShdow");
     }
