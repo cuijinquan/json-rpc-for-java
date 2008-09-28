@@ -26,14 +26,19 @@
   }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
   {
-    var o = this.SelectDiv, tb = o.getElementsByTagName("table"), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
+    var o = this.SelectDiv, tb = this.getByTagName("table",o), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
     if(!b)return false;
     if(r.length > o["_lstNum"])
        r[o["_lstNum"] || 0].className='slcthand';
-    if(-1 == n)n = r.length - 1;
-    if(r.length <= n || 0 > n)n = 0;
-    r[n].className='cursor slctOver';
-    if(!flg)r[n].scrollIntoView(true);
+    if(0 > n)n = r.length - 1;
+    if(r.length <= n)n = 0;
+    r[n].className='cursor slctOver'; 
+    var oSD = this.getByTagName("DIV",o)[0], a = [ r[n].offsetLeft, r[n].offsetTop, 
+        r[n].clientWidth, r[n].clientHeight, 
+        oSD.scrollLeft, oSD.scrollTop, 
+        o.clientWidth, o.clientHeight];
+    oSD.scrollTop  = a[1] + a[3] - a[7];
+    oSD.scrollLeft = a[0] + a[2] - a[6];
     o["_lstNum"] = n;
     if(3 == arguments.length)
       return this.stopPropagation(e),this.preventDefault(e), false;
@@ -41,7 +46,7 @@
   },
   getSelectDataStr:function(oE, w)
   {
-    var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;\">"], i, j, o, k,
+    var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;position: relative;left:0;top:0\">"], i, j, o, k,
         b = this.getObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
     !bDisp && (b = b.split(/[,;\|\/]/));
     for(i = 0; i < a.length; i++)
@@ -125,10 +130,11 @@
     for(n = 0; n < a.length; n++)
       if(-1 < a[n]["_id_"].indexOf(s))
          b.push(a[n]);
-    this.data = 0 < b.length ? b : null;
+    this.data = 0 < b.length || 0 < s.length ? b : null;
   },
   show: function()
-  {
+  { 
+   	 
      this.showShadow(this.getDom("_Xui_SelectDiv"));
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
@@ -168,7 +174,7 @@
         /* 回车选择 */
         case 13:
            this.onSelect(null, i);
-           this.bIE ? (e.keyCode = 9) : (e.which = 9);
+           this.bIE ? (e.keyCode = 9) : '';
            this.hidden();
            break;
         case 38: /* 上 */
@@ -180,10 +186,6 @@
         default:;
      }
      return true;
-  },onResize:function()
-  {
-     var o = this.getDom("_Xui_SelectDiv");
-     o && this.showShadow(o);
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
@@ -248,7 +250,7 @@
        if(0 < oTable.length && (15 < n || 1000 < new Date().getTime() - nTm))
        {
          o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = n + "px";
-         _t.showShadow(o);
+         _t.show();
          return true;
        }
        return false

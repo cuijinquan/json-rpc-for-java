@@ -3,30 +3,28 @@
   nVer: 0,
   init: function()
   {
-     init: function()
-  {
       var ua = navigator.userAgent.toLowerCase();
       this.isStrict = document.compatMode == "CSS1Compat",
-	  this.isOpera = ua.indexOf("opera") > -1,
-	  this.isSafari = (/webkit|khtml/).test(ua),
-	  this.isSafari3 = isSafari && ua.indexOf('webkit/5') != -1,
-	  this.bIE = this.isIE = !isOpera && ua.indexOf("msie") > -1,
-	  this.isIE7 = !isOpera && ua.indexOf("msie 7") > -1,
-	  this.isGecko = !isSafari && ua.indexOf("gecko") > -1,
-	  this.isGecko3 = !isSafari && ua.indexOf("rv:1.9") > -1,
-	  this.isBorderBox = isIE && !isStrict,
-	  this.isWindows = (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1),
-	  this.isMac = (ua.indexOf("macintosh") != -1 || ua.indexOf("mac os x") != -1),
-	  this.isAir = (ua.indexOf("adobeair") != -1),
-	  this.isLinux = (ua.indexOf("linux") != -1),
-	  this.isSecure = window.location.href.toLowerCase().indexOf("https") === 0; 
-     if(this.bIE)
-     {
+	    this.isOpera = ua.indexOf("opera") > -1,
+	    this.isSafari = (/webkit|khtml/).test(ua),
+	    this.isSafari3 = this.isSafari && ua.indexOf('webkit/5') != -1,
+	    this.bIE = this.isIE = !this.isOpera && ua.indexOf("msie") > -1,
+	    this.isIE7 = !this.isOpera && ua.indexOf("msie 7") > -1,
+	    this.isGecko = !this.isSafari && ua.indexOf("gecko") > -1,
+	    this.isGecko3 = !this.isSafari && ua.indexOf("rv:1.9") > -1,
+	    this.isBorderBox = this.isIE && !this.isStrict,
+	    this.isWindows = (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1),
+	    this.isMac = (ua.indexOf("macintosh") != -1 || ua.indexOf("mac os x") != -1),
+	    this.isAir = (ua.indexOf("adobeair") != -1),
+	    this.isLinux = (ua.indexOf("linux") != -1),
+	    this.isSecure = window.location.href.toLowerCase().indexOf("https") === 0; 
+      if(this.bIE)
+      { 
        this.nVer = parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]) ||  0;
        if(7 > this.nVer)
          try{document.execCommand("BackgroundImageCache", false, true)}catch(e){}
-     }
-     return this;
+      } 
+      return this;
   },
   /* 一些初始化动作 */
   bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
@@ -53,8 +51,8 @@
   getDom:function(s)
   {
      if(!s || !document)return null;
-     var o = "string" == typeof s ? document.getElementById(s) : s, k;
-     for(k in this)o[k] = this[k];
+     var o = ("string" == typeof s ? document.getElementById(s) : s), k;
+     /* for(k in this)o[k] = this[k]; */
     return o;
   },
   getByTagName: function(s,o)
