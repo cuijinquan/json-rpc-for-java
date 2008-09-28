@@ -188,14 +188,16 @@
      }
      return o;
   },/* 显示阴影图层 */
-  showShadow:function(o)
+  showShadow:function(o, oIpt)
   {
       var old = o;
       o = o.currentStyle || o.runtimeStyle || o.style || null;
-      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 7,oTmp = this.getDom("xuiSelectShdow") || {},
-         obj = oTmp.style,
+      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 7,
+          oTmp = this.getDom("xuiSelectShdow") || {}, obj = oTmp.style,
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) - 2 , zIndex = (o.zIndex || 11000) - 1;
      if(!obj || !h || !w || 12 > h)return this;
+     // if(h + top ? )
+     
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
      obj.zIndex = zIndex, obj.position = "absolute";
