@@ -3,7 +3,23 @@
   nVer: 0,
   init: function()
   {
-     this.bIE = -1 < navigator.userAgent.indexOf("MSIE");
+     init: function()
+  {
+      var ua = navigator.userAgent.toLowerCase();
+      this.isStrict = document.compatMode == "CSS1Compat",
+	  this.isOpera = ua.indexOf("opera") > -1,
+	  this.isSafari = (/webkit|khtml/).test(ua),
+	  this.isSafari3 = isSafari && ua.indexOf('webkit/5') != -1,
+	  this.bIE = this.isIE = !isOpera && ua.indexOf("msie") > -1,
+	  this.isIE7 = !isOpera && ua.indexOf("msie 7") > -1,
+	  this.isGecko = !isSafari && ua.indexOf("gecko") > -1,
+	  this.isGecko3 = !isSafari && ua.indexOf("rv:1.9") > -1,
+	  this.isBorderBox = isIE && !isStrict,
+	  this.isWindows = (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1),
+	  this.isMac = (ua.indexOf("macintosh") != -1 || ua.indexOf("mac os x") != -1),
+	  this.isAir = (ua.indexOf("adobeair") != -1),
+	  this.isLinux = (ua.indexOf("linux") != -1),
+	  this.isSecure = window.location.href.toLowerCase().indexOf("https") === 0; 
      if(this.bIE)
      {
        this.nVer = parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]) ||  0;
@@ -34,9 +50,12 @@
        b.push(a[i]);
     return b;
   }, /* 获取id为s的对象 */
-  id:function(s)
+  getDom:function(s)
   {
-    return s && s['constructor'] && String == s['constructor'] ? document.getElementById(s) : s
+     if(!s || !document)return null;
+     var o = "string" == typeof s ? document.getElementById(s) : s, k;
+     for(k in this)o[k] = this[k];
+    return o;
   },
   getByTagName: function(s,o)
   {
@@ -49,11 +68,11 @@
   fireEvent:function(szElement,szEvent)
   {
     if(document.all)
-       this.id(szElement).fireEvent('on' + szEvent);
+       this.getDom(szElement).fireEvent('on' + szEvent);
     else{
       var evt = document.createEvent('HTMLEvents');
       evt.initEvent(szEvent,true,true);
-      this.id(szElement).dispatchEvent(evt);
+      this.getDom(szElement).dispatchEvent(evt);
     }
   }, /* 将对象o绑定给fn函数 */
   bind:function(fn, o)
@@ -112,14 +131,14 @@
   }, /* 清楚保留的o滚动条信息,例如：Base.clearScroll(o) */
   clearScroll:function(o)
   {
-    var k = this.id(o).id;
+    var k = this.getDom(o).id;
     delete top.__aScroll[k];
     this.setCookie(k, null);
   }, /* 设置对象o自动保存滚动条信息,例如：Base.autoSaveScroll(o) */
   autoSaveScroll: function(o)
   {
     top.__aScroll || (top.__aScroll = []);
-    o = this.id(o);
+    o = this.getDom(o);
     var t = this, k = o.id, s = t.getCookie(k) || top.__aScroll[k];
     s && t.addEvent(window, 'load', function(e){o.scrollTop = s,t.setCookie(k, null),delete top.__aScroll[k]});
     t.addEvent(o, 'scroll', function(e)
@@ -150,7 +169,7 @@
   {
      var o = null, b = !!arguments[0] || false,
          p = arguments[0], k, a1 = [];
-     if(p && p["id"] && (o = this.id(p["id"])))return o;
+     if(p && p["id"] && (o = this.getDom(p["id"])))return o;
      o = document.createElement("div")
      if(b)
      {
@@ -158,7 +177,7 @@
        for(k in p)o[k] = p[k];
      }
      document.body.appendChild(o);
-     if(!this.id("xuiSelectShdow"))
+     if(!this.getDom("xuiSelectShdow"))
      {
        a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
        a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
@@ -167,7 +186,7 @@
        this.insertHtml(document.body, "beforeend", a1.join(""));
        a1 = null;
        if(this.bIE && 5 < this.nVer && 7 > this.nVer)
-       	  this.id("xuiSelectShdow").style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=30) progid:DXImageTransform.Microsoft.Blur(pixelradius=4)";
+       	  this.getDom("xuiSelectShdow").style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=30) progid:DXImageTransform.Microsoft.Blur(pixelradius=4)";
      }
      return o;
   },/* 显示阴影图层 */
@@ -175,7 +194,7 @@
   {
       var old = o;
       o = o.currentStyle || o.runtimeStyle || o.style || null;
-      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 7,oTmp = this.id("xuiSelectShdow") || {},
+      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 7,oTmp = this.getDom("xuiSelectShdow") || {},
          obj = oTmp.style,
          left = parseFloat(o.left) - 4, top = parseFloat(o.top) - 2 , zIndex = (o.zIndex || 11000) - 1;
      if(!obj || !h || !w || 12 > h)return this;
@@ -183,10 +202,10 @@
      obj.top = top + "px", obj.left = left + "px",
      obj.zIndex = zIndex, obj.position = "absolute";
      oTmp = obj;
-     if(!(obj = this.id("xuislctsd4")))return this;
-     obj.style.width = this.id("xuislctsd3").style.width =
-     this.id("xuislctsd1").style.width = (w - 12) + "px";
-     obj = this.id("xuislctsd2");
+     if(!(obj = this.getDom("xuislctsd4")))return this;
+     obj.style.width = this.getDom("xuislctsd3").style.width =
+     this.getDom("xuislctsd1").style.width = (w - 12) + "px";
+     obj = this.getDom("xuislctsd2");
      obj.style.height = (h - 12) + "px";
      o = obj.getElementsByTagName("div");
      for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
@@ -194,7 +213,7 @@
   },hiddenShadow:function(o)
   {
     var oTmp;
-    if(oTmp = this.id("xuiSelectShdow"))oTmp.style.display='none';
+    if(oTmp = this.getDom("xuiSelectShdow"))oTmp.style.display='none';
     o.style.display = 'none',o.innerHTML = "";
   },
   regTimer:function(fn, n)

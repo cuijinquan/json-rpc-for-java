@@ -89,7 +89,7 @@
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
   {
-     var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.id(o[id]) || null,a,
+     var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
      if(0 <= n && dt.length > n)
@@ -114,7 +114,7 @@
   },
   hidden: function()
   {
-     this.hiddenShadow(this.id("_Xui_SelectDiv"));
+     this.hiddenShadow(this.getDom("_Xui_SelectDiv"));
      this.updata((this.descObj || {}).value || "");
   }, /* 更新data数据 */
   updata:function(s)
@@ -129,7 +129,7 @@
   },
   show: function()
   {
-     this.showShadow(this.id("_Xui_SelectDiv"));
+     this.showShadow(this.getDom("_Xui_SelectDiv"));
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
@@ -182,7 +182,7 @@
      return true;
   },onResize:function()
   {
-     var o = this.id("_Xui_SelectDiv");
+     var o = this.getDom("_Xui_SelectDiv");
      o && this.showShadow(o);
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
@@ -217,7 +217,7 @@
        this.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
            .addEvent(o, "scroll", fns)/*.addEvent(o, "resize", _t.bind(_t.onResize,_t))*/
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.bind(_t.hiddenSelectDiv));
-       this.oShdow = this.id("xuiSelectShdow");
+       this.oShdow = this.getDom("xuiSelectShdow");
     }
     szId = o.id;
     /* 状态的处理: 输入对象的id保留 */
