@@ -23,7 +23,35 @@
         }
     }
     return this.data || this.getObj(szId)["collection"]
-  }, /* 高亮显示指定的行 */
+  },scrollIntoView : function(c, el){
+        var o = [c.offsetTop, c.offsetLeft],
+            l = o[0] + c.scrollLeft,
+            t = o[1] + c.scrollTop,
+            b = t + el.offsetHeight,
+            r = l + el.offsetWidth;
+
+        var ch = c.clientHeight;
+        var ct = parseInt(c.scrollTop, 10);
+        var cl = parseInt(c.scrollLeft, 10);
+        var cb = ct + ch;
+        var cr = cl + c.clientWidth, hscroll = true;
+
+        if(el.offsetHeight > ch || t < ct){
+        	c.scrollTop = t;
+        }else if(b > cb){
+            c.scrollTop = b-ch;
+        }
+        c.scrollTop = c.scrollTop; // corrects IE, other browsers will ignore
+
+        if(hscroll !== false){
+			if(el.offsetWidth > c.clientWidth || l < cl){
+                c.scrollLeft = l;
+            }else if(r > cr){
+                c.scrollLeft = r-c.clientWidth;
+            }
+            c.scrollLeft = c.scrollLeft;
+        }
+    }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
   {
     var o = this.SelectDiv, tb = this.getByTagName("table",o), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
@@ -33,12 +61,7 @@
     if(0 > n)n = r.length - 1;
     if(r.length <= n)n = 0;
     r[n].className='cursor slctOver'; 
-    var oSD = this.getByTagName("DIV",o)[0], a = [ r[n].offsetLeft, r[n].offsetTop, 
-        r[n].clientWidth, r[n].clientHeight, 
-        oSD.scrollLeft, oSD.scrollTop, 
-        o.clientWidth, o.clientHeight], n1 = 0;
-    oSD.scrollTop  = a[1] + a[3] * 2 - a[7];
-    oSD.scrollLeft = a[0] + a[2] * 2 - a[6];
+    if(!flg)r[n].scrollIntoView(false); 
     o["_lstNum"] = n;
     if(3 == arguments.length)
       return this.stopPropagation(e),this.preventDefault(e), false;
@@ -134,6 +157,7 @@
   },
   show: function()
   { 
+   	 
      this.showShadow(this.getDom("_Xui_SelectDiv"));
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
