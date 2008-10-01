@@ -191,13 +191,12 @@
   showShadow:function(o, oIpt)
   {
       var old = o;
-      o = o.currentStyle || o.runtimeStyle || o.style || null;
-      var w = parseFloat(o.width) + 10, h = parseFloat(o.height || 1) + 7,
+      var w = parseFloat(this.getStyle(o, "width")) + 10, h = parseFloat(this.getStyle(o, "height") || 1) + 7,
           oTmp = this.getDom("xuiSelectShdow") || {}, obj = oTmp.style,
-         left = parseFloat(o.left) - 4, top = parseFloat(o.top) - 2 , zIndex = (o.zIndex || 11000) - 1;
+         left = parseFloat(this.getStyle(o, "left")) - 4, top = parseFloat(this.getStyle(o, "top")) - 2 , 
+         zIndex = (this.getStyle(o, "zIndex") || 11000) - 1;
      if(!obj || !h || !w || 12 > h)return this;
-     // if(h + top ? )
-     
+     o = o.style;
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
      obj.zIndex = zIndex, obj.position = "absolute";
@@ -209,7 +208,7 @@
      obj.style.height = (h - 12) + "px";
      o = obj.getElementsByTagName("div");
      for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
-     oTmp.display = old.display = "block";
+     oTmp.display = old.style.display = "block";
   },hiddenShadow:function(o)
   {
     var oTmp;
@@ -224,28 +223,7 @@
     }, n || 13);
     return nTime;
   },clearTimer:function(n){clearInterval(n)},
-  getOffset:function(o)
-  {
-    var a = [o.offsetLeft, o.offsetTop, o.offsetWidth,o.offsetHeight, 0, 0], r;
-    if(o.getBoundingClientRect)
-    {
-       r = o.getBoundingClientRect();
-       a[0] = r.left + Math.max(document.documentElement.scrollLeft, document.body.scrollLeft) - document.documentElement.clientLeft;
-       a[1] = r.top + Math.max(document.documentElement.scrollTop, document.body.scrollTop) - document.documentElement.clientTop;
-    }
-    else
-    {
-        while(o = o.offsetParent)
-        {
-          a[0] += (o.offsetLeft || 0) - (o.scrollLeft || 0);
-          a[1] += (o.offsetTop || 0) - (o.scrollTop || 0);
-          a[4] += o.scrollLeft || 0;
-          a[5] += o.scrollTop || 0;
-          if(document.body == o)break;
-        }
-     }
-     return a;
-   }, /* 给o增加class为s */
+   /* 给o增加class为s */
    addClass: function(s, o)
    {
       o.className = (o.className || s).replace(new RegExp( "\\s?" + s, "g"), "") + " " + s;
@@ -383,15 +361,173 @@
 	        fn.call(o || _t);
 	        this._RunOne = false;
         }
-     },/* 显示图层，包含阴影图层；o为参照定位图层显示位置的对象，oDiv为要显示的图层对象，w为宽度，默认为o的宽度就设置为0，h为显示高度 */
+     },getStyle : function(){
+         var view = document.defaultView, propCache = {}, 
+            camelRe = /(-[a-z])/gi,
+            camelFn = function(m, a){ return a.charAt(1).toUpperCase(); };  
+        return view && view.getComputedStyle ?
+            function(el, prop){
+                var v, cs, camel;
+                if(prop == 'float'){
+                    prop = "cssFloat";
+                }
+                if(v = el.style[prop]){
+                    return v;
+                }
+                if(cs = view.getComputedStyle(el, "")){
+                    if(!(camel = propCache[prop])){
+                        camel = propCache[prop] = prop.replace(camelRe, camelFn);
+                    }
+                    return cs[camel];
+                }
+                return null;
+            } :
+            function(el, prop){
+                var v, cs, camel,
+                    camelRe = /(-[a-z])/gi,
+                    camelFn = function(m, a){ return a.charAt(1).toUpperCase(); }; 
+                if(prop == 'opacity'){
+                    if(typeof el.style.filter == 'string'){
+                        var m = el.style.filter.match(/alpha\(opacity=(.*)\)/i);
+                        if(m){
+                            var fv = parseFloat(m[1]);
+                            if(!isNaN(fv)){
+                                return fv ? fv / 100 : 0;
+                            }
+                        }
+                    }
+                    return 1;
+                }else if(prop == 'float'){
+                    prop = "styleFloat";
+                }
+                if(!(camel = propCache[prop])){
+                    camel = propCache[prop] = prop.replace(camelRe, camelFn);
+                }
+                if(v = el.style[camel]){
+                    return v;
+                }
+                if(cs = el.currentStyle){
+                    return cs[camel];
+                }
+                return null;
+            };
+    }(),
+    getScroll : function(d){
+        var doc = document;
+        if(d == doc || d == doc.body){
+            var l, t;
+            if(this.isIE && this.isStrict){
+                l = doc.documentElement.scrollLeft || (doc.body.scrollLeft || 0);
+                t = doc.documentElement.scrollTop || (doc.body.scrollTop || 0);
+            }else{
+                l = window.pageXOffset || (doc.body.scrollLeft || 0);
+                t = window.pageYOffset || (doc.body.scrollTop || 0);
+            }
+            return {left: l, top: t};
+        }else{
+            return {left: d.scrollLeft, top: d.scrollTop};
+        }
+    },
+     getViewWidth : function(full) {
+            return full ? this.getDocumentWidth() : this.getViewportWidth();
+        },
+
+        getViewHeight : function(full) {
+            return full ? this.getDocumentHeight() : this.getViewportHeight();
+        },
+
+        getDocumentHeight: function() {
+            var scrollHeight = (this.compatMode != "CSS1Compat") ? document.body.scrollHeight : document.documentElement.scrollHeight;
+            return Math.max(scrollHeight, this.getViewportHeight());
+        },
+
+        getDocumentWidth: function() {
+            var scrollWidth = (this.compatMode != "CSS1Compat") ? document.body.scrollWidth : document.documentElement.scrollWidth;
+            return Math.max(scrollWidth, this.getViewportWidth());
+        },
+
+        getViewportHeight: function(){
+            if(this.isIE){
+                return this.isStrict ? document.documentElement.clientHeight :
+                         document.body.clientHeight;
+            }else{
+                return self.innerHeight;
+            }
+        },
+
+        getViewportWidth: function() {
+            if(this.isIE){
+                return this.isStrict ? document.documentElement.clientWidth :
+                         document.body.clientWidth;
+            }else{
+                return self.innerWidth;
+            }
+        },
+    getOffset: function(o){
+    /* offsetLeft, offsetTop */
+    var a = [o.offsetLeft, o.offsetTop, o.offsetWidth,o.offsetHeight, 0, 0], r, parent;
+    if(o.getBoundingClientRect)
+    {
+       r = o.getBoundingClientRect();
+       var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop),
+           scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+       a[0] = parseInt(r.left + scrollLeft);
+       a[1] = parseInt(r.bottom + scrollTop);
+    }
+    else if(document.getBoxObjectFor)    // gecko    
+	{
+	  r = document.getBoxObjectFor(o); 
+	  var s = this.getStyle(o, "borderLeftWidth"),
+	      borderLeft = s ? parseInt(s) : 0, 
+	      borderTop = (s = this.getStyle(o, "borderTopWidth")) ? parseInt(s) : 0; 
+	  a[0] = r.x - borderLeft, a[1] = r.y - borderTop;
+	}
+    else /* safari & opera */
+    {
+        a[1] += o.clientHeight;
+        parent = o;
+        if(o != parent.offsetParent)
+        while(parent = parent.offsetParent)
+        {
+          a[0] += (parent.offsetLeft || 0);/* - (parent.scrollLeft || 0);*/
+          a[1] += (parent.offsetTop || 0);/* - (parent.scrollTop || 0);*/
+          a[4] += parent.scrollLeft || 0;
+          a[5] += parent.scrollTop || 0;
+          if(document.body == o)break;
+        }
+        var n = (this.isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop);
+        a[1] -= n;
+        a[5] += n;
+     }
+     return a;
+    }, isCSS1Compat: document.compatMode == "CSS1Compat",
+    /* 显示图层，包含阴影图层；o为参照定位图层显示位置的对象，oDiv为要显示的图层对象，w为宽度，默认为o的宽度就设置为0，h为显示高度 */
 	showDiv: function(o, oDiv, w, h)
 	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
-	  p = { height: (h || 1) + 'px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
-              top: (oR[1] + oR[3] - (this.bIE ? 5 : 2)) + "px", display:'block',
+	  p = { height: parseInt(h || 1) + 'px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", // oR[0] 
+              top: (oR[1] - (this.bIE ? 5 : 2)) + "px", display:'block',
               position: "absolute",
               width: ((this.bIE ? 2 : 0) + parseInt(w || o.clientWidth || oR[2])) + "px"};
       for(k in p)style[k] = p[k];
+      var body = document.documentElement || document.body, oR = document.body.getBoundingClientRect();
+		      h = body.offsetHeight || body.clientHeight || body.scrollHeight || oR.bottom - oR.top,
+		      w = body.offsetWidth || body.scrollWidth || oR.right - oR.left,
+		      scrollTop  = this.isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop,
+		      scrollLeft = this.isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
       this.showShadow(oDiv);
+    
+      var w1 = parseInt(oDiv.style.width), h1 = parseInt(oDiv.style.height),
+		      l  = parseInt(oDiv.style.left), t = parseInt(oDiv.style.top),
+		      oR1 = o.getBoundingClientRect && o.getBoundingClientRect() || {left: o.clientLeft, top:o.clientTop, right: o.clientRight, bottom: clientBottom};
+		      w2 = oR1.right - oR1.left, h2 = oR1.bottom - oR1.top,
+		      oTmp = this.getDom("xuiSelectShdow")
+		  if(t + h1 > h)
+		     h = -h2 - h1,oDiv.style.top = (t + h) + "px", oTmp.style.top = (parseInt(oTmp.style.top) + h) + "px";
+		     
+		  if(l + w1 > w)
+		     w = -w2 - w1, oDiv.style.left = (l + w) + "px", oTmp.style.left = (parseInt(oTmp.style.left) + w) + "px";
+		  document.body.scrollTop = scrollTop, document.body.scrollLeft = scrollLeft;
+		  document.body.scrollTop = document.body.scrollTop, document.body.scrollLeft = document.body.scrollLeft;
 	}
 }

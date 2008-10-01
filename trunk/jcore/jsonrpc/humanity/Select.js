@@ -157,8 +157,9 @@
   },
   show: function()
   { 
-   	 
-     this.showShadow(this.getDom("_Xui_SelectDiv"));
+   	 var o = this.SelectDiv;
+     this.showDiv(this.p(this.descObj, "TABLE"), this.SelectDiv, 
+       parseInt(o.style.width), parseInt(o.style.height));
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
@@ -218,7 +219,7 @@
     var _t = this, o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
         oR = this.getOffset(oTable),h = oR[3], w = oR[2],
         p = { height:'1px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
-              top: (oR[1] + h - (this.bIE ? 3 : 2)) + "px", display:'block',
+              top: (oR[1] - (this.bIE ? 3 : 2)) + "px", display:'block',
               position: "absolute",
               width: ((this.bIE ? 2 : 0) + parseInt((obj||{}).width || oTable.clientWidth || w)) + "px"},
         k,
