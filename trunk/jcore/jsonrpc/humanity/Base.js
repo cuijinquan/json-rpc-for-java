@@ -1,6 +1,6 @@
 {
   bIE: false,
-  nVer: 0,
+  nVer: 0, trim:function(s){return s.replace(/(^\s*)|(\s*$)/gm, "")},
   init: function()
   {
       var ua = navigator.userAgent.toLowerCase();
@@ -495,7 +495,7 @@
           a[5] += parent.scrollTop || 0;
           if(document.body == o)break;
         }
-        var n = (this.isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop);
+        var n = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
         a[1] -= n;
         a[5] += n;
      }
@@ -513,8 +513,8 @@
       var body = document.documentElement || document.body, oR = document.body.getBoundingClientRect();
 		      h = body.offsetHeight || body.clientHeight || body.scrollHeight || oR.bottom - oR.top,
 		      w = body.offsetWidth || body.scrollWidth || oR.right - oR.left,
-		      scrollTop  = this.isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop,
-		      scrollLeft = this.isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
+		      scrollTop  = Math.max(document.documentElement.scrollTop, document.body.scrollTop),
+		      scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
       this.showShadow(oDiv);
     
       var w1 = parseInt(oDiv.style.width), h1 = parseInt(oDiv.style.height),

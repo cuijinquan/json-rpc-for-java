@@ -226,10 +226,10 @@
         fns = _t.bind(function()
         {
           var o = this.SelectDiv;
-          o["tmer"] && _t.clearTimer(o["tmer"]);
-	      o.style.display = 'block';
           if(0 < (this.getData(oE.id) || []).length)
           {
+	          o["tmer"] && _t.clearTimer(o["tmer"]);
+		      o.style.display = 'block';
               if(o.style.height)              
                  this.show();
           }
