@@ -158,8 +158,9 @@
   show: function()
   { 
    	 var o = this.SelectDiv;
-     this.showDiv(this.p(this.descObj, "TABLE"), this.SelectDiv, 
-       parseInt(o.style.width), parseInt(o.style.height));
+   	 if(0 < this.getData(this.descObj.id))
+       this.showDiv(this.p(this.descObj, "TABLE"), this.SelectDiv, 
+         parseInt(o.style.width), parseInt(o.style.height));
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
@@ -168,7 +169,7 @@
        var _t = Select;
        _t.getData(oIpt.id);
        var n = 0, o = _t.SelectDiv, oT = _t.getObj(oIpt.id),
-           s = oIpt.value.replace(/(^\s+)|(\s+$)/g, "");
+           s = oIpt.value.replace(/(^\s+)|(\s+$)/g, ""), sv = "x-form-invalid";
        if(!o)return _t;
        /* 检索过滤处理 */
        _t.updata(s);
@@ -181,8 +182,8 @@
        else if(oIpt.getAttribute("oldValue") != s || 0 == n)
           _t.setValue("", 2, e);
        if(0 < n)
-          _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
-       else _t.hidden();
+          this.delClass(sv, oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
+       else _t.hidden(), !oT["allowEdit"] && this.addClass(sv, oIpt);
        _t.stopPropagation(e),_t.preventDefault(e);
      }, Select);
   }, /* 键盘事件处理 */

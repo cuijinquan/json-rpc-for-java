@@ -213,7 +213,8 @@
   {
     var oTmp;
     if(oTmp = this.getDom("xuiSelectShdow"))oTmp.style.display='none';
-    o.style.display = 'none',o.innerHTML = "";
+    o.style.display = 'none';
+    return this;
   },
   regTimer:function(fn, n)
   {
@@ -227,10 +228,12 @@
    addClass: function(s, o)
    {
       o.className = (o.className || s).replace(new RegExp( "\\s?" + s, "g"), "") + " " + s;
+      return this;
    }, /* 去除o中s的class */
    delClass: function(s, o)
    {
       o.className = (o.className || "").replace(new RegExp( "\\s?" + s, "g"), "");
+      return this;
    },
   FromEventObj: function(e){return (e = e || window.event).target || e.srcElement},
   /* 事件返回false */
@@ -344,9 +347,9 @@
        /* 两种计算星期几的公式 
        var y = o.getFullYear(), m = o.getMonth() + 1, day = o.getDate(),
            ds = day, i,
-           a = this.pkData = [31,(this.isLeapYear(y) ? 29 : 28),31,30,31,30,31,31,30,31,30,31];
+           a = this.pkData = [0, 31,(this.isLeapYear(y) ? 29 : 28),31,30,31,30,31,31,30,31,30,31];
        this.year = y, this.month = m, this.day = day;
-           for(i = 0; i < m - 1; i++)
+           for(i = 0; i < m; i++)
               ds += a[i];
        // return parseInt((ds + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7);
        return y--, parseInt((y + y / 4 - y / 100 + y / 400 + ds) % 7)
@@ -505,7 +508,7 @@
 	showDiv: function(o, oDiv, w, h)
 	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
-	  p = { height: parseInt(h || 1) + 'px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", // oR[0] 
+	  p = { height: parseInt(h || 1) + 'px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] - (this.bIE ? 5 : 2)) + "px", display:'block',
               position: "absolute",
               width: ((this.bIE ? 2 : 0) + parseInt(w || o.clientWidth || oR[2])) + "px"};
@@ -521,7 +524,7 @@
 		      l  = parseInt(oDiv.style.left), t = parseInt(oDiv.style.top),
 		      oR1 = o.getBoundingClientRect && o.getBoundingClientRect() || {left: o.clientLeft, top:o.clientTop, right: o.clientRight, bottom: clientBottom};
 		      w2 = oR1.right - oR1.left, h2 = oR1.bottom - oR1.top,
-		      oTmp = this.getDom("xuiSelectShdow")
+		      oTmp = this.getDom("xuiSelectShdow");
 		  if(t + h1 > h)
 		     h = -h2 - h1,oDiv.style.top = (t + h) + "px", oTmp.style.top = (parseInt(oTmp.style.top) + h) + "px";
 		     
