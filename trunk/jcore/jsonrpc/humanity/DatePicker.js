@@ -35,8 +35,8 @@
 	},showXuiSlctMY: function(y)
 	{
 	   var o = this.xuiSlctMY, oTb = this.getByTagName("TABLE", o)[0], i, 
-	       j, r, k = 4, p, oldY = this.year,
-	       y1 = y || this.slctY || oldY, m = this.slctM || this.month;
+	       j, r, k = 4, p, oldY = this.year, yy = y || this.slctY || oldY,
+	       y1 = this.slctY || oldY, m = this.slctM || this.month;
 	   this.year = y || oldY;
 	   this.oldYear = this.year; 
 	   for(i = 0; i < oTb.rows.length; i++)
@@ -52,7 +52,7 @@
 	         }
 	         else if(0 < i && 1 < j)
 	         {
-	            this.getByTagName("A", r.cells[j])[0].innerHTML = p = (y1 - k) + (j - 2) * 5;
+	            this.getByTagName("A", r.cells[j])[0].innerHTML = p = (yy - k) + (j - 2) * 5;
 	            if((r.cells[j].textContent || r.cells[j].innerText) == y1)this.addClass("x-date-mp-sel", r.cells[j]);
 	            else this.delClass("x-date-mp-sel", r.cells[j]);
 	         }
@@ -61,6 +61,7 @@
 	   }	   
 	   this.year = oldY;
 	   o.style.display = "block";
+	   this.dpIpt.focus();
 	},slctOk:function() /* 选择Ok */
 	{
 	   this.year = this.slctY || this.year;
@@ -88,7 +89,7 @@
 	   var i,j, a = [
 	     "<ul class=\"x-menu-list\"><li class=\"x-menu-list-item x-menu-date-item\"><div style=\"-moz-user-select: none; width: 175px;\" class=\"x-date-picker x-unselectable\"><table style=\"width: 175px;\" cellspacing=\"0\"><tbody>"
 	     /* 头部 */
-	     ,"<tr><td class=\"x-date-left\"><a onclic=\"DatePicker.this.month--,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"#\" title=\"上月(Ctrl+Left)\">&nbsp;</a></td><td class=\"x-date-middle\" align=\"center\"><table style=\"width: auto;\" class=\"x-btn-wrap x-btn\" border=\"0\" cellpadding=\"0\"cellspacing=\"0\"><tbody><tr class=\"x-btn-with-menu\"><td class=\"x-btn-left\"><i>&nbsp;</i></td><td class=\"x-btn-center\"><em unselectable=\"on\" onclick=\"DatePicker.showXuiSlctMY()\"><button class=\"x-btn-text\" type=\"button\" id=\"xuiCurYear\"></button></em></td><td class=\"x-btn-right\"><i>&nbsp;</i></td></tr></tbody></table></td><td class=\"x-date-right\"><a onclic=\"DatePicker.this.month++,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"#\" title=\"下月(Ctrl+Right)\">&nbsp;</a></td></tr>"
+	     ,"<tr><td class=\"x-date-left\"><a onclick=\"DatePicker.month--,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"#\" title=\"上月(Ctrl+Left)\">&nbsp;</a></td><td class=\"x-date-middle\" align=\"center\"><table style=\"width: auto;\" class=\"x-btn-wrap x-btn\" border=\"0\" cellpadding=\"0\"cellspacing=\"0\"><tbody><tr class=\"x-btn-with-menu\"><td class=\"x-btn-left\"><i>&nbsp;</i></td><td class=\"x-btn-center\"><em unselectable=\"on\" onclick=\"DatePicker.showXuiSlctMY()\"><button class=\"x-btn-text\" type=\"button\" id=\"xuiCurYear\"></button></em></td><td class=\"x-btn-right\"><i>&nbsp;</i></td></tr></tbody></table></td><td class=\"x-date-right\"><a onclick=\"DatePicker.month++,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"#\" title=\"下月(Ctrl+Right)\">&nbsp;</a></td></tr>"
 	   ];
 	   /* 中间 start */
 	   a.push("<tr><td colspan=\"3\"><table class=\"x-date-inner\" cellspacing=\"0\"><thead><tr><th title=\"星期天\"><span>日</span></th><th title=\"星期一\"><span>一</span></th><th title=\"星期二\"><span>二</span></th><th title=\"星期三\"><span>三</span></th><th title=\"星期四\"><span>四</span></th><th title=\"星期五\"><span>五</span></th><th title=\"星期六\"><span>六</span></th></tr></thead><tbody id=\"xuiDatePicker\">");
@@ -148,12 +149,11 @@
 	  return r;
 	},setValue: function()
 	{
-	   this.dpIpt.value = [this.year, this.month, this.day].join("-");
+	   this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, 9 < this.day ? this.day : "0" + this.day].join("-");
 	},
 	updataTBody: function()
 	{
 	   /* 上一个月 */
-	   document.title = [this.month, this.getWeek(this.year, this.month, 1)];
 	   var m = this.month - 1, n = this.getWeek(this.year, this.month, 1),
 	       r = this.xuiDPRows.rows, d, y = this.year, _t = this;
 	   if(0 >= m)m = 12, y--;
@@ -199,51 +199,111 @@
      var n = e.which || e.keyCode;
      switch(n)
      {
-        /* 接受连续退格键 e.repeat, 8 */
-        case 8:return true;
+        case 46:
+        case 35:
+        case 36:
+        case 109:
+        case 116:
+        case 8:
+           return true;
+        /* Ctrl + s */
+        case 83:
+           if(e.ctrlKey)
+           {
+             this.stopPropagation(e),this.preventDefault(e);
+             return this.showXuiSlctMY(),false;
+           }
+           break;       
         /*Esc 关闭图层*/
         case 27:this.hidden();break;
         /* 回车选择 */
         case 13:
+           if("block" == this.xuiSlctMY.style.display)
+           {
+              this.slctOk();
+              return true;
+           }
            this.hidden();
            this.bIE ? (e.keyCode = 9) : '';
            this.setValue();
            break;
         case 38: /* 上 */
            n = -7;
-           if(e.ctrlKey)n = 0,this.year--,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
-           this.addDate(n);
+           var bSMy = "block" == this.xuiSlctMY.style.display;
+           if(e.ctrlKey)
+           {
+              if(bSMy)
+	          {
+	              this.slctY = (this.slctY || this.year) - 1;
+	              this.showXuiSlctMY(false);
+	              return true;
+	          }
+              else n = 0,this.year--,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
+           }
+           if(!bSMy)this.addDate(n);
            break;
         case 40: /* 下 */
            n = 7;
-           if(e.ctrlKey)n = 0,this.year++,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
-           this.addDate(n);
+           var bSMy = "block" == this.xuiSlctMY.style.display;
+           if(e.ctrlKey)
+           {
+              if(bSMy)
+	          {
+	              this.slctY = (this.slctY || this.year) + 1;
+	              this.showXuiSlctMY(false);
+	              return true;
+	          }
+              else n = 0,this.year++,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
+           }
+           if(!bSMy)this.addDate(n);
            break;
         case 37: /* 左 */
            n = -1;
+           var bSMy = "block" == this.xuiSlctMY.style.display;
            if(e.ctrlKey)
            {
-              this.month--;
-              if(1 > this.month)this.month = 12, this.year--,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
-              var nTmp = this.pkData[this.month - 1];
-              if(2 == this.month && nTmp < this.day)
-                 this.day = nTmp;
-              n = 0;
+              if(bSMy)
+	          {
+	              this.slctM = (this.slctM || this.month) - 1;
+	              if(1 > this.slctM)this.slctM = 12;
+	              this.showXuiSlctMY(false);
+	              return true;
+	          }
+	          else
+	          {
+	              this.month--;
+	              if(1 > this.month)this.month = 12, this.year--,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
+	              var nTmp = this.pkData[this.month - 1];
+	              if(2 == this.month && nTmp < this.day)
+	                 this.day = nTmp;
+	              n = 0;
+              }
            }
-           this.addDate(n);
+           if(!bSMy)this.addDate(n);
            break;
         case 39: /* 右 */
            n = 1;
+           var bSMy = "block" == this.xuiSlctMY.style.display;
            if(e.ctrlKey)
            {
-              this.month++;
-              var nTmp = this.pkData[this.month - 1];
-              if(12 < this.month)this.month = 1, this.year++,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
-              if(2 == this.month && nTmp < this.day)
-                 this.day = nTmp;
-              n = 0;
+              if(bSMy)
+	          {
+	              this.slctM = (this.slctM || this.month) + 1;
+	              if(12 < this.slctM)this.slctM = 1;
+	              this.showXuiSlctMY(false);
+	              return true;
+	          }
+	          else
+	          {
+	              this.month++;
+	              var nTmp = this.pkData[this.month - 1];
+	              if(12 < this.month)this.month = 1, this.year++,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
+	              if(2 == this.month && nTmp < this.day)
+	                 this.day = nTmp;
+	              n = 0;
+              }
            }
-           this.addDate(n);
+           if(!bSMy)this.addDate(n);
            break;
         default:
            n = String.fromCharCode(n);
@@ -252,14 +312,55 @@
            this.stopPropagation(e),this.preventDefault(e);
            return false;
      }
-     
-     return true;
-  },onInput: function(e, oIpt)
+  },onInput: function(e, o)
    {
      this.event = e = e || window.event;
      return this.RunOne(function(){
-        ;
         this.stopPropagation(e),this.preventDefault(e);
+        if(!o["_oldVl"])o["_oldVl"] = o.value;
+        var s = this.trim(o.value), s2 = s.replace(/(^\-*)|(\-*^)|([^\d\-])/g, "").replace(/\-\-/g, "-"), a = s2.split("-");
+        if(s)
+        {
+           switch(a.length)
+           {
+              case 1:
+                 if(10000 < a[0])a[0] = a[0].substr(0, 4);
+                 break;
+              case 2:
+                 var n = parseInt(a[1], 10);
+                 if(12 < n)a[1] = "12";
+                 else if(1 > n && 2 == a[1].length)a[1] = "0" + 1;
+                 if(0 == a[1].length)
+                    a.pop();
+                 break;
+              case 3:
+                 var n = parseInt(a[1], 10);
+                 if(12 < n)a[1] = "12";
+                 else if(1 > n)a[1] = "0" + 1;
+                 
+                 if(0 == a[2].length)
+                 {
+                    a.pop();
+                    break;
+                 }                 
+                 var a1 = [0, 31,this.isLeapYear(a[0]) ? 29 : 28,31,30,31,30,31,31,30,31,30,31],
+                     m = a1[n];
+                 n = parseInt(a[2], 10);
+                 if(1 > n)a[2] = 1;
+                 else if(m < n)a[2] = m;
+              default:;
+           }
+           s2 = a.join("-");
+           if(s != s2)
+           {
+               if((s2.length > o["_oldVl"].length || /\-$/g.test(s)) && (7 == s2.length || 4 == s2.length))
+                 s2 += "-";
+               o.value = s2;
+           }
+           else if((s2.length > o["_oldVl"].length || /\-$/g.test(s)) && (7 == s2.length || 4 == s2.length))
+              s2 += "-", o.value = s2;
+        }
+        o["_oldVl"] = o.value;
      });
    },click:function(o)
 	{

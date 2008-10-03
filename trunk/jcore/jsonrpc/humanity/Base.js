@@ -224,6 +224,13 @@
     }, n || 13);
     return nTime;
   },clearTimer:function(n){clearInterval(n)},
+   addInvalid: function(o)
+   {
+      this.addClass("x-form-invalid", o);
+   },delInvalid: function(o)
+   {
+      this.delClass("x-form-invalid", o);
+   },
    /* 给o增加class为s */
    addClass: function(s, o)
    {
