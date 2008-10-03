@@ -4,7 +4,7 @@
     xuiDPRows: null, /* body */
     xuiCurYear:null, xuiSlctMY:null,
     slctM: 0, slctY: 0,
-    year:0, month:0,day:0, pkweek: 0,
+    year:0, month:0,day:0,
     dpMax: null, dpMin: null, /* 允许的最大年月日和最小的年月日 */
     pkData: [], /* 初始化一年的数据 */
     initPkData:function(nY, m, d)
@@ -12,13 +12,8 @@
        var o = new Date(this.year = parseInt(nY, 10), (this.month = parseInt(m, 10)) - 1, 
            this.day = parseInt(d, 10));
        this.pkData = [31,(this.isLeapYear(nY) ? 29 : 28),31,30,31,30,31,31,30,31,30,31];
-       return this.pkweek = this.getWeek(o)
-    },
-	init:function()
-	{
-	  XUI(this);
-	  return this;
-	}, /* 设置当前的日期，并将上次的日期焦点去除 */
+       return this;
+    }, /* 设置当前的日期，并将上次的日期焦点去除 */
 	setDate:function()
 	{
 	    var a = this.A(),b;
@@ -147,11 +142,17 @@
 	     r.push([a[0], a[1], a[2]++, c.join(" ")]);
 	  }
 	  return r;
-	},setValue: function()
+	},setValue: function(e)
 	{
-	   this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, 9 < this.day ? this.day : "0" + this.day].join("-");
+	   this.month = parseInt(this.month, 10);
+	   this.day = parseInt(this.day, 10);
+	   this.year = parseInt(this.year, 10);
+	   if(!e)
+	   this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, 
+	     9 < this.day ? this.day : (0 < this.day ? "0" + this.day : 0)].join("-");
+	   else this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, this.day].join("-");
 	},
-	updataTBody: function()
+	updataTBody: function(e)
 	{
 	   /* 上一个月 */
 	   var m = this.month - 1, n = this.getWeek(this.year, this.month, 1),
@@ -175,7 +176,7 @@
          n++;
        }
        this.xuiCurYear.innerHTML = this.year + "年" + this.month + "月";
-       this.setValue();
+       this.setValue(e);
        window.setTimeout(function()
        {
          _t.dpIpt.focus();
@@ -183,13 +184,28 @@
 	},addDate: function(n)
 	{
 	   /* 新的日期 */
-	   n = this.day + n;
+	   n = parseInt(this.day, 10) + n;
 	   var y = this.year, m = this.month, d = this.pkData[m - 1];
-	   if(0 < n && n < d)return this.day = n, this.updataTBody(), this;
-	   else if(0 >= n)m--, n += this.pkData[m - 1];
-	   else if(n > d)m++, n -= d;
-	   if(1 > m)y--, m = 12, this.pkData[1] = this.isLeapYear(y) ? 29 : 28;
-	   else if(12 < m)y++, m = 1, this.pkData[1] = this.isLeapYear(y) ? 29 : 28;
+	   if(0 == n)
+	   {
+	      m--;
+          if(1 > m)y--, m = 12;
+	      n = this.pkData[m - 1];
+	   }
+	   else if(0 < n && n < d)this.day = n;
+	   else if(0 >= n)
+	   {
+	      m--;
+	      if(1 > m)y--, m = 12;
+	      n += this.pkData[m - 1];
+	   }
+	   else if(n > d)
+	   {
+	      m++;
+	      if(12 < m)y++, m = 1;
+	      n -= d;
+	   }
+	   this.pkData[1] = this.isLeapYear(y) ? 29 : 28;
 	   
 	   return this.day = n, this.month = m, this.year = y, this.updataTBody(), this;
 	}, /* 键盘事件处理 */
@@ -197,6 +213,11 @@
    {
      e = e || window.event;
      var n = e.which || e.keyCode;
+     if("none" == this.XuiDatePicker.style.display)
+     {
+        if(40 == n && e.ctrlKey)this.showSelectDiv(e, oIpt);
+        return true;
+     }
      switch(n)
      {
         case 46:
@@ -215,7 +236,11 @@
            }
            break;       
         /*Esc 关闭图层*/
-        case 27:this.hidden();break;
+        case 27:
+           if("block" == this.xuiSlctMY.style.display)
+                this.hiddenXuiSlctMY();
+           else this.hidden();
+           break;
         /* 回车选择 */
         case 13:
            if("block" == this.xuiSlctMY.style.display)
@@ -343,11 +368,13 @@
                     a.pop();
                     break;
                  }                 
-                 var a1 = [0, 31,this.isLeapYear(a[0]) ? 29 : 28,31,30,31,30,31,31,30,31,30,31],
+                 var a1 = (this.pkData = [31,this.isLeapYear(a[0]) ? 29 : 28,31,30,31,30,31,31,30,31,30,31]),
                      m = a1[n];
                  n = parseInt(a[2], 10);
-                 if(1 > n)a[2] = 1;
-                 else if(m < n)a[2] = m;
+                 if(1 > n && 2 == a[2].length)a[2] = 1;else if(m < n)a[2] = m;
+                 a[0] && (this.year = a[0]), a[1] && (this.month = a[1]), a[2] && (this.day = a[2]);
+                 this.updataTBody(e);
+                 break;
               default:;
            }
            s2 = a.join("-");
@@ -395,6 +422,7 @@
 		    this.xuiCurYear = this.getDom("xuiCurYear");
 		    this.xuiSlctMY = this.getDom("xuiSlctMY");
 		  }
+		  this.clearTimer(oDiv["tmer"]);
 		  s = s.split("-");
 		  if(3 == s.length)
 		     this.setDate.apply(this, s);
@@ -403,5 +431,12 @@
 		  
 		  this.showDiv(this.p(o, "TABLE"), oDiv, this.bIE ? 173: 175, this.bIE ? 201 : (this.isOpera ? 180: 194));/* IE8: 173 * 201 */
 	    });
+	},onblur: function(e, oIpt)
+	{
+	    var _t = DatePicker, o = _t.XuiDatePicker;
+	    o["tmer"] = _t.regTimer(function(e)
+	    {
+		    return _t.hidden(), true;
+	    }, 333);
 	}
 }

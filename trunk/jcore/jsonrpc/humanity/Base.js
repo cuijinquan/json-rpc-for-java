@@ -218,12 +218,12 @@
   },
   regTimer:function(fn, n)
   {
-    var nTime = setInterval(function()
+    var nTime = window.setInterval(function()
     {
-      if(fn())clearInterval(nTime);
+      if(fn())window.clearInterval(nTime);
     }, n || 13);
     return nTime;
-  },clearTimer:function(n){clearInterval(n)},
+  },clearTimer:function(n){n && window.clearInterval(n)},
    addInvalid: function(o)
    {
       this.addClass("x-form-invalid", o);
