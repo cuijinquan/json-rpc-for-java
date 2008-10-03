@@ -7,6 +7,11 @@
     year:0, month:0,day:0,
     dpMax: null, dpMin: null, /* 允许的最大年月日和最小的年月日 */
     pkData: [], /* 初始化一年的数据 */
+    init:function()
+    {
+       XUI(this);
+       return this;
+    },
     initPkData:function(nY, m, d)
     {
        var o = new Date(this.year = parseInt(nY, 10), (this.month = parseInt(m, 10)) - 1, 
@@ -104,26 +109,19 @@
 	  var a = this.A(), r = a[5] || [], i, bEq = (this.year == a[0] && this.month == a[1]), c,
 	      d = new Date(), bTd = (d.getFullYear() == a[0] && (d.getMonth() + 1) == a[1]),
 	      nTdDay = d.getDate(), /* 最大、最小两月的处理 */
-	      dpMax = null,dpMin = null, bMax = false, bMin = false;
-	      
+	      dpMax = null,dpMin = null, nCur = 0, nCurTm = 0;
 	      if(this.dpMax)
 	      {
 	         dpMax = this.dpMax.split("-");
 	         if(3 == dpMax.length)
-	         {
-	            dpMax = new Date(dpMax[0], dpMax[1] - 1, dpMax[2]);
-	            bMax = a[0] > dpMax[0] || (a[0] == dpMax[0] && a[1] > dpMax[1]);
-	         }
+	            dpMax = new Date(parseInt(dpMax[0], 10), parseInt(dpMax[1], 10) - 1, parseInt(dpMax[2], 10)).getTime();
 	         else dpMax = null;
 	      }
 	      if(this.dpMin)
 	      {
 	         dpMin = this.dpMin.split("-");
 	         if(3 == dpMin.length)
-	         {
-	           dpMin = new Date(dpMin[0], dpMin[1] - 1, dpMin[2]);
-	           bMin = a[0] < dpMin[0] || (a[0] == dpMax[0] && a[1] < dpMax[1]);
-	         }
+	           dpMin = new Date(parseInt(dpMin[0], 10), parseInt(dpMin[1], 10) - 1, parseInt(dpMin[2], 10)).getTime();
 	         else dpMin = null;
 	      }
 	  delete d;
@@ -132,9 +130,12 @@
 	     c = [a[4]];
 	     if(bEq && a[2] == this.day)c.push("x-date-selected");
 	     if(bTd && nTdDay == a[2])c.push("x-date-today");
-	     if( (dpMax && bMax && a[2] > dpMax.getDate()) || 
-	         (dpMin && bMin && a[2] < dpMin.getDate()))c.push("x-date-disabled");
-	     r.push([a[0], a[1], a[2]++, c.join(" ")]);
+	     nCurTm = new Date(a[0], a[1] - 1, nCur = a[2]++).getTime();
+	     if( (dpMax && !dpMin && nCurTm > dpMax) || 
+	         (dpMin && !dpMax && nCurTm < dpMin) || 
+	         (dpMax && dpMin && !(nCurTm < dpMax && nCurTm > dpMin))
+	       )c.push("x-date-disabled");
+	     r.push([a[0], a[1], nCur, c.join(" ")]);
 	  }
 	  return r;
 	},setValue: function(e)
@@ -406,7 +407,7 @@
 	    this.stopPropagation(e),this.preventDefault(e);
 	    return this.RunOne(function(){
 	      o = this.dpIpt = (o || this.FromEventObj(e));
-		  var bFirst = !this.XuiDatePicker, s = this.trim(o.value), 
+		  var bFirst = !this.XuiDatePicker, s = this.trim(o.value), szAt,
 		      oDiv = this.XuiDatePicker || (this.XuiDatePicker = this.createDiv({className: "x-layer x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
 		  /* 第一次需要做初始化处理 */
 		  if(bFirst)
@@ -416,6 +417,8 @@
 		    this.xuiCurYear = this.getDom("xuiCurYear");
 		    this.xuiSlctMY = this.getDom("xuiSlctMY");
 		  }
+		  if(szAt = o.getAttribute("max"))this.dpMax = szAt;
+		  if(szAt = o.getAttribute("min"))this.dpMin = szAt;
 		  this.clearTimer(oDiv["tmer"]);
 		  s = s.split("-");
 		  if(3 == s.length)
