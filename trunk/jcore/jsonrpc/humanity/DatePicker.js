@@ -411,7 +411,7 @@
 	    this.stopPropagation(e),this.preventDefault(e);
 	    return this.RunOne(function(){
 	      o = this.dpIpt = (o || this.FromEventObj(e));
-		  var bFirst = !this.XuiDatePicker, s = this.trim(o.value), szAt,
+		  var bFirst = !this.XuiDatePicker, s = this.trim(o.value),
 		      oDiv = this.XuiDatePicker || (this.XuiDatePicker = this.createDiv({className: "x-layer x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
 		  /* 第一次需要做初始化处理 */
 		  if(bFirst)
@@ -421,8 +421,8 @@
 		    this.xuiCurYear = this.getDom("xuiCurYear");
 		    this.xuiSlctMY = this.getDom("xuiSlctMY");
 		  }
-		  if(szAt = o.getAttribute("max"))this.dpMax = szAt;
-		  if(szAt = o.getAttribute("min"))this.dpMin = szAt;
+		  this.dpMax = o.getAttribute("max");
+		  this.dpMin = o.getAttribute("min");
 		  this.clearTimer(oDiv["tmer"]);
 		  s = s.split("-");
 		  if(3 == s.length)
