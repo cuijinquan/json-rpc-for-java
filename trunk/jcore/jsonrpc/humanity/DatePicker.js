@@ -7,11 +7,6 @@
     year:0, month:0,day:0,
     dpMax: null, dpMin: null, /* 允许的最大年月日和最小的年月日 */
     pkData: [], /* 初始化一年的数据 */
-    init:function()
-    {
-       XUI(this);
-       return this;
-    },
     initPkData:function(nY, m, d)
     {
        var o = new Date(this.year = parseInt(nY, 10), (this.month = parseInt(m, 10)) - 1, 
@@ -102,14 +97,9 @@
 		a.push("</tbody></table></td></tr><tr><td colspan=\"3\" class=\"x-date-bottom\" align=\"center\"><table onclick=\"DatePicker.selectToday()\" style=\"width: auto;\" class=\"x-btn-wrap x-btn\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr><td class=\"x-btn-left\"><i>&nbsp;</i></td><td class=\"x-btn-center\"><em unselectable=\"on\"><button class=\"x-btn-text\" type=\"button\">\u4eca\u5929</button></em></td><td class=\"x-btn-right\"><i>&nbsp;</i></td></tr></tbody></table></td></tr></tbody></table><div id=\"xuiSlctMY\" class=\"x-date-mp\" style=\"display: none; width: 175px; height: 193px; position: absolute; left: 0px; top: 0px; z-index: auto;\"><table cellspacing=\"0\" border=\"0\" style=\"width: 175px; height: 193px;\"><tbody><tr><td class=\"x-date-mp-month\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">1</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">2</a></td><td align=\"center\" class=\"x-date-mp-ybtn\"><a class=\"x-date-mp-prev\" onclick=\"DatePicker.showXuiSlctMY(DatePicker.oldYear -= 10)\"></a></td><td align=\"center\" class=\"x-date-mp-ybtn\"><a class=\"x-date-mp-next\" onclick=\"DatePicker.showXuiSlctMY(DatePicker.oldYear += 10)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">3</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">4</a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">5</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">6</a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">7</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">8</a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">9</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">10</a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">11</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\">12</a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"#\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr class=\"x-date-mp-btns\"><td colspan=\"4\"><button class=\"x-date-mp-ok\" type=\"button\" onclick=\"DatePicker.slctOk()\">\u786e\u5b9a</button><button class=\"x-date-mp-cancel\" type=\"button\" onclick=\"DatePicker.hiddenXuiSlctMY()\">\u53d6\u6d88</button></td></tr></tbody></table></div></div></li></ul>");
 
 	    return a.join("");
-	},
-	pushData: function()
+	}, isInvalid: function(y, m, d)
 	{
-	  /* y,m,d,n,className */
-	  var a = this.A(), r = a[5] || [], i, bEq = (this.year == a[0] && this.month == a[1]), c,
-	      d = new Date(), bTd = (d.getFullYear() == a[0] && (d.getMonth() + 1) == a[1]),
-	      nTdDay = d.getDate(), /* 最大、最小两月的处理 */
-	      dpMax = null,dpMin = null, nCur = 0, nCurTm = 0;
+	      var dpMax = null, dpMin = null, nCurTm, bRst = true;
 	      if(this.dpMax)
 	      {
 	         dpMax = this.dpMax.split("-");
@@ -124,17 +114,28 @@
 	           dpMin = new Date(parseInt(dpMin[0], 10), parseInt(dpMin[1], 10) - 1, parseInt(dpMin[2], 10)).getTime();
 	         else dpMin = null;
 	      }
+	      if(dpMax || dpMin)
+	      {
+	         nCurTm = new Date(y, m - 1, d).getTime();
+	         if(dpMax && dpMin)bRst = nCurTm < dpMax && nCurTm > dpMin;
+	         else if(dpMax && !dpMin)bRst = nCurTm < dpMax;
+	         else if(dpMin && !dpMax)bRst = nCurTm > dpMin;
+	      }
+	      return !bRst;
+	},
+	pushData: function()
+	{
+	  /* y,m,d,n,className */
+	  var a = this.A(), r = a[5] || [], i, bEq = (this.year == a[0] && this.month == a[1]), c,
+	      d = new Date(), bTd = (d.getFullYear() == a[0] && (d.getMonth() + 1) == a[1]),
+	      nTdDay = d.getDate(); /* 最大、最小两月的处理 */
 	  delete d;
 	  for(i = 0; i < a[3]; i++)
 	  {
 	     c = [a[4]];
 	     if(bEq && a[2] == this.day)c.push("x-date-selected");
 	     if(bTd && nTdDay == a[2])c.push("x-date-today");
-	     nCurTm = new Date(a[0], a[1] - 1, nCur = a[2]++).getTime();
-	     if( (dpMax && !dpMin && nCurTm > dpMax) || 
-	         (dpMin && !dpMax && nCurTm < dpMin) || 
-	         (dpMax && dpMin && !(nCurTm < dpMax && nCurTm > dpMin))
-	       )c.push("x-date-disabled");
+	     if(this.isInvalid(a[0], a[1], nCur = a[2]++))c.push("x-date-disabled");
 	     r.push([a[0], a[1], nCur, c.join(" ")]);
 	  }
 	  return r;
@@ -143,10 +144,13 @@
 	   this.month = parseInt(this.month, 10);
 	   this.day = parseInt(this.day, 10);
 	   this.year = parseInt(this.year, 10);
-	   if(!e)
-	   this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, 
-	     9 < this.day ? this.day : (0 < this.day ? "0" + this.day : 0)].join("-");
-	   else this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, this.day].join("-");
+	   if(!this.isInvalid(this.year, this.month, this.day))
+	   {
+		   if(!e)
+		   this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, 
+		     9 < this.day ? this.day : (0 < this.day ? "0" + this.day : 0)].join("-");
+		   else this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, this.day].join("-");
+	   }
 	},
 	updataTBody: function(e)
 	{
