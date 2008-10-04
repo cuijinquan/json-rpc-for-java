@@ -157,18 +157,18 @@
        data: "__ajaxParam_=" + s.join('|'),
        url: o.url || document.location.href,
        bAsync: !!o.fn,
-       clbkFun: o.fn || function () {
+       clbkFun: (o.fn || function(){
     try {
       alert(arguments[0]);
     }catch (e) {}
-  }});
+  })});
   }, /* 创建图层 */
   createDiv:function()
   {
      var o = null, b = !!arguments[0] || false,
          p = arguments[0], k, a1 = [];
      if(p && p["id"] && (o = this.getDom(p["id"])))return o;
-     o = document.createElement("div")
+     o = document.createElement("div");
      if(b)
      {
        p["className"] || (p["className"] = "x-combo-list");
@@ -499,8 +499,8 @@
         if(o != parent.offsetParent)
         while(parent = parent.offsetParent)
         {
-          a[0] += (parent.offsetLeft || 0);/* - (parent.scrollLeft || 0);*/
-          a[1] += (parent.offsetTop || 0);/* - (parent.scrollTop || 0);*/
+          a[0] += (parent.offsetLeft || 0);
+          a[1] += (parent.offsetTop || 0);
           a[4] += parent.scrollLeft || 0;
           a[5] += parent.scrollTop || 0;
           if(document.body == o)break;
@@ -510,10 +510,9 @@
         a[5] += n;
      }
      return a;
-    }, isCSS1Compat: document.compatMode == "CSS1Compat",
-    /* 显示图层，包含阴影图层；o为参照定位图层显示位置的对象，oDiv为要显示的图层对象，w为宽度，默认为o的宽度就设置为0，h为显示高度 */
+    }, isCSS1Compat: (document.compatMode == "CSS1Compat"),
 	showDiv: function(o, oDiv, w, h)
-	{
+	{/* 显示图层，包含阴影图层；o为参照定位图层显示位置的对象，oDiv为要显示的图层对象，w为宽度，默认为o的宽度就设置为0，h为显示高度 */
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
 	  p = { height: parseInt(h || 1) + 'px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] - (this.bIE ? 5 : 2)) + "px", display:'block',
