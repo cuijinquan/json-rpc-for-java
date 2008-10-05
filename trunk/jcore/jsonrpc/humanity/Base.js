@@ -46,7 +46,7 @@
   A:function(a)
   {
    if(0 == arguments.length)
-     a = this.A.caller.arguments;
+     a = arguments.callee.caller.arguments;
     var i = 0, b = [];
     for(; i < a.length; i++)
        b.push(a[i]);
