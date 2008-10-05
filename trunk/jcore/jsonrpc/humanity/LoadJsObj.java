@@ -42,7 +42,7 @@ public class LoadJsObj extends JsonRpcObject{
 				s = Content.JS(new String(s.getBytes(), "UTF-8"));
 				s = s.replaceFirst("^\\\\ufeff", "");
 				s = s.replaceAll("[\\t ]*\\r\\n[\\t ]*\\r\\n", "\r\n");
-				s = s.replaceAll("\\n[\\t ]+", "\n");
+				s = s.replaceAll("[ \\t]*\\n[\\t ]+", "\n");
 				// s = s.replaceAll("([^\\r])\\n", "$1");
 				// System.out.println("var " + szName + " = (" + s + ").init();");
 				oRst.setResult(s);

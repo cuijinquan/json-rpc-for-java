@@ -16,7 +16,7 @@
     }, /* 设置当前的日期，并将上次的日期焦点去除 */
 	setDate:function()
 	{
-	    var a = this.A(),b;
+	    var a = this.A(arguments),b;
 	    if(3 == a.length)a[3] = true;
 	    /* 把上一个位置的css进行改变为普通的 */
 	    if(this.year)
@@ -126,7 +126,7 @@
 	pushData: function()
 	{
 	  /* y,m,d,n,className */
-	  var a = this.A(), r = a[5] || [], i, bEq = (this.year == a[0] && this.month == a[1]), c,
+	  var a = this.A(arguments), r = a[5] || [], i, bEq = (this.year == a[0] && this.month == a[1]), c,
 	      d = new Date(), bTd = (d.getFullYear() == a[0] && (d.getMonth() + 1) == a[1]),
 	      nTdDay = d.getDate(); /* 最大、最小两月的处理 */
 	  delete d;
@@ -413,29 +413,30 @@
 	showSelectDiv: function(e,o)
 	{
 	    this.event = e = e || window.event;
-	    this.stopPropagation(e),this.preventDefault(e);
-	    return this.RunOne(function(){
-	      o = this.dpIpt = (o || this.FromEventObj(e));
-		  var bFirst = !this.XuiDatePicker, s = this.trim(o.value),
-		      oDiv = this.XuiDatePicker || (this.XuiDatePicker = this.createDiv({className: "x-layer x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
+	    e && (this.stopPropagation(e),this.preventDefault(e));
+	    var _t = this;
+	    return _t.RunOne(function(){
+	      o = _t.dpIpt = (o || _t.FromEventObj(e));
+		  var bFirst = !_t.XuiDatePicker, s = _t.trim(o['value'] || ""),
+		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-layer x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
 		  /* 第一次需要做初始化处理 */
 		  if(bFirst)
 		  {
-		    oDiv.innerHTML = this.initDivHtml();
-		    this.xuiDPRows = this.getDom("xuiDatePicker");
-		    this.xuiCurYear = this.getDom("xuiCurYear");
-		    this.xuiSlctMY = this.getDom("xuiSlctMY");
+		    oDiv.innerHTML = _t.initDivHtml();
+		    _t.xuiDPRows = _t.getDom("xuiDatePicker");
+		    _t.xuiCurYear = _t.getDom("xuiCurYear");
+		    _t.xuiSlctMY = _t.getDom("xuiSlctMY");
 		  }
-		  this.dpMax = o.getAttribute("max");
-		  this.dpMin = o.getAttribute("min");
-		  this.clearTimer(oDiv["tmer"]);
+		  _t.dpMax = o.getAttribute("max");
+		  _t.dpMin = o.getAttribute("min");
+		  _t.clearTimer(oDiv["tmer"]);
 		  s = s.split("-");
 		  if(3 == s.length)
-		     this.setDate.apply(this, s);
-		  else s = new Date(), this.setDate(s.getFullYear(), s.getMonth() + 1, s.getDate());
-		  this.updataTBody();
+		     _t.setDate.apply(_t, s);
+		  else s = new Date(), _t.setDate(s.getFullYear(), s.getMonth() + 1, s.getDate());
+		  _t.updataTBody();
 		  
-		  this.showDiv(this.p(o, "TABLE"), oDiv, this.bIE ? 173: 175, this.bIE ? 201 : (this.isOpera ? 180: 194));/* IE8: 173 * 201 */
+		  _t.showDiv(_t.p(o, "DIV"), oDiv, _t.bIE ? 173: 175, 0);/* IE8: 173 * 201 */
 	    });
 	},onblur: function(e, oIpt)
 	{

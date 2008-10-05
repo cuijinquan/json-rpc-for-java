@@ -160,7 +160,7 @@
    	 var o = this.SelectDiv;
    	 if(0 < this.getData(this.descObj.id))
        this.showDiv(this.p(this.descObj, "TABLE"), this.SelectDiv, 
-         parseInt(o.style.width), parseInt(o.style.height));
+         parseInt(o.style.width, 10), parseInt(o.style.height, 10));
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {

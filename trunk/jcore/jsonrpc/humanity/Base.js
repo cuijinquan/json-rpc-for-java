@@ -498,17 +498,17 @@
 	}
     else /* safari & opera */
     {
+        a[0] = a[1] = a[4] = a[5] = 0;
         a[1] += o.clientHeight;
         parent = o;
         if(o != parent.offsetParent)
         {
-            a[0] = a[1] = a[4] = a[5] = 0;
 	        while(parent && document.body != parent)
 	        {
 	          a[0] += (parent.offsetLeft || 0);
 	          a[1] += (parent.offsetTop || 0);
-	          a[4] += parent.scrollLeft || 0;
-	          a[5] += parent.scrollTop || 0;
+	          a[4] += (parent.scrollLeft || 0);
+	          a[5] += (parent.scrollTop || 0);
 	          if(!this.isNS6)
 	          {
 	             if(n = parseInt(parent.currentStyle.borderLeftWidth, 10))a[0] += n;
@@ -517,19 +517,17 @@
 	          parent = parent.offsetParent
 	        }
         }
-        var n = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
-        a[1] -= n;
-        a[5] += n;
      }
      return a;
     }, isCSS1Compat: (document.compatMode == "CSS1Compat"),
 	showDiv: function(o, oDiv, w, h)
 	{/* 显示图层，包含阴影图层；o为参照定位图层显示位置的对象，oDiv为要显示的图层对象，w为宽度，默认为o的宽度就设置为0，h为显示高度 */
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
-	  p = { height: parseInt(h || 1) + 'px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
+	  p = {   left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] - (this.bIE ? 5 : 2)) + "px", display:'block',
               position: "absolute",
               width: ((this.bIE ? 2 : 0) + parseInt(w || o.clientWidth || oR[2])) + "px"};
+      if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
       var body = document.documentElement || document.body, oR = document.body.getBoundingClientRect();
 		      h = body.offsetHeight || body.clientHeight || body.scrollHeight || oR.bottom - oR.top,
