@@ -3,12 +3,13 @@
   nVer: 0, trim:function(s){return s.replace(/(^\s*)|(\s*$)/gm, "")},
   init: function()
   {
-      var ua = navigator.userAgent.toLowerCase();
-      this.isStrict = document.compatMode == "CSS1Compat",
+        var ua = navigator.userAgent.toLowerCase();
+        this.isStrict = document.compatMode == "CSS1Compat",
 	    this.isOpera = ua.indexOf("opera") > -1,
 	    this.isSafari = (/webkit|khtml/).test(ua),
 	    this.isSafari3 = this.isSafari && ua.indexOf('webkit/5') != -1,
-	    this.bIE = this.isIE = !this.isOpera && ua.indexOf("msie") > -1,
+	    this.isOmniweb = -1 < ua.indexOf("omniweb"),
+	    this.bIE = this.isIE = (!this.isOpera && ua.indexOf("msie") > -1 && !this.isOmniweb),
 	    this.isIE7 = !this.isOpera && ua.indexOf("msie 7") > -1,
 	    this.isGecko = !this.isSafari && ua.indexOf("gecko") > -1,
 	    this.isGecko3 = !this.isSafari && ua.indexOf("rv:1.9") > -1,
@@ -18,6 +19,9 @@
 	    this.isAir = (ua.indexOf("adobeair") != -1),
 	    this.isLinux = (ua.indexOf("linux") != -1),
 	    this.isSecure = window.location.href.toLowerCase().indexOf("https") === 0; 
+	    this.isW3C = !!document.getElementById;
+        this.isIE5 = this.isW3C && this.isIE;
+        this.isNS6 = this.isW3C && "Netscape" == navigator.appName;
       if(this.bIE)
       { 
        this.nVer = parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]) ||  0;
@@ -475,7 +479,7 @@
         },
     getOffset: function(o){
     /* offsetLeft, offsetTop */
-    var a = [o.offsetLeft, o.offsetTop, o.offsetWidth,o.offsetHeight, 0, 0], r, parent;
+    var a = [o.offsetLeft, o.offsetTop, o.offsetWidth,o.offsetHeight, 0, 0], r, parent, n;
     if(o.getBoundingClientRect)
     {
        r = o.getBoundingClientRect();
@@ -497,13 +501,21 @@
         a[1] += o.clientHeight;
         parent = o;
         if(o != parent.offsetParent)
-        while(parent = parent.offsetParent)
         {
-          a[0] += (parent.offsetLeft || 0);
-          a[1] += (parent.offsetTop || 0);
-          a[4] += parent.scrollLeft || 0;
-          a[5] += parent.scrollTop || 0;
-          if(document.body == o)break;
+            a[0] = a[1] = a[4] = a[5] = 0;
+	        while(parent && document.body != parent)
+	        {
+	          a[0] += (parent.offsetLeft || 0);
+	          a[1] += (parent.offsetTop || 0);
+	          a[4] += parent.scrollLeft || 0;
+	          a[5] += parent.scrollTop || 0;
+	          if(!this.isNS6)
+	          {
+	             if(n = parseInt(parent.currentStyle.borderLeftWidth, 10))a[0] += n;
+	             if(n = parseInt(parent.currentStyle.borderTopWidth, 10))a[1] += n;
+              }
+	          parent = parent.offsetParent
+	        }
         }
         var n = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
         a[1] -= n;
