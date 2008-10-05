@@ -355,16 +355,12 @@
     {
        if(3 == arguments.length)arguments[1]--,o = new Date(arguments[0], arguments[1], arguments[2]);
        return o.getDay();
-       /* 两种计算星期几的公式 
-       var y = o.getFullYear(), m = o.getMonth() + 1, day = o.getDate(),
-           ds = day, i,
-           a = this.pkData = [0, 31,(this.isLeapYear(y) ? 29 : 28),31,30,31,30,31,31,30,31,30,31];
-       this.year = y, this.month = m, this.day = day;
-           for(i = 0; i < m; i++)
-              ds += a[i];
-       // return parseInt((ds + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7);
-       return y--, parseInt((y + y / 4 - y / 100 + y / 400 + ds) % 7)
-       */
+       /* 两种计算星期几的公式  */
+       /* var y = o.getFullYear(), m = o.getMonth() + 1, day = o.getDate(), ds = day, i, a = this.pkData = [0, 31,(this.isLeapYear(y) ? 29 : 28),31,30,31,30,31,31,30,31,30,31]; */
+       /* this.year = y, this.month = m, this.day = day; */
+       /* for(i = 0; i < m; i++)ds += a[i]; */
+       /* // return parseInt((ds + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7); */
+       /* return y--, parseInt((y + y / 4 - y / 100 + y / 400 + ds) % 7) */
     }, /* 保证fn只能在一个线程里执行 */
      RunOne: function(fn, o)
      {

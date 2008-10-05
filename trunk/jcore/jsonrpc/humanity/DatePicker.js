@@ -415,7 +415,6 @@
 	    this.event = e = e || window.event;
 	    e && (this.stopPropagation(e),this.preventDefault(e));
 	    var _t = this;
-	    return _t.RunOne(function(){
 	      o = _t.dpIpt = (o || _t.FromEventObj(e));
 		  var bFirst = !_t.XuiDatePicker, s = _t.trim(o['value'] || ""),
 		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-layer x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
@@ -437,7 +436,6 @@
 		  _t.updataTBody();
 		  
 		  _t.showDiv(_t.p(o, "DIV"), oDiv, _t.bIE ? 173: 175, 0);/* IE8: 173 * 201 */
-	    });
 	},onblur: function(e, oIpt)
 	{
 	    var _t = DatePicker, o = _t.XuiDatePicker;

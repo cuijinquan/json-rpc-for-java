@@ -44,7 +44,7 @@ public class LoadJsObj extends JsonRpcObject{
 				s = s.replaceAll("[\\t ]*\\r\\n[\\t ]*\\r\\n", "\r\n");
 				s = s.replaceAll("[ \\t]*\\n[\\t ]+", "\n");
 				// s = s.replaceAll("([^\\r])\\n", "$1");
-				// System.out.println("var " + szName + " = (" + s + ").init();");
+				System.out.println("var " + szName + " = (" + s + ").init();");
 				oRst.setResult(s);
 			}
 			else oRst.setErrMsg("指定的对象不存在，请确认大小写是否正确。");
