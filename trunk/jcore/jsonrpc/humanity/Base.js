@@ -520,13 +520,14 @@
      }
      return a;
     }, isCSS1Compat: (document.compatMode == "CSS1Compat"),
-	showDiv: function(o, oDiv, w, h)
-	{/* 显示图层，包含阴影图层；o为参照定位图层显示位置的对象，oDiv为要显示的图层对象，w为宽度，默认为o的宽度就设置为0，h为显示高度 */
+    showDiv: function(o, oDiv, w, h)
+	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
 	  p = {   left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] - (this.bIE ? 5 : 2)) + "px", display:'block',
               position: "absolute",
               width: ((this.bIE ? 2 : 0) + parseInt(w || o.clientWidth || oR[2])) + "px"};
+             
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
       var body = document.documentElement || document.body, oR = document.body.getBoundingClientRect();
@@ -548,5 +549,5 @@
 		     w = -w2 - w1, oDiv.style.left = (l + w) + "px", oTmp.style.left = (parseInt(oTmp.style.left) + w) + "px";
 		  document.body.scrollTop = scrollTop, document.body.scrollLeft = scrollLeft;
 		  document.body.scrollTop = document.body.scrollTop, document.body.scrollLeft = document.body.scrollLeft;
-	}
+	}	
 }

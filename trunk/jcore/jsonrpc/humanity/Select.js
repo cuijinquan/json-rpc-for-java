@@ -153,13 +153,13 @@
     for(n = 0; n < a.length; n++)
       if(-1 < a[n]["_id_"].indexOf(s))
          b.push(a[n]);
-    this.data = 0 < b.length || 0 < s.length ? b : null;
+    this.data = (0 < b.length || 0 < s.length) ? b : null;
   },
   show: function()
   { 
    	 var o = this.SelectDiv;
-   	 if(0 < this.getData(this.descObj.id))
-       this.showDiv(this.p(this.descObj, "TABLE"), this.SelectDiv, 
+   	 if(0 < this.getData(this.descObj.id).length)
+       this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
          parseInt(o.style.width, 10), parseInt(o.style.height, 10));
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
