@@ -1,10 +1,11 @@
 package jcore.jsonrpc.common;
 
+import java.text.ParseException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.text.ParseException;
 
 /***
  * 异步对象的转换
@@ -61,7 +62,7 @@ public class JSONObject {
     /**
      * The hash map where the JSONObject's properties are kept.
      */
-    private HashMap myHashMap;
+    private Map myHashMap;
 
     /**
      * It is sometimes more convenient and less ambiguous to have a NULL
@@ -75,7 +76,7 @@ public class JSONObject {
      * Construct an empty JSONObject.
      */
     public JSONObject() {
-        myHashMap = new HashMap();
+        myHashMap = Collections.synchronizedMap(new HashMap());
     }
 
 
