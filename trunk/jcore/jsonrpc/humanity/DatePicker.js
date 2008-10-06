@@ -1,24 +1,24 @@
-{
-    dpIpt: null, /* ???? */
-    XuiDatePicker: null,  /* ??????? */
+﻿{
+    dpIpt: null, /* 输入对象 */
+    XuiDatePicker: null,  /* 显示日期的图层 */
     xuiDPRows: null, /* body */
     xuiCurYear:null, xuiSlctMY:null,
     slctM: 0, slctY: 0,
     year:0, month:0,day:0,
-    dpMax: null, dpMin: null, /* ??????????????? */
-    pkData: [], /* ???????? */
+    dpMax: null, dpMin: null, /* 允许的最大年月日和最小的年月日 */
+    pkData: [], /* 初始化一年的数据 */
     initPkData:function(nY, m, d)
     {
        var o = new Date(this.year = parseInt(nY, 10), (this.month = parseInt(m, 10)) - 1, 
            this.day = parseInt(d, 10));
        this.pkData = [31,(this.isLeapYear(nY) ? 29 : 28),31,30,31,30,31,31,30,31,30,31];
        return this;
-    }, /* ??????????????????? */
+    }, /* 设置当前的日期，并将上次的日期焦点去除 */
 	setDate:function()
 	{
 	    var a = this.A(arguments),b;
 	    if(3 == a.length)a[3] = true;
-	    /* ???????css???????? */
+	    /* 把上一个位置的css进行改变为普通的 */
 	    if(this.year)
 	       b = [this.year, this.month, this.day, false], 
 	       this.year = this.month = this.day = 0,
@@ -57,7 +57,7 @@
 	   this.year = oldY;
 	   o.style.display = "block";
 	   this.dpIpt.focus();
-	},slctOk:function() /* ??Ok */
+	},slctOk:function() /* 选择Ok */
 	{
 	   this.year = this.slctY || this.year;
 	   this.month = this.slctM || this.month;
@@ -66,7 +66,7 @@
 	     this.day = this.pkData[this.month - 1];
 	   this.addDate(0);
 	   this.hiddenXuiSlctMY();
-	}, slctMY: function(e, o) /* ???? */
+	}, slctMY: function(e, o) /* 选择年月 */
 	{
 	   var n = parseInt((o.textContent || o.innerText).replace(/\s/g, ""), 10);
 	   o = this.p(o, "TD");
@@ -75,15 +75,15 @@
 	   else this.slctM = n;
 	   
 	   this.showXuiSlctMY(false);
-	},hiddenXuiSlctMY: function() /* ???????? */
+	},hiddenXuiSlctMY: function() /* 隐藏选择年月图层 */
 	{
 	   this.xuiSlctMY.style.display = "none";
 	   this.dpIpt.focus();
-	}, /* ?????????div */
+	}, /* 初始化要显示的日期div */
 	initDivHtml:function()
 	{
 	    var i, j, a = ["<ul class=\"x-menu-list\"><li class=\"x-menu-list-item x-menu-date-item\"><div style=\"-moz-user-select: none; width: 175px;\" class=\"x-date-picker x-unselectable\"><table style=\"width: 175px;\" cellspacing=\"0\"><tbody>", "<tr><td class=\"x-date-left\"><a onclick=\"DatePicker.month--,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"javascript:void(0)\" title=\"\u4e0a\u6708(Ctrl+Left)\">&nbsp;</a></td><td class=\"x-date-middle\" align=\"center\"><table style=\"width: auto;\" class=\"x-btn-wrap x-btn\" border=\"0\" cellpadding=\"0\"cellspacing=\"0\"><tbody><tr class=\"x-btn-with-menu\"><td class=\"x-btn-left\"><i>&nbsp;</i></td><td class=\"x-btn-center\"><em unselectable=\"on\" onclick=\"DatePicker.showXuiSlctMY()\"><button class=\"x-btn-text\" type=\"button\" id=\"xuiCurYear\"></button></em></td><td class=\"x-btn-right\"><i>&nbsp;</i></td></tr></tbody></table></td><td class=\"x-date-right\"><a onclick=\"DatePicker.month++,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"javascript:void(0)\" title=\"\u4e0b\u6708(Ctrl+Right)\">&nbsp;</a></td></tr>"];
-		/* ?? start */
+		/* 中间 start */
 		a.push("<tr><td colspan=\"3\"><table class=\"x-date-inner\" cellspacing=\"0\"><thead><tr><th title=\"\u661f\u671f\u5929\"><span>\u65e5</span></th><th title=\"\u661f\u671f\u4e00\"><span>\u4e00</span></th><th title=\"\u661f\u671f\u4e8c\"><span>\u4e8c</span></th><th title=\"\u661f\u671f\u4e09\"><span>\u4e09</span></th><th title=\"\u661f\u671f\u56db\"><span>\u56db</span></th><th title=\"\u661f\u671f\u4e94\"><span>\u4e94</span></th><th title=\"\u661f\u671f\u516d\"><span>\u516d</span></th></tr></thead><tbody id=\"xuiDatePicker\">");
 		for (j = 0; j < 6; j++) {
 			a.push("<tr>");
@@ -92,8 +92,8 @@
 			}
 			a.push("</tr>");
 		}
-		/* ?? end */
-		/* ?? */
+		/* 中间 end */
+		/* 尾部 */
 		a.push("</tbody></table></td></tr><tr><td colspan=\"3\" class=\"x-date-bottom\" align=\"center\"><table onclick=\"DatePicker.selectToday()\" style=\"width: auto;\" class=\"x-btn-wrap x-btn\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr><td class=\"x-btn-left\"><i>&nbsp;</i></td><td class=\"x-btn-center\"><em unselectable=\"on\"><button class=\"x-btn-text\" type=\"button\">\u4eca\u5929</button></em></td><td class=\"x-btn-right\"><i>&nbsp;</i></td></tr></tbody></table></td></tr></tbody></table><div id=\"xuiSlctMY\" class=\"x-date-mp\" style=\"display: none; width: 175px; height: 193px; position: absolute; left: 0px; top: 0px; z-index: auto;\"><table cellspacing=\"0\" border=\"0\" style=\"width: 175px; height: 193px;\"><tbody><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">1</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">2</a></td><td align=\"center\" class=\"x-date-mp-ybtn\"><a class=\"x-date-mp-prev\" onclick=\"DatePicker.showXuiSlctMY(DatePicker.oldYear -= 10)\"></a></td><td align=\"center\" class=\"x-date-mp-ybtn\"><a class=\"x-date-mp-next\" onclick=\"DatePicker.showXuiSlctMY(DatePicker.oldYear += 10)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">3</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">4</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">5</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">6</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">7</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">8</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">9</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">10</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">11</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">12</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr class=\"x-date-mp-btns\"><td colspan=\"4\"><button class=\"x-date-mp-ok\" type=\"button\" onclick=\"DatePicker.slctOk()\">\u786e\u5b9a</button><button class=\"x-date-mp-cancel\" type=\"button\" onclick=\"DatePicker.hiddenXuiSlctMY()\">\u53d6\u6d88</button></td></tr></tbody></table></div></div></li></ul>");
 
 	    return a.join("");
@@ -128,7 +128,7 @@
 	  /* y,m,d,n,className */
 	  var a = this.A(arguments), r = a[5] || [], i, bEq = (this.year == a[0] && this.month == a[1]), c,
 	      d = new Date(), bTd = (d.getFullYear() == a[0] && (d.getMonth() + 1) == a[1]),
-	      nTdDay = d.getDate(); /* ?????????? */
+	      nTdDay = d.getDate(); /* 最大、最小两月的处理 */
 	  delete d;
 	  for(i = 0; i < a[3]; i++)
 	  {
@@ -154,15 +154,15 @@
 	},
 	updataTBody: function(e)
 	{
-	   /* ???? */
+	   /* 上一个月 */
 	   var m = this.month - 1, n = this.getWeek(this.year, this.month, 1),
 	       r = this.xuiDPRows.childNodes, d, y = this.year, _t = this;
 	   if(0 >= m)m = 12, y--;
-	   /* ???? */
+	   /* 上一个月 */
 	   d = this.pushData(y, m, this.pkData[m - 1] - n + 1, n, "x-date-prevday");
-	   /* ??? */
+	   /* 当前月 */
 	   d = this.pushData(this.year, this.month, 1, this.pkData[this.month - 1], "x-date-active", d);
-	   /* ???? */
+	   /* 下一个月 */
        y = this.year, m = this.month + 1; if(12 < m)m = 1, y += 1;
        d = this.pushData(y, m, 1, 42 - n - this.pkData[this.month - 1], "x-date-nextday", d);
        y = -1, n = 0;
@@ -180,9 +180,11 @@
        this.dpIpt.focus();
 	},addDate: function(n)
 	{
-	   /* ???? */
+	   /* 新的日期 */
 	   n = parseInt(this.day, 10) + n;
 	   var y = this.year, m = this.month, d = this.pkData[m - 1];
+	   if(1 > m) m = this.month = 12;
+	   else if(12 < m) m = this.month = 1;
 	   if(0 == n)
 	   {
 	      m--;
@@ -205,7 +207,7 @@
 	   this.pkData[1] = this.isLeapYear(y) ? 29 : 28;
 	   
 	   return this.day = n, this.month = m, this.year = y, this.updataTBody(), this;
-	}, /* ?????? */
+	}, /* 键盘事件处理 */
     onkeydown:function(e, oIpt)
    {
      e = e || window.event;
@@ -232,13 +234,13 @@
              return this.showXuiSlctMY(),false;
            }
            break;       
-        /*Esc ????*/
+        /*Esc 关闭图层*/
         case 27:
            if("block" == this.xuiSlctMY.style.display)
                 this.hiddenXuiSlctMY();
            else this.hidden();
            break;
-        /* ???? */
+        /* 回车选择 */
         case 13:
            if(e.ctrlKey)
            {
@@ -254,7 +256,7 @@
            this.bIE ? (e.keyCode = 9) : '';
            this.setValue();
            break;
-        case 38: /* ? */
+        case 38: /* 上 */
            n = -7;
            var bSMy = "block" == this.xuiSlctMY.style.display;
            if(e.ctrlKey)
@@ -269,7 +271,7 @@
            }
            if(!bSMy)this.addDate(n);
            break;
-        case 40: /* ? */
+        case 40: /* 下 */
            n = 7;
            var bSMy = "block" == this.xuiSlctMY.style.display;
            if(e.ctrlKey)
@@ -284,7 +286,7 @@
            }
            if(!bSMy)this.addDate(n);
            break;
-        case 37: /* ? */
+        case 37: /* 左 */
            n = -1;
            var bSMy = "block" == this.xuiSlctMY.style.display;
            if(e.ctrlKey)
@@ -308,7 +310,7 @@
            }
            if(!bSMy)this.addDate(n);
            break;
-        case 39: /* ? */
+        case 39: /* 右 */
            n = 1;
            var bSMy = "block" == this.xuiSlctMY.style.display;
            if(e.ctrlKey)
@@ -409,7 +411,7 @@
 	hidden: function()
 	{
 	   this.hiddenShadow(this.XuiDatePicker);
-	}, /*????*/
+	}, /*显示图层*/
 	showSelectDiv: function(e,o)
 	{
 	    this.event = e = e || window.event;
@@ -418,7 +420,7 @@
 	      o = _t.dpIpt = (o || _t.FromEventObj(e));
 		  var bFirst = !_t.XuiDatePicker, s = _t.trim(o['value'] || ""),
 		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-layer x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
-		  /* ??????????? */
+		  /* 第一次需要做初始化处理 */
 		  if(bFirst)
 		  {
 		    oDiv.innerHTML = _t.initDivHtml();
