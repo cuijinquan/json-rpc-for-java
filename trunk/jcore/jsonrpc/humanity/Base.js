@@ -526,24 +526,6 @@
              
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
-      var body = document.documentElement || document.body, oR = document.body.getBoundingClientRect();
-		      h = body.offsetHeight || body.clientHeight || body.scrollHeight || oR.bottom - oR.top,
-		      w = body.offsetWidth || body.scrollWidth || oR.right - oR.left,
-		      scrollTop  = Math.max(document.documentElement.scrollTop, document.body.scrollTop),
-		      scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
       this.showShadow(oDiv);
-    
-      var w1 = parseInt(oDiv.style.width), h1 = parseInt(oDiv.style.height),
-		      l  = parseInt(oDiv.style.left), t = parseInt(oDiv.style.top),
-		      oR1 = o.getBoundingClientRect && o.getBoundingClientRect() || {left: o.clientLeft, top:o.clientTop, right: o.clientRight, bottom: clientBottom};
-		      w2 = oR1.right - oR1.left, h2 = oR1.bottom - oR1.top,
-		      oTmp = this.getDom("xuiSelectShdow");
-		  if(t + h1 > h)
-		     h = -h2 - h1,oDiv.style.top = (t + h) + "px", oTmp.style.top = (parseInt(oTmp.style.top) + h) + "px";
-		     
-		  if(l + w1 > w)
-		     w = -w2 - w1, oDiv.style.left = (l + w) + "px", oTmp.style.left = (parseInt(oTmp.style.left) + w) + "px";
-		  document.body.scrollTop = scrollTop, document.body.scrollLeft = scrollLeft;
-		  document.body.scrollTop = document.body.scrollTop, document.body.scrollLeft = document.body.scrollLeft;
 	}	
 }
