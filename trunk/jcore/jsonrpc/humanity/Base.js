@@ -523,7 +523,7 @@
  	      p = { left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] - (this.bIE ? 5 : 2)) + "px", 
               position: "absolute",
-              width: ((this.bIE ? 2 : 0) + parseInt(w || o.clientWidth || oR[2])) + "px"};
+              width: parseInt(w || o.clientWidth || oR[2]) + "px"};
              
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];

@@ -351,6 +351,13 @@
      this.event = e = e || window.event;
      return this.RunOne(function(){
         this.stopPropagation(e),this.preventDefault(e);
+        if(o.readOnly || o.disabled)return false;
+        var _t = this;
+        if(_t.isIE)
+        {
+         _t.detachEvent(o, "propertychange", _t[o.id] && _t[o.id].onpropertychange || o["onpropertychange"] || function(){});
+         o["onpropertychange"] = null;
+        }
         if(!o["_oldVl"])o["_oldVl"] = o.value;
         var s = this.trim(o.value), s2 = s.replace(/(^\-*)|(\-*^)|([^\d\-])/g, "").replace(/\-\-/g, "-"), a = s2.split("-");
         if(s)
@@ -397,6 +404,13 @@
               s2 += "-", o.value = s2;
         }
         o["_oldVl"] = o.value;
+        if(_t.isIE)
+	    {
+	       _t.addEvent(o, "propertychange",  (_t[o.id] || (_t[o.id] = {})).onpropertychange = function(e)
+	       {
+	          _t.onInput.call(_t, e, o);
+	       });
+	    }
      });
    },click:function(o)
 	{

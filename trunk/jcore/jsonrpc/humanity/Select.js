@@ -142,12 +142,20 @@
   onInput:function(e, oIpt)
   {
      return this.RunOne(function()
-     { 
-       var _t = Select;
+     {
+       var _t = this;
+       _t.stopPropagation(e),_t.preventDefault(e);
+       if(oIpt.readOnly || oIpt.disabled)return false;
+       if(_t.isIE)
+       {
+         _t.descObj = oIpt;
+         _t.detachEvent(oIpt, "propertychange", _t[oIpt.id] && _t[oIpt.id].onpropertychange || oIpt["onpropertychange"] || function(){});
+         oIpt["onpropertychange"] = null;
+       }
        _t.getData(oIpt.id);
        var n = 0, o = _t.SelectDiv, oT = _t.getObj(oIpt.id),
            s = oIpt.value.replace(/(^\s+)|(\s+$)/g, "");
-       if(!o)return _t;
+       if(!o)return false;
        /* 检索过滤处理 */
        _t.updata(s);
        n = _t.getData(oIpt.id).length;
@@ -161,7 +169,13 @@
        if(0 < n)
           this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
        else _t.hidden(), !oT["allowEdit"] && this.addInvalid(oIpt);
-       _t.stopPropagation(e),_t.preventDefault(e);
+       if(_t.isIE)
+	   {
+	       _t.addEvent(oIpt, "propertychange",  (_t[oIpt.id] || (_t[oIpt.id] = {})).onpropertychange = function(e)
+	       {
+	          _t.onInput.call(_t, e, oIpt);
+	       });
+	   }
      }, Select);
   }, /* 键盘事件处理 */
   onkeydown:function(e, oIpt)
@@ -193,15 +207,16 @@
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
-    var b3 = (3 == arguments.length);
+    var b3 = (3 == arguments.length), _t = this;
     e = e || window.event;
-    if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
-    var _t = this, o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
-        oR = this.getOffset(oTable),h = oR[3], w = oR[2],
+    return this.RunOne(function(){
+      if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
+      var o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
+        oR = this.getOffset(oTable),h = oR[3], w = parseInt((obj||{}).width || $(oE.parentNode).width()),
         p = { height:'1px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] - (this.bIE ? 3 : 2)) + "px",
-              position: "absolute",
-              width: ((this.bIE ? 2 : 0) + parseInt((obj||{}).width || oTable.clientWidth || w)) + "px"},
+              position: "absolute", display: "block",
+              width: w + "px"},
         k,
         fns = _t.bind(function()
         {
@@ -209,7 +224,7 @@
           if(0 < (this.getData(oE.id) || []).length)
           {
 	          o["tmer"] && _t.clearTimer(o["tmer"]);
-              if(o.style.height)              
+              if(o.style.height)
                  this.show();
           }
           o["_in_"] = true
@@ -229,7 +244,7 @@
     o[szId] = oE.id, o["_lstNum"] = 0, o["_blur_"]= false, fns();
 
     /* 修正显示图层的上下位置 */
-    if(190 < p.top - document.body.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;
+    if(190 < p.top - document.documentElement.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;
     /* 失去焦点就隐藏 */
     if(!oE[szId])
     {
@@ -260,7 +275,8 @@
     });
    
     this.lightRow(0);
-    this.stopPropagation(e),this.preventDefault(e);
+    e && this.stopPropagation(e),this.preventDefault(e);
+    });    
   }, /* 隐藏图层的方法 */
   hiddenSelectDiv:function()
   {
