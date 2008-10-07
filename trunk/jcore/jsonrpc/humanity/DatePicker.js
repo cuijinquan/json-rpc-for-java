@@ -437,7 +437,7 @@
 		  else s = new Date(), _t.setDate(s.getFullYear(), s.getMonth() + 1, s.getDate());
 		  _t.updataTBody();
 		  
-		  _t.showDiv(_t.p(o, "DIV"), oDiv, _t.bIE ? 173: 175, Math.max(194, $(oDiv).height()));/* IE8: 173 * 201 */
+		  _t.showDiv(_t.p(o, "DIV"), oDiv, _t.bIE ? 173: 175, 0);/* IE8: 173 * 201 */
 	},onblur: function(e, oIpt)
 	{
 	    var _t = DatePicker, o = _t.XuiDatePicker;

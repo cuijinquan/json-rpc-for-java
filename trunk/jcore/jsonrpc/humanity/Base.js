@@ -527,6 +527,9 @@
              
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
+      style["display"] = "block";
+      /* 修正显示定位 */
+      style["height"] = $(oDiv).height() + "px";
       oDiv.style.width = Math.max(parseInt($(o).width(), 10), parseInt(oDiv.style.width, 10)) + "px";
       hs[4] = parseInt(oDiv.style.top, 10);
       hs[5] = parseInt(oDiv.style.height, 10);
@@ -534,7 +537,6 @@
       hs[7] = parseInt(oDiv.style.width, 10);
       if(hs[4] + hs[5] > hs[1] + document.documentElement.scrollTop)oDiv.style.top = (hs[4] - hs[5] - $(o).height()) + "px";
       if(hs[6] + hs[7] > hs[3] + document.documentElement.scrollLeft)oDiv.style.left = (hs[6] - hs[7] - $(o).width()) + "px";
-      style["display"] = "block";
       this.showShadow(oDiv);
 	}	
 }
