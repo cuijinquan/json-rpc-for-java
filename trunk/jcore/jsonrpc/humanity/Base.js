@@ -528,7 +528,7 @@
              
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
-      this.showShadow(oDiv);
+      oDiv.style.width = $(o).width() + "px";
       hs[4] = parseInt(oDiv.style.top, 10);
       hs[5] = parseInt(oDiv.style.height, 10);
       hs[6] = parseInt(oDiv.style.left, 10);
