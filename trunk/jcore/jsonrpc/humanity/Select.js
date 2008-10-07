@@ -25,33 +25,9 @@
     return this.data || this.getObj(szId)["collection"]
   },scrollIntoView: function(c, el){
         if(!c)return this;
-        var o = [c.offsetTop, c.offsetLeft],
-            l = o[0] + c.scrollLeft,
-            t = o[1] + c.scrollTop,
-            b = t + el.offsetHeight,
-            r = l + el.offsetWidth;
-
-        var ch = c.clientHeight;
-        var ct = parseInt(c.scrollTop, 10);
-        var cl = parseInt(c.scrollLeft, 10);
-        var cb = ct + ch;
-        var cr = cl + c.clientWidth, hscroll = true;
-
-        if(el.offsetHeight > ch || t < ct){
-        	c.scrollTop = t;
-        }else if(b > cb){
-            c.scrollTop = b-ch;
-        }
-        c.scrollTop = c.scrollTop; // corrects IE, other browsers will ignore
-
-        if(hscroll !== false){
-			if(el.offsetWidth > c.clientWidth || l < cl){
-                c.scrollLeft = l;
-            }else if(r > cr){
-                c.scrollLeft = r-c.clientWidth;
-            }
-            c.scrollLeft = c.scrollLeft;
-        }
+        var o = $(el), a = [parseInt(c.clientHeight, 10), parseInt(o.offset().top, 10), o.height(), parseInt(c.scrollTop, 10)];
+        c.scrollTop = a[1] + a[2] - a[0];
+        c.scrollTop = c.scrollTop;
     }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
   {
@@ -62,7 +38,7 @@
     if(0 > n)n = r.length - 1;
     if(r.length <= n)n = 0;
     r[n].className='cursor slctOver'; 
-    if(!flg && 0 <= n && r.length > n)r[n].scrollIntoView(true);/* this.scrollIntoView(this.p(tb[0], "DIV"), r[n]) */
+    if(!flg && 0 <= n && r.length > n)this.scrollIntoView(this.p(tb[0], "DIV"), r[n]);/*  r[n].scrollIntoView(true)*/
     o["_lstNum"] = n;
     if(3 == arguments.length)
       return this.stopPropagation(e),this.preventDefault(e), false;
@@ -272,7 +248,7 @@
     this.regTimer(function()
     {
        var oTable = o.getElementsByTagName("table"),n = Math.min(170, k = 2 + (o.scrollHeight || 0 < oTable.length && oTable[0].clientHeight || 0));
-       if(0 < oTable.length && (15 < n || 13 < new Date().getTime() - nTm))
+       if(0 < oTable.length && 15 < n && 77 < (new Date().getTime() - nTm))
        {
          o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = n + "px";
          _t.show();
