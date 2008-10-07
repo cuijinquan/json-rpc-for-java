@@ -181,10 +181,12 @@
            break;
         case 38: /* 上 */
            i = this.lightRow(i - 1);
-           break;
+           this.stopPropagation(e),this.preventDefault(e);
+           return false;
         case 40: /* 下 */
            i = this.lightRow(i + 1);
-           break;
+           this.stopPropagation(e),this.preventDefault(e);
+           return false;
         default:;
      }
      return true;

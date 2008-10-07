@@ -225,6 +225,7 @@
         case 109:
         case 116:
         case 8:
+        case 9:
            return true;
         /* Ctrl + s */
         case 83:
@@ -270,7 +271,8 @@
               else n = 0,this.year--,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
            }
            if(!bSMy)this.addDate(n);
-           break;
+           this.stopPropagation(e),this.preventDefault(e);
+           return false;
         case 40: /* 下 */
            n = 7;
            var bSMy = "block" == this.xuiSlctMY.style.display;
@@ -285,7 +287,8 @@
               else n = 0,this.year++,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
            }
            if(!bSMy)this.addDate(n);
-           break;
+           this.stopPropagation(e),this.preventDefault(e);
+           return false;
         case 37: /* 左 */
            n = -1;
            var bSMy = "block" == this.xuiSlctMY.style.display;
@@ -309,7 +312,8 @@
               }
            }
            if(!bSMy)this.addDate(n);
-           break;
+           this.stopPropagation(e),this.preventDefault(e);
+           return false;
         case 39: /* 右 */
            n = 1;
            var bSMy = "block" == this.xuiSlctMY.style.display;
@@ -333,7 +337,8 @@
               }
            }
            if(!bSMy)this.addDate(n);
-           break;
+           this.stopPropagation(e),this.preventDefault(e);
+           return false;
         default:
            n = String.fromCharCode(n);
            if('0' <= n && n <= '9' || n == '-')
