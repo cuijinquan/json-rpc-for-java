@@ -204,7 +204,6 @@
      obj.width = w + "px", obj.height = h + "px",
      obj.top = top + "px", obj.left = left + "px",
      obj.zIndex = zIndex, obj.position = "absolute";
-     oTmp = obj;
      if(!(obj = this.getDom("xuislctsd4")))return this;
      obj.style.width = this.getDom("xuislctsd3").style.width =
      this.getDom("xuislctsd1").style.width = (w - 12) + "px";
@@ -212,7 +211,7 @@
      obj.style.height = (h - 12) + "px";
      o = obj.getElementsByTagName("div");
      for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
-     oTmp.display = old.style.display = "block";
+     oTmp.style.display = old.style.display = "block";
   },hiddenShadow:function(o)
   {
     var oTmp;
@@ -522,19 +521,20 @@
 	      hs = [ document.documentElement.scrollHeight, document.documentElement.clientHeight,
 	             document.documentElement.scrollWidth, document.documentElement.clientWidth],
  	      p = { left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
-              top: (oR[1] - (this.bIE ? 5 : 2)) + "px", display:'block',
+              top: (oR[1] - (this.bIE ? 5 : 2)) + "px", 
               position: "absolute",
               width: ((this.bIE ? 2 : 0) + parseInt(w || o.clientWidth || oR[2])) + "px"};
              
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
-      oDiv.style.width = $(o).width() + "px";
+      oDiv.style.width = Math.max(parseInt($(o).width(), 10), parseInt(oDiv.style.width, 10)) + "px";
       hs[4] = parseInt(oDiv.style.top, 10);
       hs[5] = parseInt(oDiv.style.height, 10);
       hs[6] = parseInt(oDiv.style.left, 10);
       hs[7] = parseInt(oDiv.style.width, 10);
-      if(hs[4] + hs[5] > hs[1])oDiv.style.top = (hs[4] - hs[5] - $(o).height()) + "px";
-      if(hs[6] + hs[7] > hs[3])oDiv.style.left = (hs[6] - hs[7] - $(o).width()) + "px";
+      if(hs[4] + hs[5] > hs[1] + document.documentElement.scrollTop)oDiv.style.top = (hs[4] - hs[5] - $(o).height()) + "px";
+      if(hs[6] + hs[7] > hs[3] + document.documentElement.scrollLeft)oDiv.style.left = (hs[6] - hs[7] - $(o).width()) + "px";
+      style["display"] = "block";
       this.showShadow(oDiv);
 	}	
 }

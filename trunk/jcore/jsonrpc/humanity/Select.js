@@ -23,7 +23,8 @@
         }
     }
     return this.data || this.getObj(szId)["collection"]
-  },scrollIntoView : function(c, el){
+  },scrollIntoView: function(c, el){
+        if(!c)return this;
         var o = [c.offsetTop, c.offsetLeft],
             l = o[0] + c.scrollLeft,
             t = o[1] + c.scrollTop,
@@ -61,7 +62,7 @@
     if(0 > n)n = r.length - 1;
     if(r.length <= n)n = 0;
     r[n].className='cursor slctOver'; 
-    if(!flg)r[n].scrollIntoView(false); 
+    if(!flg && 0 <= n && r.length > n)r[n].scrollIntoView(true);/* this.scrollIntoView(this.p(tb[0], "DIV"), r[n]) */
     o["_lstNum"] = n;
     if(3 == arguments.length)
       return this.stopPropagation(e),this.preventDefault(e), false;
@@ -161,7 +162,6 @@
    	 if(0 < this.getData(this.descObj.id).length)
        this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
          parseInt(o.style.width, 10), parseInt(o.style.height, 10));
-     document.title = [document.documentElement.scrollHeight, document.documentElement.clientHeight];
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
@@ -221,7 +221,7 @@
     var _t = this, o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
         oR = this.getOffset(oTable),h = oR[3], w = oR[2],
         p = { height:'1px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
-              top: (oR[1] - (this.bIE ? 3 : 2)) + "px", display:'block',
+              top: (oR[1] - (this.bIE ? 3 : 2)) + "px",
               position: "absolute",
               width: ((this.bIE ? 2 : 0) + parseInt((obj||{}).width || oTable.clientWidth || w)) + "px"},
         k,
@@ -231,7 +231,6 @@
           if(0 < (this.getData(oE.id) || []).length)
           {
 	          o["tmer"] && _t.clearTimer(o["tmer"]);
-		      o.style.display = 'block';
               if(o.style.height)              
                  this.show();
           }
@@ -273,7 +272,7 @@
     this.regTimer(function()
     {
        var oTable = o.getElementsByTagName("table"),n = Math.min(170, k = 2 + (o.scrollHeight || 0 < oTable.length && oTable[0].clientHeight || 0));
-       if(0 < oTable.length && (15 < n || 1000 < new Date().getTime() - nTm))
+       if(0 < oTable.length && (15 < n || 13 < new Date().getTime() - nTm))
        {
          o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = n + "px";
          _t.show();
