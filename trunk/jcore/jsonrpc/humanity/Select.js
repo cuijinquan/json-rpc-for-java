@@ -161,6 +161,7 @@
    	 if(0 < this.getData(this.descObj.id).length)
        this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
          parseInt(o.style.width, 10), parseInt(o.style.height, 10));
+     document.title = [document.documentElement.scrollHeight, document.documentElement.clientHeight];
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {

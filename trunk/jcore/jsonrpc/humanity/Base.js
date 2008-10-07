@@ -519,13 +519,22 @@
     showDiv: function(o, oDiv, w, h)
 	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
-	  p = {   left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
+	      hs = [ document.documentElement.scrollHeight, document.documentElement.clientHeight,
+	             document.documentElement.scrollWidth, document.documentElement.clientWidth],
+ 	      p = { left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] - (this.bIE ? 5 : 2)) + "px", display:'block',
               position: "absolute",
               width: ((this.bIE ? 2 : 0) + parseInt(w || o.clientWidth || oR[2])) + "px"};
              
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
+      this.showShadow(oDiv);
+      hs[4] = parseInt(oDiv.style.top, 10);
+      hs[5] = parseInt(oDiv.style.height, 10);
+      hs[6] = parseInt(oDiv.style.left, 10);
+      hs[7] = parseInt(oDiv.style.width, 10);
+      if(hs[4] + hs[5] > hs[1])oDiv.style.top = (hs[4] - hs[5] - $(o).height()) + "px";
+      if(hs[6] + hs[7] > hs[3])oDiv.style.left = (hs[6] - hs[7] - $(o).width()) + "px";
       this.showShadow(oDiv);
 	}	
 }
