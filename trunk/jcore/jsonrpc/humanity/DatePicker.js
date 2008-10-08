@@ -417,8 +417,9 @@
 	   if(-1 < o.className.indexOf("x-date-disabled"))return this;
 	   var a = o.title.split("-");
 	   this.year = a[0],this.month = a[1],this.day = a[2];
-	   this.setValue();
+	   this.stopPropagation(e),this.preventDefault(e);
 	   this.hidden();
+	   this.setValue();	   
 	   return this;
 	}, selectToday:function()
 	{
