@@ -213,7 +213,7 @@
       if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
       var o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
         oR = this.getOffset(oTable),h = oR[3], w = parseInt((obj||{}).width || $(oE.parentNode).width()),
-        p = { height:'1px', left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
+        p = { left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] - (this.bIE ? 3 : 2)) + "px",
               position: "absolute", display: "block",
               width: w + "px"},
@@ -258,22 +258,11 @@
                });
     }
     for(k in p)o.style[k] = p[k];
-    _t.oShdow.style.height = p.height;
     _t.updata(oE.value);
+    o.style['height'] = Math.min(15 * _t.getData(oE.id).length, 170) + 'px';
     o.innerHTML = _t.getSelectDataStr(oE, p.width);
     var nTm = new Date().getTime();
-    this.regTimer(function()
-    {
-       var oTable = o.getElementsByTagName("table"),n = Math.min(170, k = 2 + (o.scrollHeight || 0 < oTable.length && oTable[0].clientHeight || 0));
-       if(0 < oTable.length && 15 < n && 77 < (new Date().getTime() - nTm))
-       {
-         o.getElementsByTagName("div")[0].style["height"] = o.style["height"] = n + "px";
-         _t.show();
-         return true;
-       }
-       return false
-    });
-   
+    _t.show();
     this.lightRow(0);
     e && this.stopPropagation(e),this.preventDefault(e);
     });    
