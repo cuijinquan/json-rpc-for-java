@@ -34,6 +34,12 @@ public class JSONRPCServlet extends HttpServlet {
 	private boolean bGzip = false;
 	private ServletConfig config = null;
 	
+	public void destroy() {
+		super.destroy();
+		config = null;
+		this.charset = null;
+	}
+	
 	public void init(ServletConfig config)throws ServletException
 	{
 		this.config = config;
