@@ -11,7 +11,7 @@
                max = arg[1][2],min = arg[1][3];
              }
            }
-            if(0 < decimalNum) 
+           if(0 < decimalNum) 
              o.maxLength = decimalNum + integralNum + 2;
            else
              o.maxLength = integralNum + 1;  
@@ -23,26 +23,34 @@
            Digit.addEvent(o, "drop", Digit.sz_ondrop);
            Digit.addEvent(o, "keypress", Digit.sz_onkeypress);
            Digit.addEvent(o, "blur", Digit.sz_onblur);
+           
         });
       }catch(e){alert(e.message)}
     },
     
     str_onpaste : function(evt){
-      e = (evt || event || window.event),o = e.srcElement || e.target;
-      var data = Digit.getClipboard();
-      return Digit.regInput(o, o.reg, data);
+      e = (evt || event || window.event),o = e.srcElement || e.target,
+      data = Digit.getClipboard(), isReg = Digit.regInput(o, o.reg, data);
+      if(!isReg && e.preventDefault) e.preventDefault();
+      return isReg;
     },
     
     sz_ondrop : function(evt){
-      e = (evt || event || window.event),o = e.srcElement || e.target;
-      var data = event.dataTransfer.getData('Text');
-      return Digit.regInput(o, o.reg, data);
+      e = (evt || event || window.event),o = e.srcElement || e.target,
+      data = e.dataTransfer.getData('Text'), isReg = Digit.regInput(o, o.reg, data);
+      if(!isReg && e.preventDefault) e.preventDefault();
+      return isReg;
     },
 	
-    sz_onkeypress : function(evt){
-      e = (evt || event || window.event),o = e.srcElement || e.target;
-      var data = String.fromCharCode(event.keyCode);
-      return Digit.regInput(o, o.reg, data);
+    sz_onkeypress : function(evt){      
+      e = (evt || event || window.event),o = e.srcElement || e.target,
+      key = window.event ? e.keyCode:e.which, data = String.fromCharCode(key),
+      isReg = Digit.regInput(o, o.reg, data);
+      if (!isReg && 8!=key && 45!=key && 0!=key 
+           &&!(e.ctrlKey && data.toLowerCase() == "v")){
+        if(e.preventDefault)e.preventDefault(); 
+      } 
+      return isReg;
     },
     
     sz_onblur : function(evt){
@@ -54,10 +62,20 @@
 			return eval(o.mylen + ";");
 		}
       }
-      o.focus(), o.select(), alert("输入值必须在[" + o.min + " - " + o.max + "]之间");
+      setTimeout(function(){o.focus(),o.select();},1);
+      alert("输入值必须在[" + o.min + " - " + o.max + "]之间,并且小数点位数正确");
     },
     
     regInput : function(obj, reg, inputStr){
+      if(Browser.isIE()){
+        return Digit.ieContentContact(obj, reg, inputStr);
+      } else {
+        return Digit.ffContentContact(obj, reg, inputStr);
+      }  
+      return false;  
+    },
+    
+    ieContentContact : function(obj, reg, inputStr){
       try{
 	    var docSel  = document.selection.createRange();
 	    if(null != docSel && null != docSel.parentElement() && "INPUT" != docSel.parentElement().tagName)
@@ -69,7 +87,15 @@
 	    var str = oSel.text + inputStr + srcRange.text.substr(oSel.text.length);
 	    return reg.test(str);
       }catch(e){alert(e.message);}
-      return false;
+    },
+    
+    ffContentContact : function(obj, reg, inputStr){
+      try{
+        var n=obj.selectionStart, old=obj.value, 
+        behind=old.substr(n), front=old.substr(0,(old.length-behind.length)),
+        str = front + inputStr + behind;
+        return reg.test(str);
+      }catch(e){alert(e.message);}
     },
     
     doFun : function(fn){
