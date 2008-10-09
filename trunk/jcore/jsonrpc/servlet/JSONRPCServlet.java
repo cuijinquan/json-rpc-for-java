@@ -103,7 +103,6 @@ public class JSONRPCServlet extends HttpServlet {
 
     public void service(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ClassCastException {
-
     	 HttpSession session = request.getSession(false);
     	 if(null == session)session = request.getSession(true);
     	 if(null != session)
