@@ -88,7 +88,7 @@
 		for (j = 0; j < 6; j++) {
 			a.push("<tr>");
 			for (i = 0; i < 7; i++) {
-				a.push("<td onclick=\"DatePicker.click(this)\"><a href=\"javascript:void(0)\" hidefocus=\"on\"><em><span></span></em></a></td>");
+				a.push("<td onclick=\"DatePicker.click(event,this)\"><a href=\"javascript:void(0)\" hidefocus=\"on\"><em><span></span></em></a></td>");
 			}
 			a.push("</tr>");
 		}
@@ -412,7 +412,7 @@
 	       });
 	    }
      });
-   },click:function(o)
+   },click:function(e, o)
 	{
 	   if(-1 < o.className.indexOf("x-date-disabled"))return this;
 	   var a = o.title.split("-");
