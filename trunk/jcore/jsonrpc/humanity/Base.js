@@ -530,7 +530,6 @@
       style["display"] = "block";
       /* 修正显示定位 */
       style["height"] = $(oDiv).height() + "px";
-      oDiv.style.width = Math.max(parseInt($(o).width(), 10), parseInt(oDiv.style.width, 10)) + "px";
       hs[4] = parseInt(oDiv.style.top, 10);
       hs[5] = parseInt(oDiv.style.height, 10);
       hs[6] = parseInt(oDiv.style.left, 10);
