@@ -212,7 +212,7 @@
     return this.RunOne(function(){
       if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
       var o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
-        oR = this.getOffset(oTable),h = oR[3], w = parseInt((obj||{}).width || $(oE.parentNode).width()),
+        oR = this.getOffset(oE),h = oR[3], w = parseInt((obj||{}).width || $(oE.parentNode).width()),
         p = { left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
               top: (oR[1] - (this.bIE ? 3 : 2)) + "px",
               position: "absolute", display: "block",
