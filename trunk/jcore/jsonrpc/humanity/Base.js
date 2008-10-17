@@ -3,31 +3,45 @@
   nVer: 0, trim:function(s){return s.replace(/(^\s*)|(\s*$)/gm, "")},
   init: function()
   {
-        var ua = navigator.userAgent.toLowerCase();
-        this.isStrict = document.compatMode == "CSS1Compat",
-	    this.isOpera = ua.indexOf("opera") > -1,
-	    this.isSafari = (/webkit|khtml/).test(ua),
-	    this.isSafari3 = this.isSafari && ua.indexOf('webkit/5') != -1,
-	    this.isOmniweb = -1 < ua.indexOf("omniweb"),
-	    this.bIE = this.isIE = (!this.isOpera && ua.indexOf("msie") > -1 && !this.isOmniweb),
-	    this.isIE7 = !this.isOpera && ua.indexOf("msie 7") > -1,
-	    this.isGecko = !this.isSafari && ua.indexOf("gecko") > -1,
-	    this.isGecko3 = !this.isSafari && ua.indexOf("rv:1.9") > -1,
-	    this.isBorderBox = this.isIE && !this.isStrict,
-	    this.isWindows = (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1),
-	    this.isMac = (ua.indexOf("macintosh") != -1 || ua.indexOf("mac os x") != -1),
-	    this.isAir = (ua.indexOf("adobeair") != -1),
-	    this.isLinux = (ua.indexOf("linux") != -1),
-	    this.isSecure = window.location.href.toLowerCase().indexOf("https") === 0; 
-	    this.isW3C = !!document.getElementById;
-        this.isIE5 = this.isW3C && this.isIE;
-        this.isNS6 = this.isW3C && "Netscape" == navigator.appName;
-      if(this.bIE)
+        var ua = navigator.userAgent.toLowerCase(), _t = this;
+        _t.isStrict = document.compatMode == "CSS1Compat",
+	    _t.isOpera = ua.indexOf("opera") > -1,
+	    _t.isSafari = (/webkit|khtml/).test(ua),
+	    _t.isSafari3 = _t.isSafari && ua.indexOf('webkit/5') != -1,
+	    _t.isOmniweb = -1 < ua.indexOf("omniweb"),
+	    _t.bIE = _t.isIE = (!_t.isOpera && ua.indexOf("msie") > -1 && !_t.isOmniweb),
+	    _t.isIE7 = !_t.isOpera && ua.indexOf("msie 7") > -1,
+	    _t.isGecko = !_t.isSafari && ua.indexOf("gecko") > -1,
+	    _t.isGecko3 = !_t.isSafari && ua.indexOf("rv:1.9") > -1,
+	    _t.isBorderBox = _t.isIE && !_t.isStrict,
+	    _t.isWindows = (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1),
+	    _t.isMac = (ua.indexOf("macintosh") != -1 || ua.indexOf("mac os x") != -1),
+	    _t.isAir = (ua.indexOf("adobeair") != -1),
+	    _t.isLinux = (ua.indexOf("linux") != -1),
+	    _t.isSecure = window.location.href.toLowerCase().indexOf("https") === 0; 
+	    _t.isW3C = !!document.getElementById;
+        _t.isIE5 = _t.isW3C && _t.isIE;
+        _t.isNS6 = _t.isW3C && "Netscape" == navigator.appName;
+      if(_t.bIE)
       { 
-       this.nVer = parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]) ||  0;
-       if(7 > this.nVer)
+       _t.nVer = parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]) ||  0;
+       if(7 > _t.nVer)
          try{document.execCommand("BackgroundImageCache", false, true)}catch(e){}
-      } 
+      }
+      $(document).ready(function(){
+      if(!_t.getDom("xuiSelectShdow"))
+      {
+       var a1 = [];
+       a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
+       a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
+       a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\" id=\"showdxsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
+       a1.push("<div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" id=\"xuislctsd4\"></div><div class=\"xsbr\"></div></div></div>");
+       _t.insertHtml(document.body, "beforeend", a1.join(""));
+       a1 = null;
+       if(_t.bIE && 5 < _t.nVer && 7 > _t.nVer)
+       	  _t.getDom("xuiSelectShdow").style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=30) progid:DXImageTransform.Microsoft.Blur(pixelradius=4)";
+      }
+      });
       return this;
   },
   /* 一些初始化动作 */
@@ -170,7 +184,7 @@
   createDiv:function()
   {
      var o = null, b = !!arguments[0] || false,
-         p = arguments[0], k, a1 = [];
+         p = arguments[0], k;
      if(p && p["id"] && (o = this.getDom(p["id"])))return o;
      o = document.createElement("div");
      if(b)
@@ -179,20 +193,9 @@
        for(k in p)o[k] = p[k];
      }
      document.body.appendChild(o);
-     if(!this.getDom("xuiSelectShdow"))
-     {
-       a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
-       a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
-       a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\" id=\"showdxsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
-       a1.push("<div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" id=\"xuislctsd4\"></div><div class=\"xsbr\"></div></div></div>");
-       this.insertHtml(document.body, "beforeend", a1.join(""));
-       a1 = null;
-       if(this.bIE && 5 < this.nVer && 7 > this.nVer)
-       	  this.getDom("xuiSelectShdow").style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=30) progid:DXImageTransform.Microsoft.Blur(pixelradius=4)";
-     }
      return o;
   },/* 显示阴影图层 */
-  showShadow:function(o, oIpt)
+  showShadow:function(o)
   {
       var old = o;
       var w = parseFloat(this.getStyle(o, "width")) + 10, h = parseFloat(this.getStyle(o, "height") || 1) + 7,
@@ -201,9 +204,7 @@
          zIndex = (this.getStyle(o, "zIndex") || 11000) - 1;
      if(!obj || !h || !w || 12 > h)return this;
      o = o.style;
-     obj.width = w + "px", obj.height = h + "px",
-     obj.top = top + "px", obj.left = left + "px",
-     obj.zIndex = zIndex, obj.position = "absolute";
+     $(oTmp).css({width:w + "px", height: h + "px", top: top + "px", left: left + "px", zIndex: zIndex, position: "absolute"});
      if(!(obj = this.getDom("xuislctsd4")))return this;
      obj.style.width = this.getDom("xuislctsd3").style.width =
      this.getDom("xuislctsd1").style.width = (w - 12) + "px";
