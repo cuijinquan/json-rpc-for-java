@@ -516,16 +516,16 @@
      }
      return a;
     }, isCSS1Compat: (document.compatMode == "CSS1Compat"),
-    showDiv: function(o, oDiv, w, h)
+    showDiv: function(o, oDiv, w, h, left)
 	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
 	      hs = [ document.documentElement.scrollHeight, document.documentElement.clientHeight,
 	             document.documentElement.scrollWidth, document.documentElement.clientWidth],
- 	      p = { left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
+ 	      p = { left: (left || (oR[0] - (this.bIE ? 2 : 0))) + "px", 
               top: (oR[1] - (this.bIE ? 5 : 2)) + "px", 
               position: "absolute",
               width: parseInt(w || o.clientWidth || oR[2]) + "px"};
-             
+
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
       style["display"] = "block";
