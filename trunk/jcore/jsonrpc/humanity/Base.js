@@ -51,6 +51,10 @@
 	     }
 	  };
       return this;
+  },binds: function(a)
+  {
+     for(var i = 0; i < a.length; i++)
+       this[a[i]] = this[a[i]].bind(this);
   },
   /* 一些初始化动作 */
   bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
