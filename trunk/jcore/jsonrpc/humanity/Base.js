@@ -42,6 +42,14 @@
        	  _t.getDom("xuiSelectShdow").style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=30) progid:DXImageTransform.Microsoft.Blur(pixelradius=4)";
       }
       });
+      Function.prototype.bind = function(o)
+	  {
+	     var _t = this, a = Base.A(arguments);a.shift();
+	     return function(e)
+	     {
+	        _t.apply(o || _t, Base.A(arguments).concat(a));
+	     }
+	  };
       return this;
   },
   /* 一些初始化动作 */
