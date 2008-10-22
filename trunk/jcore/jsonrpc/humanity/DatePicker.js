@@ -56,7 +56,8 @@
 	   }	   
 	   this.year = oldY;
 	   o.style.display = "block";
-	   try{this.dpIpt.focus();}catch(e){}
+	   if(0 == $(this.dpIpt).parents(":hidden").length)
+	     this.dpIpt.focus();
 	},slctOk:function() /* 选择Ok */
 	{
 	   this.year = this.slctY || this.year;
@@ -78,7 +79,8 @@
 	},hiddenXuiSlctMY: function() /* 隐藏选择年月图层 */
 	{
 	   this.xuiSlctMY.style.display = "none";
-	   try{this.dpIpt.focus();}catch(e){}
+	   if(0 == $(this.dpIpt).parents(":hidden").length)
+	     this.dpIpt.focus();
 	}, /* 初始化要显示的日期div */
 	initDivHtml:function()
 	{
@@ -177,7 +179,8 @@
        }
        this.xuiCurYear.innerHTML = this.year + "\u5e74" + this.month + "\u6708";
        this.setValue(e);
-       try{this.dpIpt.focus();}catch(e){}
+       if(0 == $(this.dpIpt).parents(":hidden").length)
+	     this.dpIpt.focus();
 	},addDate: function(n)
 	{
 	   /* 新的日期 */
