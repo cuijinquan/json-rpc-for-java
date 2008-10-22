@@ -56,7 +56,7 @@
 	   }	   
 	   this.year = oldY;
 	   o.style.display = "block";
-	   this.dpIpt.focus();
+	   try{this.dpIpt.focus();}catch(e){}
 	},slctOk:function() /* 选择Ok */
 	{
 	   this.year = this.slctY || this.year;
@@ -78,7 +78,7 @@
 	},hiddenXuiSlctMY: function() /* 隐藏选择年月图层 */
 	{
 	   this.xuiSlctMY.style.display = "none";
-	   this.dpIpt.focus();
+	   try{this.dpIpt.focus();}catch(e){}
 	}, /* 初始化要显示的日期div */
 	initDivHtml:function()
 	{
@@ -177,7 +177,7 @@
        }
        this.xuiCurYear.innerHTML = this.year + "\u5e74" + this.month + "\u6708";
        this.setValue(e);
-       this.dpIpt.focus();
+       try{this.dpIpt.focus();}catch(e){}
 	},addDate: function(n)
 	{
 	   /* 新的日期 */
