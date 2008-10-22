@@ -41,6 +41,7 @@
        if(_t.bIE && 5 < _t.nVer && 7 > _t.nVer)
        	  _t.getDom("xuiSelectShdow").style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=30) progid:DXImageTransform.Microsoft.Blur(pixelradius=4)";
       }
+      $(window).error(function(){return false});
       });
       Function.prototype.bind = function(o)
 	  {
