@@ -109,7 +109,7 @@
        cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
        o["_lstNum"] = n;
      }else o["_over"] = 1;
-     this.hidden();
+     this.hidden(e);
      if(e)this.preventDefault(e), this.stopPropagation(e);
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
@@ -168,7 +168,7 @@
           _t.setValue("", 2, e);
        if(0 < n)
           this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
-       else _t.hidden(), !oT["allowEdit"] && this.addInvalid(oIpt);
+       else _t.hidden(e), !oT["allowEdit"] && this.addInvalid(oIpt);
        if(_t.isIE)
 	   {
 	       _t.addEvent(oIpt, "propertychange",  (_t[oIpt.id] || (_t[oIpt.id] = {})).onpropertychange = function(e)
@@ -186,12 +186,12 @@
      {
         /* 接受连续退格键 e.repeat, 8 */
         /*Esc 关闭图层*/
-        case 27:this.hidden();break;
+        case 27:this.hidden(e);break;
         /* 回车选择 */
         case 13:
-           this.onSelect(null, i);
+           this.onSelect(e, i);
            this.bIE ? (e.keyCode = 9) : '';
-           this.hidden();
+           this.hidden(e);
            break;
         case 38: /* 上 */
            i = this.lightRow(i - 1);
@@ -279,7 +279,7 @@
        {
 	       if(o["_in_"])return true;
 	       if(333 < new Date().getTime() - o["_tm_"])
-	          return _t.hidden(), true;
+	          return _t.hidden(e), true;
        }
        return false
     }, 333);
