@@ -187,35 +187,34 @@
   }, /* 异步刷新区域的封装，还没有实现完整 */
   updateUi:function(o)
   {
-    var s = [], s1 = [""];
+    var s = [], s1 = [""], o1, _t = this, s2;
     if(!o.data)return alert("updateUi调用参数不正确，没有指定参数data");
-    
-    /*post数据，格式为["aac001", "#myTab:input", "divId1"]*/
+    /* post数据，格式为["aac001", "#myTab:input", "divId1"] */
     o.postData && o.postData.each(function()
     {
-       var o1 = $(this);
-       if(0 == o1.length)o1 = $(":input[@name="+ this + "]");
-       if(0 == o1.length)o1 = $("#"+ this + " :input");
+       o1 = $(this);
+       if(!o1[0].nodeName)o1 = $("#"+ this + " :input");
+       if(!o1[0].nodeName)o1 = $(":input[@name=" + this + "]");
        if(0 < o1.length)
        {
           o1.each(function()
           {
-             s1.push(this.name + "=" + decodeStr($(this).val().join(","));
+             if(this.name && (s2 = $(this).val()))
+               s1.push(this.name + "=" + escape(_t.decodeStr(s2)));
           });
        }
     });
-    
     /* data为请求刷新的对象，格式为[id,1或true表示过滤后面的字段,需要过滤的字段] */
     o.data.each(function(){s.push(this.join(","))});
     JsonRpcClient().AJAX({
        data: "__ajaxParam_=" + s.join('|') + s1.join("&"),
        url: o.url || document.location.href,
        bAsync: !!o.fn,
-       clbkFun: (o.fn || function(){
-    try {
-        alert(arguments[0]);
-    }catch (e) {}
-  })});
+       clbkFun: function(){
+       try {
+           o.fn && o.fn.apply(this, arguments);
+       }catch(e){}
+       }});
   }, /* 创建图层 */
   createDiv:function()
   {
