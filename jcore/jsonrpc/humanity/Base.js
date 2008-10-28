@@ -51,6 +51,33 @@
 	        _t.apply(o || _t, Base.A(arguments).concat(a));
 	     }
 	  };
+	  /*扩展jQuery insertNode函数，兼容FF没有 insertAdjacentElement函数*/
+	  $.fn.insertNode = function(where, node){
+	    return this.each(function(){
+	      if (this.insertAdjacentElement){
+	        this.insertAdjacentElement(where, node);
+	      } else {
+	        switch(where){
+	          case "beforeBegin":
+	            this.parentNode.insertBefore(node,this); 
+	            break;
+	          case "afterBegin" :  
+	            this.insertBefore(node,this.firstChild); 
+	            break;
+	          case "beforeEnd":
+	            this.appendChild(node);
+	            break;   
+	          case "afterEnd":
+	            if(this.nextSibling){
+	              this.parentNode.insertBefore(node,this.nextSibling);
+	            } else {
+	              this.parentNode.appendChild(node);
+	            }  
+	            break;   
+	        }
+	      }
+	    });
+	  };
       return this;
   },binds: function(a)
   {
