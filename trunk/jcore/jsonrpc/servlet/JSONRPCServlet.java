@@ -21,6 +21,8 @@ import jcore.jsonrpc.common.JSONRPCBridge;
 import jcore.jsonrpc.common.JsonRpcRegister;
 import jcore.jsonrpc.humanity.LoadJsObj;
 
+import com.yinhai.xui.config.XuiRpc;
+
 /*******************************************************************************
  * JSON-RPC对web的服务通道
  * 
@@ -106,6 +108,8 @@ public class JSONRPCServlet extends HttpServlet {
 			session = request.getSession(true);
 		if (null != session){
 			JsonRpcRegister.registerObject(request, "_LoadJsObj", LoadJsObj.class);
+			// Xui 处理的
+			JsonRpcRegister.registerObject(request, "XuiRpc", XuiRpc.class);
 			JSONRPCBridge brg = (JSONRPCBridge) session.getAttribute(Content.RegSessionJSONRPCName);
 			// 如果是第一次就注册对象
 			if (null == brg){
