@@ -14,6 +14,7 @@ import jcore.jsonrpc.tools.Tools;
  */
 public class LoadJsObj extends JsonRpcObject{
 	private static final long serialVersionUID = -1988214985561562945L;
+	
 	/***
 	 * 通过js对象名获取对象，区分大小写
 	 * @param szName

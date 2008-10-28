@@ -15,11 +15,12 @@
   addResize: function(szId)
   {
      var _t = this, 
-         b = $("#" + szId + " div[@class=x-grid3-header-offset] > table td"), i; /* 标题行中的Td */
+         b = $("#" + szId + " td[@class*='" + szId + "_hd_']"), i, /* 标题行中的Td */
+         sta = $("#" + szId + " div[@class=statistics] > table td"); /* 标题行中统计信息的Td */
      _t.oCur = _t.getDom(szId); /* 当前操作的collection对象 */
      _t.onResize.add(function()
      {
-         var a = $("#" + szId + " div[@class*=x-grid3-row]:first td"), w, o, o1;
+         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']"), w, o, o1;
          i = 0;
          b.each(function()
          {
@@ -35,6 +36,8 @@
 	                /* 数据体第一行中的td对象 */
 		            o1 = $(a[i]);w = o1.width();
 		            setTdw(o, w);
+		            /*调整统计信息的列宽度*/
+		            setTdw($(sta[i]), w);
 		            /* Fixed */
 		            if(0 < i)
 		            {  /* o 为标题 */
@@ -55,19 +58,7 @@
          });
      });
      _t.onResize.start();
-     
-     /* 设置序号列高度 */
-     var oXh = $("#" + szId + "_xh tr"),i = 0;
-     $("#" + szId + " div[@class=x-grid3-body] div[@class*=x-grid3-row]").each(function()
-     {
-        if(0 < i)
-        {
-	        var o1 = $(oXh[i - 1]), o2 = $(this), n = o2.offset().top - $(oXh[i]).offset().top;
-	        /*o1.css("height", (o1.height() - n)  + "px");*/
-        }
-        i++;
-     });
-     
+         
      /* 滚动条图层宽度的设置 */
      $("#" + szId + " div[@class=x-grid3-scroller]").each(function()
      {
@@ -81,7 +72,7 @@
      i = 0;
      b.each(function()
      {
-        if(b.length - 1 > i++)/* 控制最后一列不处理 */
+        if(b.length > i++)/* 控制最后一列不处理 */
           $(this).mousemove(function(e)
           {
            e = e || window.event;
@@ -148,8 +139,8 @@
     this.oCur = this.getDom(szId);var o = $("#" + szId + " td[class*=x-grid3-td-" + n + "]");
     "none" == o[0].style.display ? o.show() : o.hide();
     $(oLi).toggleClass("x-menu-item-checked");
-    this.sortClct.focus();
     e && (this.preventDefault(e), this.stopPropagation(e));
+    this.onResize.start();
     return false;
   },/* 显示排序图层 */
   showSortClct:function(e,o,szId)
@@ -168,8 +159,7 @@
   {
     var _t = this, a = [], szId = _t.oCur.id,
        o2 = $(_t.clctSlctCols), i = 1;
-
-    $(_t.p(_t.oCurCol, "TR")).children().each(function()
+    $(_t.oCur).find("td[@class*=" + szId + "_hd_]").each(function()
     {
        var o = $(this), s = o.attr("class");
        if(-1 < s.indexOf("-" + i))
@@ -242,7 +232,65 @@
       left: (o.offset().left - oOffset.left) + "px", display:'block', position:'absolute', height: o.height() + "px"}).find(":input").val(o.text());
      $(oI).focus();
   },
-   
+
+    /*点击列标志*/
+  colClicktag : false,
+  
+  closeClicktag : function(e){
+    e = e || window.event, o = e.target || e.srcElement;
+    this.colClicktag = false;
+    var proxy = document.getElementById("drag-proxy");
+    var top = document.getElementById("moveTop"), bottom = document.getElementById("moveBottom");
+    proxy.style.visibility = "hidden";
+    top.style.visibility = "hidden";
+    bottom.style.visibility = "hidden";
+    if (this.oCurCol.move && o && o.className){
+      if ("TD" != o.nodeName) o = $(o).parent()[0];
+      var col1 = "." + o.className.split(" ")[2],
+      col2 = "." + this.oCurCol.className.split(" ")[2];
+      
+      for (var i=0, target=$(col1), source=$(col2); i<target.length; i++){
+        Element(target[i]).insertNode("afterEnd", source[i]);
+      }
+    }
+  },
+  
+  colDrag : function(e, content){
+    e = e || window.event, o = e.target || e.srcElement;
+    o = $(o), x = e.x || e.pageX, offset = o.offset(), n = offset.left + o.width() - x;
+    if(this.colClicktag){ 
+      /*增加列名*/
+      var ghost = document.getElementById("drag-ghost");
+      var html = "<div style=\"margin: 0pt; width: 120px; height:16px; float: none;\" unselectable=\"on\" class=\"x-grid3-hd-inner x-grid3-hd-common\">"
+                 + $(this.oCurCol).text();
+                 + "</div>";
+      ghost.innerHTML = html;           
+	  
+	  /*修改位置*/	
+      var proxy = document.getElementById("drag-proxy"),
+      top = document.getElementById("moveTop"), bottom = document.getElementById("moveBottom"),
+      div = this.oCurCol.getElementsByTagName("div")[0], link = this.oCurCol.getElementsByTagName("a")[0],
+      notCurrent = o[0] != this.oCurCol && o[0] != div && o[0] != link && "DIV" == o[0].nodeName && (o[0].className.indexOf("hd") > -1);      
+      proxy.style.visibility = "visible";
+      proxy.style.left = (e.clientX+12) + "px";
+      proxy.style.top = (e.clientY+20) + "px";
+      if (n <= o.width()/2 && notCurrent){
+        proxy.className = "x-dd-drag-proxy x-dd-drop-ok x-grid3-col-dd";
+        top.style.visibility = "visible";
+        top.style.top = (offset.top - 10) + "px";
+        top.style.left = offset.left + o.width() + "px";
+        bottom.style.visibility = "visible";
+        bottom.style.top = offset.top + 20 + "px";
+        bottom.style.left = offset.left + o.width() + "px";        
+        this.oCurCol.move = true;
+      }else {
+        proxy.className = "x-dd-drag-proxy x-dd-drop-nodrop x-grid3-col-dd";
+        top.style.visibility = "hidden";
+        bottom.style.visibility = "hidden";
+      }  
+    }
+  },
+
   init: function()
   {
      var _t = this;
@@ -252,7 +300,7 @@
      {
         _t.onResize.start();
      });
-      _t.insertHtml(document.body, "beforeend", "<div id=\"sortClct\" class=\"x-layer x-menu\" style=\"position:absolute; z-index: 15000; display:none;\"><a onclick=\"return false;\" href=\"javascript:void(0)\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-itemxg-hmenu-sort-asc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Sort Ascending</a></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-itemxg-hmenu-sort-desc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>SortDescending</a></li><li class=\"x-menu-list-itemx-menu-sep-li\"><span class=\"x-menu-sep\"></span></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" onclick=\"Collection.showSlctCols(event, this)\" class=\"x-menu-itemx-menu-item-arrow\"><img class=\"x-menu-item-icon x-cols-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Columns</a></li></ul></div><div class=\"x-grid3-resize-marker\" id=\"x-grid3-resize-marker\">&nbsp;</div><div class=\"x-grid3-resize-proxy\" id=\"x-grid3-resize-proxy\">&nbsp;</div><div id=\"clctSlctCols\" class=\"x-layer x-menu\" style=\"position: absolute; z-index: 15005; display:none;\"><a onclick=\"return false;\" href=\"javascript:void\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"></ul></div>");
+      _t.insertHtml(document.body, "beforeend", "<div id=\"sortClct\" class=\"x-layer x-menu\" style=\"position:absolute; z-index: 15000; display:none;\"><a onclick=\"return false;\" href=\"javascript:void(0)\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-item xg-hmenu-sort-asc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Sort Ascending</a></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-item xg-hmenu-sort-desc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>SortDescending</a></li><li class=\"x-menu-list-itemx-menu-sep-li\"><span class=\"x-menu-sep\"></span></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" onclick=\"Collection.showSlctCols(event, this)\" class=\"x-menu-item x-menu-item-arrow\"><img class=\"x-menu-item-icon x-cols-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Columns</a></li></ul></div><div class=\"x-grid3-resize-marker\" id=\"x-grid3-resize-marker\">&nbsp;</div><div class=\"x-grid3-resize-proxy\" id=\"x-grid3-resize-proxy\">&nbsp;</div><div id=\"clctSlctCols\" class=\"x-layer x-menu\" style=\"position: absolute; z-index: 15005; display:none;\"><a onclick=\"return false;\" href=\"javascript:void\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"></ul></div>");
      _t.clctSlctCols = _t.getDom("clctSlctCols");
      _t.RsMarker = _t.getDom("x-grid3-resize-marker");/* 前 */
      _t.RsProxy  = _t.getDom("x-grid3-resize-proxy"); /* 后 */
@@ -267,6 +315,35 @@
      }); /* 排序对象 */
      $(_t.sortClct).mousemove(_t.clearTm).mouseover(_t.clearTm);
      
+       //插入列移动Div
+     _t.insertHtml(document.body, "beforeend", "<div id=\"drag-proxy\" class=\"x-dd-drag-proxy x-dd-drop-nodrop x-grid3-col-dd\" style=\"position: absolute; z-index: 15000; visibility: hidden; left: -10000px; top: -10000px;\">"
+     	+ "<div class=\"x-dd-drop-icon\"></div>"
+     	+ "<div id=\"drag-ghost\" class=\"x-dd-drag-ghost\"></div>"
+     	+ "</div>");
+     	
+    //插入列移动标识
+    _t.insertHtml(document.body, "beforeend", "<div id=\"moveTop\" class=\"col-move-top\"> </div>"
+      + "<div id=\"moveBottom\" class=\"col-move-bottom\"> </div>"); 	
+     	
+     //列绑定事件
+     $(".x-grid3-hd").mousedown(function(e){
+       var o = $(this), x = e.x || e.pageX, offset = o.offset(), n = offset.left + o.width() - x;
+       document.title = n;
+	   if (n > 3){       
+         /*缓存当前列*/
+         _t.oCurCol = this;
+         _t.colClicktag = true;
+         /*document.title = (e.clientX+12) + "px," + (e.clientY+20) + "px, " + this.textContent + "flag:" + _t.colClicktag;*/
+         var proxy = document.getElementById("drag-proxy");
+         proxy.style.left = (e.clientX+12) + "px";
+         proxy.style.top = (e.clientY+20) + "px";
+         
+         _t.closeClicktag = _t.bind(_t.closeClicktag, _t),
+         _t.colDrag = _t.bind(_t.colDrag, _t);
+         $(document).unbind("mouseup",_t.closeClicktag).unbind("mousemove", _t.colDrag)
+                  .bind("mouseup",_t.closeClicktag).bind("mousemove", _t.colDrag);           
+       }           
+     });	     
      
      return this;
   }
