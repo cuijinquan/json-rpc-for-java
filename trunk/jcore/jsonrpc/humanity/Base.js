@@ -78,6 +78,7 @@
 	      }
 	    });
 	  };
+	  Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this};
       return this;
   },binds: function(a)
   {
@@ -85,7 +86,7 @@
        this[a[i]] = this[a[i]].bind(this);
   },
   /* 一些初始化动作 */
-  bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this}, 1),
+  bUnload: 1,
   a:[],nDatetime:24 * 60 * 60 * 1000,
   /* 获取对象o的父亲节点 ，例如 Base.p(o, 'TR') */
   p:function(o,szTagName)
