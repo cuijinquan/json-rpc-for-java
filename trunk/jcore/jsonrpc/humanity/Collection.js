@@ -27,7 +27,7 @@
             o = $(this);
             if(-1 < o.attr("class").indexOf("x-grid3-hd"))
             {
-	            if(b.length - 1 > i)
+	            if(b.length > i)
 	            {
 	                var setTdw = function(oTd, w)
 	                {
@@ -36,6 +36,7 @@
 	                /* 数据体第一行中的td对象 */
 		            o1 = $(a[i]);w = o1.width();
 		            setTdw(o, w);
+		            setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
 		            /*调整统计信息的列宽度*/
 		            setTdw($(sta[i]), w);
 		            /* Fixed */
@@ -57,18 +58,18 @@
             }
          });
      });
-     _t.onResize.start();
          
      /* 滚动条图层宽度的设置 */
      $("#" + szId + " div[@class=x-grid3-scroller]").each(function()
      {
-        w = $(this);w.css({width: w.width() + "px"});
+        w = $(this);w.css({width: w.width() + "px"}).parent("td").css({width: w.width() + "px"});
      }).scroll(function()
      {
         var o = $(this);
         $("#" + szId + "_scroll").attr("scrollTop", o.attr("scrollTop"));
         $("#" + szId + " div[@class=x-grid3-header-inner]").attr("scrollLeft", o.attr("scrollLeft"));
      });
+     _t.onResize.start();
      i = 0;
      b.each(function()
      {
@@ -102,7 +103,8 @@
 		              if(s)
 		              {
 		                 _t.oTd.css({width: w, cursor:"default"});
-		                 
+		                 /* 远控设置style */
+                         rpc.XuiRpc.setCollectionColStyle(szId, parseInt(s[1].replace(/[^\d]*/g, '')), "width", w);
 		                 $("#" + szId + " td[@class*=" + s[1] + "]").css({width: w}).find
 		                 ("[@class*=x-grid3-hd]").each(function()
 		                 {
@@ -136,8 +138,12 @@
   },/* 隐藏列 */
   onclickColSlct:function(szId, n, oLi,e)
   {
-    this.oCur = this.getDom(szId);var o = $("#" + szId + " td[class*=x-grid3-td-" + n + "]");
-    "none" == o[0].style.display ? o.show() : o.hide();
+    this.oCur = this.getDom(szId);var o = $("#" + szId + " td[class*=x-grid3-td-" + n + "]"), s = o[0].style.display;
+    if("none" == o[0].style.display)
+       o.show(), s = 'block';
+    else o.hide(), s = 'none';
+    /* 远控设置style */
+    rpc.XuiRpc.setCollectionColStyle(szId, n - 1, "display", s);
     $(oLi).toggleClass("x-menu-item-checked");
     e && (this.preventDefault(e), this.stopPropagation(e));
     this.onResize.start();
