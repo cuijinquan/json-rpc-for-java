@@ -230,6 +230,7 @@
                s1.push(this.name + "=" + escape(_t.decodeStr(s2)));
           });
        }
+       else s1.push(this);
     });
     /* data为请求刷新的对象，格式为[id,1或true表示过滤后面的字段,需要过滤的字段] */
     o.data.each(function(){s.push(this.join(","))});
