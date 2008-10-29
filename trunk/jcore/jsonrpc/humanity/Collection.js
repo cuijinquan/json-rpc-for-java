@@ -20,9 +20,9 @@
      _t.oCur = _t.getDom(szId); /* 当前操作的collection对象 */
      _t.onResize.add(function()
      {
-         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']"), w, o, o1;
+         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']").not(":hidden"), w, o, o1;
          i = 0;
-         b.each(function()
+         b.not(":hidden").each(function()
          {
             o = $(this);
             if(-1 < o.attr("class").indexOf("x-grid3-hd"))
@@ -35,8 +35,9 @@
 	                };
 	                /* 数据体第一行中的td对象 */
 		            o1 = $(a[i]);w = o1.width();
-		            setTdw(o, w);
-		            setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
+		            if(0 < w)
+		              setTdw(o, w),
+		              setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
 		            /*调整统计信息的列宽度*/
 		            setTdw($(sta[i]), w);
 		            /* Fixed */
@@ -104,7 +105,7 @@
 		              {
 		                 _t.oTd.css({width: w, cursor:"default"});
 		                 /* 远控设置style */
-                         rpc.XuiRpc.setCollectionColStyle(szId, parseInt(s[1].replace(/[^\d]*/g, '')), "width", w);
+                         rpc.XuiRpc.setCollectionColStyle(szId, parseInt(/(\d+)$/g.exec(s[1])[1]) - 1, "width", w);
 		                 $("#" + szId + " td[@class*=" + s[1] + "]").css({width: w}).find
 		                 ("[@class*=x-grid3-hd]").each(function()
 		                 {
@@ -131,6 +132,7 @@
 		              _t.RsProxy.style.left = (parseInt(_t.RsProxy.style.left) + e.screenX - _t.RsMarker["_x"]) + "px";
 		              _t.RsMarker["_x"] = e.screenX;
 		           }
+		           e && (_t.preventDefault(e), _t.stopPropagation(e));
 		        });
            }
            else _t.RsProxy.style.display = _t.RsMarker.style.display = "none";
