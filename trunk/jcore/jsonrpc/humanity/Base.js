@@ -51,7 +51,7 @@
 	        _t.apply(o || _t, Base.A(arguments).concat(a));
 	     }
 	  };
-	  /*扩展jQuery insertNode函数，兼容FF没有 insertAdjacentElement函数*/
+	  /* 扩展jQuery insertNode函数，兼容FF没有 insertAdjacentElement函数 */
 	  $.fn.insertNode = function(where, node){
 	    return this.each(function(){
 	      if (this.insertAdjacentElement){
@@ -78,7 +78,6 @@
 	      }
 	    });
 	  };
-	  Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this};
       return this;
   },binds: function(a)
   {
@@ -86,7 +85,7 @@
        this[a[i]] = this[a[i]].bind(this);
   },
   /* 一些初始化动作 */
-  bUnload: 1,
+  bUnload: (Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this},1),
   a:[],nDatetime:24 * 60 * 60 * 1000,
   /* 获取对象o的父亲节点 ，例如 Base.p(o, 'TR') */
   p:function(o,szTagName)
