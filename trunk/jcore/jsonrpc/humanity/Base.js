@@ -275,7 +275,7 @@
      o = obj.getElementsByTagName("div");
      for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
      oTmp.style.display = old.style.display = "block";
-  },hiddenOther:function(){/*扩展用*/},hiddenShadow:function(o)
+  },hiddenOther:function(){},hiddenShadow:function(o)
   {
     var oTmp;
     if(oTmp = this.getDom("xuiSelectShdow"))oTmp.style.display='none';
@@ -319,7 +319,7 @@
   {
      e = e || window.event;
      return e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
-  },  /* 在对象el中插入html代码 */
+  }, /* 在对象el中插入html代码 */
   insertHtml:function(el, where, html){
   where = where.toLowerCase();
   if(el.insertAdjacentHTML){
@@ -416,13 +416,7 @@
     getWeek:function(o)
     {
        if(3 == arguments.length)arguments[1]--,o = new Date(arguments[0], arguments[1], arguments[2]);
-       return o.getDay();
-       /* 两种计算星期几的公式  */
-       /* var y = o.getFullYear(), m = o.getMonth() + 1, day = o.getDate(), ds = day, i, a = this.pkData = [0, 31,(this.isLeapYear(y) ? 29 : 28),31,30,31,30,31,31,30,31,30,31]; */
-       /* this.year = y, this.month = m, this.day = day; */
-       /* for(i = 0; i < m; i++)ds += a[i]; */
-       /* // return parseInt((ds + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7); */
-       /* return y--, parseInt((y + y / 4 - y / 100 + y / 400 + ds) % 7) */
+       return o.getDay();     
     }, /* 保证fn只能在一个线程里执行 */
      RunOne: function(fn, o)
      {
@@ -546,7 +540,7 @@
        a[0] = parseInt(r.left + scrollLeft);
        a[1] = parseInt(r.bottom + scrollTop);
     }
-    else if(document.getBoxObjectFor)    // gecko    
+    else if(document.getBoxObjectFor)
 	{
 	  r = document.getBoxObjectFor(o); 
 	  var s = this.getStyle(o, "borderLeftWidth"),
