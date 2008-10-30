@@ -276,7 +276,7 @@
      o = obj.getElementsByTagName("div");
      for(w = 0; w < o.length; w++)o[w].style.height = obj.style.height;
      oTmp.style.display = old.style.display = "block";
-  },hiddenOther:function(){},hiddenShadow:function(o)
+  },hiddenShadow:function(o)
   {
     var oTmp;
     if(oTmp = this.getDom("xuiSelectShdow"))oTmp.style.display='none';
