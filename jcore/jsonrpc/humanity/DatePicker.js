@@ -431,7 +431,7 @@
 	hidden: function()
 	{
 	   this.hiddenShadow(this.XuiDatePicker);
-	   this.hiddenOther();
+	   this.dpIpt["xuiBlur"] && this.dpIpt["xuiBlur"]();
 	}, /*显示图层*/
 	showSelectDiv: function(e,o)
 	{

@@ -121,7 +121,7 @@
   {
      this.hiddenShadow(this.getDom("_Xui_SelectDiv"));
      this.updata((this.descObj || {}).value || "");
-     this.hiddenOther();
+     this.descObj["xuiBlur"] && this.descObj["xuiBlur"]();
   }, /* 更新data数据 */
   updata:function(s)
   {
