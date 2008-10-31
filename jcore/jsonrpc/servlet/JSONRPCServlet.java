@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import jcore.jsonrpc.common.Content;
 import jcore.jsonrpc.common.JSONRPCBridge;
 import jcore.jsonrpc.common.JsonRpcRegister;
+import jcore.jsonrpc.common.face.ISecureCheck;
 import jcore.jsonrpc.humanity.LoadJsObj;
 
 /*******************************************************************************
@@ -35,12 +36,17 @@ public class JSONRPCServlet extends HttpServlet {
 
 	// 支持Gzip，默认不支持
 	private boolean bGzip = false;
+	// 安全检查的类
+	private ISecureCheck check = null;
+	private String secureCheck = null;
 
 	private ServletConfig config = null;
 
 	public void destroy() {
 		super.destroy();
 		config = null;
+		check = null;
+		secureCheck = null;
 		this.charset = null;
 	}
 
@@ -55,6 +61,15 @@ public class JSONRPCServlet extends HttpServlet {
 	public void myInit(ServletConfig config, JSONRPCBridge brg) {
 
 		String szPam = null;
+		secureCheck = config.getInitParameter("secureCheck");
+		if(null != secureCheck)
+		{
+			try {
+				check = (ISecureCheck) Class.forName(secureCheck).newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		charset = "UTF-8";
 		// 配置中指定默认支持gzip
 		bGzip = "true".equals(config.getInitParameter("gzip"));
@@ -101,6 +116,10 @@ public class JSONRPCServlet extends HttpServlet {
 
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ClassCastException {
+		// 安全处理
+		if(null != check && !check.secureCheck(request, response))
+			return;
+		
 		HttpSession session = request.getSession(false);
 		if (null == session)
 			session = request.getSession(true);
