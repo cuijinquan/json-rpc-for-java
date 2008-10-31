@@ -1,6 +1,6 @@
 package jcore.jsonrpc.humanity;
 
-import java.io.Reader;
+import java.io.InputStream;
 
 import jcore.jsonrpc.common.Content;
 import jcore.jsonrpc.common.JsonRpcObject;
@@ -24,23 +24,27 @@ public class LoadJsObj extends JsonRpcObject{
 	public ResultObject getJsObj(String szName) 
 	{
 		ResultObject oRst = new ResultObject();
-		Reader f = null;
+		InputStream f = null;
 		try
 		{
-			f = Tools.getResourceAsReader("jcore/jsonrpc/humanity/" + szName + ".js");
+			f = Tools.getResourceAsStream("jcore/jsonrpc/humanity/" + szName + ".js");
 			if(null != f)
 			{
 				StringBuffer buf = new StringBuffer();
-				char []b = new char[1024];
+				byte []b = new byte[1024];
 				int j = 0;
 				while(1024 == (j = f.read(b, 0, 1024)))
 				{
-					buf.append(b, 0, j);
+					buf.append(new String(b, "UTF-8"));
 				}
 				if(0 < j)
-					buf.append(b, 0, j);
-				String s = buf.toString().trim().replaceAll("\\/\\*[^\\*]+\\*\\/", "");
-				s = Content.JS(new String(s.getBytes(), "UTF-8"));
+				{
+					byte []b1 = new byte[j];
+					System.arraycopy(b, 0, b1, 0, j);
+					buf.append(new String(b1, "UTF-8"));
+				}
+				String s = Content.JS(buf.toString().trim()).replaceAll("\\/\\*[^\\*]+\\*\\/", "");
+//				s = Content.JS(s);
 				s = s.replaceFirst("^\\\\ufeff", "");
 				s = s.replaceAll("([\\t ]*\\r\\n[\\t ]*)+", "\r\n");
 				s = s.replaceAll("[ \\t]*\\n[\\t ]+", "\n");
