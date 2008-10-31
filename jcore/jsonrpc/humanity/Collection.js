@@ -72,6 +72,13 @@
      });
      _t.onResize.start();
      i = 0;
+     w = $("#" + szId + "_xh div[@class*=x-grid3-row][@id*=" + szId + "_R_]");
+     /* 行高度调整 */
+     $("#" + szId + " div[@class=x-grid3-body]").find("div[@class*=x-grid3-row][@id*=" + szId + "_R_]").each(function()
+     {
+        $(w[i++]).css({height: $(this).height() + "px"});
+     });
+     i = 0;
      b.each(function()
      {
         if(b.length > i++)/* 控制最后一列不处理 */
@@ -105,7 +112,7 @@
 		              {
 		                 _t.oTd.css({width: w, cursor:"default"});
 		                 /* 远控设置style */
-                         rpc.XuiRpc.setCollectionColStyle(szId, parseInt(/(\d+)$/g.exec(s[1])[1]) - 1, "width", w);
+                         rpc.XuiRpc.setCollectionColWidth(szId, parseInt(/(\d+)$/g.exec(s[1])[1]) - 1, w);
 		                 $("#" + szId + " td[@class*=" + s[1] + "]").css({width: w}).find
 		                 ("[@class*=x-grid3-hd]").each(function()
 		                 {
@@ -178,7 +185,7 @@
        }
     });
     $(_t.clctSlctCols).find("ul")[0].innerHTML = a.join("");
-    _t.showDiv(o1, _t.clctSlctCols, o2.width(), o2.height(), $(o1).offset().left + $(o1).width());
+    _t.showDiv(o1, _t.clctSlctCols, o2.width(), 0, $(o1).offset().left + $(o1).width());
   },hide2:function(e)
   {
     this.clearTm();
@@ -224,13 +231,26 @@
         fnG = function(oIptDiv)
         {
           return _t.p(_t.p(oIptDiv, "DIV"), "DIV");
-        }, oI = oIptDiv; 
-     if(!oIptDiv || !/INPUT|SELECT|TEXTAREA/gi.exec(oIptDiv.nodeName))return _t;
+        }, oI = oIptDiv, szOldVl; 
+     if(!oI || !/INPUT|SELECT|TEXTAREA/gi.exec(oI.nodeName))return _t;
      _t.oCur = _t.getDom(szClctId), o = $(o);
+     /* 调用rpc更新数据，如果更新失败，则提示并还原数据，否则隐藏输入对象 */
+     szOldVl = o.text();
+     oI["xuiBlur"] = function()
+     {
+        var pall = $(fnG(oI)), bRst = false, szVal = pall.find(":input:last").val(), szErr;
+        /* rpc提交 */
+        ;
+        szErr = rpc.XuiRpc.getErrMsg();
+        if(!bRst)
+          szVal = szOldVl, szErr && alert(szErr);
+        o.find(":first").text(szVal);
+        pall.hide();
+     };
+     if(0 == $(fnG(oI)).find("table").size())
      $(oIptDiv).bind("blur", function()
      {
-        var oIpt = $(fnG(this)).hide();
-        o.find(":first").text($(this).val());
+        oI["xuiBlur"]();
         $(this).unbind("blur", arguments.callee);
      });
      oIptDiv = fnG(oIptDiv);
