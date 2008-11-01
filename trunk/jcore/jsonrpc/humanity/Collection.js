@@ -1,26 +1,29 @@
 {
   oCur:null,
-  onResize: new function()
+  /* 锁定区域宽度的智能控制 */
+  atRsLkWidth:function(szId)
   {
-     var _t = this;
-     _t.start || (_t.start = function(){});
-     _t.add = function(fn)
+     var oTd = $("#" + szId + "_lc"), w = 0, n = 10, w1 = $("#" + szId).width();
+     oTd.find("table.x-grid3-header td[class]").not(":hidden").each(function()
      {
-        var f = _t.start;
-        _t.start = fn;
-        f.call(this);
-        return _t;
-     };
+        w += $(this).width();
+     });
+     oTd.css({width: (w + n) + "px"}).next().each(function()
+     {
+        oTd = $(this);oTd.css({width: (w1 - w - n) + "px"})
+        .find("div.x-grid3-scroller").css({width: oTd.width() + "px"});
+     });
   }, /* 添加collection进行处理 */
   addResize: function(szId)
   {
-     var _t = this, 
-         b = $("#" + szId + " td[@class*='" + szId + "_hd_']"), i, /* 标题行中的Td */
-         sta = $("#" + szId + " div[@class=statistics] > table td"); /* 标题行中统计信息的Td */
+     var _t = this, b = $("#" + szId + " td[@class*='" + szId + "_hd_']");
      _t.oCur = _t.getDom(szId); /* 当前操作的collection对象 */
-     _t.onResize.add(function()
+     _t.onResize = function(szId)
      {
-         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']").not(":hidden"), w, o, o1;
+         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']").not(":hidden"), w, o, o1,
+             b = $("#" + szId + " td[@class*='" + szId + "_hd_']"),
+             b1 = $("#" + szId + " td[@class*='" + szId + "_ft_']").not(":hidden"), i, /* 标题行中的Td */
+             sta = $("#" + szId + " div[@class=statistics] > table td"); /* 标题行中统计信息的Td */;
          i = 0;
          b.not(":hidden").each(function()
          {
@@ -36,10 +39,10 @@
 	                /* 数据体第一行中的td对象 */
 		            o1 = $(a[i]);w = o1.width();
 		            if(0 < w)
-		              setTdw(o, w),
+		              setTdw(o, w), setTdw($(b1[i]), w),
 		              setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
 		            /*调整统计信息的列宽度*/
-		            setTdw($(sta[i]), w);
+		            /*setTdw($(sta[i]), w);*/
 		            /* Fixed */
 		            if(0 < i)
 		            {  /* o 为标题 */
@@ -58,19 +61,23 @@
 	            i++;
             }
          });
-     });
+         _t.atRsLkWidth(szId);
+     };
          
      /* 滚动条图层宽度的设置 */
      $("#" + szId + " div[@class=x-grid3-scroller]").each(function()
      {
-        w = $(this);w.css({width: w.width() + "px"}).parent("td").css({width: w.width() + "px"});
+        w = $(this);w.css({width: (w.width() + 10)+ "px"}).parent("td").css({width: w.width() + "px"});
      }).scroll(function()
      {
         var o = $(this);
         $("#" + szId + "_scroll").attr("scrollTop", o.attr("scrollTop"));
         $("#" + szId + " div[@class=x-grid3-header-inner]").attr("scrollLeft", o.attr("scrollLeft"));
      });
-     _t.onResize.start();
+     $(document).ready(function()
+     {
+        _t.onResize(szId);
+     });     
      i = 0;
      w = $("#" + szId + "_xh div[@class*=x-grid3-row][@id*=" + szId + "_R_]");
      /* 行高度调整 */
@@ -78,6 +85,13 @@
      {
         $(w[i++]).css({height: $(this).height() + "px"});
      });
+     /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
+     var oClct = $("#" + szId), h = oClct.attr("scrollHeight") - oClct.height();
+     $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll")).each(function()
+     {
+        oClct = $(this);oClct.css({height: (oClct.height() - h) + "px"});
+     });
+     
      i = 0;
      b.each(function()
      {
@@ -119,7 +133,7 @@
 		                    if("TD" == this.nodeName || "DIV" == this.nodeName)
 		                    $(this).css({width: w});
 		                 });
-		                 _t.onResize.start();
+		                 _t.onResize(szId);
 		                 _t.oTd = null;
 		                 $(document).unbind("mousemove", fnTmp);
 		                 $(document).unbind("mouseup", arguments.callee);
@@ -155,7 +169,7 @@
     rpc.XuiRpc.setCollectionColStyle(szId, n - 1, "display", s);
     $(oLi).toggleClass("x-menu-item-checked");
     e && (this.preventDefault(e), this.stopPropagation(e));
-    this.onResize.start();
+    this.onResize(szId);
     return false;
   },/* 显示排序图层 */
   showSortClct:function(e,o,szId)
@@ -174,7 +188,7 @@
   {
     var _t = this, a = [], szId = _t.oCur.id,
        o2 = $(_t.clctSlctCols), i = 1;
-    $(_t.oCur).find("td[@class*=" + szId + "_hd_]").each(function()
+    $("#" + szId + " td[@class*=" + szId + "_hd_]").each(function()
     {
        var o = $(this), s = o.attr("class");
        if(-1 < s.indexOf("-" + i))
@@ -186,6 +200,7 @@
     });
     $(_t.clctSlctCols).find("ul")[0].innerHTML = a.join("");
     _t.showDiv(o1, _t.clctSlctCols, o2.width(), 0, $(o1).offset().left + $(o1).width());
+    $(_t.clctSlctCols).css({display:'block',overflow:'visible',height:'auto'});
   },hide2:function(e)
   {
     this.clearTm();
@@ -227,24 +242,43 @@
   },/* 事件，当前对象，collection ID，字段名 */
   clickForEdit:function(e, o, szClctId, szFldNm, n)
   {
-     var _t = this, szId = szClctId + "_" + szFldNm + "_" + n, oIptDiv = _t.getDom(szId), nBorder = 5,
+     var _t = this, szId = szClctId + "_" + szFldNm + "_" + n, oIptDiv = _t.getDom(szId), 
+         nBorder = 5, szRcls = /(?:\b|\s)(R\d+)(?:\b|\s)/g.exec(_t.p(o, "DIV").className)[1], 
         fnG = function(oIptDiv)
         {
           return _t.p(_t.p(oIptDiv, "DIV"), "DIV");
-        }, oI = oIptDiv, szOldVl; 
+        }, oI = oIptDiv; 
      if(!oI || !/INPUT|SELECT|TEXTAREA/gi.exec(oI.nodeName))return _t;
      _t.oCur = _t.getDom(szClctId), o = $(o);
      /* 调用rpc更新数据，如果更新失败，则提示并还原数据，否则隐藏输入对象 */
-     szOldVl = o.text();
      oI["xuiBlur"] = function()
      {
-        var pall = $(fnG(oI)), bRst = false, szVal = pall.find(":input:last").val(), szErr;
+        var pall = $(fnG(oI)), bRst = false, szVal = pall.find(":input:last").val(), szErr
+            oTds = $("#" + szClctId + " div." + szRcls + " td[@class*=x-grid3-td-]").not(".x-grid3-td-numberer"),
+            oHds = $("#" + szClctId + " td[@class*=" + szClctId + "_hd_]"),
+            oParm = {}, aF = [], y = 0, oRst = null, 
+            oDv = o.find(":first"), szOldvl = oDv.text();
+        oDv.text(szVal);
         /* rpc提交 */
-        ;
-        szErr = rpc.XuiRpc.getErrMsg();
-        if(!bRst)
-          szVal = szOldVl, szErr && alert(szErr);
-        o.find(":first").text(szVal);
+        if(oTds.size() == oHds.size())
+           oHds.each(function()
+           {
+              var szFd;
+              aF.push(szFd = $(this).attr("field"));
+              oParm[szFd] = $(oTds[y++]).text();
+           });
+        oParm[aF[/x-grid3-col-(\d+)/g.exec(oDv.attr("class"))[1]]  + "_old"] = szOldvl;
+        oRst = rpc.XuiRpc.EditCollectionRow(szClctId, oParm, false);
+        if(szErr = rpc.XuiRpc.getErrMsg())
+           alert(szErr);
+        /* 数据的回写 */
+        if(oRst)
+        {
+           y = 0, oTds.each(function()
+           {
+              $(this).find(":first").text(oRst[aF[y++]]);
+           });
+        }
         pall.hide();
      };
      if(0 == $(fnG(oI)).find("table").size())
@@ -324,10 +358,6 @@
      var _t = this;
      _t.binds(["clickForEdit", "clearTm", "hiddenClct", "hide2", "onclickColSlct"]);
      _t.clctTm = 0;
-     $(document).ready(function()
-     {
-        _t.onResize.start();
-     });
       _t.insertHtml(document.body, "beforeend", "<div id=\"sortClct\" class=\"x-layer x-menu\" style=\"position:absolute; z-index: 15000; display:none;\"><a onclick=\"return false;\" href=\"javascript:void(0)\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-item xg-hmenu-sort-asc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Sort Ascending</a></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-item xg-hmenu-sort-desc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>SortDescending</a></li><li class=\"x-menu-list-itemx-menu-sep-li\"><span class=\"x-menu-sep\"></span></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" onclick=\"Collection.showSlctCols(event, this)\" class=\"x-menu-item x-menu-item-arrow\"><img class=\"x-menu-item-icon x-cols-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Columns</a></li></ul></div><div class=\"x-grid3-resize-marker\" id=\"x-grid3-resize-marker\">&nbsp;</div><div class=\"x-grid3-resize-proxy\" id=\"x-grid3-resize-proxy\">&nbsp;</div><div id=\"clctSlctCols\" class=\"x-layer x-menu\" style=\"position: absolute; z-index: 15005; display:none;\"><a onclick=\"return false;\" href=\"javascript:void\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"></ul></div>");
      _t.clctSlctCols = _t.getDom("clctSlctCols");
      _t.RsMarker = _t.getDom("x-grid3-resize-marker");/* 前 */
@@ -343,25 +373,23 @@
      }); /* 排序对象 */
      $(_t.sortClct).mousemove(_t.clearTm).mouseover(_t.clearTm);
      
-       //插入列移动Div
+      /* 插入列移动Div */
      _t.insertHtml(document.body, "beforeend", "<div id=\"drag-proxy\" class=\"x-dd-drag-proxy x-dd-drop-nodrop x-grid3-col-dd\" style=\"position: absolute; z-index: 15000; visibility: hidden; left: -10000px; top: -10000px;\">"
      	+ "<div class=\"x-dd-drop-icon\"></div>"
      	+ "<div id=\"drag-ghost\" class=\"x-dd-drag-ghost\"></div>"
      	+ "</div>");
      	
-    //插入列移动标识
+    /* 插入列移动标识 */
     _t.insertHtml(document.body, "beforeend", "<div id=\"moveTop\" class=\"col-move-top\"> </div>"
       + "<div id=\"moveBottom\" class=\"col-move-bottom\"> </div>"); 	
      	
-     //列绑定事件
+     /* 列绑定事件 */
      $(".x-grid3-hd").mousedown(function(e){
        var o = $(this), x = e.x || e.pageX, offset = o.offset(), n = offset.left + o.width() - x;
-       document.title = n;
 	   if (n > 3){       
-         /*缓存当前列*/
+         /* 缓存当前列 */
          _t.oCurCol = this;
          _t.colClicktag = true;
-         /*document.title = (e.clientX+12) + "px," + (e.clientY+20) + "px, " + this.textContent + "flag:" + _t.colClicktag;*/
          var proxy = document.getElementById("drag-proxy");
          proxy.style.left = (e.clientX+12) + "px";
          proxy.style.top = (e.clientY+20) + "px";
