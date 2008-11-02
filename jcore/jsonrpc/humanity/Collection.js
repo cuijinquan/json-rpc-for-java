@@ -237,7 +237,7 @@
      /* 调用rpc更新数据，如果更新失败，则提示并还原数据，否则隐藏输入对象 */
      oI["xuiBlur"] = function()
      {
-        var pall = $(fnG(oI)), bRst = false, szVal = pall.find(":input:last").val(), szErr
+        var pall = $(fnG(oI)), bRst = false, szVal = pall.find(":input:first").val(), szErr
             oTds = $("#" + szClctId + " div." + szRcls + " td[@class*=x-grid3-td-]").not(".x-grid3-td-numberer"),
             oHds = $("#" + szClctId + " td[@class*=" + szClctId + "_hd_]"),
             oParm = {}, aF = [], y = 0, oRst = null, 
