@@ -144,9 +144,9 @@
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
+     var _t = this;
      return this.RunOne(function()
      {
-       var _t = this;
        _t.stopPropagation(e),_t.preventDefault(e);
        if(oIpt.readOnly || oIpt.disabled)return false;
        if(_t.isIE)
