@@ -139,6 +139,8 @@
    	 if(0 < this.getData(this.descObj.id).length)
        this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
          parseInt(o.style.width, 10), parseInt(o.style.height, 10));
+     (o = $(o)).css({overflowY:'auto'});
+     if(170 > o.attr('scrollHeight'))o.css({overflowY:'visible'});
   }, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
@@ -245,7 +247,7 @@
     o[szId] = oE.id, o["_lstNum"] = 0, o["_blur_"]= false, fns();
 
     /* 修正显示图层的上下位置 */
-    if(190 < p.top - document.documentElement.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;
+    /* if(190 < p.top - document.documentElement.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;*/
     /* 失去焦点就隐藏 */
     if(!oE[szId])
     {
