@@ -177,7 +177,8 @@
        }
        this.xuiCurYear.innerHTML = this.year + "\u5e74" + this.month + "\u6708";
        this.setValue(e);
-	   this.dpIpt.focus();
+       /* ie 下collection编辑列中发生焦点无法移动在不可见位置错误修正 */
+	   !this.dpIpt["xuiBlur"] && this.dpIpt.focus();
 	},addDate: function(n)
 	{
 	   /* 新的日期 */
