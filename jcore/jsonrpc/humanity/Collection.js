@@ -10,8 +10,10 @@
      });
      oTd.css({width: (w + n) + "px"}).next().each(function()
      {
-        oTd = $(this);oTd.css({width: (w1 - w - n) + "px"})
-        .find("div.x-grid3-scroller").css({width: oTd.width() + "px"});
+        n = w1 - w - n;
+        oTd = $(this);
+        if(0 < n)oTd.css({width: n + "px"});
+        oTd.find("div.x-grid3-scroller").css({width: oTd.width() + "px"});
      });
   }, /* 添加collection进行处理 */
   addResize: function(szId)
@@ -20,49 +22,32 @@
      _t.oCur = _t.getDom(szId); /* 当前操作的collection对象 */
      _t.onResize = function(szId)
      {
-         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']").not(":hidden"), w, o, o1,
-             b = $("#" + szId + " td[@class*='" + szId + "_hd_']"),
+         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']").not(":hidden"), /* 第一行 */ 
+             w, o, o1,b = $("#" + szId + " td[@class*='" + szId + "_hd_']").not(":hidden"),
              b1 = $("#" + szId + " td[@class*='" + szId + "_ft_']").not(":hidden"), i, /* 标题行中的Td */
              sta = $("#" + szId + " div[@class=statistics] > table td"); /* 标题行中统计信息的Td */;
          i = 0;
-         b.not(":hidden").each(function()
+         b.each(function()
          {
             o = $(this);
-            if(-1 < o.attr("class").indexOf("x-grid3-hd"))
+            var setTdw = function(oTd, w)
             {
-	            if(b.length > i)
-	            {
-	                var setTdw = function(oTd, w)
-	                {
-	                   oTd.css({width: w+ "px"});
-	                };
-	                /* 数据体第一行中的td对象 */
-		            o1 = $(a[i]);w = o1.width();
-		            if(0 < w)
-		              setTdw(o, w), setTdw($(b1[i]), w),
-		              setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
-		            /*调整统计信息的列宽度*/
-		            /*setTdw($(sta[i]), w);*/
-		            /* Fixed */
-		            if(0 < i)
-		            {  /* o 为标题 */
-		               var nC = o.offset().left - o1.offset().left;
-		               if(0 != nC)
-		               {
-		                 $(b[i - 1]).each(function()
-		                 {
-		                     var oP = $(this);
-		                     w = oP.width() - nC;
-		                     setTdw(oP, w);
-		                 });
-		               }
-		            }
-	            }
-	            i++;
-            }
+               oTd.css({width: w + "px"});
+            };
+            /* 数据体第一行中的td对象 */
+            o1 = $(a[i]);w = o1.width();
+            if(3 < w)
+              setTdw(o, w), setTdw($(b1[i]), w),
+              setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
+            /*调整统计信息的列宽度*/
+            /*setTdw($(sta[i]), w);*/
+            i++;
          });
          _t.atRsLkWidth(szId);
      };
+     
+     /* IE下标题高度不一致的修正 */
+     if(_t.isIE)$("#" + szId + "_lc table.x-grid3-header").css({height:1 + $("#" + szId + " div.x-grid3-header").height() + "px"});
          
      /* 滚动条图层宽度的设置 */
      $("#" + szId + " div[@class=x-grid3-scroller]").each(function()
@@ -83,7 +68,7 @@
      /* 行高度调整 */
      $("#" + szId + " div[@class=x-grid3-body]").find("div[@class*=x-grid3-row][@id*=" + szId + "_R_]").each(function()
      {
-        $(w[i++]).css({height: $(this).height() + "px"});
+        $(w[i++]).css({height: (_t.isIE ? 1 : 0) + $(this).height() + "px"});
      });
      /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
      var oClct = $("#" + szId), h = oClct.attr("scrollHeight") - oClct.height();
@@ -101,8 +86,7 @@
            e = e || window.event;
            var o = $(this), x = e.x || e.pageX, y = e.y || e.pageY, offset = o.offset(), 
                n = Math.abs(offset.left + o.width() - x);
-           if( n <= 3)o[0].style.cursor = "col-resize";
-           else o[0].style.cursor = "default";
+           $(o[0]).css({cursor: n <= 3 && !_t.isOpera ? "col-resize" : "default"});
           }).mousedown(function(e)
           {
            e = e || window.event; /* oTd当前td */
