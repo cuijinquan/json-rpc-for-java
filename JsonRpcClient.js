@@ -25,7 +25,7 @@ function JsonRpcClient(url) {
 			   return String.fromCharCode(arguments[1]);
 			}), _this.xml.responseXML), delete _this.xml.onreadystatechange, delete _this.xml;
 	    }};
-	    // if(-1 == o.url.indexOf("http:"))o.url = [lct.protocol, "//", lct.host, ":", lct.port || 80].join("") + o.url;
+	    if(-1 == o.url.indexOf("http:"))o.url = [lct.protocol, "//", lct.host, ":", lct.port || 80].join("") + o.url;
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
 			o.bAsync && (this.xml.onreadystatechange = function () {
 				fncbk();
