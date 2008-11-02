@@ -158,20 +158,22 @@
        _t.getData(oIpt.id);
        var n = 0, o = _t.SelectDiv, oT = _t.getObj(oIpt.id),
            s = oIpt.value.replace(/(^\s+)|(\s+$)/g, "");
-       if(!o)return false;
-       /* 检索过滤处理 */
-       _t.updata(s);
-       n = _t.getData(oIpt.id).length;
-       if(oT["allowEdit"] || 1 == n)
+       if(o)
        {
-          s = _t.getValueByDesc(s);
-          s && _t.setValue(s, 2, e);
+	       /* 检索过滤处理 */
+	       _t.updata(s);
+	       n = _t.getData(oIpt.id).length;
+	       if(oT["allowEdit"] || 1 == n)
+	       {
+	          s = _t.getValueByDesc(s);
+	          s && _t.setValue(s, 2, e);
+	       }
+	       else if(oIpt.getAttribute("oldValue") != s || 0 == n)
+	          _t.setValue("", 2, e);
+	       if(0 < n)
+	          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
+	       else _t.hidden(e), !oT["allowEdit"] && this.addInvalid(oIpt);
        }
-       else if(oIpt.getAttribute("oldValue") != s || 0 == n)
-          _t.setValue("", 2, e);
-       if(0 < n)
-          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
-       else _t.hidden(e), !oT["allowEdit"] && this.addInvalid(oIpt);
        if(_t.isIE)
 	   {
 	       _t.addEvent(oIpt, "propertychange",  (_t[oIpt.id] || (_t[oIpt.id] = {})).onpropertychange = function(e)
