@@ -45,7 +45,6 @@
          });
          _t.atRsLkWidth(szId);
      };
-     
      /* IE下标题高度不一致的修正 */
      if(_t.isIE)$("#" + szId + "_lc table.x-grid3-header").css({height:1 + $("#" + szId + " div.x-grid3-header").height() + "px"});
          
@@ -140,7 +139,7 @@
         })});
         $(document).ready(function()
         {
-           _t.onResize(szId);_t.isIE6 && _t.onResize(szId);document.title = [szId, _t.isIE6]; 
+           _t.onResize(szId);_t.isIE6 && _t.onResize(szId); 
         }); 
   },/* 隐藏列 */
   onclickColSlct:function(szId, n, oLi,e)
@@ -336,7 +335,6 @@
       }  
     }
   },
-
   init: function()
   {
      XUI(this);
