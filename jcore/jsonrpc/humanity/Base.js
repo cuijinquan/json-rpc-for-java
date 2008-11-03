@@ -11,6 +11,7 @@
 	    _t.isOmniweb = -1 < ua.indexOf("omniweb"),
 	    _t.bIE = _t.isIE = (!_t.isOpera && ua.indexOf("msie") > -1 && !_t.isOmniweb),
 	    _t.isIE7 = !_t.isOpera && ua.indexOf("msie 7") > -1,
+	    _t.isIE6 = !_t.isOpera && ua.indexOf("msie 6") > -1,
 	    _t.isGecko = !_t.isSafari && ua.indexOf("gecko") > -1,
 	    _t.isGecko3 = !_t.isSafari && ua.indexOf("rv:1.9") > -1,
 	    _t.isBorderBox = _t.isIE && !_t.isStrict,
