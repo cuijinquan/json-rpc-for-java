@@ -296,7 +296,7 @@
       col2 = "." + this.oCurCol.className.split(" ")[2];
       
       for (var i=0, target=$(col1), source=$(col2); i<target.length; i++){
-        Element(target[i]).insertNode("afterEnd", source[i]);
+        $(target[i]).insertNode("afterEnd", source[i]);
       }
     }
   },
@@ -339,7 +339,6 @@
 
   init: function()
   {
-     XUI(this);
      var _t = this;
      _t.binds(["clickForEdit", "clearTm", "hiddenClct", "hide2", "onclickColSlct"]);
      _t.clctTm = 0;
