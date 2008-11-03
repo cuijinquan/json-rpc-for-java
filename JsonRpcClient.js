@@ -25,7 +25,7 @@ function JsonRpcClient(url) {
 			   return String.fromCharCode(arguments[1]);
 			}), _this.xml.responseXML), delete _this.xml.onreadystatechange, delete _this.xml;
 	    }};
-	    if(-1 == o.url.indexOf("http:"))o.url = [lct.protocol, "//", lct.host, ":", lct.port || 80].join("") + o.url;
+	    if(-1 == o.url.indexOf("http:"))o.url = [lct.protocol, "//", lct.host].join("") + o.url;
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
 			o.bAsync && (this.xml.onreadystatechange = function () {
 				fncbk();
@@ -133,7 +133,7 @@ function JsonRpcClient(url) {
 var rpc = JsonRpcClient(),
     XUI = function()
     {
-        var o = Base, a = o.A(arguments).concat([o]), k, i, p = a[0];
+        var o = Base || rpc.LoadJsObj("Base"), a = o.A(arguments).concat([o]), k, i, p = a[0];
         for(i = 1; i < a.length; i++)
            for(k in a[i])if(!p[k])p[k] = a[i][k];
         return p;
