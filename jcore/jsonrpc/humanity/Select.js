@@ -218,10 +218,6 @@
       if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
       var o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
         oR = this.getOffset(oE),h = oR[3], w = parseInt((obj||{}).width || $(oE.parentNode).width()),
-        p = { left: (oR[0] - (this.bIE ? 2 : 0)) + "px", 
-              top: (oR[1] - (this.bIE ? 3 : 2)) + "px",
-              position: "absolute", display: "block",
-              width: w + "px"},
         k,
         fns = _t.bind(function()
         {
@@ -262,10 +258,9 @@
                  _t.fnMvIstPoint(oE, oE.value.length, oE.value.length, e);
                });
     }
-    for(k in p)o.style[k] = p[k];
     _t.updata(oE.value);
     o.style['height'] = Math.min(15 * _t.getData(oE.id).length, 170) + 'px';
-    o.innerHTML = _t.getSelectDataStr(oE, p.width);
+    o.innerHTML = _t.getSelectDataStr(oE, w);
     var nTm = new Date().getTime();
     _t.show();
     this.lightRow(0);
