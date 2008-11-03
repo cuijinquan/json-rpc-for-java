@@ -339,6 +339,7 @@
 
   init: function()
   {
+     XUI(this);
      var _t = this;
      _t.binds(["clickForEdit", "clearTm", "hiddenClct", "hide2", "onclickColSlct"]);
      _t.clctTm = 0;
