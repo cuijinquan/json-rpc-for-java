@@ -117,14 +117,14 @@ function JsonRpcClient(url) {
 	  try{o = _this.cacheObj[s] || (_this.cacheObj[s] = eval("1," + _this._LoadJsObj.getJsObj(s).getResult()))}catch(e){alert(e.message)};
 	  if(o)
 	  {
-	     if(!o.init)o.init = function()
+	     if(o.init) o = o.init();
+	     else
 	     {
-	        var o = Base, a = o.A(arguments).concat([o]), k, i;
-            for(i = 0; i < a.length; i++)
-              for(k in a[i])if(!this[k])this[k] = a[i][k];
-	        return this
-	     };
-	     _this.cacheObj[s] = o = o.init();
+	       if(Base)
+	        for(var k in Base)
+	          if(!o[k])o[k] = Base[k];
+	     }
+	     _this.cacheObj[s] = o;
 	     eval("window." + s + "=o;");
 	  }
 	  return o
