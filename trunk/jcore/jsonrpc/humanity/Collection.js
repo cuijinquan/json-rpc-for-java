@@ -59,10 +59,6 @@
         $("#" + szId + "_scroll").attr("scrollTop", o.attr("scrollTop"));
         $("#" + szId + " div[@class=x-grid3-header-inner]").attr("scrollLeft", o.attr("scrollLeft"));
      });
-     $(document).ready(function()
-     {
-        _t.onResize(szId);
-     });     
      i = 0;
      w = $("#" + szId + "_xh div[@class*=x-grid3-row][@id*=" + szId + "_R_]");
      /* 行高度调整 */
@@ -142,6 +138,10 @@
            }
            else _t.RsProxy.style.display = _t.RsMarker.style.display = "none";
         })});
+        $(document).ready(function()
+        {
+           _t.onResize(szId);_t.isIE6 && _t.onResize(szId);document.title = [szId, _t.isIE6]; 
+        }); 
   },/* 隐藏列 */
   onclickColSlct:function(szId, n, oLi,e)
   {
@@ -342,7 +342,7 @@
      var _t = this;
      _t.binds(["clickForEdit", "clearTm", "hiddenClct", "hide2", "onclickColSlct"]);
      _t.clctTm = 0;
-      _t.insertHtml(document.body, "beforeend", "<div id=\"sortClct\" class=\"x-layer x-menu\" style=\"position:absolute; z-index: 15000; display:none;\"><a onclick=\"return false;\" href=\"javascript:void(0)\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-item xg-hmenu-sort-asc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Sort Ascending</a></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-item xg-hmenu-sort-desc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>SortDescending</a></li><li class=\"x-menu-list-itemx-menu-sep-li\"><span class=\"x-menu-sep\"></span></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" onclick=\"Collection.showSlctCols(event, this)\" class=\"x-menu-item x-menu-item-arrow\"><img class=\"x-menu-item-icon x-cols-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Columns</a></li></ul></div><div class=\"x-grid3-resize-marker\" id=\"x-grid3-resize-marker\">&nbsp;</div><div class=\"x-grid3-resize-proxy\" id=\"x-grid3-resize-proxy\">&nbsp;</div><div id=\"clctSlctCols\" class=\"x-layer x-menu\" style=\"position: absolute; z-index: 15005; display:none;\"><a onclick=\"return false;\" href=\"javascript:void\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"></ul></div>");
+      _t.insertHtml(document.body, "beforeend", "<div id=\"sortClct\" class=\"x-layer x-menu\" style=\"overflow:visible;position:absolute; z-index: 15000; display:none;\"><a onclick=\"return false;\" href=\"javascript:void(0)\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-item xg-hmenu-sort-asc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Sort Ascending</a></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" class=\"x-menu-item xg-hmenu-sort-desc\"><img class=\"x-menu-item-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>SortDescending</a></li><li class=\"x-menu-list-itemx-menu-sep-li\"><span class=\"x-menu-sep\"></span></li><li class=\"x-menu-list-item\"><a href=\"javascript:void(0)\" onclick=\"Collection.showSlctCols(event, this)\" class=\"x-menu-item x-menu-item-arrow\"><img class=\"x-menu-item-icon x-cols-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>Columns</a></li></ul></div><div class=\"x-grid3-resize-marker\" id=\"x-grid3-resize-marker\">&nbsp;</div><div class=\"x-grid3-resize-proxy\" id=\"x-grid3-resize-proxy\">&nbsp;</div><div id=\"clctSlctCols\" class=\"x-layer x-menu\" style=\"position: absolute; z-index: 15005; display:none;\"><a onclick=\"return false;\" href=\"javascript:void\" class=\"x-menu-focus\"></a><ul class=\"x-menu-list\"></ul></div>");
      _t.clctSlctCols = _t.getDom("clctSlctCols");
      _t.RsMarker = _t.getDom("x-grid3-resize-marker");/* 前 */
      _t.RsProxy  = _t.getDom("x-grid3-resize-proxy"); /* 后 */
