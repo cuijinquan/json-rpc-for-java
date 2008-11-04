@@ -1,5 +1,16 @@
 {
   oCur:null,
+  /* 导出 */
+  clkExport:function(szId)
+  {
+    var _t = this, o = $(_t.oCur = _t.getDom(szId)), oP = {all: o.find(":input:checked[@name=" + szId + "_Expt_all]").val(), 
+        type: o.find(":input[@name=" + szId + "_Expt_type]").val()}, 
+        p = $(_t.p(_t.oCur, "FORM")), act = p.attr("action");
+    p.attr("action", (contextPath || '') + "/Expt?XUIExportClctId=" + szId);
+    p.submit();    
+    p.attr("action", act);
+
+  },
   /* 锁定区域宽度的智能控制 */
   atRsLkWidth:function(szId)
   {
@@ -27,6 +38,7 @@
              b1 = $("#" + szId + " td[@class*='" + szId + "_ft_']").not(":hidden"), i, /* 标题行中的Td */
              sta = $("#" + szId + " div[@class=statistics] > table td"); /* 标题行中统计信息的Td */;
          i = 0;
+         if(0 < a.size())
          b.each(function()
          {
             o = $(this);
@@ -39,12 +51,11 @@
             if(3 < w)
               setTdw(o, w), setTdw($(b1[i]), w),
               setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
-            /*调整统计信息的列宽度*/
-            /*setTdw($(sta[i]), w);*/
             i++;
-         });
+         }),
          _t.atRsLkWidth(szId);
      };
+     
      /* IE下标题高度不一致的修正 */
      if(_t.isIE)$("#" + szId + "_lc table.x-grid3-header").css({height:1 + $("#" + szId + " div.x-grid3-header").height() + "px"});
          
@@ -66,10 +77,14 @@
         $(w[i++]).css({height: (_t.isIE ? 1 : 0) + $(this).height() + "px"});
      });
      /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
-     var oClct = $("#" + szId), h = oClct.attr("scrollHeight") - oClct.height();
+     var oClct = $("#" + szId), h = oClct.attr("scrollHeight") - oClct.height(),
+         h1 = (oClct.find("div.statistics:first").height() || 0) 
+              + (oClct.find("div.x-toolbar:first").height() || 0)
+              + oClct.find("div.x-grid3-header:first").height();
+         h = oClct.height() - h1 - 6;
      $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll")).each(function()
-     {
-        oClct = $(this);oClct.css({height: (oClct.height() - h) + "px"});
+     {/* oClct.height() - h */
+        oClct = $(this);oClct.css({height: (h) + "px"});
      });
      
      i = 0;
@@ -141,6 +156,45 @@
         {
            _t.onResize(szId);_t.isIE6 && _t.onResize(szId); 
         }); 
+        
+      /* 绑定collection的header的列拖拽交换显示顺序事件 */
+      $("#" + szId + " td.x-grid3-hd").mousedown(function(e){
+       var o = $(this), x = e.x || e.pageX, offset = o.offset(), n = offset.left + o.width() - x;
+	   if (n > 3){       
+         _t.oCurCol = this;
+         _t.colClicktag = true;
+         var proxy = document.getElementById("drag-proxy");
+         proxy.style.left = (e.clientX+12) + "px";
+         proxy.style.top = (e.clientY+20) + "px";
+         
+         _t.closeClicktag = _t.bind(function(e){
+		    e = e || window.event, o = e.target || e.srcElement;
+		    this.colClicktag = false;
+		    var proxy = document.getElementById("drag-proxy");
+		    var top = document.getElementById("moveTop"), bottom = document.getElementById("moveBottom");
+		    proxy.style.visibility = "hidden";
+		    top.style.visibility = "hidden";
+		    bottom.style.visibility = "hidden";
+		    if (this.oCurCol.move && o && o.className){
+		      if ("TD" != o.nodeName) o = $(o).parent()[0];
+		      document.title = [$(o).attr("colid")];
+		      //判断是否是来自同一个collection
+		      if (szId != $(o).attr("colid")) return;
+		      var col1 = "#" + szId + " td." + o.className.split(" ")[2],
+		      col2 = "#" + szId + " td." + this.oCurCol.className.split(" ")[2];
+		      /*调用xpc设置持久化列的顺序*/
+		      var param = {"id":szId, "target":col1, "source":col2};
+		      rpc.XuiRpc.setCollectionColIndex(szId, param);
+		      for (var i=0, target=$(col1), source=$(col2); i<target.length; i++){
+		        $(target[i]).insertNode("afterEnd", source[i]);
+		      }
+		    }
+		  }, _t),
+         _t.colDrag = _t.bind(_t.colDrag, _t);
+         $(document).unbind("mouseup",_t.closeClicktag).unbind("mousemove", _t.colDrag)
+                  .bind("mouseup",_t.closeClicktag).bind("mousemove", _t.colDrag); 
+       }           
+     });
   },/* 隐藏列 */
   onclickColSlct:function(szId, n, oLi,e)
   {
@@ -280,26 +334,6 @@
 
     /*点击列标志*/
   colClicktag : false,
-  
-  closeClicktag : function(e){
-    e = e || window.event, o = e.target || e.srcElement;
-    this.colClicktag = false;
-    var proxy = document.getElementById("drag-proxy");
-    var top = document.getElementById("moveTop"), bottom = document.getElementById("moveBottom");
-    proxy.style.visibility = "hidden";
-    top.style.visibility = "hidden";
-    bottom.style.visibility = "hidden";
-    if (this.oCurCol.move && o && o.className){
-      if ("TD" != o.nodeName) o = $(o).parent()[0];
-      var col1 = "." + o.className.split(" ")[2],
-      col2 = "." + this.oCurCol.className.split(" ")[2];
-      
-      for (var i=0, target=$(col1), source=$(col2); i<target.length; i++){
-        $(target[i]).insertNode("afterEnd", source[i]);
-      }
-    }
-  },
-  
   colDrag : function(e, content){
     e = e || window.event, o = e.target || e.srcElement;
     o = $(o), x = e.x || e.pageX, offset = o.offset(), n = offset.left + o.width() - x;
@@ -320,6 +354,7 @@
       proxy.style.left = (e.clientX+12) + "px";
       proxy.style.top = (e.clientY+20) + "px";
       if (n <= o.width()/2 && notCurrent){
+        if ($(o.parent()[0]).attr("colid") != $(this.oCurCol).attr("colid")) return;
         proxy.className = "x-dd-drag-proxy x-dd-drop-ok x-grid3-col-dd";
         top.style.visibility = "visible";
         top.style.top = (offset.top - 10) + "px";
@@ -335,6 +370,7 @@
       }  
     }
   },
+
   init: function()
   {
      XUI(this);
@@ -365,25 +401,6 @@
     /* 插入列移动标识 */
     _t.insertHtml(document.body, "beforeend", "<div id=\"moveTop\" class=\"col-move-top\"> </div>"
       + "<div id=\"moveBottom\" class=\"col-move-bottom\"> </div>"); 	
-     	
-     /* 列绑定事件 */
-     $(".x-grid3-hd").mousedown(function(e){
-       var o = $(this), x = e.x || e.pageX, offset = o.offset(), n = offset.left + o.width() - x;
-	   if (n > 3){       
-         /* 缓存当前列 */
-         _t.oCurCol = this;
-         _t.colClicktag = true;
-         var proxy = document.getElementById("drag-proxy");
-         proxy.style.left = (e.clientX+12) + "px";
-         proxy.style.top = (e.clientY+20) + "px";
-         
-         _t.closeClicktag = _t.bind(_t.closeClicktag, _t),
-         _t.colDrag = _t.bind(_t.colDrag, _t);
-         $(document).unbind("mouseup",_t.closeClicktag).unbind("mousemove", _t.colDrag)
-                  .bind("mouseup",_t.closeClicktag).bind("mousemove", _t.colDrag);           
-       }           
-     });	     
-     
      return this;
   }
 }
