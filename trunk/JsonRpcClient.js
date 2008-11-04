@@ -133,7 +133,7 @@ function JsonRpcClient(url) {
 var rpc = JsonRpcClient(),
     XUI = function()
     {
-        var o = Base || rpc.LoadJsObj("Base"), a = o.A(arguments).concat([o]), k, i, p = a[0];
+        var o = "undefined" == typeof Base && rpc.LoadJsObj("Base") || Base, a = o.A(arguments).concat([o]), k, i, p = a[0];
         for(i = 1; i < a.length; i++)
            for(k in a[i])if(!p[k])p[k] = a[i][k];
         return p;
