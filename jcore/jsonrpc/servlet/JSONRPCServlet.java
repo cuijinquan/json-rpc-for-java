@@ -102,7 +102,7 @@ public class JSONRPCServlet extends HttpServlet {
 	 * @param szStr
 	 * @return
 	 */
-	public String encodeUnicodeHtm(String szStr) {
+	public static String encodeUnicodeHtm(String szStr) {
 		if (null == szStr || 0 == szStr.trim().length())
 			return szStr;
 		Pattern p = Pattern.compile("[\u4E00-\u9FA5]", Pattern.MULTILINE);
