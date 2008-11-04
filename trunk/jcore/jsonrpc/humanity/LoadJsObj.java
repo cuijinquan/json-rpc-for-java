@@ -49,7 +49,7 @@ public class LoadJsObj extends JsonRpcObject{
 				s = s.replaceAll("([\\t ]*\\r\\n[\\t ]*)+", "\r\n");
 				s = s.replaceAll("[ \\t]*\\n[\\t ]+", "\n");
 				s = s.replaceAll("([^\\r])\\n", "$1");
-				// System.out.println(szName);
+				System.out.println(szName + " = " + s);
 //				if("Base".equals(szName))
 //				 System.out.println("var " + szName + " = (" + s + ").init();");
 				oRst.setResult(s);
