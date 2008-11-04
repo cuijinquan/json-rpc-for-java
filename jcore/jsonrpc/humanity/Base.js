@@ -7,6 +7,7 @@
         _t.isStrict = document.compatMode == "CSS1Compat",
 	    _t.isOpera = ua.indexOf("opera") > -1,
 	    _t.isSafari = (/webkit|khtml/).test(ua),
+	    _t.chrome = (/chrome/).test(ua),
 	    _t.isSafari3 = _t.isSafari && ua.indexOf('webkit/5') != -1,
 	    _t.isOmniweb = -1 < ua.indexOf("omniweb"),
 	    _t.bIE = _t.isIE = (!_t.isOpera && ua.indexOf("msie") > -1 && !_t.isOmniweb),
