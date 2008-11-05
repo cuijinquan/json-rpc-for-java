@@ -59,7 +59,6 @@ public class JSONRPCServlet extends HttpServlet {
 	 * 这里初始化启动的时候需要注册的对象
 	 */
 	public void myInit(ServletConfig config, JSONRPCBridge brg) {
-
 		String szPam = null;
 		secureCheck = config.getInitParameter("secureCheck");
 		if(null != secureCheck)
@@ -92,7 +91,7 @@ public class JSONRPCServlet extends HttpServlet {
 			}
 			arrTmp = null;
 		}
-
+		config = null;
 	}
 
 	/*****************************************************************************
@@ -124,14 +123,15 @@ public class JSONRPCServlet extends HttpServlet {
 		if (null == session)
 			session = request.getSession(true);
 		if (null != session){
-			JsonRpcRegister.registerObject(request, "_LoadJsObj", LoadJsObj.class);
 			JSONRPCBridge brg = (JSONRPCBridge) session.getAttribute(Content.RegSessionJSONRPCName);
 			// 如果是第一次就注册对象
 			if (null == brg){
 				session.setAttribute(Content.RegSessionJSONRPCName, brg = new JSONRPCBridge()
 						.setSession(session));
-				myInit(this.config, brg);
 			}
+			if(null != this.config)
+				myInit(this.config, brg);
+			JsonRpcRegister.registerObject(request, "_LoadJsObj", LoadJsObj.class);
 			OutputStream out = null;
 			String szGzip = request.getHeader("Accept-Encoding");
 			if (null != szGzip && -1 < szGzip.indexOf("gzip")
@@ -168,7 +168,6 @@ public class JSONRPCServlet extends HttpServlet {
 				bout = brg.getRegObjsToString().getBytes();
 			}
 			response.setIntHeader("Content-Length", bout.length);
-
 			out.write(bout);
 			out.flush();
 			out.close();

@@ -18,7 +18,8 @@ public class JsonRpcRegister{
 	public static void registerObject(HttpServletRequest request, String szKeyName, Class o)
 	{
 		HttpSession session = request.getSession(false);
-		if(null == session)session = request.getSession(true);
+		if(null == session)
+			session = request.getSession(true);
 		JSONRPCBridge brg = (JSONRPCBridge)session.getAttribute(Content.RegSessionJSONRPCName);
 		// 如果是第一次就注册对象
 		if(null == brg)
