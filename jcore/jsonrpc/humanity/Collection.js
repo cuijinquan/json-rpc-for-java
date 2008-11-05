@@ -9,23 +9,28 @@
     p.attr("action", (contextPath || '') + "/Expt?XUIExportClctId=" + szId);
     p.submit();    
     p.attr("action", act);
-
   },
   /* 锁定区域宽度的智能控制 */
   atRsLkWidth:function(szId)
   {
-     var oTd = $("#" + szId + "_lc"), w = 0, n = 10, w1 = $("#" + szId).width();
+     var oTd = $("#" + szId + "_lc"), w = 0, n = 10, w1 = $("#" + szId).width(),oTd2;
      oTd.find("table.x-grid3-header td[class]").not(":hidden").each(function()
      {
         w += $(this).width();
      });
-     oTd.css({width: (w + n) + "px"}).next().each(function()
+     oTd2 = oTd.css({width: (w + n) + "px"}).next().each(function()
      {
         n = w1 - w - n;
         oTd = $(this);
         if(0 < n)oTd.css({width: n + "px"});
         oTd.find("div.x-grid3-scroller").css({width: oTd.width() + "px"});
      });
+     w = 0;
+     oTd2.find("div.x-grid3-header td[class][field]").not(":hidden").each(function()
+     {
+        w += $(this).width();
+     });
+     0 < w && oTd2.find("div.x-grid3-scroller div.x-grid3-body").css({width: 13 + w + "px"});
   }, /* 添加collection进行处理 */
   addResize: function(szId)
   {
@@ -77,14 +82,26 @@
         $(w[i++]).css({height: (_t.isIE ? 1 : 0) + $(this).height() + "px"});
      });
      /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
-     var oClct = $("#" + szId), h = oClct.attr("scrollHeight") - oClct.height(),
-         h1 = (oClct.find("div.statistics:first").height() || 0) 
-              + (oClct.find("div.x-toolbar:first").height() || 0)
-              + oClct.find("div.x-grid3-header:first").height();
-         h = oClct.height() - h1 - 6;
-     $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll")).each(function()
-     {/* oClct.height() - h */
-        oClct = $(this);oClct.css({height: (h) + "px"});
+     var oClct = $("#" + szId), h = $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll")),
+         bdh = oClct.height() - (oClct.find("div.x-toolbar").height() || 0)
+               - (oClct.find("div.statistics").height() || 0)
+               - oClct.find("div.x-grid3-header-offset").height();
+     _t.regTimer(function()
+     {
+        var ath = oClct.attr("scrollHeight") - oClct.height(), j = 33;
+        if(_t.chrome)j = -1;
+        else
+        {
+          while(0 != ath % j)j--;
+          if(0 == j) j = 1;j = -j;
+        }
+        h.each(function()
+        {
+          oTmp09 = $(this),
+          oTmp09.css({height: (oTmp09.height() + j) + "px"});
+        });
+        if(oClct.attr("scrollHeight") != oClct.height())return false;
+        return true;
      });
      
      i = 0;
@@ -152,7 +169,7 @@
            }
            else _t.RsProxy.style.display = _t.RsMarker.style.display = "none";
         })});
-        $(document).ready(function()
+        $(window).load(function()
         {
            _t.onResize(szId);_t.isIE6 && _t.onResize(szId); 
         }); 
