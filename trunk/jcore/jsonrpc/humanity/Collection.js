@@ -30,7 +30,7 @@
      {
         w += $(this).width();
      });
-     0 < w && oTd2.find("div.x-grid3-scroller div.x-grid3-body").css({width: 13 + w + "px"});
+     0 < w && oTd2.find("div.x-grid3-scroller div.x-grid3-body").css({width: (this.isIE ? 17 : 8) + w + "px"});
   }, /* 添加collection进行处理 */
   addResize: function(szId)
   {
@@ -76,11 +76,6 @@
      });
      i = 0;
      w = $("#" + szId + "_xh div[@class*=x-grid3-row][@id*=" + szId + "_R_]");
-     /* 行高度调整 */
-     $("#" + szId + " div[@class=x-grid3-body]").find("div[@class*=x-grid3-row][@id*=" + szId + "_R_]").each(function()
-     {
-        $(w[i++]).css({height: (_t.isIE ? 1 : 0) + $(this).height() + "px"});
-     });
      /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
      var oClct = $("#" + szId), h = $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll")),
          bdh = oClct.height() - (oClct.find("div.x-toolbar").height() || 0)
