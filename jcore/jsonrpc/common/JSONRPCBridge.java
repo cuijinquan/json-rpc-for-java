@@ -42,6 +42,7 @@ public class JSONRPCBridge implements Serializable{
 		StringBuffer buf = new StringBuffer("{\"result\":[");
 		int n = 0;
 		Iterator oIt = topNms.entrySet().iterator();
+		System.out.println(topNms.size());
 		while(oIt.hasNext())
 		{
 			if(0 < n)
