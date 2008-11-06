@@ -9,7 +9,23 @@
     p.attr("action", (contextPath || '') + "/Expt?XUIExportClctId=" + szId);
     p.submit();    
     p.attr("action", act);
-  },
+  },/* 默认传递界面上所有输入数据 */
+updateCollection:function(szId, o, filterFld)
+{
+   o || (o = {});
+   var _t = this;
+   o['postData'] = [":input"], o["data"] = [[szId, 1, filterFld || '']],
+   o['fn'] = function(s)
+     {
+        s = s.substr(s.indexOf("<body>") + 6);
+        s = s.replace(/^\s*<div[^>]*>/gmi, "");
+        s = s.substr(0, s.lastIndexOf("</div>"));
+        _t.getDom(szId).innerHTML = s;
+        _t.addResize(szId);
+     };
+   if(o.url)o.url = contextPath + o.url;
+   _t.updateUi(o);
+},
   /* 锁定区域宽度的智能控制 */
   atRsLkWidth:function(szId)
   {
