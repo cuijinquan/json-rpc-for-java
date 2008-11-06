@@ -213,23 +213,7 @@
         {
           return "&#" + arguments[0].charCodeAt(0) + ";";
         })
-  },/* 默认传递界面上所有输入数据 */
-updateCollection:function(szId, o, filterFld)
-{
-   o || (o = {});
-   var _t = this;
-   o['postData'] = [":input"], o["data"] = [[szId, 1, filterFld || '']],
-   o['fn'] = function(s)
-     {
-        s = s.substr(s.indexOf("<body>") + 6);
-        s = s.replace(/^\s*<div[^>]*>/gmi, "");
-        s = s.substr(0, s.lastIndexOf("</div>"));
-        _t.getDom(szId).innerHTML = s;
-        _t.addResize(szId);
-     };
-   if(o.url)o.url = contextPath + o.url;
-   _t.updateUi(o);
-}, /* 异步刷新区域的封装，还没有实现完整 */
+  }, /* 异步刷新区域的封装，还没有实现完整 */
   updateUi:function(o)
   {
     var s = [], s1 = [""], o1, _t = this, s2;
