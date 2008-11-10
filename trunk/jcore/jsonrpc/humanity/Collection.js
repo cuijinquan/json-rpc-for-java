@@ -14,7 +14,7 @@ updateCollection:function(szId, o, filterFld)
 {
    o || (o = {});
    var _t = this;
-   o['postData'] = [":input"], o["data"] = [[szId, 1, filterFld || '']],
+   o['postData'] || (o['postData'] = [":input"]), o["data"] || (o["data"] = [[szId, 1, filterFld || '']]),
    o['fn'] = function(s)
      {
         s = s.substr(s.indexOf("<body>") + 6);
