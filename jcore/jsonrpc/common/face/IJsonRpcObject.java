@@ -23,4 +23,15 @@ public interface IJsonRpcObject extends IResultObject{
 	 * 释放资源
 	 */
 	public void release();
+	
+	/***
+	  * 获取异常、错误消息使用
+	  * @return
+	  */
+	public String getErrMsg();
+	
+	/***
+	 * 设置异常错误消息
+	 */
+	public void setErrMsg(String s);
 }

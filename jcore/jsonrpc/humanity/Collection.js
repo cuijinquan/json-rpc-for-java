@@ -333,7 +333,7 @@ updateCollection:function(szId, o, filterFld)
               oParm[szFd] = $(oTds[y++]).text();
            });
         oParm[aF[/x-grid3-col-(\d+)/g.exec(oDv.attr("class"))[1]]  + "_old"] = szOldvl;
-        oRst = rpc.XuiRpc.EditCollectionRow(szClctId, oParm, false);
+        oRst = rpc.XuiRpc.EditCollectionRow(szClctId, $(_t.oCur).attr("PriKeys"), oParm, false);
         if(szErr = rpc.XuiRpc.getErrMsg() && "true" != szErr)
            alert(szErr);
         /* 数据的回写 */
