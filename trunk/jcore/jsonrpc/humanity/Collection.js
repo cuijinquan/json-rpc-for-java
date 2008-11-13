@@ -337,7 +337,7 @@ updateCollection:function(szId, o, filterFld)
         if(szErr = rpc.XuiRpc.getErrMsg() && "true" != szErr)
            alert(szErr);
         /* 数据的回写 */
-        if(oRst)
+        else if(oRst)
         {
            y = 0, oTds.each(function()
            {
