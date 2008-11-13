@@ -406,7 +406,7 @@ updateCollection:function(szId, o, filterFld)
      if(bRst)
      {
        if(window.confirm(o.errMsg))
-         _t.updateCollection(_t.oCur.id, {postData:["reqCode=query"]});
+         _t.updateCollection(_t.oCur.id, {postData:["reqCode=" + $(_t.oCur).attr("reqCode")]});
      }
      else alert(o.errMsg);
      _t.hide2();
