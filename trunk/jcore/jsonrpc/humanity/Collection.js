@@ -334,8 +334,8 @@ updateCollection:function(szId, o, filterFld)
            });
         oParm[aF[/x-grid3-col-(\d+)/g.exec(oDv.attr("class"))[1]]  + "_old"] = szOldvl;
         oRst = rpc.XuiRpc.EditCollectionRow(szClctId, $(_t.oCur).attr("PriKeys"), oParm, false);
-        if(szErr = rpc.XuiRpc.getErrMsg() && "true" != szErr)
-           alert(szErr);
+        if((szErr = rpc.XuiRpc.getErrMsg()) && "" != szErr.length)
+           oRst = null, alert(szErr);
         /* 数据的回写 */
         else if(oRst)
         {
