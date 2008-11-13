@@ -77,9 +77,6 @@ updateCollection:function(szId, o, filterFld)
          _t.atRsLkWidth(szId);
      };
      
-     /* IE下标题高度不一致的修正 */
-     if(_t.isIE)$("#" + szId + "_lc table.x-grid3-header").css({height:1 + $("#" + szId + " div.x-grid3-header").height() + "px"});
-         
      /* 滚动条图层宽度的设置 */
      $("#" + szId + " div[@class=x-grid3-scroller]").each(function()
      {
@@ -112,6 +109,7 @@ updateCollection:function(szId, o, filterFld)
           oTmp09.css({height: (oTmp09.height() + j) + "px"});
         });
         if(oClct.attr("scrollHeight") != oClct.height())return false;
+        _t.onResize(szId);
         return true;
      });
      
