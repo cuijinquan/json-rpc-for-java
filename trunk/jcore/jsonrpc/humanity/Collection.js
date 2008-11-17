@@ -89,30 +89,6 @@ updateCollection:function(szId, o, filterFld)
      });
      i = 0;
      w = $("#" + szId + "_xh div[@class*=x-grid3-row][@id*=" + szId + "_R_]");
-     /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
-     var oClct = $("#" + szId), h = $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll")),
-         bdh = oClct.height() - (oClct.find("div.x-toolbar").height() || 0)
-               - (oClct.find("div.statistics").height() || 0)
-               - oClct.find("div.x-grid3-header-offset").height();
-     _t.regTimer(function()
-     {
-        var ath = oClct.attr("scrollHeight") - oClct.height(), j = 33;
-        if(_t.chrome)j = -1;
-        else
-        {
-          while(0 != ath % j)j--;
-          if(0 == j) j = 1;j = -j;
-        }
-        h.each(function()
-        {
-          oTmp09 = $(this),
-          oTmp09.css({height: (oTmp09.height() + j) + "px"});
-        });
-        if(oClct.attr("scrollHeight") != oClct.height())return false;
-        _t.onResize(szId);
-        return true;
-     });
-     
      i = 0;
      b.each(function()
      {
@@ -180,8 +156,27 @@ updateCollection:function(szId, o, filterFld)
         })});
         $(window).load(function()
         {
-           _t.onResize(szId);_t.isIE6 && _t.onResize(szId); 
-        }); 
+           /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
+           var oClct = $("#" + szId), h = $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll"));
+           _t.regTimer(function()
+           {
+             var ath = oClct.attr("scrollHeight") - oClct.height(), j = 33;
+             if(_t.chrome)j = -1;
+             else
+             {
+               while(0 != ath % j)j--;
+               if(0 == j) j = 1;j = -j;
+             }
+             h.each(function()
+             {
+               oTmp09 = $(this),
+               oTmp09.css({height: (oTmp09.height() + j) + "px"});
+             });
+             if(oClct.attr("scrollHeight") != oClct.height())return false;
+             _t.onResize(szId);_t.isIE6 && _t.onResize(szId);
+             return true;
+           });
+        });  
         
       /* 绑定collection的header的列拖拽交换显示顺序事件 */
       $("#" + szId + " td.x-grid3-hd").mousedown(function(e){
