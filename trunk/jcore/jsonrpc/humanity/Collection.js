@@ -30,23 +30,27 @@ updateCollection:function(szId, o, filterFld)
   atRsLkWidth:function(szId)
   {
      var oTd = $("#" + szId + "_lc"), w = 0, n = 10, w1 = $("#" + szId).width(),oTd2;
-     oTd.find("table.x-grid3-header td[class]").not(":hidden").each(function()
+     oTd2 = oTd.find("table.x-grid3-header td[class]").not(":hidden");
+     if(1 < oTd2.length)
      {
-        w += $(this).width();
-     });
-     oTd2 = oTd.css({width: (w + n) + "px"}).next().each(function()
-     {
-        n = w1 - w - n;
-        oTd = $(this);
-        if(0 < n)oTd.css({width: n + "px"});
-        oTd.find("div.x-grid3-scroller").css({width: oTd.width() + "px"});
-     });
-     w = 0;
-     oTd2.find("div.x-grid3-header td[class][field]").not(":hidden").each(function()
-     {
-        w += $(this).width();
-     });
-     0 < w && oTd2.find("div.x-grid3-scroller div.x-grid3-body").css({width: (this.isIE ? 17 : 8) + w + "px"});
+	     oTd2.each(function()
+	     {
+	        w += $(this).width();
+	     });
+	     oTd2 = oTd.css({width: (w + n) + "px"}).next().each(function()
+	     {
+	        n = w1 - w - n;
+	        oTd = $(this);
+	        if(0 < n)oTd.css({width: n + "px"});
+	        oTd.find("div.x-grid3-scroller").css({width: oTd.width() + "px"});
+	     });
+	     w = 0;
+	     oTd2.find("div.x-grid3-header td[class][field]").not(":hidden").each(function()
+	     {
+	        w += $(this).width();
+	     });
+	     0 < w && oTd2.find("div.x-grid3-scroller div.x-grid3-body").css({width: (this.isIE ? 17 : 8) + w + "px"});
+     }
   }, /* 添加collection进行处理 */
   addResize: function(szId)
   {
@@ -56,8 +60,7 @@ updateCollection:function(szId, o, filterFld)
      {
          var a = $("#" + szId + " td[@class*='" + szId + "_fst_']").not(":hidden"), /* 第一行 */ 
              w, o, o1,b = $("#" + szId + " td[@class*='" + szId + "_hd_']").not(":hidden"),
-             b1 = $("#" + szId + " td[@class*='" + szId + "_ft_']").not(":hidden"), i, /* 标题行中的Td */
-             sta = $("#" + szId + " div[@class=statistics] > table td"); /* 标题行中统计信息的Td */;
+             b1 = $("#" + szId + " td[@class*='" + szId + "_ft_']").not(":hidden"), i; /* 标题行中的Td */
          i = 0;
          if(0 < a.size())
          b.each(function()
@@ -70,7 +73,7 @@ updateCollection:function(szId, o, filterFld)
             /* 数据体第一行中的td对象 */
             o1 = $(a[i]);w = o1.width();
             if(3 < w)
-              setTdw(o, w), setTdw($(b1[i]), w),
+              setTdw(o, w), b1.length > i && setTdw($(b1[i]), w),
               setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
             i++;
          }),
