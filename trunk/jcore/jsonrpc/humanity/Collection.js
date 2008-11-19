@@ -15,14 +15,14 @@ updateCollection:function(szId, o, filterFld)
    o || (o = {});
    var _t = this;
    o['postData'] || (o['postData'] = [":input"]), o["data"] || (o["data"] = [[szId, 1, filterFld || '']]),
-   o['fn'] = function(s)
+   o['fn'] || (o['fn'] = function(s)
      {
         s = s.substr(s.indexOf("<body>") + 6);
         s = s.replace(/^\s*<div[^>]*>/gmi, "");
         s = s.substr(0, s.lastIndexOf("</div>"));
         _t.getDom(szId).innerHTML = s;
         _t.addResize(szId);
-     };
+     });
    if(o.url)o.url = contextPath + o.url;
    _t.updateUi(o);
 },
