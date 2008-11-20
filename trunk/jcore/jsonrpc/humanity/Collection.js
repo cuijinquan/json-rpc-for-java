@@ -407,6 +407,91 @@ updateCollection:function(szId, o, filterFld)
      else alert(o.errMsg);
      _t.hide2();
   },
+  /*排序*/
+  sort: function(e, arg0)
+  {
+    var _t = this, a = [], i = 0;
+    
+    /*将表格中的数据放入数组*/
+    oRows = $(_t.oCur).find("div[@class^=x-grid3-row R]");
+    oRows.each(function()
+    {
+      a[i] = [];
+      $(this).find("div[@class^=x-grid3-cell-inner x-grid3-col-]:not([@class$=x-grid3-col-numberer])").each(function()
+      {
+        a[i].push(Base.trim($(this).text()));
+      });
+      i++;
+    });
+    
+    nL = oRows.length / 2, b = [], m = 0, l = 0;
+    if($(oRows[0]).find("td").length > 1) { /*判断有无锁定列*/
+      m = a[0].length; /*锁定列数*/
+      l = a[nL].length; /*非锁定列数*/
+      for (j = 0; j < nL; j++) {
+        b[j] = a[j].concat(a[j + nL]);
+      }
+    } else {
+      for (j = nL; j < a.length; j++) {
+        b[l++] = a[j];
+      }
+    }
+    
+    szCls = $(_t.oCurCol).attr("class"); /*排序列class*/
+    nXh = szCls.substring(szCls.lastIndexOf("_") + 1) - 1; /*排序列索引号*/
+    i = 1, k = 0;
+    while (k < nL) {
+      if (k + i >= nL) {
+        i = 1;
+        k++;
+        continue;
+      }
+      v1 = isNaN(b[k][nXh]) ? b[k][nXh] : parseFloat(b[k][nXh], 10);
+      v2 = isNaN(b[k + i][nXh]) ? b[k + i][nXh] : parseFloat(b[k + i][nXh], 10);
+      if (arg0 == 0 && ((typeof(v1)=='number' && typeof(v2)=='number' && v1 > v2) || ((typeof v1 == 'string' || typeof v2 == 'string') && (v1+'').localeCompare(v2+'') > 0))) { /*升序排序并且v1排序在v2之后*/
+        c = b[k];
+        b[k] = b[k + i];
+        b[k + i] = c;
+      } else if (arg0 == 1 && ((typeof(v1)=='number' && typeof(v2)=='number' && v1 < v2) || ((typeof v1 == 'string' || typeof v2 == 'string') && (v1+'').localeCompare(v2+'') < 0))) { /*降序排序并且v1排序在v2之前*/
+        c = b[k];
+        b[k] = b[k + i];
+        b[k + i] = c;
+      }
+      i++;
+    }
+    
+    if (m > 0) { /*有锁定列*/
+      for (j = 0; j < nL; j++) {
+        i = 0;
+        for (k = 0; k < b[j].length; k++) {
+          if (k < m) {
+            a[j][k] = b[j][k];
+          } else {
+            a[nL + j][i] = b[j][k];
+            i++;
+          }
+        }
+      }
+    } else {
+      for (j = 0; j < nL; j++) {
+        a[nL + j] = b[j];
+      }
+    }
+    
+    /*写回表格*/
+    i = 0;
+    oRows.each(function()
+    {
+      j = 0;
+      $(this).find("div[@class^=x-grid3-cell-inner x-grid3-col-]:not([@class$=x-grid3-col-numberer])").each(function()
+      {
+        $(this).text(a[i][j]);
+        j++;
+      });
+      i++;
+    });
+    _t.hiddenShadow(_t.sortClct);
+  },
   init: function()
   {
      XUI(this);
