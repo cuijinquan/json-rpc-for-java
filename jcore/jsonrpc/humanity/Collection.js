@@ -532,6 +532,7 @@
     }
     this.updateCollection(id, {url:url, 
                           postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value),(id+"xui_page_maxsize=" + maxSize.value),(id+"xui_page_query=" + num)]});
+    this.addResize(id);                      
   }                                               
 },
 
