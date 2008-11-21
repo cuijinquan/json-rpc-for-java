@@ -10,18 +10,26 @@
     p.submit();    
     p.attr("action", act);
   },/* 默认传递界面上所有输入数据 */
-updateCollection:function(szId, o, filterFld)
+  updateCollection:function(szId, o, filterFld)
 {
    o || (o = {});
    var _t = this;
    o['postData'] || (o['postData'] = [":input"]), o["data"] || (o["data"] = [[szId, 1, filterFld || '']]),
    o['fn'] || (o['fn'] = function(s)
      {
+        var script = "", n = s.indexOf("<script");
+        if(-1 < n)
+        {
+           script = s.substr(n);
+           script = script.substr(0, script.lastIndexOf("</" + "script>"));
+           script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
+           script = script.replace(/\/\/--><!\]\]>\s*$/, "");
+        }
         s = s.substr(s.indexOf("<body>") + 6);
         s = s.replace(/^\s*<div[^>]*>/gmi, "");
         s = s.substr(0, s.lastIndexOf("</div>"));
         _t.getDom(szId).innerHTML = s;
-        _t.addResize(szId);
+        try{script && eval(script)}catch(e){alert(e.message);}
      });
    if(o.url)o.url = contextPath + o.url;
    _t.updateUi(o);
