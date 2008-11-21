@@ -1,6 +1,6 @@
 {
   bIE: false,
-  nVer: 0, trim:function(s){return s.replace(/(^\s*)|(\s*$)/gm, "")},
+  nVer: 0,
   init: function()
   {
         var ua = navigator.userAgent.toLowerCase(), _t = this;
@@ -30,6 +30,7 @@
        if(7 > _t.nVer)
          try{document.execCommand("BackgroundImageCache", false, true)}catch(e){}
       }
+      _t.trim = String.prototype.trim = function(s){return (s||this).replace(/(^\s*)|(\s*$)/gm, "")};
       $(document).ready(function(){
       if(!_t.getDom("xuiSelectShdow"))
       {
