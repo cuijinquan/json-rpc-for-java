@@ -500,6 +500,41 @@
     });
     _t.hiddenShadow(_t.sortClct);
   },
+  
+  movePage : function(num, id){
+  var reqCode = $("#"+id+"reqCode").attr("reqCode"),
+  maxSize = $("#"+id+"xui_page_maxsize")[0], queryPage = $("#"+id+"xui_page_query")[0],
+  pageSize = $("#"+id+"xui_page_pagesize").text(), url = "/" + $(this.p(maxSize, "FORM")).attr("action"),
+  ids = $("#xui_coll_array")[0]; 
+  if (!maxSize || !queryPage){
+    this.updateCollection(id, {url:url, postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value)]});
+  } else {
+    if ("XUI" == num){
+      /* FIXME: 验证maxSize为数字，验证queryPage为数字，并且在最小页和最大页的范围内*/
+      var msg = "\u8bf7\u8f93\u5165\u6570\u5b57\u0021";
+      if (0 != maxSize.value.replace(/[\d\s]/g, '').length){
+        /*请输入数字!*/
+        alert(msg);
+        maxSize.value = "";
+        return false;
+      }
+      if (0 != queryPage.value.replace(/[\d\s]/g, '').length){
+        alert(msg);
+        queryPage.value = "";
+        return false;
+      }
+      if (parseInt(pageSize)<parseInt(queryPage.value) || 0 >= parseInt(queryPage.value)){
+        /**/
+        alert("\u9875\u6570\u5fc5\u987b\u5728\u0031\u548c" + pageSize + "\u4e4b\u95f4\u0021");
+        return false;
+      }
+      num = queryPage.value;
+    }
+    this.updateCollection(id, {url:url, 
+                          postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value),(id+"xui_page_maxsize=" + maxSize.value),(id+"xui_page_query=" + num)]});
+  }                                               
+},
+
   init: function()
   {
      XUI(this);
