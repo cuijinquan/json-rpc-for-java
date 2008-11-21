@@ -29,7 +29,7 @@
         s = s.replace(/^\s*<div[^>]*>/gmi, "");
         s = s.substr(0, s.lastIndexOf("</div>"));
         _t.getDom(szId).innerHTML = s;
-        try{script && eval(script)}catch(e){alert(e.message);}
+        try{setTimeout(function(){script && eval(script)},333)}catch(e){alert(e.message);}
      });
    if(o.url)o.url = contextPath + o.url;
    _t.updateUi(o);
