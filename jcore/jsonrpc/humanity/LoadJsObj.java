@@ -16,6 +16,27 @@ public class LoadJsObj extends JsonRpcObject{
 	private static final long serialVersionUID = -1988214985561562945L;
 	
 	/***
+	 * 获取一个未注册的java对象，该对象需要继承
+	 * jcore.jsonrpc.common.JsonRpcObject
+	 * 或实现接口jcore.jsonrpc.common.face.IJsonRpcObject
+	 * 并有默认的构造函数
+	 * @param szClassPathName
+	 * @return
+	 */
+	public Object getRpcObj(String szClassPathName)
+	{
+		try
+		{
+			return (Class.forName(szClassPathName).newInstance());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			log.debug(e);
+		}
+		return null;
+	}
+	
+	/***
 	 * 通过js对象名获取对象，区分大小写
 	 * @param szName
 	 * @return
