@@ -129,6 +129,14 @@ function JsonRpcClient(url) {
 	  }
 	  return o
 	};
+	/*
+	 * 获取一个未注册的java对象，该对象需要继承, jcore.jsonrpc.common.JsonRpcObject
+	 * 或实现接口jcore.jsonrpc.common.face.IJsonRpcObject,并有默认的构造函数
+	 */
+	this.getRpcObj = function(s)
+	{
+	   return _this._LoadJsObj.getRpcObj(s);
+	};
 }
 var rpc = JsonRpcClient(),
     XUI = function()
