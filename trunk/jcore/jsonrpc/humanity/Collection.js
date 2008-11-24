@@ -1,15 +1,6 @@
 {
   oCur:null,
-  /* 导出 */
-  clkExport:function(szId)
-  {
-    var _t = this, o = $(_t.oCur = _t.getDom(szId)), oP = {all: o.find(":input:checked[@name=" + szId + "_Expt_all]").val(), 
-        type: o.find(":input[@name=" + szId + "_Expt_type]").val()}, 
-        p = $(_t.p(_t.oCur, "FORM")), act = p.attr("action");
-    p.attr("action", (contextPath || '') + "/Expt?XUIExportClctId=" + szId);
-    p.submit();    
-    p.attr("action", act);
-  },/* 默认传递界面上所有输入数据 */
+  /* 默认传递界面上所有输入数据 */
   updateCollection:function(szId, o, filterFld)
 {
    o || (o = {});
@@ -29,7 +20,7 @@
         s = s.replace(/^\s*<div[^>]*>/gmi, "");
         s = s.substr(0, s.lastIndexOf("</div>"));
         _t.getDom(szId).innerHTML = s;
-        try{setTimeout(function(){script && eval(script)},333)}catch(e){alert(e.message);}
+        try{script && eval(script)}catch(e){alert(e.message);}
      });
    if(o.url)o.url = contextPath + o.url;
    _t.updateUi(o);
@@ -37,10 +28,12 @@
   /* 锁定区域宽度的智能控制 */
   atRsLkWidth:function(szId)
   {
-     var oTd = $("#" + szId + "_lc"), w = 0, n = 10, w1 = $("#" + szId).width(),oTd2;
+     var oTd = $("#" + szId + "_lc"), w = 0, n = 10, w1 = $("#" + szId).width(),oTd2,
+         nWd = oTd.find("tr.x-grid3-hd-row td:last").width();
      oTd2 = oTd.find("table.x-grid3-header td[class]").not(":hidden");
      if(1 < oTd2.length)
      {
+         if(2 == oTd2.length && !$(oTd2[1]).text())return this;
 	     oTd2.each(function()
 	     {
 	        w += $(this).width();
@@ -52,12 +45,8 @@
 	        if(0 < n)oTd.css({width: n + "px"});
 	        oTd.find("div.x-grid3-scroller").css({width: oTd.width() + "px"});
 	     });
-	     w = 0;
-	     oTd2.find("div.x-grid3-header td[class][field]").not(":hidden").each(function()
-	     {
-	        w += $(this).width();
-	     });
-	     0 < w && oTd2.find("div.x-grid3-scroller div.x-grid3-body").css({width: (this.isIE ? 17 : 8) + w + "px"});
+	     w = oTd2.find("#" +szId+ "_R_1 table.x-grid3-row-table").width();
+	     0 < w && oTd2.find("div.x-grid3-scroller div.x-grid3-body").css({width:w + "px"});
      }
   }, /* 添加collection进行处理 */
   addResize: function(szId)
@@ -71,7 +60,7 @@
              b1 = $("#" + szId + " td[@class*='" + szId + "_ft_']").not(":hidden"), i; /* 标题行中的Td */
          i = 0;
          if(0 < a.size())
-         b.each(function()
+         _t.atRsLkWidth(szId),b.each(function()
          {
             o = $(this);
             var setTdw = function(oTd, w)
@@ -84,8 +73,7 @@
               setTdw(o, w), b1.length > i && setTdw($(b1[i]), w),
               setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
             i++;
-         }),
-         _t.atRsLkWidth(szId);
+         });
      };
      
      /* 滚动条图层宽度的设置 */
@@ -165,7 +153,7 @@
            }
            else _t.RsProxy.style.display = _t.RsMarker.style.display = "none";
         })});
-        $(window).load(function()
+        $(document).ready(function()
         {
            /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
            var oClct = $("#" + szId), h = $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll"));
@@ -227,6 +215,16 @@
                   .bind("mouseup",_t.closeClicktag).bind("mousemove", _t.colDrag); 
        }           
      });
+  },
+  /* 导出 */
+  clkExport:function(szId)
+  {
+    var _t = this, o = $(_t.oCur = _t.getDom(szId)), oP = {all: o.find(":input:checked[@name=" + szId + "_Expt_all]").val(), 
+        type: o.find(":input[@name=" + szId + "_Expt_type]").val()}, 
+        p = $(_t.p(_t.oCur, "FORM")), act = p.attr("action");
+    p.attr("action", (contextPath || '') + "/Expt?XUIExportClctId=" + szId);
+    p.submit();    
+    p.attr("action", act);
   },/* 隐藏列 */
   onclickColSlct:function(szId, n, oLi,e)
   {
