@@ -139,7 +139,7 @@
      var _t = this, a = _t.A(arguments);a.shift();a.shift();
      return function(e)
      {
-        fn.apply(o || _t, _t.A(arguments).concat(a));
+        return fn.apply(o || _t, _t.A(arguments).concat(a));
      }
   }, /* unLoad窗口无效时卸载事件绑定 */
   unLoad:function(o, t, f)
@@ -288,9 +288,9 @@
   },
   regTimer:function(fn, n)
   {
-    var nTime = window.setInterval(function()
+    var _t = this,nTime = window.setInterval(function()
     {
-      if(fn())window.clearInterval(nTime);
+      if(fn(_t))window.clearInterval(nTime);
     }, n || 13);
     return nTime;
   },clearTimer:function(n){n && window.clearInterval(n)},
