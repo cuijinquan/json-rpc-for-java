@@ -1,6 +1,14 @@
 {
   bIE: false,
   nVer: 0,
+  replaceHtml: function(el, html) {
+	var oldEl = typeof el === "string" ? document.getElementById(el) : el;
+	if(this.isIE)return oldEl.innerHTML = html, oldEl;
+	var newEl = oldEl.cloneNode(false);
+	newEl.innerHTML = html;
+	oldEl.parentNode.replaceChild(newEl, oldEl);
+	return newEl;
+},
   init: function()
   {
         var ua = navigator.userAgent.toLowerCase(), _t = this;
