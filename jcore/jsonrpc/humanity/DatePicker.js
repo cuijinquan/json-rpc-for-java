@@ -440,7 +440,7 @@
 	    e && (this.stopPropagation(e),this.preventDefault(e));
 	    var _t = this;
 	      o = _t.dpIpt = (o || _t.FromEventObj(e));
-		  var bFirst = !_t.XuiDatePicker, s = _t.trim(o['value'] || ""),
+		  var bFirst = !_t.XuiDatePicker, s = (o['value'] || "").trim(),
 		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-layer x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
 		  /* 第一次需要做初始化处理 */
 		  if(bFirst)
@@ -458,7 +458,6 @@
 		     _t.setDate.apply(_t, s);
 		  else s = new Date(), _t.setDate(s.getFullYear(), s.getMonth() + 1, s.getDate());
 		  _t.updataTBody();
-		  
 		  _t.showDiv(o, oDiv, _t.bIE ? 173: 175, 0, 0);/* IE8: 173 * 201 */
 	},onblur: function(e, oIpt)
 	{
