@@ -82,7 +82,7 @@
         seq: 0,            /* 当前父亲节点内的序号 */
         html: null,        /* html代码 */
         doParentCheckedFlg: true, /* 默认会执行父亲节点的选择方法 */
-        doChildCheckedFlg: true,  /* 默认会执行子亲节点的选择方法 */
+        doChildCheckedFlg: true,  /* 默认会执行子节点的选择方法 */
         label: null,       /* 描述 */
         depth: 0,          /* 深度 */
         nodeIcon: 'x-tree-node-icon', /* 当前节点默认的图标定义 */

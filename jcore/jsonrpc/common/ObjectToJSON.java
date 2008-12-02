@@ -216,7 +216,7 @@ public class ObjectToJSON implements Serializable{
 			if(0 < oMs.length)
 			{
 				buf.append("\"methods\":[");
-				String szFlt = "(notifyAll)|(getClass)|(wait)|(wait)|(equals)|(notify)|(main)";
+				String szFlt = "(notifyAll)|(getClass)|(wait)|(wait)|(equals)|(notify)|(main)|(hashCode)|(toString)";
 				Map mMTmp = new HashMap();
 				for(int i = 0, k = 0; i < oMs.length; i++)
 				{
@@ -242,17 +242,18 @@ public class ObjectToJSON implements Serializable{
 			Field []f = c.getDeclaredFields(); // c.getFields();
 			if(0 < f.length)
 			{
+				String szFlter = "(serialVersionUID)";
 				for(int i = 0; i < f.length; i++)
 				{
 					f[i].setAccessible(true);
 					// 如果不是public的就继续下一轮的处理
 //					if (!Modifier.isPublic(f[i].getModifiers()))
 //		                continue;
+					// 属性名
+					if("request".equals(f[i].getName()) || 0 == f[i].getName().replaceAll(szFlter, "").length())
+						continue;
 					// 如果不是第一次
 					if(0 < nPos)buf.append(",");
-					// 属性名
-					if("request".equals(f[i].getName()))
-						continue;
 				    buf.append("\"").append(f[i].getName()).append("\":");
 				    // 类型
 				    String szType = f[i].getType().toString();
