@@ -166,9 +166,8 @@
            oCeckBox.attr("checked", _t.isChecked = bCkd), _t.upCkBxData(szId, bCkd, oCeckBox.val());
            _t.regTimer(function(o)
            {
-             var Dom = _t.tree.Dom;
-             Dom.next(":input[@name=" + _t.tree.id + "_add]").val(_t.getAddData());
-             Dom.next(":input[@name=" + _t.tree.id + "_del]").val(_t.getDelData());
+             $(document.getElementsByName(_t.tree.id + "_add")[0]).val(_t.getAddData());
+             $(document.getElementsByName(_t.tree.id + "_del")[0]).val(_t.getDelData());
              return true;
            }, nTm);
            /* 父亲节点选择 */
