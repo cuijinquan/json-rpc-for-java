@@ -67,7 +67,7 @@
     },
     
     regInput : function(obj, reg, inputStr){
-      if(Browser.isIE()){
+      if(this.isIE){
         return Digit.ieContentContact(obj, reg, inputStr);
       } else {
         return Digit.ffContentContact(obj, reg, inputStr);
@@ -108,7 +108,7 @@
     addEvent : function(o, type, fn){
       if (!o["xui" + type]){
  		o["xui" + type] = true;          
-        if(Browser.isIE()){
+        if(this.isIE){
           o.detachEvent("on" + type, fn);
           o.attachEvent("on" + type, fn);
         } else {
