@@ -88,7 +88,7 @@
 		for (j = 0; j < 6; j++) {
 			a.push("<tr>");
 			for (i = 0; i < 7; i++) {
-				a.push("<td onclick=\"DatePicker.click(event,this)\"><a href=\"javascript:void(0)\" hidefocus=\"on\"><em><span></span></em></a></td>");
+				a.push("<td onclick=\"return DatePicker.click(event,this)\"><a href=\"javascript:void(0)\" hidefocus=\"on\"><em><span></span></em></a></td>");
 			}
 			a.push("</tr>");
 		}
@@ -418,10 +418,10 @@
 	   if(-1 < o.className.indexOf("x-date-disabled"))return this;
 	   var a = o.title.split("-");
 	   this.year = a[0],this.month = a[1],this.day = a[2];
-	   this.stopPropagation(e),this.preventDefault(e);
+	   e && (this.stopPropagation(e),this.preventDefault(e));
+	   this.setValue();
 	   this.hidden();
-	   this.setValue();	   
-	   return this;
+	   return false;
 	}, selectToday:function()
 	{
 	   var d = new Date();
