@@ -7,7 +7,7 @@ import jcore.jsonrpc.common.face.IResultObject;
 public class ResultObject implements IResultObject,Serializable {
 	private static final long serialVersionUID = -7059298543537434669L;
 	private String errMsg;
-	public Object result = null;
+	public transient Object result = null;
 	 /***
 	  * 获取异常、错误消息使用
 	  * @return

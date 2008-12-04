@@ -1,10 +1,12 @@
 package jcore.jsonrpc.humanity;
 
 import java.io.InputStream;
+import java.io.Serializable;
 
 import jcore.jsonrpc.common.Content;
 import jcore.jsonrpc.common.JsonRpcObject;
 import jcore.jsonrpc.common.ResultObject;
+import jcore.jsonrpc.common.face.IJsonRpcObject;
 import jcore.jsonrpc.tools.Tools;
 
 /***
@@ -12,7 +14,7 @@ import jcore.jsonrpc.tools.Tools;
  * @author 夏天
  *
  */
-public class LoadJsObj extends JsonRpcObject{
+public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializable{
 	private static final long serialVersionUID = -1988214985561562945L;
 	
 	/***
@@ -78,6 +80,7 @@ public class LoadJsObj extends JsonRpcObject{
 			else oRst.setErrMsg("指定的对象不存在，请确认大小写是否正确。");
 		}catch(Exception e)
 		{
+			e.printStackTrace();
 			log.debug(e);
 			oRst.setErrMsg(e.getMessage());
 		}

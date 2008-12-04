@@ -22,7 +22,7 @@ import jcore.jsonrpc.tools.Tools;
 public class JSONRPCBridge implements Serializable{
 	private static final long serialVersionUID = 1L;
 	// 为了集群中使用内存复制使用
-	private HttpSession session = null;
+	private transient HttpSession session = null;
 	// 注册中的对象
 	private Map globalMap = Collections.synchronizedMap(new HashMap());
 	
