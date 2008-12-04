@@ -4,7 +4,7 @@
       return reg.test(s);
     },
     getContent : function(obj, inputStr){
-      if(Browser.isIE()){
+      if(this.isIE){
         return this.ieGetContent(obj, inputStr);
       } else {
         return this.ffGetContent(obj, inputStr);
