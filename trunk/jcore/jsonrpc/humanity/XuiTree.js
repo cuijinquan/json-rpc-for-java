@@ -80,7 +80,7 @@
         tree: null,        /* 树对象 */
         seq: 0,            /* 当前父亲节点内的序号 */
         html: null,        /* html代码 */
-        doParentCheckedFlg: true, /* 默认会执行父亲节点的选择方法 */
+        doParentCheckedFlg: false, /* 默认会执行父亲节点的选择方法 */
         doChildCheckedFlg: true,  /* 默认会执行子节点的选择方法 */
         label: null,       /* 描述 */
         depth: 0,          /* 深度 */
@@ -89,8 +89,8 @@
         target: null,      /* 页面重定位置 */
         id: null,          /* 当前节点id */
         Dom: null,         /* 当前节点Dom对象 */
-        checkValue: null,
-        allowCheck: false, /* 允许选择 */
+        checkValue: "sdf",
+        allowCheck: true, /* 允许选择 */
         bExpandAll: false, /* 全部展开 */
         lastSlctNd: null,  /* 最后一次选择的对象 */
 
@@ -116,10 +116,10 @@
         {
            if(oSelf.allowCheck && oSelf.checkValue)
            {
-             var bCkd = oSelf.parent && oSelf.parent.doChildCheckedFlg && oSelf.parent.isChecked || oSelf.isChecked,
+             var bCkd = (oSelf.isChecked = oSelf.parent && oSelf.parent.doChildCheckedFlg && oSelf.parent.isChecked),
                  szId = oSelf.getCheckBoxId();
              oSelf.tree.oldData[szId] = bCkd;
-             return [ "<input onclick=\"return XuiTree.getTreeNode('",
+             return [ "<input style=\"cursor:none\" onclick=\"return XuiTree.getTreeNode('",
                 oSelf.tree.id, "','", oSelf.id, "')",
                 ".checked(this.checked, "
                 ,oSelf.doChildCheckedFlg,
@@ -170,7 +170,14 @@
              return true;
            }, nTm);
            /* 父亲节点选择 */
-           if(_t.doParentCheckedFlg && _t.parent)_t.parent.checked(0 < _t.parent.Dom.find(":input:checked").size(), false, e);
+           if(_t.doParentCheckedFlg)
+           {
+               if(_t.parent)_t.parent.checked(0 < _t.parent.Dom.find(":input:checked").size(), false, e);
+           }
+           else if(bCkd)
+           {
+               if(_t.parent)_t.parent.checked(0 < _t.parent.Dom.find(":input:checked").size(), false, e);
+           }
            e && _t.stopPropagation(e);
            return _t;
         },
@@ -314,9 +321,12 @@
            /* 缩进的计算 */
            if(0 < this.depth)
            {
+              /* 每个节点都有点空白位置 */
               a.push("<span class=\"x-tree-node-indent\">");
               /* 空白格子 */
               a.push("<img class=\"x-tree-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>");
+              
+              
               szClsTmp = 'x-tree-elbow-line';
               if(this.parent && this.parent.parent && this.parent.seq == this.parent.parent.childNodes.length - 1)szClsTmp = 'x-tree-icon';
               for(;i < this.depth; i++)
