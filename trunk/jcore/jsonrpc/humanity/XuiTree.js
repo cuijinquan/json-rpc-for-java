@@ -43,11 +43,9 @@
        else
        {
           o1 = o2.next("li:first");
-          if(0 == o1.size())o1 = o2.parent().parent().next("li");
+          while(("LI" == o2.attr("nodeName") || "UL" == o2.attr("nodeName")) && 0 == o1.size())o1 = (o2 = o2.parent().parent()).next("li");
           if(0 < o1.size())
-          {
               o.select(o1.find("div")[0], null);
-          }
        }
     },
     /* 键盘的接收 */
@@ -262,10 +260,11 @@
               var p = this.childNodes, i = 0, j = p.length;
               for(; i < j; i++)
                  if(0 < p[i].childNodes.length)
+                 {
                     p[i].regTimer(function(o){
-                       o.isExpand = true, o.doExpand(), o.expandAll();
-                       return true;
-                    }, 777);
+                       try{o.isExpand = true, o.doExpand(), o.expandAll();}catch(e){}
+                    return true;}, 133);
+                 }
            }else this.tree.bExpandAll = true;
         }, /* 折叠所有子节点 */
         collapseAll: function()
@@ -377,6 +376,7 @@
            	  this.Dom = $("#" + this.id).find("ul.x-tree-node-ct:first"),
               this.isExpand = true, this.doExpand();
               if(this.tree.bExpandAll)this.expandAll(), this.tree.bExpandAll = false;
+              this.select(this.Dom.prev("div")[0], null);
            }
            return this;
         }
