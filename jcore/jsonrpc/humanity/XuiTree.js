@@ -64,6 +64,7 @@
 	    }
     },init: function()
    {
+      XUI(this);
       this.onkeydown = this.bind(this.onkeydown);
       this.addEvent(document, "keydown", this.onkeydown);
       this.ext(this, this.TreeNode.prototype);
@@ -90,8 +91,8 @@
         target: null,      /* 页面重定位置 */
         id: null,          /* 当前节点id */
         Dom: null,         /* 当前节点Dom对象 */
-        checkValue: "df",
-        allowCheck: true, /* 允许选择 */
+        checkValue: null,
+        allowCheck: false, /* 允许选择 */
         bExpandAll: false, /* 全部展开 */
         lastSlctNd: null,  /* 最后一次选择的对象 */
 
@@ -184,7 +185,7 @@
            this.tree.lastSlctNode = this.tree.allTreeCc[o.parent().attr("id")];
            e && o.find(":checkbox:first").click();
            XuiTree.curTree = this.tree;
-           var oTree = $(XuiTree.curTree.tree.inserDom);
+           var oTree = $(XuiTree.curTree.tree.insertDom);
            o[0].scrollIntoView && o[0].scrollIntoView();
            return this;
         },
@@ -348,10 +349,8 @@
            a.push("<img class=\"" + s + "\" src=\"" + g_sysInfo[2] + "default/s.gif\"");
            if(bHvCld)a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').doExpand(event, true)\"");
            a.push("/>");
-
            /* 当前节点图标 */
            a.push("<img unselectable=\"on\" class=\"" + this.nodeIcon + "\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>");
-
            /* 描述部分 */
            a.push("<a href=\"" + this.url + "\" class=\"x-tree-node-anchor\" hidefocus=\"on\"");
            if(this.target)a.push(" target=\"" + this.target + "\"");
@@ -372,9 +371,9 @@
                a.push("<input type=\"hidden\" name=\"" + this.id + "_del\"/>");
            }
            this.html = a.join("");
-           if(0 == this.depth && this.inserDom)
+           if(0 == this.depth && this.insertDom)
            {
-           	  this.tree.inserDom = this.replaceHtml(this.tree.inserDom, this.html),
+           	  this.tree.insertDom = this.replaceHtml(this.tree.insertDom, this.html),
            	  this.Dom = $("#" + this.id).find("ul.x-tree-node-ct:first"),
               this.isExpand = true, this.doExpand();
               if(this.tree.bExpandAll)this.expandAll(), this.tree.bExpandAll = false;
@@ -403,7 +402,6 @@
         _t.ext({tree: _t['tree'], parent: _t, depth: depth, seq: i, id: [_t.id, depth, i].join('_')}, _t.childNodes[i]);
         _t.childNodes[i] = new arguments.callee(_t.childNodes[i]);
       }
-
       /* 无阻塞模式工作 */
       if(null == this.parent || this.parent.isExpand)
       this.regTimer(function()
@@ -411,7 +409,6 @@
         _t.draw();
         return true;
       }, nTm);
-
       return this;
    }
 }
