@@ -89,8 +89,8 @@
         target: null,      /* 页面重定位置 */
         id: null,          /* 当前节点id */
         Dom: null,         /* 当前节点Dom对象 */
-        checkValue: "sdf",
-        allowCheck: true, /* 允许选择 */
+        checkValue: null,
+        allowCheck: false,  /* 允许选择 */
         bExpandAll: false, /* 全部展开 */
         lastSlctNd: null,  /* 最后一次选择的对象 */
 
@@ -116,13 +116,22 @@
         {
            if(oSelf.allowCheck && oSelf.checkValue)
            {
-             var bCkd = (oSelf.isChecked = oSelf.parent && oSelf.parent.doChildCheckedFlg && oSelf.parent.isChecked),
+             var bCkd = false, p = oSelf.parent,
                  szId = oSelf.getCheckBoxId();
-             oSelf.tree.oldData[szId] = bCkd;
-             return [ "<input style=\"cursor:none\" onclick=\"return XuiTree.getTreeNode('",
+             if(oSelf.tree.doChildCheckedFlg)
+             while(p)
+             {
+                if(p.isChecked)
+                {
+                   oSelf.isChecked = p.isChecked;
+                   break;
+                }
+                p = p.parent;
+             }
+             return [ "<input style=\"cursor:default\" onclick=\"return XuiTree.getTreeNode('",
                 oSelf.tree.id, "','", oSelf.id, "')",
                 ".checked(this.checked, "
-                ,oSelf.doChildCheckedFlg,
+                ,oSelf.tree.doChildCheckedFlg,
                 ", event,this)\" type=\"checkbox\" value=\"",
                 oSelf.checkValue,
                 "\"",
@@ -134,16 +143,39 @@
         }, /* 后期扩展label前插入html */
         insertAftLabel: function(oSelf){return ''}, /* 后期扩展label后插入html */
         /* 更新选择对象的数据 */
-        upCkBxData: function(szId, bCkd, szValue)
+        upCkBxData: function(szId, bCkd, o)
         {
-           var _t = this;
+           var _t = this, szValue = o.checkValue;
            if(!szId)return this;
+           if("boolean" != typeof this.tree.oldData[szId] || null == this.tree.oldData[szId])
+             this.tree.oldData[szId] = o.isChecked;
            if(bCkd == _t.tree.oldData[szId])/* 还原 */
               delete _t.tree.addData[szId], delete _t.tree.delData[szId];
            else
            {
               if(bCkd)_t.tree.addData[szId] = szValue,delete _t.tree.delData[szId];
               else    _t.tree.delData[szId] = szValue,delete _t.tree.addData[szId];
+           }
+        }, /* 处理所有子节点 */
+        upCkBxDataAllCld: function(o, b)
+        {
+           var szId = o.id, i = 0, d = o.depth + 1, j = o.childNodes.length;
+           this.upCkBxData(szId, b, o);
+           for(; i < j; i++)
+           {
+              if(0 < o.childNodes[i].childNodes.length)this.upCkBxDataAllCld(o.childNodes[i], b);
+              else
+              {
+                 szId = [o.id, d, i].join("_");
+                 this.upCkBxData(szId, b, o.childNodes[i]);
+              }
+           }
+        }, /* 处理所有父亲节点 */
+        upCkBxDataAllParent: function(o, b)
+        {
+           while(o = o.parent)
+           {
+              this.upCkBxData(o.id, b, o);
            }
         },
         /* 同时触发父亲节点和子节点的同名方法，允许设置标志不触发父亲节点、子节点方法 */
@@ -156,13 +188,15 @@
            	  oCeckBox = this.Dom.prev().find(":checkbox:first"),
               szId = oCeckBox.attr("id");
            }
-           if(bDoCld && _t.doChildCheckedFlg && 0 < _t.childNodes.length)
-              _t.Dom.find("a.x-tree-node-anchor :checkbox").each(function()
+           if(bDoCld && _t.tree.doChildCheckedFlg && 0 < _t.childNodes.length)
+           {
+              _t.Dom.find("div.x-tree-node-el :checkbox").each(function()
              {
                var oTis = $(this).attr("checked", bCkd);
-               _t.upCkBxData(oTis.attr("id"), bCkd, oTis.val());
              });
-           oCeckBox.attr("checked", _t.isChecked = bCkd), _t.upCkBxData(szId, bCkd, oCeckBox.val());
+             _t.upCkBxDataAllCld(_t, bCkd);
+           }
+           _t.upCkBxData(szId, bCkd, _t), oCeckBox.attr("checked", _t.isChecked = bCkd);
            _t.regTimer(function(o)
            {
              $(document.getElementsByName(_t.tree.id + "_add")[0]).val(_t.getAddData());
@@ -170,7 +204,7 @@
              return true;
            }, nTm);
            /* 父亲节点选择 */
-           if(_t.doParentCheckedFlg)
+           if(_t.tree.doParentCheckedFlg)
            {
                if(_t.parent)_t.parent.checked(0 < _t.parent.Dom.find(":input:checked").size(), false, e);
            }
@@ -190,8 +224,9 @@
            this.tree.lastSlctNode = this.tree.allTreeCc[o.parent().attr("id")];
            e && o.find(":checkbox:first").click();
            XuiTree.curTree = this.tree;
-           var oTree = $(XuiTree.curTree.tree.insertDom);
-           o[0].scrollIntoView && o[0].scrollIntoView();
+           var oTree = $(XuiTree.curTree.tree.insertDom), nTop = oTree.attr("scrollTop"), nTp = o.offset().top, nH = oTree.attr('clientHeight');
+           
+           o[0].scrollIntoView && o[0].scrollIntoView(0 < nTop && nTp < nH || (nTop + nH) < nTp);
            return this;
         },
          /* 展开切换 */
@@ -326,12 +361,24 @@
               /* 空白格子 */
               a.push("<img class=\"x-tree-icon\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>");
               
-              
+              /* 父亲节点为最后一个节点，则为空白x-tree-icon，否则为x-tree-elbow-line */
               szClsTmp = 'x-tree-elbow-line';
+              var oTmp = this.parent, aTmp = [], szCls = '';
+              while(oTmp && oTmp.parent)
+              {
+                 szCls = "x-tree-icon";
+                 if(oTmp.seq < oTmp.parent.childNodes.length - 1)
+                    szCls = "x-tree-elbow-line";
+                 aTmp.push("<img class=\"" + szCls + "\" src=\"" + 
+                     g_sysInfo[2] + "default/s.gif\"/>");
+                 oTmp = oTmp.parent;
+              }/*
               if(this.parent && this.parent.parent && this.parent.seq == this.parent.parent.childNodes.length - 1)szClsTmp = 'x-tree-icon';
               for(;i < this.depth; i++)
                 a.push("<img class=\""), a.push(szClsTmp), a.push("\" src=\""),
                 a.push(g_sysInfo[2]), a.push("default/s.gif\"/>");
+                */
+              a = a.concat(aTmp.reverse());
               a.push("</span>");
            }
            /* 树干形式图标 */
@@ -360,11 +407,13 @@
            a.push("/>");
            /* 当前节点图标 */
            a.push("<img unselectable=\"on\" class=\"" + this.nodeIcon + "\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>");
+           /* checkbox */
+           a.push(this.insertBfLabel(this));
            /* 描述部分 */
            a.push("<a href=\"" + this.url + "\" class=\"x-tree-node-anchor\" hidefocus=\"on\"");
            if(this.target)a.push(" target=\"" + this.target + "\"");
            a.push("><span unselectable=\"on\">");
-           a.push(this.insertBfLabel(this)),a.push(this.label),a.push(this.insertAftLabel(this));
+           a.push(this.label),a.push(this.insertAftLabel(this));
            a.push("</span></a>");
            a.push("</div>");
 
