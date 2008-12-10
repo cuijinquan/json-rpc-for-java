@@ -3,7 +3,11 @@
    curTree: null, /* 当前激活的tree */
    ext: function(oSrc, oDes)
    {
-      for(var k in oSrc)oDes[k] = oSrc[k];
+      for(var k in oSrc)
+      {
+         if(oDes[k])oDes[k + "_old"] = oDes[k];
+         oDes[k] = oSrc[k];
+      }
       return oDes;
    },upperNode: function()
     {
