@@ -9,6 +9,26 @@
          oDes[k] = oSrc[k];
       }
       return oDes;
+   }, /* 为id为指定值的tree扩展处理 */
+   ext4id: function(id, o)
+   {
+      var k, p = this.TreeNode.prototype;
+      for(k in o)
+      {
+         if(p[k])
+         {
+             p[k + "_old"] = p[k];
+             (function(i){
+		         p[i] = function()
+		         {
+		             if(this.tree.id == id)return o[i].apply(this, arguments);
+		             else return this[i + "_old"].apply(this, arguments);
+		         };
+	         })(k);
+         }
+         else p[k] = o[k];
+      }
+      return this.TreeNode;
    },upperNode: function()
     {
        var o = XuiTree.curTree.lastSlctNode;
@@ -199,7 +219,7 @@
            {
               _t.Dom.find("div.x-tree-node-el :checkbox").each(function()
              {
-               var oTis = $(this).attr("checked", bCkd);
+                 $(this).attr("checked", bCkd);
              });
              _t.upCkBxDataAllCld(_t, bCkd);
            }
