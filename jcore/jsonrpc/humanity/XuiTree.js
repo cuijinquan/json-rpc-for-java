@@ -118,15 +118,18 @@
            {
              var bCkd = false, p = oSelf.parent,
                  szId = oSelf.getCheckBoxId();
-             if(oSelf.tree.doChildCheckedFlg)
-             while(p && p != oSelf.tree)
+             if(oSelf.tree.doChildCheckedFlg && p)
              {
-                if(p.isChecked)
-                {
-                   bCkd = oSelf.isChecked = p.isChecked;
-                   break;
-                }
-                p = p.parent;
+                 bCkd = oSelf.isChecked = p.isChecked;
+	             while(p && !p.checkValue && p != oSelf.tree)
+	             {
+	                if(p.isChecked)
+	                {
+	                   bCkd = oSelf.isChecked = p.isChecked;
+	                   break;
+	                }
+	                p = p.parent;
+	             }
              }
              return [ "<input style=\"cursor:default\" onclick=\"return XuiTree.getTreeNode('",
                 oSelf.tree.id, "','", oSelf.id, "')",
