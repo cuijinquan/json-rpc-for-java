@@ -121,7 +121,7 @@
              if(oSelf.tree.doChildCheckedFlg && p)
              {
                  bCkd = oSelf.isChecked = p.isChecked;
-	             while(p && !p.checkValue && p != oSelf.tree)
+	             while(p && (null == p.checkValue || p.isChecked) && p != oSelf.tree)
 	             {
 	                if(p.isChecked)
 	                {
