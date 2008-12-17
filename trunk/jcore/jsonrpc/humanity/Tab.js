@@ -1,5 +1,5 @@
 {
-    /*id: tabs标签的id tabstest1*/
+    /*初始化宽度. id: tabs标签的id*/
     initWidth : function(id){
       var width = $("#" + id).width();
       $("#" + id).width(width);
@@ -9,12 +9,19 @@
         $(this).width(width-2);
       });
     },
+    /*初始化宽度. id: tabs标签的id, active:设置选中tab的id*/
     TabsInit:function(id, active){
        this.initWidth(id);
+       var i=1, tabs = $("#"+id+"xui_tabs")[0], _t = this;
+       tabs.headers = new Object();
        $("#" + id + " span.x-tab-strip-text").each(function(){
-          var o = $(this), p = o.parent(), w = p.width();
+          var o = $(this), p = o.parent(), w = p.width(), li=_t.p(o[0], "LI");
           p.width('100%');
-          if(o.width() < 122)p.width(w);
+          if(o.width() < 122){
+            p.width(w);
+          }  
+          tabs.headers["index"+i] = {"id":li.id}; 
+          i++;
        });
        this.setActiveTab(id, active);
     },
@@ -41,7 +48,6 @@
       try{
         var o = $("#" + active)[0], tabs = $("#"+id+"xui_tabs")[0], 
         index = parseInt(o.attributes['index'].nodeValue);
-        //tabs.stop = index;
         for(var i=0; i<index-1; i++)
 	        this.tabScrollRightHandler(id);
       }catch(e){alert(e.message);}
@@ -60,11 +66,11 @@
      }
     },
     tabScrollRightHandler : function(id){
-      var tabs = $("#"+id+"xui_tabs")[0], 
+      var tabs = $("#"+id+"xui_tabs")[0],
       index = tabs.left || 1, 
       index = (1 != index) && "sub"==tabs.action?(index+1):index,
-      //current = $("#"+id+"xui_tabs").find("#tab"+index)[0],
-      current = $("#"+id+" #tab"+index)[0],
+      h = tabs.headers["index"+index],
+      current = $("#" + id + " #" + h["id"])[0],
       eachw = $(current).width() < 140 ? 140 : $(current).width(), 
       r = parseInt($(current).css("right")), timer = null, 
       count = tabs.getElementsByTagName("LI").length, prew = tabs.w || 0,
@@ -72,7 +78,8 @@
       if (!tabs.stop){
           var tmpw = 0;
 	      for(i=count-1; i>=0; i--){
-	        tmpw += $("#"+id+" #tab"+i).width();
+	        var tmph = tabs.headers["index"+i];
+	        tmpw += $("#" + id + " #" + tmph["id"]).width();
 	        if (tmpw > twidth){
 	          tabs.stop = i+2;
 	          break;
@@ -86,7 +93,7 @@
         tabs.left = ++index;tabs.w = prew + eachw;tabs.action="add";
 		clearTimeout(timer);        
       } else {
-        r += 15;
+        r += 21;
         $("#"+id+" li.x-tab-with-icon").each(function(){
           $(this).css("right", (r+"px"));
         });  
@@ -96,16 +103,17 @@
       
     tabScrollLeftHandler : function(id){
       var tabs = $("#"+id+"xui_tabs")[0], index = (tabs.left) || 1, 
-      index = "add"==tabs.action?(index-1):index, current = $("#"+id+" #tab"+index)[0],
+      index = "add"==tabs.action?(index-1):index, 
+      h = tabs.headers["index"+index],
+      current = $("#" + id + " #" + h["id"])[0],
       eachw = $(current).width() < 140 ? 140 : $(current).width(), 
       r = parseInt($(current).css("right")), timer = null, prew = tabs.w || 0;
-	  document.title = ["index:",index, "eachw:",eachw, "r:", r, "prew:", prew];      
 	  if(r<0) return;
       if(r <= prew-eachw){
         tabs.left = --index; tabs.w = prew - eachw;tabs.action="sub";
         clearTimeout(timer);
       } else {
-        r -= 15;
+        r -= 21;
         $("#"+id+" li.x-tab-with-icon").each(function(){
           $(this).css("right", (r+"px"));
         });  
