@@ -25,6 +25,19 @@
        });
        this.setActiveTab(id, active);
     },
+    
+    /*将tab页置灰*/
+    disableTab : function(id, tab){
+      var li = $("#" + id + " #" + tab), _t = this;
+      this.toggleStyle("x-item-disabled", li[0], true);
+    },
+    
+    /*将tab页置灰恢复*/
+    enableTab : function(id, tab){
+      var li = $("#" + id + " #" + tab), _t = this;
+      this.toggleStyle("x-item-disabled", li[0], false);
+    },
+    
     /* 将为name的class样式，增加或者是删除在指定的对象上.如果返回是真的的话,表示增加或者删除成功*/
     toggleStyle : function(cStyle, o, show){
       if (!o)return false;
@@ -61,7 +74,6 @@
       this.tabLoad(id, o);
      } else {
       var ftab = $("#" + id +" li")[0];
-      this.toggleStyle("x-tab-strip-active", ftab, true)
       this.tabLoad(id, ftab);
      }
     },
@@ -74,7 +86,9 @@
       eachw = $(current).width() < 140 ? 140 : $(current).width(), 
       r = parseInt($(current).css("right")), timer = null, 
       count = tabs.getElementsByTagName("LI").length, prew = tabs.w || 0,
-      twidth = $(tabs).width();
+      twidth = $(tabs).width(),
+      rslider = $("#" + id + " #xui_tab_r_slider")[0], 
+      lslider = $("#" + id + " #xui_tab_l_slider")[0];
       if (!tabs.stop){
           var tmpw = 0;
 	      for(i=count-1; i>=0; i--){
@@ -87,13 +101,15 @@
 	      }
       }
       if (index >= count || index > tabs.stop){
+        this.toggleStyle("x-tab-scroller-right-disabled", rslider, true);
         return;
       }
       if (r >= (eachw + prew)){
+        this.toggleStyle("x-tab-scroller-left-disabled", lslider, false);
         tabs.left = ++index;tabs.w = prew + eachw;tabs.action="add";
 		clearTimeout(timer);        
       } else {
-        r += 21;
+        r += 10;
         $("#"+id+" li.x-tab-with-icon").each(function(){
           $(this).css("right", (r+"px"));
         });  
@@ -107,13 +123,19 @@
       h = tabs.headers["index"+index],
       current = $("#" + id + " #" + h["id"])[0],
       eachw = $(current).width() < 140 ? 140 : $(current).width(), 
-      r = parseInt($(current).css("right")), timer = null, prew = tabs.w || 0;
-	  if(r<0) return;
+      r = parseInt($(current).css("right")), timer = null, prew = tabs.w || 0,
+      rslider = $("#" + id + " #xui_tab_r_slider")[0], 
+      lslider = $("#" + id + " #xui_tab_l_slider")[0];
+	  if(r<0) {
+	    this.toggleStyle("x-tab-scroller-left-disabled", lslider, true);
+	    return;
+	  }
       if(r <= prew-eachw){
+        this.toggleStyle("x-tab-scroller-right-disabled", rslider, false);
         tabs.left = --index; tabs.w = prew - eachw;tabs.action="sub";
         clearTimeout(timer);
       } else {
-        r -= 21;
+        r -= 10;
         $("#"+id+" li.x-tab-with-icon").each(function(){
           $(this).css("right", (r+"px"));
         });  
@@ -122,6 +144,8 @@
     },
     /*加载tab页的内容*/
     tabLoad : function(id, o){
+        var name = o.className,length = name.indexOf("x-item-disabled");
+        if (length > -1)return false;
 	    var tab = document.getElementById(id+"xui_tabs"), aid = tab.active || "xui_no_active",
 	    active = $("#"+id+" #"+aid)[0],
 	    abody = $("#" + id + " #" + aid + "_body")[0],
@@ -135,6 +159,8 @@
     },
 	/*设置onmouse over和out的样式*/
 	tabOver : function(o, show){
+	  var name = o.className,length = name.indexOf("x-item-disabled");
+      if (length > -1)return false; 
 	  if (name.indexOf("x-tab-strip-active") <= -1){
 	    this.toggleStyle("x-tab-strip-over", o, show);
 	  }
