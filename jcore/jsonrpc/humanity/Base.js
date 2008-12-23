@@ -104,9 +104,13 @@
     var i = 0;
     while(o && i++ < 500)
     {
-      if((o = o.parentNode).nodeName === szTagName)
-        return o;
+      if(o = o.parentNode)
+      {
+        if("BODY" == o.nodeName)return null;
+        if(o.nodeName === szTagName)return o;
+      }else break;
     }
+    return null;
   }, /* 将a转换为有效的Array */
   A:function(a)
   {
