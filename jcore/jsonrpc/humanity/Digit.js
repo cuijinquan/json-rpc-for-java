@@ -6,9 +6,9 @@
            var arg = Digit.check.arguments, o = Digit.check.arguments[0],
            integralNum=18, decimalNum=0, max =999999999999, min=-999999999999;
            if(1 < arg.length){
-             integralNum = arg[1][0],decimalNum = arg[1][1];
+             integralNum = arg[1][0] || integralNum, decimalNum = arg[1][1] || decimalNum;
              if(2 < arg[1].length){
-               max = arg[1][2],min = arg[1][3];
+               max = arg[1][2] || max, min = arg[1][3] || min;
              }
            }
            if(0 < decimalNum) 
