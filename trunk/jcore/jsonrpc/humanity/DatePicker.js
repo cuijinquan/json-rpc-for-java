@@ -141,7 +141,7 @@
 	  return r;
 	},setValue: function(e)
 	{
-	   if(o.readOnly || o.disabled)return false;
+	   if(this.dpIpt.readOnly || this.dpIpt.disabled)return false;
 	   this.month = parseInt(this.month, 10);
 	   this.day = parseInt(this.day, 10);
 	   this.year = parseInt(this.year, 10);
@@ -350,6 +350,7 @@
      }
   },onInput: function(e, o)
    {
+     if(!(o.readOnly || o.disabled))return false;
      this.event = e = e || window.event;
      return this.RunOne(function(){
         this.stopPropagation(e),this.preventDefault(e);
