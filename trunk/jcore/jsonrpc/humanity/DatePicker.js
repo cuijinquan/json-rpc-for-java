@@ -141,6 +141,7 @@
 	  return r;
 	},setValue: function(e)
 	{
+	   if(o.readOnly || o.disabled)return false;
 	   this.month = parseInt(this.month, 10);
 	   this.day = parseInt(this.day, 10);
 	   this.year = parseInt(this.year, 10);
