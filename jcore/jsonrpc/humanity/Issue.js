@@ -41,8 +41,9 @@
       var e = (evt || event || window.event),o = e.srcElement || e.target,
       length = o.value.length;
       if(0 < length && o.maxLength != length){
-        setTimeout(function(){o.focus(),o.select();},1);
-        alert("输入期号不完整！");
+        Base.addInvalid(o);
+      }else{
+        Base.delInvalid(o);
       }
     },
     getData : function(){
@@ -76,7 +77,7 @@
       return reg.test(s);
     },
     getContent : function(obj, inputStr){
-      if(this.bIE){
+      if(Base.bIE){
         return this.ieGetContent(obj, inputStr);
       } else {
         return this.ffGetContent(obj, inputStr);
