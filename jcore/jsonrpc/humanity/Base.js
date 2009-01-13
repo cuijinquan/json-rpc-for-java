@@ -337,7 +337,7 @@
      return e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
   }, /* 在对象el中插入html代码 */
   insertHtml:function(el, where, html){
-  where = where.toLowerCase();
+  where = where.toLowerCase();if(!el)return this;
   if(el.insertAdjacentHTML){
       switch(where){
           case "beforebegin":

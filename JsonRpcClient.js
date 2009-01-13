@@ -146,4 +146,4 @@ var rpc = JsonRpcClient(),
         for(i = 1; i < a.length; i++)
            for(k in a[i])if(!p[k])p[k] = a[i][k];
         return p;
-    },Base = rpc.LoadJsObj("Base");
+    };
