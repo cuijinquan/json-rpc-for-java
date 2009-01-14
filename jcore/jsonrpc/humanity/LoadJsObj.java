@@ -69,12 +69,9 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 				String s = Content.JS(buf.toString().trim()).replaceAll("\\/\\*[^\\*]+\\*\\/", "");
 //				s = Content.JS(s);
 				s = s.replaceFirst("^\\\\ufeff", "");
-				s = s.replaceAll("([\\t ]*\\r\\n[\\t ]*)+", "\r\n");
-				s = s.replaceAll("[ \\t]*\\n[\\t ]+", "\n");
-				s = s.replaceAll("([^\\r])\\n", "$1");
-				// System.out.println(szName + " = " + s);
-//				if("Base".equals(szName))
-//				 System.out.println("var " + szName + " = (" + s + ").init();");
+//				s = s.replaceAll("([\\t ]*\\r\\n[\\t ]*)+", "\r\n");
+//				s = s.replaceAll("[ \\t]*\\n[\\t ]+", "\n");
+//				s = s.replaceAll("([^\\r])\\n", "$1");
 				oRst.setResult(s);
 			}
 			else oRst.setErrMsg("指定的对象不存在，请确认大小写是否正确。");
