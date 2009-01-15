@@ -1,10 +1,10 @@
 {
     check : function(o){
       o.maxLength = 6;
-      this.addEvent(o, "keypress", this.checkPress);
-      this.addEvent(o, "paste", this.checkPaste);
-      this.addEvent(o, "drop", this.checkDrop);
-      this.addEvent(o, "blur", this.checkBlur);
+      Digit.addEvent(o, "keypress", this.checkPress);
+      Digit.addEvent(o, "paste", this.checkPaste);
+      Digit.addEvent(o, "drop", this.checkDrop);
+      Digit.addEvent(o, "blur", this.checkBlur);
     },
     getRegStr : function(s){
       var n = s.length;
@@ -42,6 +42,7 @@
       length = o.value.length;
       if(0 < length && o.maxLength != length){
         Base.addInvalid(o);
+        alert("输入期号不完整！");
       }else{
         Base.delInvalid(o);
       }

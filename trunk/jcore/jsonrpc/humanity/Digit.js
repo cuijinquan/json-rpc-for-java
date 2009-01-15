@@ -19,10 +19,10 @@
            if(0 < decimalNum) reg += "(\\.\\d{0," + decimalNum + "})?";
            reg += "$/";
            o.reg = eval(reg + ";"), o.max = max, o.min = min, o.mylen = 3;
-           Digit.addEvent(o, "paste", Digit.str_onpaste);
-           Digit.addEvent(o, "drop", Digit.sz_ondrop);
-           Digit.addEvent(o, "keypress", Digit.sz_onkeypress);
-           Digit.addEvent(o, "blur", Digit.sz_onblur);
+           Digit.addEvent(o, "paste", this.str_onpaste);
+           Digit.addEvent(o, "drop", this.sz_ondrop);
+           Digit.addEvent(o, "keypress", this.sz_onkeypress);
+           Digit.addEvent(o, "blur", this.sz_onblur);
            
         });
       }catch(e){alert(e.message)}
@@ -59,9 +59,11 @@
         if ("" == o.value || 
 		    ("false" == o.isRequired && "" == o.value) || 
 		    (o.max >= o.value && o.min <= o.value)) {
+		    Base.delInvalid(o);
 			return eval(o.mylen + ";");
 		}
       }
+      Base.addInvalid(o);
       setTimeout(function(){o.focus(),o.select();},1);
       alert("输入值必须在[" + o.min + " - " + o.max + "]之间,并且小数点位数正确");
     },
