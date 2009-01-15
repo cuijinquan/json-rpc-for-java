@@ -3,7 +3,7 @@
       if(false == empty){
         if(Utils.isStrEmpty(input.value)){
           alert("身份证号码录入的数据不能为空" );
-          input.select();
+          setTimeout(function(){input.focus();input.select();},1);
 	      return false;
         }
       }
@@ -15,7 +15,7 @@
         IdCard.check18(input, sex, birthday);
       } else {
         alert("身份证号码长度错误！");
-        input.select();
+        setTimeout(function(){input.focus();input.select();},1);
         return false;
       } 
       return true;
@@ -28,18 +28,18 @@
 	  day  = input.value.substr(12,2);
       if(!Utils.isDateNumberFormat(month,day,year)){
         alert("身份证号码日期部分错误！"+year+"-"+month+"-"+day);
-        input.select();
+        setTimeout(function(){input.focus();input.select();},1);
         return false;
       }
       var tmp = input.value.replace(/\d/gmi,"");
       if (!("" == tmp || "X" == tmp)){
         alert("输入的身份证中有不合法的字符!");
-	    input.select();
+	    setTimeout(function(){input.focus();input.select();},1);
 	    return false;
       }
       if (!IdCard.upgrade(input.value)){
         alert("输入的身份证校验位不合法!!!");
-	    input.select();
+	    setTimeout(function(){input.focus();input.select();},1);
 	    return false;        
       }
       date = year+"-"+month+"-"+day;
@@ -60,7 +60,7 @@
 	  day  = input.value.substr(10,2);
       if(!Utils.isDateNumberFormat(month,day,year)){
         alert("身份证号码日期部分错误！"+year+"-"+month+"-"+day);
-        input.select();
+        setTimeout(function(){input.focus();input.select();},1);
         return false;
       }
       date = year+"-"+month+"-"+day;
