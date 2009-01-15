@@ -4,11 +4,15 @@
         if(Utils.isStrEmpty(input.value)){
           alert("身份证号码录入的数据不能为空" );
           setTimeout(function(){input.focus();input.select();},1);
+          Base.addInvalid(input);
 	      return false;
         }
       }
       input.value = Utils.trim(input.value).replace(/[^\dX]/g,"");
-      if(true == empty && Utils.isStrEmpty(input.value))return true;
+      if(true == empty && Utils.isStrEmpty(input.value)){
+        Base.delInvalid(input);
+        return true;
+      }  
       if (15 == Utils.trim(input.value).length)
         IdCard.check15(input, sex, birthday);
       else if (18 == Utils.trim(input.value).length){
@@ -16,8 +20,10 @@
       } else {
         alert("身份证号码长度错误！");
         setTimeout(function(){input.focus();input.select();},1);
+        Base.addInvalid(input);
         return false;
       } 
+      Base.delInvalid(input);
       return true;
     },
     
@@ -29,17 +35,20 @@
       if(!Utils.isDateNumberFormat(month,day,year)){
         alert("身份证号码日期部分错误！"+year+"-"+month+"-"+day);
         setTimeout(function(){input.focus();input.select();},1);
+        Base.addInvalid(input);
         return false;
       }
       var tmp = input.value.replace(/\d/gmi,"");
       if (!("" == tmp || "X" == tmp)){
         alert("输入的身份证中有不合法的字符!");
 	    setTimeout(function(){input.focus();input.select();},1);
+	    Base.addInvalid(input);
 	    return false;
       }
       if (!IdCard.upgrade(input.value)){
         alert("输入的身份证校验位不合法!!!");
 	    setTimeout(function(){input.focus();input.select();},1);
+	    Base.addInvalid(input);
 	    return false;        
       }
       date = year+"-"+month+"-"+day;
@@ -50,6 +59,7 @@
 	    if (input.value.substr(16,1)%2==0)
 	      sex.value="2";
       } 
+      Base.delInvalid(input);
       return true;
     },
     
@@ -61,6 +71,7 @@
       if(!Utils.isDateNumberFormat(month,day,year)){
         alert("身份证号码日期部分错误！"+year+"-"+month+"-"+day);
         setTimeout(function(){input.focus();input.select();},1);
+        Base.addInvalid(input);
         return false;
       }
       date = year+"-"+month+"-"+day;
@@ -72,6 +83,7 @@
 	      sex.value="2";
       } 
       input.value = IdCard.upgrade(input.value);    
+      Base.delInvalid(input);
       return true;
     },
     
