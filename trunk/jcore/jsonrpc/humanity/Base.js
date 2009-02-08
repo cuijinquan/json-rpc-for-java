@@ -8,6 +8,18 @@
 	newEl.innerHTML = html;
 	oldEl.parentNode.replaceChild(newEl, oldEl);
 	return newEl;
+},doUpdateCollection:function(szCollectionId, szData)
+{
+  szCollectionId.swf().doUpdateCollection(this.getAllInput(szData));
+},getAllInput:function(s)
+{
+   var a = [], _t = Base,o = $(s || ":input");
+   if(0 < o.size())
+   o.each(function(){
+      a.push(this.name + "=" + escape(_t.decodeStr($(this).val())));
+   });
+   else a.push(s);
+   return a.join("&");
 },
   init: function()
   {
@@ -32,6 +44,33 @@
 	    _t.isW3C = !!document.getElementById;
         _t.isIE5 = _t.isW3C && _t.isIE;
         _t.isNS6 = _t.isW3C && "Netscape" == navigator.appName;
+        window.getAllInput = _t.getAllInput;
+        window.getBrowserObjects = function()
+{
+    var tempArr = [];
+    for (var name in navigator)
+    {
+        var value = navigator[name];
+        switch (typeof(value))
+        {
+            case "string":
+            case "boolean":
+                tempArr.push("navigator." + name + "=" + escape(value));
+                break;
+        }
+    }
+    for (var name in screen)
+    {
+        var value = screen[name];
+        switch (typeof(value))
+        {
+            case "number":
+                tempArr.push("screen." + name + "=" + escape(value));
+                break;
+        }
+    }        
+    return tempArr.join("&");
+};
       if(_t.bIE)
       { 
        _t.nVer = parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]) ||  0;
@@ -39,6 +78,14 @@
          try{document.execCommand("BackgroundImageCache", false, true)}catch(e){}
       }
       _t.trim = String.prototype.trim = function(s){return (s||this).replace(/(^\s*)|(\s*$)/gm, "")};
+      String.prototype.swf = function(){
+         return -1 != navigator.appName.indexOf("Microsoft") ? window[this] : document[this];
+      };
+      Array.prototype.indexOf = function(f){
+        for(var i = 0; i < this.length; i++)
+         if(this[i] == f)return i;
+        return -1;
+      };
       $(document).ready(function(){
       if(!_t.getDom("xuiSelectShdow"))
       {
