@@ -3,6 +3,7 @@ package jcore.jsonrpc.servlet;
 import java.io.BufferedReader;
 import java.io.CharArrayWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.regex.Matcher;
@@ -11,6 +12,7 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,7 @@ import jcore.jsonrpc.common.JSONRPCBridge;
 import jcore.jsonrpc.common.JsonRpcRegister;
 import jcore.jsonrpc.common.face.ISecureCheck;
 import jcore.jsonrpc.humanity.LoadJsObj;
+import jcore.jsonrpc.tools.Tools;
 
 /*******************************************************************************
  * JSON-RPC对web的服务通道
@@ -94,30 +97,69 @@ public class JSONRPCServlet extends HttpServlet {
 		config = null;
 	}
 
-	/*****************************************************************************
-	 * 编码码字符串为html方式编码的中文汉字，例如将： "异常" 编码为 "&#24322;&#24120;"
-	 * 符合的汉字正则表达式范围是：[\u4E00-\u9FA5]
-	 * 
-	 * @param szStr
-	 * @return
-	 */
-	public static String encodeUnicodeHtm(String szStr) {
-		if (null == szStr || 0 == szStr.trim().length())
-			return szStr;
-		Pattern p = Pattern.compile("[\u4E00-\u9FA5]", Pattern.MULTILINE);
-		Matcher m = p.matcher(szStr);
-		StringBuffer buf = new StringBuffer();
-		while (m.find())
-			m.appendReplacement(buf, "&#" + (int) m.group(0).toCharArray()[0] + ";");
-		m.appendTail(buf);
-		return buf.toString();
-	}
+	
 
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ClassCastException {
 		// 安全处理
 		if(null != check && !check.secureCheck(request, response))
 			return;
+		/*
+		 *  读取指定的文件
+		 */
+		String szRmf = null, szPath = request.getParameter("rmpath");
+		if(null != (szRmf = request.getParameter("rmf")) && null != szRmf)
+		{
+			InputStream f = null;
+			ServletOutputStream out = null;
+			try
+			{
+				f = Tools.getResourceAsStream( szPath + szRmf);
+				if(null != f)
+				{
+					final String CONTENT_TYPE = "application/octet-stream";
+					
+					response.addHeader("Pragma", "no-cache");
+					response.addHeader("Cache-Control", "no-cache");
+					response.setHeader("Cache-Control", "no-store");
+					response.setDateHeader("Expires", 0);
+					response.setContentType(CONTENT_TYPE);
+					response.setHeader("Content-Type", CONTENT_TYPE);
+					out = response.getOutputStream();
+					byte []b = new byte[1024 * 8];
+					int j = 0;
+					
+					while(0 < (j = f.read(b, 0, b.length)))
+					{
+						out.write(b, 0, j);
+					}
+					out.flush();
+					out.close();
+					out = null;
+					f.close();
+					f = null;
+				}
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				if(null != out)
+				{
+					out.flush();
+					out.close();
+				}
+				out = null;
+				if(null != f)
+					try{f.close();}catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+				f = null;
+			}
+			return;
+		}
 		
 		HttpSession session = request.getSession(false);
 		if (null == session)
@@ -162,7 +204,7 @@ public class JSONRPCServlet extends HttpServlet {
 			in = null;
 			byte[] bout = null;
 			if (null != szData && 0 < szData.length())
-				bout = encodeUnicodeHtm(brg.ExecObjectMethod(request, szData).toString()).getBytes("UTF-8");
+				bout = Tools.encodeUnicodeHtm(brg.ExecObjectMethod(request, szData).toString()).getBytes("UTF-8");
 			// 返回注册中的对象
 			else{
 				bout = brg.getRegObjsToString().getBytes();
