@@ -13,12 +13,19 @@
   szCollectionId.swf().doUpdateCollection(this.getAllInput(szData));
 },getAllInput:function(s)
 {
-   var a = [], _t = Base,o = $(s || ":input");
+   var a = [], _t = Base,o = $(s || ":input"), ecd = _t.decodeStr;
    if(0 < o.size())
    o.each(function(){
-      a.push(this.name + "=" + escape(_t.decodeStr($(this).val())));
+      a.push(this.name + "=" + escape(ecd($(this).val())));
    });
-   else a.push(s);
+   else{
+      var p = s.split("&"), u;
+      for(var i = 0; i < p.length; i++)
+      {
+        u = p[i].split("=");
+        a.push(u[0] + "=" + escape(ecd(u[1])));
+      }
+   }
    return a.join("&");
 },
   init: function()
@@ -79,7 +86,7 @@
       }
       _t.trim = String.prototype.trim = function(s){return (s||this).replace(/(^\s*)|(\s*$)/gm, "")};
       String.prototype.swf = function(){
-         return -1 != navigator.appName.indexOf("Microsoft") ? window[this] : document[this];
+         return -1 != navigator.appName.indexOf("Microsoft") ? window[this] || document.getElementById(this): document[this];
       };
       Array.prototype.indexOf = function(f){
         for(var i = 0; i < this.length; i++)
@@ -268,8 +275,8 @@
     });
     return this;
   },decodeStr: function(s)
-  {
-        return s.replace(/[\u4E00-\u9FA5]/gm, function()
+  {/* \u4E00-\u9FA5 */
+        return s.replace(/[^\u00-\uff]/gm, function()
         {
           return "&#" + arguments[0].charCodeAt(0) + ";";
         })
