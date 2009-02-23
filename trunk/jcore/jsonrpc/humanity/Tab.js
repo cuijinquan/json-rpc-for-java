@@ -1,4 +1,5 @@
-{
+{   
+    //初始化宽度. id: tabs标签的id 
     initWidth : function(id){
       var width = $("#" + id).width();
       $("#" + id).width(width);
@@ -9,6 +10,7 @@
       });
     },
     
+    //初始化宽度. id: tabs标签的id, active:设置选中tab的id
     TabsInit:function(id, active){
        XUI(this);
        this.initWidth(id);
@@ -27,6 +29,7 @@
        this.setActiveTab(id, active);
     },
     
+    //关闭标签页.id: tabs标签的id, o:li组件
     closeTab : function(id, o){
       var tabs = $("#"+id+"xui_tabs")[0],
       li = "LI" == o.nodeName ? o : this.p(o, "LI"),
@@ -44,16 +47,19 @@
       this.disableTab(id, li.id);
     },
     
+    //将tab页置灰. id:tabs标签的id, tab:需要置灰标签页的id
     disableTab : function(id, tab){
       var li = $("#" + id + " #" + tab), _t = this;
       this.toggleStyle("x-item-disabled", li[0], true);
     },
     
+    //将置灰的tab页恢复. id:tabs标签的id, tab:需要置灰标签页的id
     enableTab : function(id, tab){
       var li = $("#" + id + " #" + tab), _t = this;
       this.toggleStyle("x-item-disabled", li[0], false);
     },
     
+    //将为name的class样式，增加或者是删除在指定的对象上.如果返回是真的的话,表示增加或者删除成功
     toggleStyle : function(cStyle, o, show){
       if (!o)return false;
       var name = o.className,length = name.indexOf(cStyle);
@@ -71,6 +77,7 @@
       return false;
     },
     
+    //如果指定的tab页被隐藏，则滑动至可见. id:标签页tabs的id，active:滑动到指定标签页的id
     moveToTab : function(id, active){
       try{
         var o = $("#" + id + " #" + active)[0], 
@@ -87,6 +94,7 @@
       }catch(e){alert(e.message);}
     },
     
+    //设置选中的tab页. id:标签页tabs的id，active:指定选中的标签页的id
     setActiveTab : function(id, active){
      var o = $("#" + id + " #" + active)[0];
      if(o){
@@ -98,6 +106,7 @@
      }
     },
     
+    //获取显示了的标签页的整个宽度
     getDisplayWidth : function(id, index){
       var tabs = $("#"+id+"xui_tabs")[0], count = 0;
       for(var i=index; i<=tabs.max; i++){
@@ -109,6 +118,7 @@
       return count;
     },
     
+    //标签页向左滑动函数.
     tabScrollRightHandler : function(id, speed){
       speed = speed || 25;
       var tabs = $("#"+id+"xui_tabs")[0],
@@ -156,7 +166,8 @@
         timer = setTimeout("Tab.tabScrollRightHandler('"+id+"');", 10);
       }
     },
-      
+    
+    //标签页向左滑动函数.  
     tabScrollLeftHandler : function(id, speed){
       speed = speed || 25;
       var tabs = $("#"+id+"xui_tabs")[0], index = (tabs.left) || 1, 
@@ -189,6 +200,7 @@
       }
     },
     
+    //加载tab页的内容. 
     tabLoad : function(id, span, hide){
         var o = "LI" == span.nodeName ? span : this.p(span,"LI"), 
         name = o.className,length = name.indexOf("x-item-disabled");
@@ -208,6 +220,7 @@
 	    }
     },
     
+    //设置onmouse over和out的样式
 	tabOver : function(o, show){
 	  var name = o.className,length = name.indexOf("x-item-disabled");
       if (length > -1)return false; 
@@ -219,6 +232,7 @@
 	  this.toggleStyle("x-tab-strip-over", o, show);
     },
     
+    //点击标签页头，高亮显示标题
     tablist : function(id, o){
       var div = $("#" + id + "tabslist"), li = this.p(o, "LI"),
       left = $(li).offset().left+"px", top = ($(li).offset().top+23)+"px";
@@ -236,6 +250,7 @@
       });
     },
     
+    //判断是否所有的标签页都是隐藏的
     isAllHide : function(id){
       var tabs = $("#"+id+"xui_tabs")[0];
       for(var i=1; i<=tabs.max; i++){
@@ -247,6 +262,7 @@
       return true;
     },
     
+    //获取下一个非隐藏的标签页
     getNextShowTab : function(id, index){
       var tabs = $("#"+id+"xui_tabs")[0];
       if(this.isAllHide(id))return undefined;
@@ -265,6 +281,7 @@
       }
     },
     
+    //将隐藏的标签页显示
     showTab : function(id, o, index){
       var tabs = $("#"+id+"xui_tabs")[0], hide = this.isAllHide(id);
       var li = this.p(o, "LI"),
