@@ -319,6 +319,7 @@
       }  
     },
     
+    //点击标签页的下拉选框菜单时，滑动到对应的标签页上
     slidet : function(id, o, index){
       var tabs = $("#"+id+"xui_tabs")[0],
       h = tabs.headers["index"+index], active = h["id"],
