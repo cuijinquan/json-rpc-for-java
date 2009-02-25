@@ -3,22 +3,15 @@ package jcore.jsonrpc.servlet;
 import java.io.BufferedReader;
 import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.yinhai.xui.tools.CommonTools;
 
 import jcore.jsonrpc.common.Content;
 import jcore.jsonrpc.common.JSONRPCBridge;
@@ -99,90 +92,13 @@ public class JSONRPCServlet extends HttpServlet {
 		config = null;
 	}
 
-	
-
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ClassCastException {
 		// 安全处理
 		if(null != check && !check.secureCheck(request, response))
 			return;
-		/*
-		 *  读取指定的文件
-		 */
-		String szRmf = null, szPath = request.getParameter("rmpath");
-		if(null != (szRmf = request.getParameter("rmf")) && null != szRmf)
-		{
-			InputStream f = null;
-			ServletOutputStream out = null;
-			try
-			{
-				f = Tools.getResourceAsStream( szPath + szRmf);
-				boolean bCss = -1 < szRmf.indexOf(".css");
-				if(null != f)
-				{
-					String CONTENT_TYPE = "application/octet-stream";
-					if(bCss)CONTENT_TYPE = "text/plain";
-					
-					response.addHeader("Pragma", "no-cache");
-					response.addHeader("Cache-Control", "no-cache");
-					response.setHeader("Cache-Control", "no-store");
-					response.setDateHeader("Expires", 0);
-					response.setContentType(CONTENT_TYPE);
-					response.setHeader("Content-Type", CONTENT_TYPE);
-					out = response.getOutputStream();
-					byte []b = new byte[1024 * 8];
-					int j = 0;
-					StringBuffer buf = new StringBuffer();
-					
-					while(0 < (j = f.read(b, 0, b.length)))
-					{
-						if(bCss)
-						{
-							byte []b1 = new byte[j];
-							System.arraycopy(b, 0, b1, 0, j);
-							buf.append(new String(b1, "GBK"));
-							b1 = null;
-						}
-						else out.write(b, 0, j);
-					}
-					if(bCss)
-					{
-						// request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + 
-						String szP = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + CommonTools.getImgPath();
-						szP = buf.toString().replaceAll("\\.\\.\\/images\\/", szP)
-						      .replaceAll("\\/\\*[^\\n]+\\*\\/[\\r\\n]*", "");
-//						System.out.println(szP);
-						out.write(szP.getBytes());
-					}
-					out.flush();
-					out.close();
-					out = null;
-					f.close();
-					f = null;
-				}
-			}catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-			finally
-			{
-				if(null != out)
-				{
-					out.flush();
-					out.close();
-				}
-				out = null;
-				if(null != f)
-					try{f.close();}catch(Exception e)
-					{
-						e.printStackTrace();
-					}
-				f = null;
-			}
-			return;
-		}
-		
 		HttpSession session = request.getSession(false);
+		
 		if (null == session)
 			session = request.getSession(true);
 		if (null != session){
@@ -196,14 +112,15 @@ public class JSONRPCServlet extends HttpServlet {
 				myInit(this.config, brg);
 			JsonRpcRegister.registerObject(request, "_LoadJsObj", LoadJsObj.class);
 			OutputStream out = null;
-			String szGzip = request.getHeader("Accept-Encoding");
-			if (null != szGzip && -1 < szGzip.indexOf("gzip")
-					&& (bGzip || "1".equals("JSONAccept-Encoding"))){
-				response.setContentType("text/plain;charset=" + charset);
-				response.setHeader("Content-Encoding", "GZIP");
-				out = new GZIPOutputStream(response.getOutputStream());
-			}
-			else{
+//			String szGzip = request.getHeader("Accept-Encoding");
+//			if (null != szGzip && -1 < szGzip.indexOf("gzip")
+//					&& (bGzip || "1".equals("JSONAccept-Encoding"))){
+//				response.setContentType("text/plain;charset=" + charset);
+//				response.setHeader("Content-Encoding", "GZIP");
+//				out = new GZIPOutputStream(response.getOutputStream());
+//			}
+//			else
+			{
 				response.setContentType("text/plain;charset=" + charset);
 				out = response.getOutputStream();
 			}
@@ -235,6 +152,7 @@ public class JSONRPCServlet extends HttpServlet {
 			out.flush();
 			out.close();
 			session.setAttribute(Content.RegSessionJSONRPCName, brg);
+			
 		}
 	}
 }

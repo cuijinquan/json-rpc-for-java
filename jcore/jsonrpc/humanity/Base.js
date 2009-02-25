@@ -8,7 +8,33 @@
 	newEl.innerHTML = html;
 	oldEl.parentNode.replaceChild(newEl, oldEl);
 	return newEl;
-},doUpdateCollection:function(szCollectionId, szData)
+}, /* 隐藏指定名字或id的对象 */
+hideObj:function(szNameOrId)
+{
+  var o = $("#" + szNameOrId);
+  if(0 < o.length)
+  {
+     if("x-panel" == o.attr("class"))o = o.parent("div");
+     o.hide();
+  }
+  else (o = $(":input[@name=" + szNameOrId + "]").parent("div").parent("div")).hide();
+}, /* 显示指定名字或id的对象 */
+showObj:function(szNameOrId, bDisb)
+{
+  var o = $("#" + szNameOrId);
+  if(0 < o.length)
+  {
+     if("x-panel" == o.attr("class"))o = o.parent("div");
+     o.show();
+  }
+  else (o = $(":input[@name=" + szNameOrId + "]").parent("div").parent("div")).show();
+  o = o.children("*");
+  o.not(":input").attr("disabled", bDisb = !!bDisb);
+  (o = o.find(":input")).attr("readonly", bDisb);
+  if(bDisb)o.addClass("readOnly");else o.removeClass("readOnly");
+}
+,/* 传递Xpath szData指定的数据，并更新flash区域的查询 */
+doUpdateCollection:function(szCollectionId, szData)
 {
   szCollectionId.swf().doUpdateCollection(this.getAllInput(szData));
 },getAllInput:function(s)
