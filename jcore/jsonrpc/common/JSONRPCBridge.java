@@ -318,7 +318,7 @@ public class JSONRPCBridge implements Serializable{
 								String szOut = new ObjectToJSON(oRst, this).toJSON(null);
 								return szOut;
 							}
-							return "true";
+							return "null";
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
