@@ -8,6 +8,11 @@
 	newEl.innerHTML = html;
 	oldEl.parentNode.replaceChild(newEl, oldEl);
 	return newEl;
+},getObj: function(s)
+{
+   var o = $("#" + s);
+   if(0 < o.length)return o;
+   o = document.getElementsByName(s);
 }, /* 隐藏指定名字或id的对象 */
 hideObj:function(szNameOrId)
 {
