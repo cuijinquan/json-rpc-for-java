@@ -8,11 +8,12 @@
 	newEl.innerHTML = html;
 	oldEl.parentNode.replaceChild(newEl, oldEl);
 	return newEl;
-},getObj: function(s)
+}
+,getObj: function(s)
 {
    var o = $("#" + s);
    if(0 < o.length)return o;
-   o = document.getElementsByName(s);
+   return $(":input[@name=" + s + "]");
 }, /* 隐藏指定名字或id的对象 */
 hideObj:function(szNameOrId)
 {
@@ -83,11 +84,45 @@ doUpdateCollection:function(szCollectionId, szData)
         _t.isIE5 = _t.isW3C && _t.isIE;
         _t.isNS6 = _t.isW3C && "Netscape" == navigator.appName;
         window.getAllInput = _t.getAllInput;
+        jQuery.extend({
+           addRedStar:(_t.addRedStar = function(s)
+           {
+             var o = this;
+             if(s)
+             {
+                o = _t.getObj(s).parent("div").parent("div");
+                _t.insertHtml(o.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
+                o.find("input:first").attr("isrequired", "true");
+             }
+             else o.each(function()
+             {
+                var o1 = $(this).parent("div").parent("div");
+                _t.insertHtml(o1.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
+                o1.find("input:first").attr("isrequired", "true");
+             });
+           }),
+           delRedStar:function(s)
+           {
+             var o = this;
+             if(s)
+             {
+                o = _t.getObj(s).parent("div").parent("div");
+                o.find("nobr").remove();
+                o.find("input:first").removeAttr("isrequired");
+             }
+             else o.each(function()
+             {
+                var o1 = $(this).parent("div").parent("div");
+                o1.find("nobr").remove();
+                o1.find("input:first").removeAttr("isrequired");
+             });
+           }
+        });
         window.getBrowserObjects = function()
-{
-    var tempArr = [];
-    for (var name in navigator)
-    {
+       {
+      var tempArr = [];
+      for (var name in navigator)
+      {
         var value = navigator[name];
         switch (typeof(value))
         {
@@ -96,19 +131,19 @@ doUpdateCollection:function(szCollectionId, szData)
                 tempArr.push("navigator." + name + "=" + escape(value));
                 break;
         }
-    }
-    for (var name in screen)
-    {
-        var value = screen[name];
-        switch (typeof(value))
-        {
+       }
+       for (var name in screen)
+       {
+         var value = screen[name];
+         switch (typeof(value))
+         {
             case "number":
                 tempArr.push("screen." + name + "=" + escape(value));
                 break;
-        }
-    }        
-    return tempArr.join("&");
-};
+          }
+        }        
+        return tempArr.join("&");
+      };
       if(_t.bIE)
       { 
        _t.nVer = parseFloat(/MSIE\s*(\d(\.\d)?);/g.exec(navigator.userAgent)[1]) ||  0;
