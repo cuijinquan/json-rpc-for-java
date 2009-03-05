@@ -22,7 +22,7 @@
         _t.getDom(szId).innerHTML = s;
         try{script && eval(script)}catch(e){alert(e.message);}
      });
-   if(o.url)o.url = contextPath + o.url;
+   if(o.url)o.url = (o.nouseCtx ? "" : contextPath) + o.url;
    _t.updateUi(o);
 },
   /* 锁定区域宽度的智能控制 */
@@ -79,7 +79,7 @@
      /* 滚动条图层宽度的设置 */
      $("#" + szId + " div[@class=x-grid3-scroller]").each(function()
      {
-        w = $(this);w.css({width: (w.width() + 10)+ "px"}).parent("td").css({width: w.width() + "px"});
+        w = $(this);w.css({width: (w.width() + (_t.isIE ? 0 : 10))+ "px"}).parent("td").css({width: w.width() + "px"});
      }).scroll(function()
      {
         var o = $(this);
@@ -499,10 +499,10 @@
     _t.hiddenShadow(_t.sortClct);
   },
   
-  movePage : function(num, id){
+  movePage: function(num, id){
   var reqCode = $("#"+id+"reqCode").attr("reqCode"),
   maxSize = $("#"+id+"xui_page_maxsize")[0], queryPage = $("#"+id+"xui_page_query")[0],
-  pageSize = $("#"+id+"xui_page_pagesize").text(), url = "/" + $(this.p(maxSize, "FORM")).attr("action"),
+  pageSize = $("#"+id+"xui_page_pagesize").text(), url = $(this.p(maxSize, "FORM")).attr("action"),
   ids = $("#xui_coll_array")[0]; 
   if (!maxSize || !queryPage){
     this.updateCollection(id, {url:url, postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value)]});
@@ -528,9 +528,8 @@
       }
       num = queryPage.value;
     }
-    this.updateCollection(id, {url:url, 
-                          postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value),(id+"xui_page_maxsize=" + maxSize.value),(id+"xui_page_query=" + num)]});
-    this.addResize(id);                      
+    this.updateCollection(id, {url:url, nouseCtx:true,
+                          postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value),(id+"xui_page_maxsize=" + maxSize.value),(id+"xui_page_query=" + num)]});                   
   }                                               
 },
 
