@@ -101,7 +101,7 @@ doUpdateCollection:function(szCollectionId, szData)
                 o1.find("input:first").attr("isrequired", "true");
              });
            }),
-           delRedStar:function(s)
+           delRedStar:(_t.delRedStar = function(s)
            {
              var o = this;
              if(s)
@@ -116,7 +116,7 @@ doUpdateCollection:function(szCollectionId, szData)
                 o1.find("nobr").remove();
                 o1.find("input:first").removeAttr("isrequired");
              });
-           }
+           })
         });
         window.getBrowserObjects = function()
        {
