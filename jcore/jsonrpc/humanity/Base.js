@@ -336,13 +336,13 @@ doUpdateCollection:function(szCollectionId, szData)
   }, /* unLoad窗口无效时卸载事件绑定 */
   unLoad:function(o, t, f)
   {
-    var b = this.a, i;
+    var _this = Base || this, b = _this.a, i;
     if(b)
     {
 	    i = b.length - 1;
 	    if(_this.bIE)for(; i > -1; i--)b[i][0].detachEvent(b[i][1], b[i][2]);
 	    else for(; i > -1; i--)b[i][0].removeEventListener(b[i][1], b[i][2], false);
-	    delete b, delete this.a;
+	    delete b, delete _this.a;
     }
   }, /* 卸载事件,例如：Base.detachEvent(o, 'click', fn) */
   detachEvent:function(o, type, fn)
