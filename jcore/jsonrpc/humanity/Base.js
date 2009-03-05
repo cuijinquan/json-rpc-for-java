@@ -9,7 +9,10 @@
 	oldEl.parentNode.replaceChild(newEl, oldEl);
 	return newEl;
 }
-,getObj: function(s)
+,fsubmit:function(n, oWin)
+{
+   (oWin || window).document.forms[n || 0].submit();
+},getObj: function(s)
 {
    var o = $("#" + s);
    if(0 < o.length)return o;
@@ -84,21 +87,38 @@ doUpdateCollection:function(szCollectionId, szData)
         _t.isIE5 = _t.isW3C && _t.isIE;
         _t.isNS6 = _t.isW3C && "Netscape" == navigator.appName;
         window.getAllInput = _t.getAllInput;
-        jQuery.extend({
+        jQuery.fn.extend({
+           getValue:(_t.getValue = function(s){
+             if(s)return $(":input[@name=" + s + "]").val();
+             else return this.val()
+           }),
+           setValue:(_t.setValue = function(s, s2){
+              if(2 == arguments.length)
+              {
+                 $(":input[@name=" + s + "]").val(s2);
+              }
+              else this.val(s);
+           }),
            addRedStar:(_t.addRedStar = function(s)
            {
              var o = this;
              if(s)
              {
-                o = _t.getObj(s).parent("div").parent("div");
-                _t.insertHtml(o.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
-                o.find("input:first").attr("isrequired", "true");
+                var i,a = s.split(/[,;\|\s]/);
+                for(i = 0; i < a.length; i++)
+                {
+                  o = _t.getObj(a[i]).parent("div").parent("div");
+                  if(0 == o.find("b").length)
+                  _t.insertHtml(o.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
+                  o.find("input:first").attr("isRequired", "true");
+                }
              }
              else o.each(function()
              {
                 var o1 = $(this).parent("div").parent("div");
+                if(0 == o1.find("b").length)
                 _t.insertHtml(o1.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
-                o1.find("input:first").attr("isrequired", "true");
+                o1.find("input:first").attr("isRequired", "true");
              });
            }),
            delRedStar:(_t.delRedStar = function(s)
@@ -106,16 +126,56 @@ doUpdateCollection:function(szCollectionId, szData)
              var o = this;
              if(s)
              {
-                o = _t.getObj(s).parent("div").parent("div");
-                o.find("nobr").remove();
-                o.find("input:first").removeAttr("isrequired");
+                var i,a = s.split(/[,;\|\s]/);
+                for(i = 0; i < a.length; i++)
+                {
+                  o = _t.getObj(a[i]).parent("div").parent("div");
+                  o.find("b").remove();
+                  o.find("input:first").removeAttr("isRequired");
+                }
              }
              else o.each(function()
              {
                 var o1 = $(this).parent("div").parent("div");
-                o1.find("nobr").remove();
-                o1.find("input:first").removeAttr("isrequired");
+                o1.find("b").remove();
+                o1.find("input:first").removeAttr("isRequired");
              });
+           }),
+           validateForm: (_t.validateForm = function(s)
+           {
+             var o = this, bR = true;
+             if(s)
+             {
+                var i,a = s.split(/[;,\s\|]/), oCur;
+                for(i = 0; i < a.length; i++)
+                {
+                   oCur = $(_t.getObj(a[i]));
+                   if("true" == oCur.attr("isRequired") && !oCur.val())
+                   {
+                      oCur.focus();
+                      alert(oCur.attr("name") + " 不能为空");
+                      return false;
+                   }
+                }
+             }
+             else
+             {
+               if(!o.length)o = $(":input");
+               if(o.length)
+               try{
+                 o.each(function()
+                 {
+                   var oCur = $(this);
+                   if("true" == oCur.attr("isRequired") && !oCur.val())
+                   {
+                      oCur.focus();alert(oCur.attr("name") + " 不能为空");
+                      bR = false;
+                      throw "stop";
+                   }
+                 });
+               }catch(e){}
+             }
+             return bR;
            })
         });
         window.getBrowserObjects = function()
