@@ -1,5 +1,73 @@
 {
   oCur:null,
+  isCheck:function(id)
+  {
+     eval("var a = " + id + "Data;");
+     for(var i = 0; i < a.length; i++)
+     {
+       if(a[i]["_check"])return true;
+     }
+  }, /* 全选 */
+  checkAll:function(id)
+  {
+     eval("var a = " + id + "Data;");
+     var i = 0, KEY_VALUE = "`", ENTRY_ENTRY = "^", s = "";
+     if(window.confirm("全选请【确定】，反选请按【取消】"))
+     {
+         for(var i = 0; i < a.length; i++)
+         {
+            if(a[i]["_check"] = true)
+	        {
+	          $("#" + id + (i + 1)).attr("checked", true);
+	          var obj = a[i], k;
+	          for(k in obj)
+	          {
+	            if("_id_" == k || "_check" == k)continue;
+	            s += k + KEY_VALUE + obj[k] + ENTRY_ENTRY;
+	          }
+	          s += "\n";
+	        }
+         }
+     }
+     else
+     {
+         for(var i = 0; i < a.length; i++)
+         {
+            $("#" + id + (i + 1)).attr("checked", a[i]["_check"] = !a[i]["_check"]);
+            if(a[i]["_check"])
+	        {
+	          var obj = a[i], k;
+	          for(k in obj)
+	          {
+	            if("_id_" == k || "_check" == k)continue;
+	            s += k + KEY_VALUE + obj[k] + ENTRY_ENTRY;
+	          }
+	          s += "\n";
+	        }
+         }
+     }
+     $("#" + id + "_check").val(s);
+  }, /* 单行选择 */
+  checkRow:function(id,j, o)
+  {
+     eval("var a = " + id + "Data;");
+     a[j]["_check"] = o.checked;
+     var KEY_VALUE = "`", ENTRY_ENTRY = "^", s = "";
+     for(var i = 0; i < a.length; i++)
+     {
+       if(a[i]["_check"])
+       {
+          var obj = a[i], k;
+          for(k in obj)
+          {
+            if("_id_" == k || "_check" == k)continue;
+            s += k + KEY_VALUE + obj[k] + ENTRY_ENTRY;
+          }
+          s += "\n";
+       }
+     }
+     $("#" + id + "_check").val(s);
+  },
   /* 默认传递界面上所有输入数据 */
   updateCollection:function(szId, o, filterFld)
 {
