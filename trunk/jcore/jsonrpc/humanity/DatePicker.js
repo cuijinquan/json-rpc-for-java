@@ -139,7 +139,7 @@
 	     r.push([a[0], a[1], nCur, c.join(" ")]);
 	  }
 	  return r;
-	},setValue: function(e)
+	},setValueD: function(e)
 	{
 	   if(this.dpIpt.readOnly || this.dpIpt.disabled)return false;
 	   this.month = parseInt(this.month, 10);
@@ -177,7 +177,7 @@
          n++;
        }
        this.xuiCurYear.innerHTML = this.year + "\u5e74" + this.month + "\u6708";
-       this.setValue(e);
+       this.setValueD(e);
        /* ie 下collection编辑列中发生焦点无法移动在不可见位置错误修正 */
 	   !this.dpIpt["xuiBlur"] && this.dpIpt.focus();
 	},addDate: function(n)
@@ -257,7 +257,7 @@
            }
            this.hidden();
            this.bIE ? (e.keyCode = 9) : '';
-           this.setValue();
+           this.setValueD();
            break;
         case 38: /* 上 */
            n = -7;
@@ -421,14 +421,14 @@
 	   var a = o.title.split("-");
 	   this.year = a[0],this.month = a[1],this.day = a[2];
 	   e && (this.stopPropagation(e),this.preventDefault(e));
-	   this.setValue();
+	   this.setValueD();
 	   this.hidden();
 	   return false;
 	}, selectToday:function()
 	{
 	   var d = new Date();
 	   this.year = d.getFullYear(), this.month = d.getMonth() + 1, this.day = d.getDate();
-	   this.setValue();
+	   this.setValueD();
 	   this.hidden();
 	},
 	hidden: function()

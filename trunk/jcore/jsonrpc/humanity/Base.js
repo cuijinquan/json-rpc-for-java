@@ -125,6 +125,7 @@ doUpdateCollection:function(szCollectionId, szData)
              else return this.val()
            }),
            setValue:(_t.setValue = function(s, s2){
+              if(!s)return this;
               if(2 == arguments.length)
               {
                  $(":input[@name=" + s + "]").val(s2);
