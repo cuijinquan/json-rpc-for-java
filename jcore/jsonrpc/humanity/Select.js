@@ -52,9 +52,8 @@
     for(i = 0; i < a.length; i++)
     {
       o = a[i];
-      a1.push("<tr title=\"");
-      a1.push(o[key]);
-      a1.push("\" onclick=\"Select.onSelect(event, this)\" class=\"cursor\" onmouseover=\"return Select.lightRow(this.rowIndex,true,event)\"\">");
+      a1.push("<tr");
+      a1.push(" onclick=\"Select.onSelect(event, this)\" class=\"cursor\" onmouseover=\"return Select.lightRow(this.rowIndex,true,event)\"\">");
       if(bDisp)
       {
           for(k in o)
