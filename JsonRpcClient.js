@@ -19,7 +19,7 @@ function JsonRpcClient(url) {
 	}, AJAX = function (o) {
 		if (window == this)
 			return new AJAX(o);
-		var _this = this, ap = document.getElementsByName("ServletPath"), lct = document.location, fncbk = function(){if (4 == _this.xml.readyState) {
+		var _this = this, ap = document.getElementsByName("ServletPath"), lct = document.location, fncbk = function(){if (_this.xml && 4 == _this.xml.readyState) {
 			200 == _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText.replace(/&#(\d+);/gm, function()
 			{
 			   return String.fromCharCode(arguments[1]);

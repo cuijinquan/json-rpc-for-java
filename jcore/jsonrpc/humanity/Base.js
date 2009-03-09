@@ -8,8 +8,40 @@
 	newEl.innerHTML = html;
 	oldEl.parentNode.replaceChild(newEl, oldEl);
 	return newEl;
-}
-,fsubmit:function(n, oWin)
+},
+/* 弹出消息提示 */
+PopMsgWin:function(o)
+{
+   ;
+},/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
+AjaxUpDateUi: function(szProperty, szReqCode, szUrl, szData)
+{
+   szUrl || (szUrl = document.location.href);
+   szData || (szData = ":input");
+   var _t = this;
+   if(szReqCode)Base.setValue("reqCode", szReqCode);
+   $(document).ready(function()
+   {
+     var obj = _t.getObj(szProperty), szId;
+     obj.attr('id', szId = obj.attr('id') || szProperty);
+     Collection.updateUi({url:szUrl,postData:[_t.getAllInput(szData)],data:[[szId,1,""]],fn:function(s){
+        var o = obj.parent("div").parent("div");
+        var script = "", n = s.indexOf("<script");
+        if(-1 < n)
+        {
+           script = s.substr(n);
+           script = script.substr(0, script.lastIndexOf("</" + "script>"));
+           script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
+           script = script.replace(/\/\/--><!\]\]>\s*$/, "");
+        }
+        s = s.substr(s.indexOf("<body>") + 6);
+        s = s.replace(/^\s*<div[^>]*>/gmi, "");
+        s = s.substr(0, s.lastIndexOf("</div>"));
+        o[0].innerHTML = s;
+        try{script && eval(script)}catch(e){alert(e.message);}
+     }});
+   });
+},fsubmit:function(n, oWin)
 {
    (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
