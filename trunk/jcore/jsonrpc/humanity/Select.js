@@ -70,7 +70,7 @@
     a1.push("</table></div>");
     return a1.join("")
   }, /* 给对象设置value */
-  setValue:function(s, n,e)
+  setValueX:function(s, n,e)
   {
      var descObj = this.descObj, inputObj = this.inputObj;
      if(1 == n && descObj)descObj.value = s;
@@ -102,7 +102,7 @@
        if(oT['valueField'])
        { /* value处理 */
          a = (oT['valueField'] || "").split(/[,; ]/);
-         this.setValue(dt[n][a[0]], 2, e);
+         this.setValueX(dt[n][a[0]], 2, e);
          oIpt.value = (1 < a.length ? dt[n][a[1]] : dt[n][a[0]]);
        } /* 回调处理 */
        cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
@@ -165,10 +165,10 @@
 	       if(oT["allowEdit"] || 1 == n)
 	       {
 	          s = _t.getValueByDesc(s);
-	          s && _t.setValue(s, 2, e);
+	          s && _t.setValueX(s, 2, e);
 	       }
 	       else if(oIpt.getAttribute("oldValue") != s || 0 == n)
-	          _t.setValue("", 2, e);
+	          _t.setValueX("", 2, e);
 	       if(0 < n)
 	          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
 	       else _t.hidden(e), !oT["allowEdit"] && this.addInvalid(oIpt);
