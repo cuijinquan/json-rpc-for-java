@@ -29,7 +29,8 @@
          else p[k] = o[k];
       }
       return this.TreeNode;
-   },upperNode: function()
+   },/* 键盘向上键 */
+   upperNode: function()
     {
        var o = XuiTree.curTree.lastSlctNode;
        if(0 < o.childNodes.length && o.isExpand)
