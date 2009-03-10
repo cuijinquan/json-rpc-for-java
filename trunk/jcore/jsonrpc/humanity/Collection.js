@@ -102,13 +102,17 @@
      if(1 < oTd2.length)
      {
          if(2 == oTd2.length && !$(oTd2[1]).text())return this;
+         /* 将标题行中的所有td转换为实际的像素宽度 */
 	     oTd2.each(function()
 	     {
 	        w += $(this).width();
 	     });
-	     oTd2 = oTd.css({width: (w + n) + "px"}).next().each(function()
+	     /* 锁定列(oTd)td的宽度为锁定列中标题列之和 */
+	     oTd2 = oTd.css({width: (w + n) + "px"});
+	     (oTd2 = oTd.next()).each(function()
 	     {
-	        n = w1 - w - n;
+	        /* 求非锁定部分所有列的宽度值 */
+	        n = w1 - oTd.width();
 	        oTd = $(this);
 	        if(0 < n)oTd.css({width: n + "px"});
 	        oTd.find("div.x-grid3-scroller").css({width: oTd.width() + "px"});
@@ -119,13 +123,13 @@
   }, /* 添加collection进行处理 */
   addResize: function(szId)
   {
-     var _t = this, b = $("#" + szId + " td[@class*='" + szId + "_hd_']");
+     var _t = this, b = $("#" + szId + " td[@class*='" + szId + "_hd_']");/* 标题部分的td，包含锁定、非锁定部分 */
      _t.oCur = _t.getDom(szId); /* 当前操作的collection对象 */
      _t.onResize = function(szId)
      {
-         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']").not(":hidden"), /* 第一行 */ 
-             w, o, o1,b = $("#" + szId + " td[@class*='" + szId + "_hd_']").not(":hidden"),
-             b1 = $("#" + szId + " td[@class*='" + szId + "_ft_']").not(":hidden"), i; /* 标题行中的Td */
+         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']").not(":hidden"), /* 通过第一行数据反向设置标题的宽度 */ 
+             w, o, o1,b = $("#" + szId + " td[@class*='" + szId + "_hd_']").not(":hidden"), /* 排除隐藏列的标题行td */
+             b1 = $("#" + szId + " td[@class*='" + szId + "_ft_']").not(":hidden"), i; /* 尾部行中的Td */
          i = 0;
          if(0 < a.size())
          _t.atRsLkWidth(szId),b.each(function()
@@ -147,7 +151,7 @@
      /* 滚动条图层宽度的设置 */
      $("#" + szId + " div[@class=x-grid3-scroller]").each(function()
      {
-        w = $(this);w.css({width: (w.width() + (_t.isIE ? 0 : 10))+ "px"}).parent("td").css({width: w.width() + "px"});
+        w = $(this);if(0 < w.width())w.css({width: (w.width() + (_t.isIE ? 0 : 10))+ "px"}).parent("td").css({width: w.width() + "px"});
      }).scroll(function()
      {
         var o = $(this);
