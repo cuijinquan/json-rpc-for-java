@@ -109,6 +109,7 @@
        o["_lstNum"] = n;
      }else o["_over"] = 1;
      this.hidden(e);
+     this.delInvalid(oIpt);
      if(e)this.preventDefault(e), this.stopPropagation(e);
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
@@ -132,6 +133,7 @@
          b.push(a[n]);
       else c.push(a[n]);
     this.data = b.concat(c);
+    return b.length;
   },/* 显示图层 */
   show: function()
   { 
@@ -160,16 +162,17 @@
            s = oIpt.value.replace(/(^\s+)|(\s+$)/g, "");
        if(o)
        {
-	       /* 检索过滤处理，并更新图层 */
-	       _t.updata(s);
-	       _t.getData(oIpt.id);	       
+	       /* 检索、过滤处理，并返回过滤得到的结果条数 */
+	       n = _t.updata(s); /* _t.getData(oIpt.id); */
+	       /* 从码表中尝试获取值，如果没有找到,如果允许编辑就用描述字段内容 */
 	       s = _t.getValueByDesc(s) || oT["allowEdit"] && s || "";
 	       _t.setValueX(s, 2, e);
-	       if(oIpt.getAttribute("oldValue") != s)
+	       if(oIpt.getAttribute("oldValue") != s || 0 == n)
 	          _t.setValueX("", 2, e);
+	       
 	       if(0 < n)
 	          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
-	       else _t.hidden(e), !oT["allowEdit"] && this.addInvalid(oIpt);
+	       else _t.hidden(e), s && !oT["allowEdit"] && this.addInvalid(oIpt);
        }
        if(_t.isIE)
 	   {
@@ -252,7 +255,7 @@
               if(!_t.inputObj.value)
               { /* 允许输入新值就将描述输入对象的值赋予它，否则就设置空值 */
                 if(_t.getSlctObj(_t.descObj.id)['allowEdit']) _t.inputObj.value = _t.descObj.value;
-                else _t.descObj.value = '';
+                else _t.descObj.value = '', _t.delInvalid(_t.descObj);
               }
               
               o["_blur_"]=true,_t.hiddenSelectDiv()
