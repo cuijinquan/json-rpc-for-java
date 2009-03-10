@@ -4,13 +4,13 @@
   descObj:null,    /* 存放描述的输入对象 */
   oFrom:null,      /* 计算图层宽度的对象 */
   oShdow:null,     /* 阴影图层对象 */
-  getObj:function(szId)
+  getSlctObj:function(szId)
   {
     return slctIptData[szId]||{};
-  }, setData:function(szId,a){this.getObj(szId)["collection"] = a;},
+  }, setData:function(szId,a){this.getSlctObj(szId)["collection"] = a;},
   getData:function(szId) /* 获取下拉列表数据 */
   {
-    var rst = this.getObj(szId)["collection"], i, s, o, k, key = "_id_";
+    var rst = this.getSlctObj(szId)["collection"], i, s, o, k, key = "_id_";
     if(0 < rst.length && "" == rst[0][key].replace(/\d/g, ""))
     {
         for(i = 0; i < rst.length; i++)
@@ -22,7 +22,7 @@
           rst[i][key] = s.join("\t");
         }
     }
-    return this.data || this.getObj(szId)["collection"]
+    return this.data || this.getSlctObj(szId)["collection"]
   },scrollIntoView: function(c, el){
         if(!c)return this;
         var o = $(el), a = [parseInt(c.clientHeight, 10), parseInt(o.offset().top, 10), o.height(), parseInt(c.scrollTop, 10)];
@@ -47,7 +47,7 @@
   getSelectDataStr:function(oE, w)
   {
     var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;position: relative;left:0;top:0\">"], i, j, o, k,
-        b = this.getObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
+        b = this.getSlctObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
     !bDisp && (b = b.split(/[,;\|\/]/));
     for(i = 0; i < a.length; i++)
     {
@@ -82,7 +82,7 @@
   },/* 通过描述得到value */
   getValueByDesc:function(s)
   {
-     var oT = this.getObj(this.descObj.id), a = oT["collection"], i, b = (oT['valueField'] || "").split(/[,; ]/), b2 = 1 < b.length;
+     var oT = this.getSlctObj(this.descObj.id), a = oT["collection"], i, b = (oT['valueField'] || "").split(/[,; ]/), b2 = 1 < b.length;
      if(oT['valueField'] && b2)
      for(i = 0; i < a.length; i++)
      {
@@ -94,7 +94,7 @@
   onSelect:function(e, oTr)
   {
      var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
-         n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getObj(oIpt.id) || {},
+         n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getSlctObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
      if(0 <= n && dt.length > n)
      {
@@ -121,17 +121,18 @@
      this.hiddenShadow(this.getDom("_Xui_SelectDiv"));
      this.updata((this.descObj || {}).value || "");
      this.descObj["xuiBlur"] && this.descObj["xuiBlur"]();
-  }, /* 更新data数据 */
+  }, /* 更新过滤后的data数据 */
   updata:function(s)
   {
     if(!this.descObj)return this;
     if(0 == s.length)return this.data = null, this;
-    var n, id = this.descObj.id, b = [], a = (this.getData(id), this.getObj(id)["collection"]);
+    var n, id = this.descObj.id, b = [], c = [], a = (this.getData(id), this.getSlctObj(id)["collection"]);
     for(n = 0; n < a.length; n++)
       if(-1 < a[n]["_id_"].indexOf(s))
          b.push(a[n]);
-    this.data = (0 < b.length || 0 < s.length) ? b : null;
-  },
+      else c.push(a[n]);
+    this.data = b.concat(c);
+  },/* 显示图层 */
   show: function()
   { 
    	 var o = this.SelectDiv;
@@ -155,19 +156,16 @@
          oIpt["onpropertychange"] = null;
        }
        _t.getData(oIpt.id);
-       var n = 0, o = _t.SelectDiv, oT = _t.getObj(oIpt.id),
+       var n = 0, o = _t.SelectDiv, oT = _t.getSlctObj(oIpt.id),
            s = oIpt.value.replace(/(^\s+)|(\s+$)/g, "");
        if(o)
        {
-	       /* 检索过滤处理 */
+	       /* 检索过滤处理，并更新图层 */
 	       _t.updata(s);
-	       n = _t.getData(oIpt.id).length;
-	       if(oT["allowEdit"] || 1 == n)
-	       {
-	          s = _t.getValueByDesc(s);
-	          s && _t.setValueX(s, 2, e);
-	       }
-	       else if(oIpt.getAttribute("oldValue") != s || 0 == n)
+	       _t.getData(oIpt.id);	       
+	       s = _t.getValueByDesc(s) || oT["allowEdit"] && s || "";
+	       _t.setValueX(s, 2, e);
+	       if(oIpt.getAttribute("oldValue") != s)
 	          _t.setValueX("", 2, e);
 	       if(0 < n)
 	          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
@@ -185,7 +183,7 @@
   onkeydown:function(e, oIpt)
   {
      e = e || window.event;
-     var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getObj(oIpt.id), i = o["_lstNum"] || 0;
+     var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getSlctObj(oIpt.id), i = o["_lstNum"] || 0;
      switch(n)
      {
         /* 接受连续退格键 e.repeat, 8 */
@@ -249,7 +247,16 @@
     if(!oE[szId])
     {
        oE[szId] = o.id,
-       this.addEvent(oE, "blur", function(){o["_blur_"]=true,_t.hiddenSelectDiv()})
+       this.addEvent(oE, "blur", function()
+           {  /* 隐藏输入对象为空 */
+              if(!_t.inputObj.value)
+              { /* 允许输入新值就将描述输入对象的值赋予它，否则就设置空值 */
+                if(_t.getSlctObj(_t.descObj.id)['allowEdit']) _t.inputObj.value = _t.descObj.value;
+                else _t.descObj.value = '';
+              }
+              
+              o["_blur_"]=true,_t.hiddenSelectDiv()
+           })
            .addEvent(oE, "mousemove", function(e)
                {
                  o["tmer"] && _t.clearTimer(o["tmer"]),
