@@ -14,7 +14,7 @@ PopMsgWin:function(o)
 {
    ;
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
-AjaxUpDateUi: function(szProperty, szReqCode, szUrl, szData)
+AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData)
 {
    szUrl || (szUrl = document.location.href);
    szData || (szData = ":input");
