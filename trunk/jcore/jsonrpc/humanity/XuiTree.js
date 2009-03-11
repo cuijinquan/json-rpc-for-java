@@ -115,6 +115,7 @@
         id: null,          /* 当前节点id */
         Dom: null,         /* 当前节点Dom对象 */
         checkValue: null,
+        onclick: null,      /* 整行中点击事件执行的方法 */
         allowCheck: false,  /* 允许选择 */
         bExpandAll: false, /* 全部展开 */
         lastSlctNd: null,  /* 最后一次选择的对象 */
@@ -438,7 +439,7 @@
            /* checkbox */
            a.push(this.insertBfLabel(this));
            /* 描述部分 */
-           a.push("<a href=\"" + this.url + "\" class=\"x-tree-node-anchor\" hidefocus=\"on\"");
+           a.push("<a " + (this.onclick ? "onclick=\"" + this.onclick + "\" " : "") + "href=\"" + this.url + "\" class=\"x-tree-node-anchor\" hidefocus=\"on\"");
            if(this.target)a.push(" target=\"" + this.target + "\"");
            a.push("><span unselectable=\"on\">");
            a.push(this.label),a.push(this.insertAftLabel(this));
