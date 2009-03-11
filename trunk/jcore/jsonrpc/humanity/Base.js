@@ -25,8 +25,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData)
      var obj = _t.getObj(szProperty), szId;
      obj.attr('id', szId = obj.attr('id') || szProperty);
      Collection.updateUi({url:szUrl,postData:[_t.getAllInput(szData)],data:[[szId,1,""]],fn:function(s){
-        //根据组件的class属性是不是x-panel来判断是不是panel
-        var o = "x-panel" != obj.attr('class') ? obj.parent("div").parent("div") : obj;
+        /* 根据组件的class属性是不是x-panel来判断是不是panel */
+        var o = "INPUT" == obj[0].nodeName ? obj.parent("div").parent("div") : obj;
         var script = "", n = s.indexOf("<script");
         if(-1 < n)
         {
