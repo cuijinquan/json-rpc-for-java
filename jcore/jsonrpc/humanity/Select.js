@@ -169,10 +169,10 @@
 	       _t.setValueX(s, 2, e);
 	       if(oIpt.getAttribute("oldValue") != s || 0 == n)
 	          _t.setValueX("", 2, e);
-	       
+
 	       if(0 < n)
 	          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
-	       else _t.hidden(e), s && !oT["allowEdit"] && this.addInvalid(oIpt);
+	       else s && !oT["allowEdit"] && this.addInvalid(oIpt);
        }
        if(_t.isIE)
 	   {
