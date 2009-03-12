@@ -804,6 +804,14 @@ doUpdateCollection:function(szCollectionId, szData)
      }
      return a;
     }, isCSS1Compat: (document.compatMode == "CSS1Compat"),
+    /*collection的链接标签,根据url打开一个新的窗口*/
+	openWin: function(o, a){
+	  var p = o["param"], url = o["url"] + p, 
+	  width = o["width"] || 800, height = o["height"] || 600,
+	  option = "height=" + height + ",width=" + width + ",status=yes,toolbar=no,menubar=no,location=no";
+	  window.open(url, null, option);
+	  return false;
+	},
     showDiv: function(o, oDiv, w, h, left)
 	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
