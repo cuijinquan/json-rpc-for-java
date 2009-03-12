@@ -228,26 +228,12 @@
         $(document).ready(function()
         {
            /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
-           var oClct = $("#" + szId), h = $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll")), nCnt = 0;
-           _t.regTimer(function()
-           {
-             var ath = oClct.attr("scrollHeight") - oClct.height(), j = 33;
-             if(_t.chrome)j = -1;
-             else
-             {
-               while(500 > nCnt && 0 != (ath % j))j--, nCnt++;
-               if(0 == j) j = 1;j = -j;
-             }
-             h.each(function()
-             {
-               oTmp09 = $(this),
-               oTmp09.css({height: (oTmp09.height() + j) + "px"});
-             });
-             if(oClct.attr("scrollHeight") != oClct.height())return false;
-             _t.onResize(szId);_t.isIE6 && _t.onResize(szId);
-             return true;
-           });
-        });  
+           var oClct = $("#" + szId), h = $("#" + szId + " div.x-grid3-scroller"), j = 0;
+             j = oClct.height() - 10 - $("#" + szId + " div[@class=x-grid3-header]").height() - $("#" + szId + " div[@class=x-toolbar]").height();
+           h.height(j);
+           $("#" + szId + "_scroll").height(j);
+           _t.onResize(szId);_t.isIE6 && _t.onResize(szId);
+        });
         
       /* 绑定collection的header的列拖拽交换显示顺序事件 */
       $("#" + szId + " td.x-grid3-hd").mousedown(function(e){
