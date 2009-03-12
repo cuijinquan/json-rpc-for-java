@@ -228,14 +228,14 @@
         $(document).ready(function()
         {
            /* 数据展示区域高度的校正，确保设置同样高度的collection，在有不同功能区时外观高度一致 */
-           var oClct = $("#" + szId), h = $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll"));
+           var oClct = $("#" + szId), h = $("#" + szId + " div.x-grid3-scroller").add($("#" + szId + "_scroll")), nCnt = 0;
            _t.regTimer(function()
            {
              var ath = oClct.attr("scrollHeight") - oClct.height(), j = 33;
              if(_t.chrome)j = -1;
              else
              {
-               while(0 != ath % j)j--;
+               while(500 > nCnt && 0 != (ath % j))j--, nCnt++;
                if(0 == j) j = 1;j = -j;
              }
              h.each(function()
