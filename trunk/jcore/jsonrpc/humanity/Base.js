@@ -26,7 +26,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData)
      obj.attr('id', szId = obj.attr('id') || szProperty);
      Collection.updateUi({url:szUrl,postData:[_t.getAllInput(szData)],data:[[szId,1,""]],fn:function(s){
         /* 根据组件的class属性是不是x-panel来判断是不是panel */
-        var o = "INPUT" == obj[0].nodeName ? obj.parent("div").parent("div") : obj;
+        var o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
         var script = "", n = s.indexOf("<script");
         if(-1 < n)
         {
@@ -186,8 +186,9 @@ doUpdateCollection:function(szCollectionId, szData)
                    oCur = $(_t.getObj(a[i]));
                    if("true" == oCur.attr("isRequired") && !oCur.val())
                    {
+                      if("hidden" == oCur.attr("type"))oCur = oCur.prev();
                       oCur.focus();
-                      alert(oCur.attr("name") + " 不能为空");
+                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text() + " 不能为空");
                       return false;
                    }
                 }
@@ -202,7 +203,8 @@ doUpdateCollection:function(szCollectionId, szData)
                    var oCur = $(this);
                    if("true" == oCur.attr("isRequired") && !oCur.val())
                    {
-                      oCur.focus();alert(oCur.attr("name") + " 不能为空");
+                      if("hidden" == oCur.attr("type"))oCur = oCur.prev();
+                      oCur.focus();alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text() + " 不能为空");
                       bR = false;
                       throw "stop";
                    }
