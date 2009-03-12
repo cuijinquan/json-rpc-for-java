@@ -96,7 +96,6 @@
      var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getSlctObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
-         alert([dt.length , n]);
      if(0 <= n && dt.length > n)
      {
        /* 处理选择 */
