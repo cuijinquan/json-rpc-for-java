@@ -11,7 +11,7 @@
   getData:function(szId) /* 获取下拉列表数据 */
   {
     var rst = this.getSlctObj(szId)["collection"], i, s, o, k, key = "_id_";
-    if(0 < rst.length && "" == rst[0][key].replace(/\d/g, ""))
+    if(rst && 0 < rst.length && "" == rst[0][key].replace(/\d/g, ""))
     {
         for(i = 0; i < rst.length; i++)
         {
