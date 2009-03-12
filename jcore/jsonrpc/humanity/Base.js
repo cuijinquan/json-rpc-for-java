@@ -1,6 +1,5 @@
 {
   bIE: false,
-  
   nVer: 0,
   replaceHtml: function(el, html) {
 	var oldEl = typeof el === "string" ? document.getElementById(el) : el;
