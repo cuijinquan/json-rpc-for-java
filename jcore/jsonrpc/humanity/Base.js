@@ -342,6 +342,7 @@ doUpdateCollection:function(szCollectionId, szData)
      if(!s || !document)return null;
      var o = ("string" == typeof s ? document.getElementById(s) : s), k;
      /* for(k in this)o[k] = this[k]; */
+     
     return o;
   },
   getByTagName: function(s,o)
