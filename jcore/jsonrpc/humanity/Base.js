@@ -829,6 +829,7 @@ doUpdateCollection:function(szCollectionId, szData)
 
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
+      // $()
       style["display"] = "block";
       /* 修正显示定位 */
       style["height"] = $(oDiv).height() + "px";
