@@ -811,9 +811,19 @@ doUpdateCollection:function(szCollectionId, szData)
     }, isCSS1Compat: (document.compatMode == "CSS1Compat"),
     /*collection的链接标签,根据url打开一个新的窗口*/
 	openWin: function(o, a){
-	  var p = o["param"], url = o["url"] + p, 
+	  var p = o["param"], dto = o["dto"],
+	  url = o["url"] + p + "&xui_pop_win=true", 
 	  width = o["width"] || 800, height = o["height"] || 600,
-	  option = "height=" + height + ",width=" + width + ",status=yes,toolbar=no,menubar=no,location=no";
+	  option = "height=" + height + ",width=" + width + ",status=yes,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
+	  if ("undefined" != typeof dto){
+	    var _this = this;
+	    $(dto).each(function(){
+	      var value = _this.getObj(this).val();
+	      if(null != value && "" != value){
+	        url += "&" + this + "=" + escape(_this.decodeStr(value));
+	      }
+	    });
+	  }
 	  window.open(url, null, option);
 	  return false;
 	},
