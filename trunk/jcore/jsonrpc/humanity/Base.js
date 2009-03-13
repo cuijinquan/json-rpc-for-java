@@ -8,6 +8,10 @@
 	newEl.innerHTML = html;
 	oldEl.parentNode.replaceChild(newEl, oldEl);
 	return newEl;
+},/* 获取top中的菜单数据 */
+getMenuData:function()
+{
+   return window.topMenu || (window.topMenu = top.frames[0].topMenu);
 },
 /* 弹出消息提示 */
 PopMsgWin:function(o)
