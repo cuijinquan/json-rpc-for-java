@@ -142,11 +142,11 @@
         {
            if(oSelf.allowCheck && oSelf.checkValue)
            {
-             var bCkd = false, p = oSelf.parent,
+              var bCkd = oSelf.isChecked, p = oSelf.parent,
                  szId = oSelf.getCheckBoxId();
              if(oSelf.tree.doChildCheckedFlg && p)
              {
-                 bCkd = oSelf.isChecked = p.isChecked;
+                 bCkd = bCkd || p.isChecked;
 	             while(p && (null == p.checkValue || p.isChecked) && p != oSelf.tree)
 	             {
 	                if(p.isChecked)
