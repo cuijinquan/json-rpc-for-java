@@ -827,6 +827,19 @@ doUpdateCollection:function(szCollectionId, szData)
 	  window.open(url, null, option);
 	  return false;
 	},
+	/*按钮的弹出窗口. url:指定的路径, width:宽度, height:高度, param:参数*/
+	/*param:参数需要是数组,例如["aac001", "aac002"]*/
+	openBtnWin : function(url, param, width, height){
+	   var p = "", _this = this, o = null;
+	   $(param).each(function(){
+	     var value = _this.getObj(this).val();
+	     if(null != value){
+	        p += "&" + this + "=" + escape(_this.decodeStr(value));
+	      }
+	   });
+	   o = {"url":url, "param":p, "width":width, "height":height};
+	   this.openWin(o, null);
+	},
     showDiv: function(o, oDiv, w, h, left)
 	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
