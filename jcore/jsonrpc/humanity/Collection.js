@@ -223,7 +223,7 @@
 		           e && (_t.preventDefault(e), _t.stopPropagation(e));
 		        });
            }
-           else _t.RsProxy.style.display = _t.RsMarker.style.display = "none";
+           else if(_t.RsProxy && _t.RsMarker) _t.RsProxy.style.display = _t.RsMarker.style.display = "none";
         })});
         $(document).ready(function()
         {
