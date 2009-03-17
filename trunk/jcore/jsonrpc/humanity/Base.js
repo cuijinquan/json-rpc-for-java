@@ -16,7 +16,36 @@ getMenuData:function()
 /* 弹出消息提示 */
 PopMsgWin:function(o)
 {
-   ;
+   var aTp = [Ext.MessageBox.INFO, Ext.MessageBox.QUESTION, Ext.MessageBox.WARNING, Ext.MessageBox.ERROR], obj = {
+           title: '系统提示信息',
+           msg: o.message,
+           buttons: {"ok": "确定"},
+           fn: function(btn){
+              if("ok" == btn)
+              {
+                if(o.okScript)
+                  try{eval(o.okScript)}catch(e){};
+                if(o.okUrl)location.href = contextPath + o.okUrl;
+              }
+              else if("no" == btn)
+              {
+                 if(o.errScript)try{eval(o.errScript)}catch(e){};
+                 if(o.errUrl)location.href = contextPath + o.errUrl;
+              }
+              if(o.field)
+              {
+                var oIp = Base.getObj(o.field);
+                if(0 < oIp.length)oIp.focus();else (oIp = Base.getObj("dto(" + o.field + ")")).focus();
+              }
+           },
+           icon: aTp[o.type]
+       };
+   if(o.field)obj.animEl = this.getObj(o.field).focus().attr("id");
+   if(o.errUrl || o.errScript)obj.buttons = {"ok": "确定", "no": "取消"};
+   Ext.MessageBox.show(obj);
+    var oDlg = $("div.x-window-dlg"), w = oDlg.width() - 12;
+    oDlg.find("div.x-window-header").width(w);
+    oDlg.find("div.x-panel-btns").width(w);
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData)
 {
@@ -102,6 +131,27 @@ doUpdateCollection:function(szCollectionId, szData)
 },
   init: function()
   {
+        window.XuiDateField = Ext.extend(Ext.form.DateField,{
+    	 defaultAutoCreate : {tag: "input", type: "text", size: 21, maxLength:21, autocomplete: "off"}
+    	 ,onResize:function(){
+    	   this.wrap.setWidth("100%");
+    	   this.el.setWidth(this.wrap.getWidth() - this.trigger.getWidth());
+    	   Ext.form.DateField.superclass.onResize.apply(this, [this.wrap.getWidth(), this.wrap.getHeight()]); 
+    	   var a = window.xuiResize.a, fn, t = this, fn1 = arguments.callee;
+    	   if(!a[t.el.dom.name])
+    	   {
+    	      a[t.el.dom.name] = true;
+    	      fn = window.xuiResize.start;
+    	      window.xuiResize.start = function()
+    	      {
+    	         fn1.apply(t);
+    	         fn();
+    	      };
+    	   }
+    	  }
+        });
+        $(window).resize(window.xuiResize = function(){window.xuiResize.start()});
+        window.xuiResize.start = function(){},window.xuiResize.a = [];       
         var ua = navigator.userAgent.toLowerCase(), _t = this;
         _t.isStrict = document.compatMode == "CSS1Compat",
 	    _t.isOpera = ua.indexOf("opera") > -1,
