@@ -33,7 +33,7 @@ public class JSONRPCServlet extends HttpServlet {
 	private String charset = "UTF-8";
 
 	// 支持Gzip，默认不支持
-	private boolean bGzip = false;
+//	private boolean bGzip = false;
 	// 安全检查的类
 	private ISecureCheck check = null;
 	private String secureCheck = null;
@@ -69,7 +69,7 @@ public class JSONRPCServlet extends HttpServlet {
 		}
 		charset = "UTF-8";
 		// 配置中指定默认支持gzip
-		bGzip = "true".equals(config.getInitParameter("gzip"));
+//		bGzip = "true".equals(config.getInitParameter("gzip"));
 		szPam = config.getInitParameter("regAppClassNames");
 		if (null != szPam && 0 < szPam.trim().length()){
 			szPam = szPam.replaceAll("[\\s]", "");
