@@ -115,7 +115,7 @@ function JsonRpcClient(url) {
 	  if("undefined" == typeof _this._LoadJsObj)return this;
 	  eval("var o = window." + s + ";");
 	  if(o)return o;
-	  try{o = _this.cacheObj[s] || (_this.cacheObj[s] = eval("1," + _this._LoadJsObj.getJsObj(s).getResult()))}catch(e){alert(e.message)};
+	  try{o = _this.cacheObj[s] || (_this.cacheObj[s] = eval("1," + _this._LoadJsObj.getJsObj(s).getResult()))}catch(e){};
 	  if(o)
 	  {
 	     if(o.init) o = o.init();
