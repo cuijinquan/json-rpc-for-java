@@ -131,12 +131,12 @@ doUpdateCollection:function(szCollectionId, szData)
 },
   init: function()
   {
-        window.XuiDateField = Ext.extend(Ext.form.DateField,{
+         window.XuiDateField = Ext.extend(Ext.form.DateField,{
     	 defaultAutoCreate : {tag: "input", type: "text", size: 21, maxLength:21, autocomplete: "off"}
     	 ,onResize:function(){
     	   this.wrap.setWidth("100%");
-    	   this.el.setWidth(this.wrap.getWidth() - this.trigger.getWidth());
-    	   Ext.form.DateField.superclass.onResize.apply(this, [this.wrap.getWidth(), this.wrap.getHeight()]); 
+    	   this.el.setWidth(this.wrap.getWidth() - this.trigger.getWidth() + 2);
+    	   /* Ext.form.DateField.superclass.onResize.apply(this, [this.wrap.getWidth(), this.wrap.getHeight()]);*/ 
     	   var a = window.xuiResize.a, fn, t = this, fn1 = arguments.callee;
     	   if(!a[t.el.dom.name])
     	   {
