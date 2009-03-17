@@ -136,6 +136,7 @@ doUpdateCollection:function(szCollectionId, szData)
     	 ,onResize:function(){
     	   this.wrap.setWidth("100%");
     	   this.el.setWidth(this.wrap.getWidth() - this.trigger.getWidth() + 2);
+    	   $(this.el.dom).css('top',-1);
     	   /* Ext.form.DateField.superclass.onResize.apply(this, [this.wrap.getWidth(), this.wrap.getHeight()]);*/ 
     	   var a = window.xuiResize.a, fn, t = this, fn1 = arguments.callee;
     	   if(!a[t.el.dom.name])
@@ -144,7 +145,7 @@ doUpdateCollection:function(szCollectionId, szData)
     	      fn = window.xuiResize.start;
     	      window.xuiResize.start = function()
     	      {
-    	         fn1.apply(t);
+    	         setTimeout(function(){fn1.apply(t);}, 13);
     	         fn();
     	      };
     	   }
