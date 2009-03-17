@@ -145,7 +145,7 @@ doUpdateCollection:function(szCollectionId, szData)
     	      fn = window.xuiResize.start;
     	      window.xuiResize.start = function()
     	      {
-    	         setTimeout(function(){fn1.apply(t);}, 13);
+    	         setTimeout(function(){fn1.apply(t)}, 13);
     	         fn();
     	      };
     	   }
