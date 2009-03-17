@@ -864,7 +864,7 @@ doUpdateCollection:function(szCollectionId, szData)
 	  var p = o["param"], dto = o["dto"],
 	  url = o["url"] + p + "&xui_pop_win=true", 
 	  width = o["width"] || 800, height = o["height"] || 600,
-	  option = "height=" + height + ",width=" + width + ",status=yes,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
+	  option = "height=" + height + ",width=" + width + ",top=" + parseInt((screen.height - height)/2 * 0.75) + ",left=" + parseInt((screen.width - width)/2) + ",status=yes,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
 	  if ("undefined" != typeof dto){
 	    var _this = this;
 	    $(dto).each(function(){
