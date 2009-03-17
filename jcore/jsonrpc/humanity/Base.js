@@ -131,6 +131,14 @@ doUpdateCollection:function(szCollectionId, szData)
 },
   init: function()
   {
+         window.XuiComboBox = Ext.extend(Ext.form.ComboBox,{
+            forceSelection: true,
+            mode: 'local',
+            triggerAction: 'all',
+            emptyText:'请选择...',
+            selectOnFocus:true,
+            resizable:true
+          });
          window.XuiDateField = Ext.extend(Ext.form.DateField,{
     	 defaultAutoCreate : {tag: "input", type: "text", size: 21, maxLength:21, autocomplete: "off"}
     	 ,onResize:function(){
@@ -187,6 +195,13 @@ doUpdateCollection:function(szCollectionId, szData)
                  $(":input[@name=" + s + "]").val(s2);
               }
               else this.val(s);
+           }),
+           setReadOnly:(_t.setReadOnly = function(s, b){
+              var o = this;
+              if(s)o = $(":input[@name=" + s + "]");
+              if("undefined" == typeof b || true == b)
+                   o.attr("readonly", "readonly").addClass("readOnly");
+              else o.removeAttr("readonly").removeClass("readOnly");
            }),
            addRedStar:(_t.addRedStar = function(s)
            {
