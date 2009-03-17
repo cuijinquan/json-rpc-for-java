@@ -167,9 +167,7 @@
 	       /* 从码表中尝试获取值，如果没有找到,如果允许编辑就用描述字段内容 */
 	       s = _t.getValueByDesc(s) || oT["allowEdit"] && s || "";
 	       _t.setValueX(s, 2, e);
-	       if(oIpt.getAttribute("oldValue") != s || 0 == n)
-	          _t.setValueX("", 2, e);
-
+	       /* if(oIpt.getAttribute("oldValue") != s || 0 == n)_t.setValueX("", 2, e); */
 	       if(0 < n)
 	          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
 	       else s && !oT["allowEdit"] && this.addInvalid(oIpt);
