@@ -142,13 +142,20 @@ public class JSONRPCServlet extends HttpServlet {
 			in = null;
 			byte[] bout = null;
 			if (null != szData && 0 < szData.length())
-				bout = Tools.encodeUnicodeHtm(brg.ExecObjectMethod(request, szData).toString()).getBytes("UTF-8");
+			{
+				Object obj = brg.ExecObjectMethod(request, szData);
+				if(null != obj)
+				   bout = Tools.encodeUnicodeHtm(obj.toString()).getBytes("UTF-8");
+			}
 			// 返回注册中的对象
 			else{
 				bout = brg.getRegObjsToString().getBytes();
 			}
-			response.setIntHeader("Content-Length", bout.length);
-			out.write(bout);
+			if(null != bout)
+			{
+				response.setIntHeader("Content-Length", bout.length);
+				out.write(bout);
+			}
 			out.flush();
 			out.close();
 			session.setAttribute(Content.RegSessionJSONRPCName, brg);
