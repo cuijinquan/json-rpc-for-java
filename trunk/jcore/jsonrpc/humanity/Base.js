@@ -49,7 +49,12 @@ PopMsgWin:function(o)
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
 {
-   szUrl && (szUrl = contextPath + szUrl) || (szUrl = document.location.href);
+   var form = $("form:first")[0], reqCode = $("input[name=reqCode]")[0];
+   if (null !=  form && null != form.action && null != reqCode && "null" != reqCode.value){
+     szUrl = form.action + "?" + "reqCode=" + reqCode.value;
+   } else {
+     szUrl && (szUrl = contextPath + szUrl) || (szUrl = document.location.href);
+   }
    szData || (szData = ":input");
    var _t = this;
    if(szReqCode)Base.setValue("reqCode", szReqCode);
@@ -58,7 +63,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
      var obj = _t.getObj(szProperty), szId;
      obj.attr('id', szId = obj.attr('id') || szProperty);
      _t.updateUi({url:szUrl,postData:[_t.getAllInput(szData)],data:[[szId,1,""]],fn:function(s){
-        /* 根据组件的class属性是不是x-panel来判断是不是panel */
+        
         var o;
         if("undefined" == typeof szDesId)o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
         else o = $("#" + szDesId);
@@ -77,7 +82,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
         try{script && eval(script)}catch(e){alert(e.message);}
      }});
    });
-},fsubmit:function(n, oWin)
+},
+fsubmit:function(n, oWin)
 {
    (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
@@ -879,8 +885,8 @@ doUpdateCollection:function(szCollectionId, szData)
     }, isCSS1Compat: (document.compatMode == "CSS1Compat"),
     /*collection的链接标签,根据url打开一个新的窗口*/
 	openWin: function(o, a){
-	  var p = o["param"], dto = o["dto"],
-	  url = o["url"] + p + "&xui_pop_win=true", 
+	  var p = o["param"], dto = o["dto"], target = o["target"] || null,
+	  url = '_self' != target ? o["url"] + p + "&xui_pop_win=true" : o["url"] + p, 
 	  width = o["width"] || 800, height = o["height"] || 600,
 	  option = "height=" + height + ",width=" + width + ",top=" + parseInt((screen.height - height)/2 * 0.75) + ",left=" + parseInt((screen.width - width)/2) + ",status=yes,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
 	  if ("undefined" != typeof dto){
@@ -892,7 +898,7 @@ doUpdateCollection:function(szCollectionId, szData)
 	      }
 	    });
 	  }
-	  window.open(url, null, option);
+	  window.open(url, target, option);
 	  return false;
 	},
 	/*按钮的弹出窗口. url:指定的路径, width:宽度, height:高度, param:参数*/
