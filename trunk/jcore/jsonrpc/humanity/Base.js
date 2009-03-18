@@ -62,11 +62,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
    {
      var obj = _t.getObj(szProperty), szId;
      obj.attr('id', szId = obj.attr('id') || szProperty);
-     _t.updateUi({url:szUrl,postData:[_t.getAllInput(szData)],data:[[szId,1,""]],fn:function(s){
-        
-        var o;
-        if("undefined" == typeof szDesId)o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
-        else o = $("#" + szDesId);
+     _t.updateUi({url:szUrl,bAsync: !szDesId,postData:[_t.getAllInput(szData)],data:[[szDesId || szId,1,""]],fn:function(s){
+        var o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
         var script = "", n = s.indexOf("<script");
         if(-1 < n)
         {
@@ -76,9 +73,13 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
            script = script.replace(/\/\/--><!\]\]>\s*$/, "");
         }
         s = s.substr(s.indexOf("<body>") + 6);
-        s = s.replace(/^\s*<div[^>]*>/gmi, "");
-        s = s.substr(0, s.lastIndexOf("</div>"));
+        if(!szDesId)
+        {
+          s = s.replace(/^\s*<div[^>]*>/gmi, "");
+          s = s.substr(0, s.lastIndexOf("</div>"));
+        }
         if(s && 20 < s.length)o[0].innerHTML = s;
+        /* try{script && setTimeout(function(){eval(script)}, 13)}catch(e){alert(e.message);} */
         try{script && eval(script)}catch(e){alert(e.message);}
      }});
    });
@@ -517,7 +518,7 @@ doUpdateCollection:function(szCollectionId, szData)
     return this;
   },decodeStr: function(s)
   {/* \u4E00-\u9FA5 */
-        return s.replace(/[^\0-\255]/gm, function()
+        return (s || '').replace(/[^\0-\255]/gm, function()
         {
           return "&#" + arguments[0].charCodeAt(0) + ";";
         })
@@ -547,7 +548,7 @@ doUpdateCollection:function(szCollectionId, szData)
     JsonRpcClient().AJAX({
        data: "__ajaxParam_=" + s.join('|') + s1.join("&"),
        url: o.url || document.location.href,
-       bAsync: !!o.fn,
+       bAsync: o.bAsync && !!o.fn,
        clbkFun: function(){
        try {
            o.fn && o.fn.apply(this, arguments);
