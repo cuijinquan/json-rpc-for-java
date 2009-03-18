@@ -23,7 +23,7 @@ function JsonRpcClient(url) {
 			200 == _this.xml.status && o.clbkFun && o.clbkFun(_this.xml.responseText.replace(/&#(\d+);/gm, function()
 			{
 			   return String.fromCharCode(arguments[1]);
-			})), delete _this.xml.onreadystatechange, delete _this.xml;
+			})), _this.xml && (delete _this.xml.onreadystatechange, delete _this.xml);
 	    }};
 	    if(-1 == o.url.indexOf("http:"))o.url = [lct.protocol, "//", lct.host].join("") + o.url;
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
