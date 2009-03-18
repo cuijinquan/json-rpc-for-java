@@ -50,8 +50,8 @@ PopMsgWin:function(o)
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
 {
    var form = $("form:first")[0], reqCode = $("input[name=reqCode]")[0];
-   if (null !=  form && null != form.action && null != reqCode && "null" != reqCode.value){
-     szUrl = form.action + "?" + "reqCode=" + reqCode.value;
+   if (form && form.action && reqCode.value){
+     szUrl = form.action + "?" + "reqCode=" + (szReqCode || reqCode.value);
    } else {
      szUrl && (szUrl = contextPath + szUrl) || (szUrl = document.location.href);
    }
