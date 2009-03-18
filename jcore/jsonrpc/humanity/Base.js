@@ -47,7 +47,7 @@ PopMsgWin:function(o)
     oDlg.find("div.x-window-header").width(w);
     oDlg.find("div.x-panel-btns").width(w);
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
-AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData)
+AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
 {
    szUrl && (szUrl = contextPath + szUrl) || (szUrl = document.location.href);
    szData || (szData = ":input");
@@ -59,7 +59,9 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData)
      obj.attr('id', szId = obj.attr('id') || szProperty);
      _t.updateUi({url:szUrl,postData:[_t.getAllInput(szData)],data:[[szId,1,""]],fn:function(s){
         /* 根据组件的class属性是不是x-panel来判断是不是panel */
-        var o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
+        var o;
+        if("undefined" == typeof szDesId)o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
+        else o = $("#" + szDesId);
         var script = "", n = s.indexOf("<script");
         if(-1 < n)
         {
