@@ -157,7 +157,7 @@ doUpdateCollection:function(szCollectionId, szData)
             if(e)k = e.which || e.charCode || e.keyCode, c = e.metaKey || e.ctrlKey;
             else if(window.event) k = window.event.keyCode || 0, c = window.event.ctrlKey || 0;
             if(c && 192 == k)
-              top.frames[0].document.getElementById('ksjr').focus();
+              top.frames[2].document.getElementById('ksjr').focus();
          });});
          window.XuiComboBox = Ext.extend(Ext.form.ComboBox,{
             forceSelection: true,
