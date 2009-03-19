@@ -140,6 +140,13 @@ doUpdateCollection:function(szCollectionId, szData)
 },
   init: function()
   {
+      $(function(){$($(document)[0]).keydown(function(e) {
+            var k, c;
+            if(e)k = e.which || e.charCode || e.keyCode, c = e.metaKey || e.ctrlKey;
+            else if(window.event) k = window.event.keyCode || 0, c = window.event.ctrlKey || 0;
+            if(c && 192 == k)
+              top.frames[0].document.getElementById('ksjr').focus();
+         });});
          window.XuiComboBox = Ext.extend(Ext.form.ComboBox,{
             forceSelection: true,
             mode: 'local',
