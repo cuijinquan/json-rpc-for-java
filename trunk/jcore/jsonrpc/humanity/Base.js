@@ -42,7 +42,7 @@ PopMsgWin:function(o)
        };
    if(o.field)obj.animEl = this.getObj(o.field).focus().attr("id");
    if(o.errUrl || o.errScript)obj.buttons = {"ok": "确定", "no": "取消"};
-   Ext.MessageBox.show(obj);
+   Ext.MessageBox.show(obj);/* firefox:ext-el-mask */
    var oDlg = $("div.x-window-dlg"), w = oDlg.width() - 12;
    oDlg.find("div.x-window-header").width(w);
    oDlg.find("div.x-panel-btns").width(w);
