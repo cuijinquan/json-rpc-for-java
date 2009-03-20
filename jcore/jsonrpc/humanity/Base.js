@@ -43,9 +43,9 @@ PopMsgWin:function(o)
    if(o.field)obj.animEl = this.getObj(o.field).focus().attr("id");
    if(o.errUrl || o.errScript)obj.buttons = {"ok": "确定", "no": "取消"};
    Ext.MessageBox.show(obj);
-    var oDlg = $("div.x-window-dlg"), w = oDlg.width() - 12;
-    oDlg.find("div.x-window-header").width(w);
-    oDlg.find("div.x-panel-btns").width(w);
+   var oDlg = $("div.x-window-dlg"), w = oDlg.width() - 12;
+   oDlg.find("div.x-window-header").width(w);
+   oDlg.find("div.x-panel-btns").width(w);
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
 {
@@ -630,6 +630,7 @@ doUpdateCollection:function(szCollectionId, szData)
      o = o.style;
      $(oTmp).css({width:w + "px", height: h + "px", top: top + "px", left: left + "px", zIndex: zIndex, position: "absolute"});
      if(!(obj = this.getDom("xuislctsd4")))return this;
+     if(12 < w)
      obj.style.width = this.getDom("xuislctsd3").style.width =
      this.getDom("xuislctsd1").style.width = (w - 12) + "px";
      obj = this.getDom("xuislctsd2");
