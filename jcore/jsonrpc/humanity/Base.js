@@ -49,8 +49,10 @@ PopMsgWin:function(o)
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
 {
-   var form = $("form:first")[0], reqCode = $("input[name=reqCode]")[0];
-   if (form && form.action && reqCode.value){
+   var form, reqCode;
+   if (!szUrl && (form = $("form:first")[0])
+            && form.action && "undefind" != typeof 
+              (reqCode = $("input[name=reqCode]")[0]).value){
      szUrl = form.action + "?" + "reqCode=" + (szReqCode || reqCode.value);
    } else {
      szUrl && (szUrl = contextPath + szUrl) || (szUrl = document.location.href);
@@ -79,7 +81,36 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
         if(s && 20 < s.length)o[0].innerHTML = s;
-        /* try{script && setTimeout(function(){eval(script)}, 13)}catch(e){alert(e.message);} */
+        try{script && setTimeout(function(){eval(script)}, 777)}catch(e){alert(e.message);}
+     }});
+   });
+},
+/*异步更新tab页的内容*/
+/*tabId: tab页的id， reqCode: action的方法, url,:请求的url, data:请求的数据, destId:请求异步内容的id*/
+AjaxTab: function(tabId, szReqCode, url, data, destId){
+   var _t = this;
+   url = contextPath + url;
+   data || (data = ":input");
+   if(szReqCode)Base.setValue("reqCode", szReqCode);
+   $(document).ready(function(){
+     var szId = tabId + "_body";
+     _t.updateUi({url:url,bAsync: !destId,postData:[_t.getAllInput(data)],data:[[destId || szId,1,""]],fn:function(s){
+        var o =  _t.getDom(szId);
+        var script = "", n = s.indexOf("<script");
+        if(-1 < n)
+        {
+           script = s.substr(n);
+           script = script.substr(0, script.lastIndexOf("</" + "script>"));
+           script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
+           script = script.replace(/\/\/--><!\]\]>\s*$/, "");
+        }
+        s = s.substr(s.indexOf("<body>") + 6);
+        if(!destId)
+        {
+          s = s.replace(/^\s*<div[^>]*>/gmi, "");
+          s = s.substr(0, s.lastIndexOf("</div>"));
+        }
+        if(s && 20 < s.length)o.innerHTML = s;
         try{script && eval(script)}catch(e){alert(e.message);}
      }});
    });
