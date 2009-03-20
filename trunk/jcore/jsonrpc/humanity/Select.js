@@ -22,7 +22,7 @@
           rst[i][key] = s.join("\t");
         }
     }
-    return this.data || this.getSlctObj(szId)["collection"]
+    return this.data || this.getSlctObj(szId)["collection"] || []
   },scrollIntoView: function(c, el){
         if(!c)return this;
         var o = $(el), a = [parseInt(c.clientHeight, 10), parseInt(o.offset().top, 10), o.height(), parseInt(c.scrollTop, 10)];
@@ -128,6 +128,7 @@
     if(!this.descObj)return this;
     if(0 == s.length)return this.data = null, this;
     var n, id = this.descObj.id, b = [], c = [], a = (this.getData(id), this.getSlctObj(id)["collection"]);
+    if(!a || 0 == a.length)return 0;
     for(n = 0; n < a.length; n++)
       if(-1 < a[n]["_id_"].indexOf(s))
          b.push(a[n]);
