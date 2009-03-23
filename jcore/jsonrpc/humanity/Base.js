@@ -265,6 +265,12 @@ doUpdateCollection:function(szCollectionId, szData)
               }
               else this.val(s);
            }),
+           setFocus:(_t.setFocus = function(s){
+              var o = this;
+              if(s)o = $(":input[@name=" + s + "]");
+              if(0 == o.length)o = ("#" + s);
+              o.focus();
+           }),
            setReadOnly:(_t.setReadOnly = function(s, b){
               var o = this;
               if(s)o = $(":input[@name=" + s + "]");
