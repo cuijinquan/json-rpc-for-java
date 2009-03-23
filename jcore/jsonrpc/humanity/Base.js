@@ -198,12 +198,13 @@ doUpdateCollection:function(szCollectionId, szData)
             allowDomMove:true,
             selectOnFocus:true, /* 加入该属性才会自动将值填充到hiddenName中去*/
             resizable:true,
-            mySlc:function(s)
+            mySlc:function(s, id, cbk)
             {
-               this.onSelect=function(o){
+               s && (this.onSelect=function(o){
                   this.setValue(o.data[s]);
                   this.collapse();
-               }; 
+                  if("function" == typeof cbk)cbk(o.data);
+               }); 
                return this;
             }
           });
@@ -270,6 +271,20 @@ doUpdateCollection:function(szCollectionId, szData)
               if("undefined" == typeof b || true == b)
                    o.attr("readonly", "readonly").addClass("readOnly");
               else o.removeAttr("readonly").removeClass("readOnly");
+           }),
+           enabledButton:(_t.enabledButton = function(s){
+              var o = this, s1 = "x-btn-disabled", s2 = "disabled";
+              if(s)o = $("#" + s);
+              o.removeClass(s1);
+              o = o.find("table");
+              o.removeAttr(s2).find("div").removeAttr(s2);
+           }),
+           disabledButton:(_t.disabledButton = function(s){
+              var o = this, s1 = "x-btn-disabled", s2 = "disabled";
+              if(s)o = $("#" + s);
+              o.addClass(s1);
+              o = o.find("table");
+              o.attr(s2, s2).find("div").attr(s2, s2);
            }),
            addRedStar:(_t.addRedStar = function(s)
            {
