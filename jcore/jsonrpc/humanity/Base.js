@@ -18,7 +18,7 @@ PopMsgWin:function(o)
 {
    var aTp = [Ext.MessageBox.INFO, Ext.MessageBox.QUESTION, Ext.MessageBox.WARNING, Ext.MessageBox.ERROR], obj = {
            title: '系统提示信息',
-           msg: o.message,
+           msg: o.message || o,
            buttons: {"ok": "确定"},
            fn: function(btn){
               if("ok" == btn)
@@ -38,7 +38,7 @@ PopMsgWin:function(o)
                 if(0 < oIp.length)oIp.focus();else (oIp = Base.getObj("dto(" + o.field + ")")).focus();
               }
            },
-           icon: aTp[o.type]
+           icon: aTp[o.type || 0]
        };
    if(o.field)obj.animEl = this.getObj(o.field).focus().attr("id");
    if(o.errUrl || o.errScript)obj.buttons = {"ok": "确定", "no": "取消"};
