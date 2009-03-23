@@ -65,7 +65,9 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
      var obj = _t.getObj(szProperty), szId;
      obj.attr('id', szId = obj.attr('id') || szProperty);
      _t.updateUi({url:szUrl,bAsync: !szDesId,postData:[_t.getAllInput(szData)],data:[[szDesId || szId,1,""]],fn:function(s){
-        var o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
+        var o = null; 
+        if(0 < obj.length)
+          o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
         var script = "", n = s.indexOf("<script");
         if(-1 < n)
         {
@@ -80,7 +82,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
           s = s.replace(/^\s*<div[^>]*>/gmi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
-        if(s && 20 < s.length)o[0].innerHTML = s;
+        if(o && s && 20 < s.length)o[0].innerHTML = s;
         try{script && setTimeout(function(){eval(script)}, 777)}catch(e){alert(e.message);}
      }});
    });
@@ -211,6 +213,7 @@ doUpdateCollection:function(szCollectionId, szData)
          window.XuiDateField = Ext.extend(Ext.form.DateField,{
     	 defaultAutoCreate : {tag: "input", type: "text", size: 21, maxLength:21, autocomplete: "off"}
     	 ,onResize:function(){
+    	   if(!this.wrap)return this;
     	   this.wrap.setWidth("100%");
     	   this.el.setWidth(this.wrap.getWidth() - this.trigger.getWidth() + 2);
     	   $(this.el.dom).css('top',-1);
