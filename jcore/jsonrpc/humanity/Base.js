@@ -192,11 +192,20 @@ doUpdateCollection:function(szCollectionId, szData)
          });});
          window.XuiComboBox = Ext.extend(Ext.form.ComboBox,{
             forceSelection: true,
-            mode: 'local',
+            mode: 'local',/* 本地数据模式 */
             triggerAction: 'all',
-            emptyText:'请选择...',
-            selectOnFocus:true,
-            resizable:true
+            emptyText: '请选择...',
+            allowDomMove:true,
+            selectOnFocus:true, /* 加入该属性才会自动将值填充到hiddenName中去*/
+            resizable:true,
+            mySlc:function(s)
+            {
+               this.onSelect=function(o){
+                  this.setValue(o.data[s]);
+                  this.collapse();
+               }; 
+               return this;
+            }
           });
          window.XuiDateField = Ext.extend(Ext.form.DateField,{
     	 defaultAutoCreate : {tag: "input", type: "text", size: 21, maxLength:21, autocomplete: "off"}
