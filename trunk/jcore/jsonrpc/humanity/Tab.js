@@ -218,6 +218,16 @@
 	    if(hide){
 	      $(o).css("display", "none");
 	    }
+	    /* 对collection Resize的控制 */
+	    if(2 == arguments.length)
+	    {
+	      Tab.RstClct || (Tab.RstClct = []);
+	      Tab.RstClct[id] || (Tab.RstClct[id] = new Function();
+	         Tab.RstClct[id].start = function(){};
+	         Tab.RstClct[id].add = function(fn){var fnt = Tab.RstClct[id].start;Tab.RstClct[id].start = function(){fnt();fn()}};
+	      );
+	      Tab.RstClct[id].start();
+	     }
     },
     
     //设置onmouse over和out的样式
