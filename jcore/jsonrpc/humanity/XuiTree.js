@@ -85,7 +85,18 @@
 	      case 39 : this.lowerNode(); break;  /* Arrow right, expand child node */
 	      case 40 : this.nextNode();  break;  /* Arrow down */
 	    }
-    },init: function()
+    },/* 更新当前的树数据为初始化修改前的状态 */
+    upDataTree:function(id)
+    {
+       var oTree, a, b, c, k;
+       if(oTree = XuiTree.XuiTreeCc[id])
+       {
+          a = oTree.oldData, b = oTree.addData, c = oTree.delData;
+          for(k in c)delete a[k]; for(k in b)a[k] = b[k];
+          oTree.delData = [], oTree.addData = [], oTree.oldData = a;
+       }
+    }
+    ,init: function()
    {
       XUI(this);
       this.onkeydown = this.bind(this.onkeydown);
