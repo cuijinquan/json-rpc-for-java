@@ -27,6 +27,13 @@
        });
        tabs.max = i-1;
        this.setActiveTab(id, active);
+       /* 增加对collection在tab里高度和宽度显示不正常的控制*/
+       var Tab = this;
+       Tab.RstClct || (Tab.RstClct = []);
+       Tab.RstClct[id] || (Tab.RstClct[id] = new Function(),
+         Tab.RstClct[id].start = function(){},
+         Tab.RstClct[id].add = function(fn){var fnt = Tab.RstClct[id].start;Tab.RstClct[id].start = function(){fnt();fn()}}
+       );
     },
     
     //关闭标签页.id: tabs标签的id, o:li组件
@@ -221,14 +228,8 @@
 	    /* 对collection Resize的控制 */
 	    if(2 == arguments.length)
 	    {
-	      var Tab = this;
-	      Tab.RstClct || (Tab.RstClct = []);
-	      Tab.RstClct[id] || (Tab.RstClct[id] = new Function(),
-	         Tab.RstClct[id].start = function(){},
-	         Tab.RstClct[id].add = function(fn){var fnt = Tab.RstClct[id].start;Tab.RstClct[id].start = function(){fnt();fn()}}
-	      );
 	      Tab.RstClct[id].start();
-	     }
+	    }
     },
     
     //设置onmouse over和out的样式
