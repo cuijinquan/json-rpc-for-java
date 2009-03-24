@@ -65,7 +65,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
      var obj = _t.getObj(szProperty), szId;
      obj.attr('id', szId = obj.attr('id') || szProperty);
      /* 夏天 2009-03-24 增加对对象自身设置了reqCode的支持 */
-     if(obj.attr('reqCode'))Base.setValue("reqCode", szReqCode = obj.attr('reqCode'));
+     if(!szReqCode && obj.attr('reqCode'))Base.setValue("reqCode", szReqCode = obj.attr('reqCode'));
      _t.updateUi({url:szUrl,bAsync: !szDesId,postData:[_t.getAllInput(szData)],data:[[szDesId || szId,1,""]],fn:function(s){
         var o = null; 
         if(0 < obj.length)
