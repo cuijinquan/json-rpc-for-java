@@ -26,13 +26,12 @@
           i++;
        });
        tabs.max = i-1;
-       this.setActiveTab(id, active);
+        try{this.setActiveTab(id, active);}catch(e){}
        /* 增加对collection在tab里高度和宽度显示不正常的控制*/
-       var Tab = this;
-       Tab.RstClct || (Tab.RstClct = []);
-       Tab.RstClct[id] || (Tab.RstClct[id] = new Function(),
-         Tab.RstClct[id].start = function(){},
-         Tab.RstClct[id].add = function(fn){var fnt = Tab.RstClct[id].start;Tab.RstClct[id].start = function(){fnt();fn()}}
+       _t.RstClct = [];
+       _t.RstClct[id] || (_t.RstClct[id] = new Function(),
+         _t.RstClct[id].start = function(){},
+         _t.RstClct[id].add = function(fn){var fnt = _t.RstClct[id].start;_t.RstClct[id].start = function(){fnt();fn()}}
        );
     },
     
@@ -226,10 +225,7 @@
 	      $(o).css("display", "none");
 	    }
 	    /* 对collection Resize的控制 */
-	    if(2 == arguments.length)
-	    {
-	      Tab.RstClct[id].start();
-	    }
+	    if(2 == arguments.length)this.RstClct[id].start(), this.RstClct[id].start = function(){};
     },
     
     //设置onmouse over和out的样式
