@@ -221,10 +221,11 @@
 	    /* 对collection Resize的控制 */
 	    if(2 == arguments.length)
 	    {
+	      var Tab = this;
 	      Tab.RstClct || (Tab.RstClct = []);
-	      Tab.RstClct[id] || (Tab.RstClct[id] = new Function();
-	         Tab.RstClct[id].start = function(){};
-	         Tab.RstClct[id].add = function(fn){var fnt = Tab.RstClct[id].start;Tab.RstClct[id].start = function(){fnt();fn()}};
+	      Tab.RstClct[id] || (Tab.RstClct[id] = new Function(),
+	         Tab.RstClct[id].start = function(){},
+	         Tab.RstClct[id].add = function(fn){var fnt = Tab.RstClct[id].start;Tab.RstClct[id].start = function(){fnt();fn()}}
 	      );
 	      Tab.RstClct[id].start();
 	     }
