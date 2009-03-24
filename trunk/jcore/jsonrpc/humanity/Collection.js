@@ -7,6 +7,7 @@
      {
        if(a[i]["_check"])return true;
      }
+     return false;
   }, /* 全选 */
   checkAll:function(id)
   {
@@ -124,6 +125,7 @@
   }, /* 添加collection进行处理 */
   addResize: function(szId)
   {
+     if(40 > $("#" + szId + " div.x-grid3-scroller").height())return this;
      var _t = this, b = $("#" + szId + " td[@class*='" + szId + "_hd_']");/* 标题部分的td，包含锁定、非锁定部分 */
      _t.oCur = _t.getDom(szId); /* 当前操作的collection对象 */
      _t.onResize = function(szId)
