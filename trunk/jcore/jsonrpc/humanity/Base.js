@@ -24,12 +24,12 @@ PopMsgWin:function(o)
               if("ok" == btn)
               {
                 if(o.okScript)
-                  try{eval(o.okScript)}catch(e){};
+                  try{if("function" == typeof o.okScript)o.okScript();else eval(o.okScript)}catch(e){};
                 if(o.okUrl)location.href = contextPath + o.okUrl;
               }
               else if("no" == btn)
               {
-                 if(o.errScript)try{eval(o.errScript)}catch(e){};
+                 if(o.errScript)try{if("function" == typeof o.errScript)o.errScript();else eval(o.errScript)}catch(e){};
                  if(o.errUrl)location.href = contextPath + o.errUrl;
               }
               if(o.field)
@@ -41,7 +41,7 @@ PopMsgWin:function(o)
            icon: aTp[o.type || 0]
        };
    if(o.field)obj.animEl = this.getObj(o.field).focus().attr("id");
-   if(o.errUrl || o.errScript)obj.buttons = {"ok": "确定", "no": "取消"};
+   if(o.errUrl || o.errScript || 1 == o.type)obj.buttons = {"ok": "确定", "no": "取消"};
    Ext.MessageBox.show(obj);/* firefox:ext-el-mask */
    var oDlg = $("div.x-window-dlg"), w = oDlg.width() - 12;
    oDlg.find("div.x-window-header").width(w);
