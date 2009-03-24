@@ -64,6 +64,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
    {
      var obj = _t.getObj(szProperty), szId;
      obj.attr('id', szId = obj.attr('id') || szProperty);
+     /* 夏天 2009-03-24 增加对对象自身设置了reqCode的支持 */
+     if(obj.attr('reqCode'))Base.setValue("reqCode", szReqCode = obj.attr('reqCode'));
      _t.updateUi({url:szUrl,bAsync: !szDesId,postData:[_t.getAllInput(szData)],data:[[szDesId || szId,1,""]],fn:function(s){
         var o = null; 
         if(0 < obj.length)
@@ -168,23 +170,26 @@ doUpdateCollection:function(szCollectionId, szData)
   szCollectionId.swf().doUpdateCollection(this.getAllInput(szData));
 },getAllInput:function(s)
 {
-   var a = [], _t = Base,o = $(s || ":input"), ecd = _t.decodeStr;
+   var a = [], _t = Base,o = $(s || ":input"), ecd = _t.decodeStr, s;
    if(0 < o.size())
    o.each(function(){
-      a.push(this.name + "=" + escape(ecd($(this).val())));
+      if(this.name && (s = escape(ecd($(this).val()))))
+      a.push(this.name + "=" + s);
    });
    else{
       var p = s.split("&"), u;
       for(var i = 0; i < p.length; i++)
       {
         u = p[i].split("=");
-        a.push(u[0] + "=" + escape(ecd(u[1])));
+        if(u[0] && (s = escape(ecd(u[1]))))
+        a.push(u[0] + "=" + s);
       }
    }
    return a.join("&");
 },
   init: function()
   {
+      Ext.BLANK_IMAGE_URL = g_sysInfo[2] + "default/s.gif";
       $(function(){$($(document)[0]).keydown(function(e) {
             var k, c;
             if(e)k = e.which || e.charCode || e.keyCode, c = e.metaKey || e.ctrlKey;
