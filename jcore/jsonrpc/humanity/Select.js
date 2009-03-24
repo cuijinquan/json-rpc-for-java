@@ -6,7 +6,7 @@
   oShdow:null,     /* 阴影图层对象 */
   getSlctObj:function(szId)
   {
-    return slctIptData[szId]||{};
+    return (window.slctIptData || {})[szId]||{};
   }, setData:function(szId,a){this.getSlctObj(szId)["collection"] = a;},
   getData:function(szId) /* 获取下拉列表数据 */
   {
