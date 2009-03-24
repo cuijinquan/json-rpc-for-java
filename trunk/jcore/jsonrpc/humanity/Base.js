@@ -618,7 +618,7 @@ doUpdateCollection:function(szCollectionId, szData)
     /* post数据，格式为["aac001", "#myTab:input", "divId1"] */
     o.postData && o.postData.each(function()
     {
-       o1 = $(this);
+       o1 = $(this.toString());
        if(o1[0] && !o1[0].nodeName)o1 = $("#"+ this + " :input");
        if(o1[0] && !o1[0].nodeName)o1 = $(":input[@name=" + this + "]");
        if(o1 && 0 < o1.length)
