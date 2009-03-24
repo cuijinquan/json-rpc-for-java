@@ -16,6 +16,7 @@ getMenuData:function()
 /* 弹出消息提示 */
 PopMsgWin:function(o)
 {
+   Base.PopMsgWin.obj = o;
    var aTp = [Ext.MessageBox.INFO, Ext.MessageBox.QUESTION, Ext.MessageBox.WARNING, Ext.MessageBox.ERROR], obj = {
            title: '系统提示信息',
            msg: o.message || o,
