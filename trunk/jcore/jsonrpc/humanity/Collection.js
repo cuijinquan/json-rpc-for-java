@@ -581,10 +581,10 @@
     this.updateCollection(id, {url:url, postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value)]});
   } else {
     if ("XUI" == num){
-      /* FIXME: 验证maxSize为数字，验证queryPage为数字，并且在最小页和最大页的范围内*/
+      
       var msg = "\u8bf7\u8f93\u5165\u6570\u5b57\u0021";
       if (0 != maxSize.value.replace(/[\d\s]/g, '').length){
-        /*请输入数字!*/
+        
         alert(msg);
         maxSize.value = "";
         return false;
@@ -601,8 +601,12 @@
       }
       num = queryPage.value;
     }
-    this.updateCollection(id, {url:url, nouseCtx:true,
-                          postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value),(id+"xui_page_maxsize=" + maxSize.value),(id+"xui_page_query=" + num)]});                   
+    /*this.updateCollection(id, {url:url, nouseCtx:true, postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value),(id+"xui_page_maxsize=" + maxSize.value),(id+"xui_page_query=" + num)]});*/
+    url += "?reqCode=" + reqCode;
+    url += "&xui_coll_array=" + ids.value;
+    url += "&" + id + "xui_page_maxsize=" + maxSize.value;
+    url += "&" + id + "xui_page_query=" + num;
+    this.updateCollection(id, {url:url, nouseCtx:true});
   }                                               
 },
 
