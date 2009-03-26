@@ -263,8 +263,11 @@ doUpdateCollection:function(szCollectionId, szData)
         window.getAllInput = _t.getAllInput;
         jQuery.fn.extend({
            getValue:(_t.getValue = function(s){
-             if(s)return $(":input[@name=" + s + "]").val();
-             else return this.val()
+             var s1;
+             if(s)s1 = $(":input[@name=" + s + "]").val();
+             else s1 = this.val()
+             if("undefined" == (s1 || typeof s1))s1 = "";
+             return s1;
            }),
            setValue:(_t.setValue = function(s, s2){
               if(!s)return this;
