@@ -48,7 +48,7 @@ PopMsgWin:function(o)
    oDlg.find("div.x-window-header").width(w);
    oDlg.find("div.x-panel-btns").width(w);
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
-AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
+AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
 {
    var form, reqCode;
    if (!szUrl && (form = $("form:first")[0])
@@ -56,7 +56,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
               (reqCode = $("input[name=reqCode]")[0]).value){
      szUrl = form.action + "?" + "reqCode=" + (szReqCode || reqCode.value);
    } else {
-     szUrl && (szUrl = contextPath + szUrl) || (szUrl = document.location.href);
+     /*如果设置了szData的话，reqCode就没有被设置*/
+     szReqCode && (szUrl = contextPath + szUrl + "?reqCode=" + szReqCode) || (szUrl = contextPath + szUrl);  
    }
    szData || (szData = ":input");
    var _t = this;
@@ -65,9 +66,10 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
    {
      var obj = _t.getObj(szProperty), szId;
      obj.attr('id', szId = obj.attr('id') || szProperty);
-     /* 夏天 2009-03-24 增加对对象自身设置了reqCode的支持 */
+     ("undefined" == typeof isAsync)&&(isAsync = !szDesId);
      if(!szReqCode && obj.attr('reqCode'))Base.setValue("reqCode", szReqCode = obj.attr('reqCode'));
-     _t.updateUi({url:szUrl,bAsync: !szDesId,postData:[_t.getAllInput(szData)],data:[[szDesId || szId,1,""]],fn:function(s){
+     _t.updateUi({url:szUrl,bAsync: isAsync,postData:[_t.getAllInput(szData)],data:[[szDesId || szId,1,""]],fn:function(s){
+        
         var o = null; 
         if(0 < obj.length)
           o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
@@ -85,16 +87,24 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId)
           s = s.replace(/^\s*<div[^>]*>/gmi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
-        if(o && s && 20 < s.length)o[0].innerHTML = s;
-        try{script && setTimeout(function(){eval(script)}, 777)}catch(e){alert(e.message);}
+        try{
+          script && ((false == isAsync)&& eval(script) || setTimeout(function(){eval(script)}, 777));
+        }catch(e){
+          alert("异步调用错误:执行返回的脚本出错" + ",错误消息是:" + e.message);
+        }
+        if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
+          if(o && s && 20 < s.length){o[0].innerHTML = s;}
+        }
      }});
    });
+   if(false == isAsync){return Base.PopMsgWin.obj.type;}/*如果是同步的话，返回错误的类型值*/
 },
 /*异步更新tab页的内容*/
 /*tabId: tab页的id， reqCode: action的方法, url,:请求的url, data:请求的数据, destId:请求异步内容的id*/
 AjaxTab: function(tabId, szReqCode, url, data, destId){
    var _t = this;
-   url = contextPath + url;
+   /*如果没有设置reqCode并且设置了data的话，reqCode就没有被设置*/
+   (szReqCode && (url = contextPath + url + "?reqCode=" + szReqCode)) || (url = contextPath + url);
    data || (data = ":input");
    if(szReqCode)Base.setValue("reqCode", szReqCode);
    $(document).ready(function(){
