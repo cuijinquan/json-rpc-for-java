@@ -43,10 +43,7 @@ PopMsgWin:function(o)
        };
    if(o.field)obj.animEl = this.getObj(o.field).focus().attr("id");
    if(o.errUrl || o.errScript || 1 == o.type)obj.buttons = {"ok": "确定", "no": "取消"};
-   Ext.MessageBox.show(obj);/* firefox:ext-el-mask */
-   var oDlg = $("div.x-window-dlg"), w = oDlg.width() - 12;
-   oDlg.find("div.x-window-header").width(w);
-   oDlg.find("div.x-panel-btns").width(w);
+   Ext.MessageBox.show(obj);
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
 {
