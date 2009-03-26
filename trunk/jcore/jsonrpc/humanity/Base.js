@@ -56,7 +56,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
      /*如果设置了szData的话，reqCode就没有被设置*/
      szReqCode && (szUrl = contextPath + szUrl + "?reqCode=" + szReqCode) || (szUrl = contextPath + szUrl);  
    }
-   szData || (szData = ":input :not(:checkbox[@checked=false])");
+   szData || (szData = ":input:not(:checkbox[@checked=false])");
    var _t = this;
    if(szReqCode)Base.setValue("reqCode", szReqCode);
    $(document).ready(function()
@@ -102,7 +102,7 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
    var _t = this;
    /*如果没有设置reqCode并且设置了data的话，reqCode就没有被设置*/
    (szReqCode && (url = contextPath + url + "?reqCode=" + szReqCode)) || (url = contextPath + url);
-   data || (data = ":input :not(:checkbox[@checked=false])");
+   data || (data = ":input:not(:checkbox[@checked=false])");
    if(szReqCode)Base.setValue("reqCode", szReqCode);
    $(document).ready(function(){
      var szId = tabId + "_body";
@@ -178,7 +178,7 @@ doUpdateCollection:function(szCollectionId, szData)
   szCollectionId.swf().doUpdateCollection(this.getAllInput(szData));
 },getAllInput:function(s)
 {
-   var a = [], _t = Base,o = $(s || ":input :not(:checkbox[@checked=false])"), ecd = _t.decodeStr, s;
+   var a = [], _t = Base,o = $(s || ":input:not(:checkbox[@checked=false])"), ecd = _t.decodeStr, s;
    if(0 < o.size())
    o.each(function(){
       if(this.name && (s = escape(ecd($(this).val()))))
@@ -373,7 +373,7 @@ doUpdateCollection:function(szCollectionId, szData)
              }
              else
              {
-               if(!o.length)o = $(":input :not(:checkbox[@checked=false])");
+               if(!o.length)o = $(":input:not(:checkbox[@checked=false])");
                if(o.length)
                try{
                  o.each(function()
@@ -630,7 +630,7 @@ doUpdateCollection:function(szCollectionId, szData)
     o.postData && o.postData.each(function()
     {
        o1 = $(this.toString());
-       if(o1[0] && !o1[0].nodeName)o1 = $("#"+ this + " :input :not(:checkbox[@checked=false])");
+       if(o1[0] && !o1[0].nodeName)o1 = $("#"+ this + " :input:not(:checkbox[@checked=false])");
        if(o1[0] && !o1[0].nodeName)o1 = $(":input[@name=" + this + "]");
        if(o1 && 0 < o1.length)
        {
