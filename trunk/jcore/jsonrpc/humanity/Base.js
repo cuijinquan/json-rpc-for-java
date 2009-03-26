@@ -20,6 +20,7 @@ PopMsgWin:function(o)
    var aTp = [Ext.MessageBox.INFO, Ext.MessageBox.QUESTION, Ext.MessageBox.WARNING, Ext.MessageBox.ERROR], obj = {
            title: '系统提示信息',
            msg: o.message || o,
+           width:450,
            buttons: {"ok": "确定"},
            fn: function(btn){
               if("ok" == btn)
@@ -41,7 +42,8 @@ PopMsgWin:function(o)
            },
            icon: aTp[o.type || 0]
        };
-   if(o.field)obj.animEl = this.getObj(o.field).focus().attr("id");
+   if(o.field)this.getObj(o.field).focus();
+   if(3 == o.type)obj.value = obj.msg,obj.multiline = true,delete obj.msg;
    if(o.errUrl || o.errScript || 1 == o.type)obj.buttons = {"ok": "确定", "no": "取消"};
    Ext.MessageBox.show(obj);
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
