@@ -98,6 +98,10 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
    });
    if(false == isAsync){return Base.PopMsgWin.obj.type;}/*如果是同步的话，返回错误的类型值*/
 },
+/*控制是否异步执行的简便方法， id:需要异步刷新的id，isAsync:是否异步标志,true为异步,false为同步*/
+AjaxSyn : function(id, isAsync){
+  return this.AjaxUpdateUi(id, null, null, null, null, isAsync);
+},
 /*异步更新tab页的内容*/
 /*tabId: tab页的id， reqCode: action的方法, url,:请求的url, data:请求的数据, destId:请求异步内容的id*/
 AjaxTab: function(tabId, szReqCode, url, data, destId){
@@ -125,7 +129,7 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
         if(s && 20 < s.length)o.innerHTML = s;
-        try{script && eval(script)}catch(e){alert(e.message);}
+        try{script && eval(script)}catch(e){alert("异步调用错误:执行返回的脚本出错" + ",错误消息是:" + e.message);}
      }});
    });
 },
