@@ -55,8 +55,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
               (reqCode = $("input[name=reqCode]")[0]).value){
      szUrl = form.action + "?" + "reqCode=" + (szReqCode || reqCode.value);
    } else {
-     /*如果设置了szData的话，reqCode就没有被设置*/
-     szReqCode && (szUrl = contextPath + szUrl + "?reqCode=" + szReqCode) || (szUrl = contextPath + szUrl);  
+     var separator = url &&  -1 < url.indexOf("?") ? "&" : "?";
+     szReqCode && (szUrl = contextPath + szUrl + separator + "reqCode=" + szReqCode) || (szUrl = contextPath + szUrl);  
    }
    szData || (szData = ":input:not(:checkbox[@checked=false])");
    var _t = this;
@@ -89,25 +89,22 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
         try{
           script && ((false == isAsync)&& eval(script) || setTimeout(function(){eval(script)}, 777));
         }catch(e){
-          alert("异步调用错误:执行返回的脚本出错" + ",错误消息是:" + e.message);
+          alert("\u5f02\u6b65\u8c03\u7528\u9519\u8bef:\u6267\u884c\u8fd4\u56de\u7684\u811a\u672c\u51fa\u9519" + ",\u9519\u8bef\u6d88\u606f\u662f:" + e.message);
         }
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
           if(o && s && 20 < s.length){o[0].innerHTML = s;}
         }
      }});
    });
-   if(false == isAsync){return Base.PopMsgWin.obj.type;}/*如果是同步的话，返回错误的类型值*/
+   if(false == isAsync){return Base.PopMsgWin.obj.type;}
 },
 /*控制是否异步执行的简便方法， id:需要异步刷新的id，isAsync:是否异步标志,true为异步,false为同步*/
 AjaxSyn : function(id, isAsync){
   return this.AjaxUpdateUi(id, null, null, null, null, isAsync);
 },
-/*异步更新tab页的内容*/
-/*tabId: tab页的id， reqCode: action的方法, url,:请求的url, data:请求的数据, destId:请求异步内容的id*/
 AjaxTab: function(tabId, szReqCode, url, data, destId){
-   var _t = this;
-   /*如果没有设置reqCode并且设置了data的话，reqCode就没有被设置*/
-   (szReqCode && (url = contextPath + url + "?reqCode=" + szReqCode)) || (url = contextPath + url);
+   var _t = this, separator = url &&  -1 < url.indexOf("?") ? "&" : "?";
+   (szReqCode && (url = contextPath + url + separator + "reqCode=" + szReqCode)) || (url = contextPath + url);
    data || (data = ":input:not(:checkbox[@checked=false])");
    if(szReqCode)Base.setValue("reqCode", szReqCode);
    $(document).ready(function(){
