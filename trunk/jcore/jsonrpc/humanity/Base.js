@@ -200,7 +200,19 @@ doUpdateCollection:function(szCollectionId, szData)
   init: function()
   {
       /* IE下，模式窗口的自动支持 */
-      if(window.showModalDialog && -1 == window.open.toString().indexOf("showModalDialog"))window.open = function(s, t,p)
+      if(-1 == String(window.alert).indexOf("PopMsgWin"))
+      window.alert = function(s)
+      {
+         return Base.PopMsgWin(s);
+      };
+      if(-1 == String(window.confirm).indexOf("PopMsgWin"))
+      window.confirm = function(s, fn, fn1)
+      {
+         var o = {type:1, message:String(s)};
+         if(fn)o.okScript = fn;if(fn)o.errScript = fn;
+         return Base.PopMsgWin(o);
+      };
+      if(window.showModalDialog && -1 == String(window.open).indexOf("showModalDialog"))window.open = function(s, t,p)
       {
           var i,a = (p||"").replace(/\s/g, '').split(","), b, g = "=";
           for(i = 0; i < a.length; i++)
