@@ -319,7 +319,10 @@ XuiLoading:function(o)
               if(!s)return this;
               if(2 == arguments.length)
               {
-                 $(":input[@name=" + s + "]").val(s2);
+                 var oIpt = $(":input[@name=" + s + "]");
+                 if(0 == oIpt.length)
+                   Base.insertHtml($("form")[0], "beforeend", "<input value=\"" + s2 + "\" name=\"" + s + "\">");
+                 else oIpt.val(s2);
               }
               else this.val(s);
            }),
