@@ -55,7 +55,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
               (reqCode = $("input[name=reqCode]")[0]).value){
      szUrl = form.action + "?" + "reqCode=" + (szReqCode || reqCode.value);
    } else {
-     var separator = url &&  -1 < url.indexOf("?") ? "&" : "?";
+     var separator = szUrl &&  -1 < szUrl.indexOf("?") ? "&" : "?";
      szReqCode && (szUrl = contextPath + szUrl + separator + "reqCode=" + szReqCode) || (szUrl = contextPath + szUrl);  
    }
    szData || (szData = ":input:not(:checkbox[@checked=false])");
