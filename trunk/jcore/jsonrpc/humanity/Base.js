@@ -131,18 +131,8 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
 },
 fsubmit:function(n, oWin)
 {
-    var e = window.event, ocss, o = {
-           msg: '正在处理中, 请稍等...',
-           progressText: 'doing...',
-           width:300,
-           wait:true,
-           waitConfig: {interval:200},
-           icon:'ext-mb-download'
-       };
-    if(e && e.srcElement)o.animEl = e.srcElement;
-    Ext.MessageBox.show(o);
-    o = $("div.x-window-dlg").find("div[@id^=ext-]");
-    o.find("div").css(ocss = {"float":"none", "clear":"both"}).find("span").css(ocss);
+    Base.AjaxObj = Ext.getBody();
+    this.XuiLoading();
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
 {
