@@ -199,6 +199,41 @@ doUpdateCollection:function(szCollectionId, szData)
 },
   init: function()
   {
+      /* IE下，模式窗口的自动支持 */
+      if(window.showModalDialog)window.open = function(s, t,p)
+      {
+          var i,a = (p||"").replace(/\s/g, '').split(","), b, g = "=";
+          for(i = 0; i < a.length; i++)
+          {
+             b = a[i].split(g);
+             if(2 == b.length)
+             {
+                switch(b[0])
+                {
+                   case "left":b[0] = "dialogLeft";break;
+                   case "top":b[0] = "dialogTop";break;
+                   case "width":b[0] = "dialogWidth";break;
+                   case "height":b[0] = "dialogHeight";break;
+                }
+                if(!isNaN(Number(b[1])))b[1] = Number(b[1]) + "px"; 
+                a[i] = b.join(g);
+             }
+          }
+          a.push("center=1");a.push("help=0");a.push("resizable=1");a.push("scroll=0");a.push("status=0");
+          p = a.join(";").replace(/=/g, ":");
+          return window.showModalDialog(s, window, p);
+      };
+      else if(this.isNS6)
+      {
+           (function(){
+               var MyOpen = window.open;
+               window.open = function(s, t, p)
+               {
+                  return MyOpen(s, t, p + ",modal=yes");
+               }           
+           })();
+      }
+      
       Ext.BLANK_IMAGE_URL = g_sysInfo[2] + "default/s.gif";
       $(function(){$($(document)[0]).keydown(function(e) {
             var k, c;
