@@ -175,9 +175,11 @@ doUpdateCollection:function(szCollectionId, szData)
    if(0 < o.size())
    o.each(function(){
       if(this.name && (s = escape(ecd($(this).val()))))
-      a.push(this.name + "=" + s);
+      if (!("checkbox" == this.type && false == this.checked))/*排除checkbox不为true*/
+      	a.push(this.name + "=" + s);
    });
    else{
+      alert(2);
       var p = s.split("&"), u;
       for(var i = 0; i < p.length; i++)
       {
@@ -187,7 +189,8 @@ doUpdateCollection:function(szCollectionId, szData)
       }
    }
    return a.join("&");
-},/* Ajax转转统一控制 */
+},
+/* Ajax转转统一控制 */
 XuiLoading:function(o)
 {
    if("undefined" != typeof Base.AjaxObj)
@@ -195,32 +198,6 @@ XuiLoading:function(o)
 },
   init: function()
   {
-      /* URL管理类 */
-      /* alert(new XuiUrl("/sdjflksjdf/slkdjf.do?reqCode=good&kk=98").add("dto(akc034)", 777).add("abc=2345&ttt=2234")); */
-      /* alert(new XuiUrl("/sdjflksjdf/slkdjf.do").add("reqCode=good&kk=98").add("dto(akc034)", 777).add("abc=2345&ttt=2234")); */
-      window.XuiUrl || (window.XuiUrl = function(s)
-      {
-        this.o = {};
-        this.url = s;
-        this.split = function(s){
-           var b = [], n, i, c;
-           if(-1 < (n = s.indexOf("?")))
-              this.url = s.substr(0, n),s = s.substr(n + 1);
-           b = s.split("&");
-           for(i = 0; i < b.length; i++)
-           {
-              c = b[i].split("=");if(2 == c.length)this.o[c[0]] = c[1];
-           }
-           return this;
-        };
-        this.add = function(k,v){if(1 == arguments.length)return this.split(k);this.o[k] = v;return this};
-        if(s)this.split(s);
-        this.toString = function(){
-           var k,a = [], o = this.o;
-           for(k in o)a.push(k + "=" + o[k]);
-           return this.url + "?" + a.join("&");
-        };
-      });
       /* IE下，模式窗口的自动支持 */
       if(-1 == String(window.alert).indexOf("PopMsgWin"))
       window.alert = function(s)
