@@ -230,7 +230,8 @@ XuiLoading:function(o)
           p = a.join(";").replace(/=/g, ":");
           return window.showModalDialog(s, window, p);
       };
-      
+      /* 修正模式窗口中opener的问题 */
+      if(window.dialogArguments)window.opener = window.dialogArguments;
       Ext.BLANK_IMAGE_URL = g_sysInfo[2] + "default/s.gif";
       $(function(){$($(document)[0]).keydown(function(e) {
             var k, c;
