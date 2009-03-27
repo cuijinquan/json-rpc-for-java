@@ -24,18 +24,19 @@ function JsonRpcClient(url) {
 			{
 			   return String.fromCharCode(arguments[1]);
 			})), _this.xml && (delete _this.xml.onreadystatechange, delete _this.xml);
-	    }};
+	    }if("undefined" != typeof Base && Base.myMask)Base.myMask.hide();};
 	    if(-1 == o.url.indexOf("http:"))o.url = [lct.protocol, "//", lct.host].join("") + o.url;
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
 			o.bAsync && (this.xml.onreadystatechange = function () {
 				fncbk();
 			});
-			
+			if("undefined" != typeof Base && Base.XuiLoading)Base.XuiLoading();
 			this.xml.open("POST", o.url + (-1 < o.url.indexOf("?") ? '&' : '?')
 			 + "xui="+ new Date().getTime()
 			 + (0 < ap.length ? "&ServletPath=" + escape(ap[0].value) : "")
 			 + ("undefined" != typeof g_szJsessionid ? "&jsessionid="+ g_szJsessionid : ""), o.bAsync, "", "");
 			this.xml.setRequestHeader("XUIAJAX",1);
+			this.xml.setRequestHeader("CMHS","JsonRpc");
 			this.xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 			this.xml.setRequestHeader("user-agent", navigator.userAgent);
 			this.xml.send(o.data && o.data.replace(/[\u4E00-\u9FA5]/gm, function()
