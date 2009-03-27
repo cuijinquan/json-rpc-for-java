@@ -96,7 +96,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
         }
      }});
    });
-   if(false == isAsync){return Base.PopMsgWin.obj.type;}
+   if(false == isAsync){return (Base.PopMsgWin.obj||{}).type;}
 },
 /*控制是否异步执行的简便方法， id:需要异步刷新的id，isAsync:是否异步标志,true为异步,false为同步*/
 AjaxSyn : function(id, isAsync){
