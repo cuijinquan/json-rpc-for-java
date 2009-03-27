@@ -90,7 +90,7 @@
         s = s.replace(/^\s*<div[^>]*>/gmi, "");
         s = s.substr(0, s.lastIndexOf("</div>"));
         _t.getDom(szId).innerHTML = s;
-        try{script && eval(script)}catch(e){alert(e.message);}
+        try{script && eval(script)}catch(e){alert("异步调用错误:执行返回的脚本出错" + ",错误消息是:" + e.message);}
      });
    if(o.url)o.url = (o.nouseCtx ? "" : contextPath) + o.url;
    _t.updateUi(o);
