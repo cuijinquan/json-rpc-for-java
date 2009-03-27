@@ -200,7 +200,7 @@ doUpdateCollection:function(szCollectionId, szData)
   init: function()
   {
       /* IE下，模式窗口的自动支持 */
-      if(window.showModalDialog)window.open = function(s, t,p)
+      if(window.showModalDialog && -1 == window.open.toString().indexOf("showModalDialog"))window.open = function(s, t,p)
       {
           var i,a = (p||"").replace(/\s/g, '').split(","), b, g = "=";
           for(i = 0; i < a.length; i++)
@@ -223,16 +223,6 @@ doUpdateCollection:function(szCollectionId, szData)
           p = a.join(";").replace(/=/g, ":");
           return window.showModalDialog(s, window, p);
       };
-      else if(this.isNS6)
-      {
-           (function(){
-               var MyOpen = window.open;
-               window.open = function(s, t, p)
-               {
-                  return MyOpen(s, t, p + ",modal=yes");
-               }           
-           })();
-      }
       
       Ext.BLANK_IMAGE_URL = g_sysInfo[2] + "default/s.gif";
       $(function(){$($(document)[0]).keydown(function(e) {
