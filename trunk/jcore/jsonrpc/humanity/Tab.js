@@ -6,7 +6,7 @@
       $("#" + id + "xui_tabs").width(width-2);
       $("#" + id + " div.x-tab-panel-header").width(width-2);
       $("#" + id + " div.x-tab-panel-body").each(function(){
-        $(this).width(width-2);
+        $(this).width(width-5);
       });
     },
     
