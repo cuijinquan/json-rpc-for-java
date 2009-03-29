@@ -19,7 +19,7 @@ function JsonRpcClient(url) {
 	}, AJAX = function (o) {
 		if (window == this)
 			return new AJAX(o);
-		var _this = this, ap = document.getElementsByName("ServletPath"), lct = document.location, fncbk = function(){if (_this.xml && 4 == _this.xml.readyState) {
+		var _this = this, lct = document.location, fncbk = function(){if (_this.xml && 4 == _this.xml.readyState) {
 			(200 == _this.xml.status || 404 == _this.xml.status || 500 == _this.xml.status) && o.clbkFun && o.clbkFun(_this.xml.responseText.replace(/&#(\d+);/gm, function()
 			{
 			   return String.fromCharCode(arguments[1]);
@@ -33,7 +33,6 @@ function JsonRpcClient(url) {
 			if("undefined" != typeof Base && Base.XuiLoading)Base.XuiLoading();
 			this.xml.open("POST", o.url + (-1 < o.url.indexOf("?") ? '&' : '?')
 			 + "xui="+ new Date().getTime()
-			 + (0 < ap.length ? "&ServletPath=" + escape(ap[0].value) : "")
 			 + ("undefined" != typeof g_szJsessionid ? "&jsessionid="+ g_szJsessionid : ""), o.bAsync, "", "");
 			this.xml.setRequestHeader("XUIAJAX",1);
 			this.xml.setRequestHeader("CMHS","JsonRpc");
