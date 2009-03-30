@@ -577,8 +577,9 @@
   movePage: function(num, id){
   var reqCode = $("#"+id+"reqCode").attr("reqCode"),
   maxSize = $("#"+id+"xui_page_maxsize")[0], queryPage = $("#"+id+"xui_page_query")[0],
-  pageSize = $("#"+id+"xui_page_pagesize").text(), url = $(this.p(maxSize, "FORM")).attr("action"),
-  ids = $("#xui_coll_array")[0]; 
+  pageSize = $("#"+id+"xui_page_pagesize").text(), url = $(this.p(maxSize, "FORM")).attr("action");
+  var ids = $("#xui_coll_array")[0];
+  if ("undefined" == typeof ids)alert("翻页的时候xui_coll_array获取不到值!"); 
   if (!maxSize || !queryPage){
     this.updateCollection(id, {url:url, postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value)]});
   } else {
