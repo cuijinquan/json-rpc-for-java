@@ -321,7 +321,7 @@ XuiLoading:function(o)
               {
                  var oIpt = $(":input[@name=" + s + "]");
                  if(0 == oIpt.length)
-                   Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\">");
+                   Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\" + id=\"" + s + "\">");
                  else oIpt.val(s2);
               }
               else this.val(s);
