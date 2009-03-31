@@ -230,7 +230,7 @@ XuiLoading:function(o)
                 a[i] = b.join(g);
              }
           }
-          a.push("center=1");a.push("help=0");a.push("resizable=1");a.push("scroll=0");a.push("status=0");
+          a.push("center=1");a.push("help=0");a.push("resizable=1");a.push("scroll=1");a.push("status=0");
           p = a.join(";").replace(/=/g, ":");
           return window.showModalDialog(s, window, p);
       };
