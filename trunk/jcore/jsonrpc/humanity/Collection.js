@@ -577,9 +577,9 @@
   movePage: function(num, id){
   var reqCode = $("#"+id+"reqCode").attr("reqCode"),
   maxSize = $("#"+id+"xui_page_maxsize")[0], queryPage = $("#"+id+"xui_page_query")[0],
-  pageSize = $("#"+id+"xui_page_pagesize").text(), url = $(this.p(maxSize, "FORM")).attr("action");
+  pageSize = $("#"+id+"xui_page_pagesize").text(), url = $("#"+id+"url").attr("url") || $(this.p(maxSize, "FORM")).attr("action");
   var ids = $("#xui_coll_array")[0];
-  if ("undefined" == typeof ids)alert("翻页的时候xui_coll_array获取不到值!"); 
+  if ("undefined" == typeof ids)alert("翻页的时候xui_coll_array获取不到值!");
   if (!maxSize || !queryPage){
     this.updateCollection(id, {url:url, postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value)]});
   } else {
@@ -604,7 +604,7 @@
       }
       num = queryPage.value;
     }
-    /*this.updateCollection(id, {url:url, nouseCtx:true, postData:["reqCode="+reqCode,("xui_coll_array=" + ids.value),(id+"xui_page_maxsize=" + maxSize.value),(id+"xui_page_query=" + num)]});*/
+    
     url += "?reqCode=" + reqCode;
     url += "&xui_coll_array=" + ids.value;
     url += "&" + id + "xui_page_maxsize=" + maxSize.value;
