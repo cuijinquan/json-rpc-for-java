@@ -54,15 +54,32 @@
       date = year+"-"+month+"-"+day;
       if(Utils.isNotNull(birthday)) birthday.value = date;
       if(Utils.isNotNull(sex)){ 
-        if (input.value.substr(16,1)%2==1)
-	      sex.value="1";
-	    if (input.value.substr(16,1)%2==0)
-	      sex.value="2";
+        if (input.value.substr(16,1)%2==1){
+          this.setDescByValue(sex, "1");
+	    }  
+	    if (input.value.substr(16,1)%2==0){
+	      this.setDescByValue(sex, "2");
+	    }
       } 
       Base.delInvalid(input);
       return true;
     },
-    
+    /*设置下拉框的描述，根据指定的值. o:下拉框对象, v:指定的值*/
+    setDescByValue : function(o, v){
+      var id = $(o).attr("id"), p = $(o).attr("property"),h = $("input[name=" + p + "]");
+      if(0 < h.length)h.val(v);/*设置隐藏字段的值*/
+      /*设置下拉框的值*/
+      var slct = Select.getSlctObj(id);
+      if ("undefined" != typeof slct){
+        var valueField = slct.valueField || "", displayFields = slct.displayFields || "",
+	    array = displayFields.split(/[,;\|\s]/), descKey, data = Select.getData(id) || [], desc = "";
+	    if(0 < array.length)descKey = array[0];
+	    $(data).each(function(){
+	      if (v == this[slct.valueField])desc = this[descKey]; 
+		});
+		$(o).val(desc);  
+      }
+    },
     check15 : function(input, sex, birthday){
       var year,month,day,date; 
       year = "19" + input.value.substr(6,2);
@@ -77,10 +94,12 @@
       date = year+"-"+month+"-"+day;
       if(Utils.isNotNull(birthday)) birthday.value = date;
       if(Utils.isNotNull(sex)){ 
-        if (input.value.substr(14,1)%2==1)
-	      sex.value="1";
-	    if (input.value.substr(14,1)%2==0)
-	      sex.value="2";
+        if (input.value.substr(16,1)%2==1){
+          this.setDescByValue(sex, "1");
+	    }  
+	    if (input.value.substr(16,1)%2==0){
+	      this.setDescByValue(sex, "2");
+	    }
       } 
       input.value = IdCard.upgrade(input.value);    
       Base.delInvalid(input);
