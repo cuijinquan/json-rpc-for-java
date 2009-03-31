@@ -83,11 +83,20 @@
   getValueByDesc:function(s)
   {
      var oT = this.getSlctObj(this.descObj.id), a = oT["collection"], i, b = (oT['valueField'] || "").split(/[,; ]/), b2 = 1 < b.length;
-     if(oT['valueField'] && b2)
-     for(i = 0; i < a.length; i++)
+     /* 指定了两个字段:value，和描述字段 */
+     if(oT['valueField'])
      {
-        if(s == a[i][b[1]])
-          return a[i][b[0]];
+         if(b2)
+	     for(i = 0; i < a.length; i++)
+	     {
+	        if(s == a[i][b[1]])
+	          return a[i][b[0]];
+	     }
+	     for(i = 0; i < a.length; i++)
+	     {
+	        if(-1 < a[i][b[0]].indexOf(s))
+	          return a[i][b[0]];
+	     }	     
      }
      return null;
   }, /* 选择的处理 */
@@ -138,10 +147,11 @@
   },/* 显示图层 */
   show: function()
   { 
-   	 var o = this.SelectDiv;
+   	 var o = this.SelectDiv, obj = this.getSlctObj(this.descObj.id);
+   	 if(null == obj.displayWidth)obj.displayWidth = o.style.width;
    	 if(0 < this.getData(this.descObj.id).length)
        this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
-         parseInt(o.style.width, 10), parseInt(o.style.height, 10));
+         parseInt(obj.displayWidth, 10), parseInt(o.style.height, 10));
      (o = $(o)).css({overflowY:'auto'});
      if(170 > o.attr('scrollHeight'))o.css({overflowY:'visible'});
   }, /* 检索过滤处理 */
