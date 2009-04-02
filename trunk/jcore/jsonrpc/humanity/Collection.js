@@ -3,12 +3,25 @@
   /* 设置高亮、选择的行:id, 加亮的行,b为true则移除高亮 */
   setLightRow:function(id, n, b)
   {
-      n || (n = 0);
+     n = parseInt( n || 0);
       var oClct = $("#" + id), oRs = oClct.find("div.x-grid3-body div.x-grid3-row"), s = "lightRow",
-            bMs = oClct.attr("Ms"), s1 = "lrnum";/* 多选择标志 */
-      oClct.focus(); oRs = $(oRs[n]);
-      if(bMs && !b)oRs.addClass(s), oClct.attr(s1, n);
-      else if(b)oRs.removeClass(s), oClct.removeAttr(s1);else oRs.addClass(s), oClct.attr(s1, n); 
+            bMs = !!oClct.attr("Ms"), s1 = "lrnum", oLst;/* 多选择标志 */
+      if(0 > n || n >= oRs.length)return this;
+      if("undefined" != typeof oClct.attr(s1))oLst = $(oRs[oClct.attr(s1)]);
+      oClct.focus();oRs = $(oRs[n]);
+      this.oCur = oClct;
+      if(b)
+      {
+         oRs.removeClass(s), oClct.removeAttr(s1);
+         if(!bMs)Collection.oCur = null;
+      }
+      else
+      {
+         /* 多选时不移除上一次的选择 */
+         if(!bMs && oLst)oLst.removeClass(s);
+         oRs.addClass(s); 
+         oClct.attr(s1, n);
+      } 
   },
   isCheck:function(id)
   {
