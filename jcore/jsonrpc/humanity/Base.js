@@ -198,20 +198,19 @@ XuiLoading:function(o)
 },
   init: function()
   {
-      /* IE下，模式窗口的自动支持 */
+      if("undefined" != typeof Base)return this;
       if(-1 == String(window.alert).indexOf("PopMsgWin"))
       window.alert = function(s)
       {
          return Base.PopMsgWin(s);
       };
-      if(-1 == String(window.confirm).indexOf("PopMsgWin"))
       window.confirm = function(s, fn, fn1)
       {
          var o = {type:1, message:String(s)};
          if(fn)o.okScript = fn;if(fn)o.errScript = fn;
          return Base.PopMsgWin(o);
       };
-      if(window.showModalDialog && -1 == String(window.open).indexOf("showModalDialog"))window.open = function(s, t,p)
+      window.open = function(s, t,p)
       {
           var i,a = (p||"").replace(/\s/g, '').split(","), b, g = "=";
           for(i = 0; i < a.length; i++)
@@ -234,27 +233,25 @@ XuiLoading:function(o)
           p = a.join(";").replace(/=/g, ":");
           return window.showModalDialog(s, window, p);
       };
-      /* 修正模式窗口中opener的问题 */
+      
       if(window.dialogArguments)window.opener = window.dialogArguments;
       Ext.BLANK_IMAGE_URL = g_sysInfo[2] + "default/s.gif";
-      /* 键盘事件，快捷键进入快速码输入 */
-      $(function(){$($(document)[0]).keydown(function(e) {
+         $(function(){$($(document)[0]).keydown(function(e) {
             var k, c;
             if(e)k = e.which || e.charCode || e.keyCode, c = e.metaKey || e.ctrlKey;
             else if(window.event) k = window.event.keyCode || 0, c = window.event.ctrlKey || 0;
             if(c && 192 == k)
               top.frames[2].document.getElementById('ksjr').focus();
-            /* collection键盘的上下键、回车导航 */
-            if(Collection.oCur && ( !Collection.oCur.attr("kbtm") || 333 < new Date().getTime() - Collection.oCur.attr("kbtm")))
+             /* collection键盘的上下键、回车导航 */
+            if(Collection.oCur && "function" == typeof Collection.oCur.attr)
             { 
                var o = Collection.oCur, n = o.attr("lrnum"), oRs = o.find("div.x-grid3-body div.x-grid3-row"),
-                     oR = $(oRs[n]);
-               o.attr("kbtm",  new Date().getTime());
+                     oR = $(oRs[n]), fn;
                n = parseInt(n || (n = 0));
                if(0 <= n)
                {
                   // 回车
-                  if(13 == k)oR.click();
+                  if(13 == k){fn = oR.attr("onclick");if("function" == typeof fn)fn.call(oR[0])}
                   else if(38 == k && 0 < n){Collection.setLightRow(o.attr('id'), n - 1)}
                   else if(40 == k && oRs.length - 1 > n){Collection.setLightRow(o.attr('id'), n + 1)}
                }
@@ -262,11 +259,11 @@ XuiLoading:function(o)
          });});
          window.XuiComboBox = Ext.extend(Ext.form.ComboBox,{
             forceSelection: true,
-            mode: 'local',/* 本地数据模式 */
+            mode: 'local',
             triggerAction: 'all',
-            emptyText: '请选择...',
+            emptyText: '\u8bf7\u9009\u62e9...',
             allowDomMove:true,
-            selectOnFocus:true, /* 加入该属性才会自动将值填充到hiddenName中去*/
+            selectOnFocus:true, 
             resizable:true,
             mySlc:function(s, id, cbk)
             {
@@ -285,7 +282,7 @@ XuiLoading:function(o)
     	   this.wrap.setWidth("100%");
     	   this.el.setWidth(this.wrap.getWidth() - this.trigger.getWidth() + 2);
     	   $(this.el.dom).css('top',-1);
-    	   /* Ext.form.DateField.superclass.onResize.apply(this, [this.wrap.getWidth(), this.wrap.getHeight()]);*/ 
+    	    
     	   var a = window.xuiResize.a, fn, t = this, fn1 = arguments.callee;
     	   if(!a[t.el.dom.name])
     	   {
@@ -424,7 +421,7 @@ XuiLoading:function(o)
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
                       oCur.focus();
-                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text() + " 不能为空");
+                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text() + " \u4e0d\u80fd\u4e3a\u7a7a");
                       return false;
                    }
                 }
@@ -440,7 +437,7 @@ XuiLoading:function(o)
                    if("true" == oCur.attr("isRequired") && !oCur.val())
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
-                      oCur.focus();alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text() + " 不能为空");
+                      oCur.focus();alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text() + " \u4e0d\u80fd\u4e3a\u7a7a");
                       bR = false;
                       throw "stop";
                    }
@@ -514,7 +511,7 @@ XuiLoading:function(o)
 	        _t.apply(o || _t, Base.A(arguments).concat(a));
 	     }
 	  };
-	  /* 扩展jQuery insertNode函数，兼容FF没有 insertAdjacentElement函数 */
+	  
 	  $.fn.insertNode = function(where, node){
 	    return this.each(function(){
 	      if (this.insertAdjacentElement){
