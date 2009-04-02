@@ -236,7 +236,9 @@ XuiLoading:function(o)
       
       if(window.dialogArguments)window.opener = window.dialogArguments;
       Ext.BLANK_IMAGE_URL = g_sysInfo[2] + "default/s.gif";
-         $(function(){$($(document)[0]).keydown(function(e) {
+        $(function(){
+         /* 键盘事件的统一入口处理 */
+         $($(document)[0]).keydown(function(e) {
             var k, c;
             if(e)k = e.which || e.charCode || e.keyCode, c = e.metaKey || e.ctrlKey;
             else if(window.event) k = window.event.keyCode || 0, c = window.event.ctrlKey || 0;
@@ -250,10 +252,19 @@ XuiLoading:function(o)
                n = parseInt(n || (n = 0));
                if(0 <= n)
                {
-                  // 回车
+                  /* 回车 */
                   if(13 == k){fn = oR.attr("onclick");if("function" == typeof fn)fn.call(oR[0])}
                   else if(38 == k && 0 < n){Collection.setLightRow(o.attr('id'), n - 1)}
                   else if(40 == k && oRs.length - 1 > n){Collection.setLightRow(o.attr('id'), n + 1)}
+               }
+            }
+            /* 回车进入下一输入焦点*/
+            if(document.activeElement && 13 == k)
+            {
+               var szNdNm = document.activeElement.nodeName;
+               if("INPUT" == szNdNm || "TEXTAREA" == szNdNm || "SELECT" == szNdNm)
+               {
+                  ;
                }
             }
          });});
