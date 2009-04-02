@@ -237,12 +237,28 @@ XuiLoading:function(o)
       /* 修正模式窗口中opener的问题 */
       if(window.dialogArguments)window.opener = window.dialogArguments;
       Ext.BLANK_IMAGE_URL = g_sysInfo[2] + "default/s.gif";
+      /* 键盘事件，快捷键进入快速码输入 */
       $(function(){$($(document)[0]).keydown(function(e) {
             var k, c;
             if(e)k = e.which || e.charCode || e.keyCode, c = e.metaKey || e.ctrlKey;
             else if(window.event) k = window.event.keyCode || 0, c = window.event.ctrlKey || 0;
             if(c && 192 == k)
               top.frames[2].document.getElementById('ksjr').focus();
+            /* collection键盘的上下键、回车导航 */
+            if(Collection.oCur && ( !Collection.oCur.attr("kbtm") || 333 < new Date().getTime() - Collection.oCur.attr("kbtm")))
+            { 
+               var o = Collection.oCur, n = o.attr("lrnum"), oRs = o.find("div.x-grid3-body div.x-grid3-row"),
+                     oR = $(oRs[n]);
+               o.attr("kbtm",  new Date().getTime());
+               n = parseInt(n || (n = 0));
+               if(0 <= n)
+               {
+                  // 回车
+                  if(13 == k)oR.click();
+                  else if(38 == k && 0 < n){Collection.setLightRow(o.attr('id'), n - 1)}
+                  else if(40 == k && oRs.length - 1 > n){Collection.setLightRow(o.attr('id'), n + 1)}
+               }
+            }
          });});
          window.XuiComboBox = Ext.extend(Ext.form.ComboBox,{
             forceSelection: true,
