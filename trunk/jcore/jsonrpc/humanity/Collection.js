@@ -1,5 +1,15 @@
 {
   oCur:null,
+  /* 设置高亮、选择的行:id, 加亮的行,b为true则移除高亮 */
+  setLightRow:function(id, n, b)
+  {
+      n || (n = 0);
+      var oClct = $("#" + id), oRs = oClct.find("div.x-grid3-body div.x-grid3-row"), s = "lightRow",
+            bMs = oClct.attr("Ms"), s1 = "lrnum";/* 多选择标志 */
+      oClct.focus(); oRs = $(oRs[n]);
+      if(bMs && !b)oRs.addClass(s), oClct.attr(s1, n);
+      else if(b)oRs.removeClass(s), oClct.removeAttr(s1);else oRs.addClass(s), oClct.attr(s1, n); 
+  },
   isCheck:function(id)
   {
      eval("var a = " + id + "Data;");
