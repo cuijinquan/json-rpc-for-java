@@ -225,7 +225,7 @@
 	      $(o).css("display", "none");
 	    }
 	    /* 对collection Resize的控制 */
-	    if(2 == arguments.length)this.RstClct[id].start(), this.RstClct[id].start = function(){};
+	    if(2 == arguments.length && this.RstClct)this.RstClct[id].start(), this.RstClct[id].start = function(){};
     },
     
     //设置onmouse over和out的样式
