@@ -245,8 +245,9 @@ XuiLoading:function(o)
             if(c && 192 == k)
               top.frames[2].document.getElementById('ksjr').focus();
              /* collection键盘的上下键、回车导航 */
-            if(Collection.oCur && "function" == typeof Collection.oCur.attr)
+             if(Collection.oCur)
             { 
+               if("function" != typeof Collection.oCur.attr)Collection.oCur = $(Collection.oCur);
                var o = Collection.oCur, n = o.attr("lrnum"), oRs = o.find("div.x-grid3-body div.x-grid3-row"),
                      oR = $(oRs[n]), fn;
                n = parseInt(n || (n = 0));
