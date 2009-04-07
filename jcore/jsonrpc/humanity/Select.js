@@ -7,7 +7,7 @@
   getSlctObj:function(szId)
   {
     return (window.slctIptData || {})[szId]||{};
-  }, setData:function(szId,a){this.getSlctObj(szId)["collection"] = a;},
+  }, setData:function(szId,a){this.getSlctObj("S" + szId)["collection"] = a;},
   getData:function(szId) /* 获取下拉列表数据 */
   {
     var rst = this.getSlctObj(szId)["collection"], i, s, o, k, key = "_id_";
