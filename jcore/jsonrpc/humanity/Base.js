@@ -359,24 +359,25 @@ XuiLoading:function(o)
            }),
            setReadOnly:(_t.setReadOnly = function(s, b){
               var o = this;
-              if(s)o = $(":input[@name=" + s + "]");
+              if(s)o = $("#" + s.replace(/\)|\(/g, "_"));
+              o = o.add(o.find("*"));
               if("undefined" == typeof b || true == b)
                    o.attr("readonly", "readonly").addClass("readOnly");
               else o.removeAttr("readonly").removeClass("readOnly");
            }),
-           enabledButton:(_t.enabledButton = function(s){
+          enabledButton:(_t.enabledButton = function(s){
               var o = this, s1 = "x-btn-disabled", s2 = "disabled";
               if(s)o = $("#" + s);
+              o = o.add(o.find("*"));
               o.removeClass(s1);
-              o = o.find("table");
-              o.removeAttr(s2).find("div").removeAttr(s2);
+              o.removeAttr(s2).removeAttr(s2);
            }),
            disabledButton:(_t.disabledButton = function(s){
               var o = this, s1 = "x-btn-disabled", s2 = "disabled";
               if(s)o = $("#" + s);
+               o = o.add(o.find("*"));
               o.addClass(s1);
-              o = o.find("table");
-              o.attr(s2, s2).find("div").attr(s2, s2);
+              o.attr(s2, s2);
            }),
            addRedStar:(_t.addRedStar = function(s)
            {
