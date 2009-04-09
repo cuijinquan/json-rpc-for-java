@@ -1,5 +1,6 @@
 {
     check : function(input, sex, birthday, empty){
+      if("INPUT" != birthday.nodeName)birthday = $(birthday).find(":input:first")[0];
       if(false == empty){
         if(Utils.isStrEmpty(input.value)){
           alert("身份证号码录入的数据不能为空" );
@@ -66,7 +67,8 @@
     },
     /*设置下拉框的描述，根据指定的值. o:下拉框对象, v:指定的值*/
     setDescByValue : function(o, v){
-      var id = $(o).attr("id"), p = $(o).attr("property"),h = $("input[name=" + p + "]");
+      var id = "S" + $(o).attr("id");
+      var p = $(o).attr("property"),h = $("input[name=" + p + "]");
       if(0 < h.length)h.val(v);/*设置隐藏字段的值*/
       /*设置下拉框的值*/
       var slct = Select.getSlctObj(id);
@@ -77,7 +79,7 @@
 	    $(data).each(function(){
 	      if (v == this[slct.valueField])desc = this[descKey]; 
 		});
-		$(o).val(desc);  
+	   $(o).find(":input:first").val(desc);
       }
     },
     check15 : function(input, sex, birthday){
