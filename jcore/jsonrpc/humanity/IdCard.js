@@ -15,9 +15,9 @@
         return true;
       }  
       if (15 == Utils.trim(input.value).length)
-        IdCard.check15(input, sex, birthday);
+        return IdCard.check15(input, sex, birthday);
       else if (18 == Utils.trim(input.value).length){
-        IdCard.check18(input, sex, birthday);
+        return IdCard.check18(input, sex, birthday);
       } else {
         alert("身份证号码长度错误！");
         setTimeout(function(){input.focus();input.select();},1);
