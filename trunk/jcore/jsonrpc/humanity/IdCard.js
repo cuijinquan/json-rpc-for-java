@@ -1,6 +1,6 @@
 {
     check : function(input, sex, birthday, empty){
-      if("INPUT" != birthday.nodeName)birthday = $(birthday).find(":input:first")[0];
+      if("undefined" != typeof birthday && "INPUT" != birthday.nodeName)birthday = $(birthday).find(":input:first")[0];
       if(false == empty){
         if(Utils.isStrEmpty(input.value)){
           alert("身份证号码录入的数据不能为空" );
