@@ -70,14 +70,15 @@
       var id = "S" + $(o).attr("id");
       var p = $(o).attr("property"),h = $("input[name=" + p + "]");
       if(0 < h.length)h.val(v);/*设置隐藏字段的值*/
-      /*设置下拉框的值*/
+       /*设置下拉框的值*/
       var slct = Select.getSlctObj(id);
       if ("undefined" != typeof slct){
         var valueField = slct.valueField || "", displayFields = slct.displayFields || "",
-	    array = displayFields.split(/[,;\|\s]/), descKey, data = Select.getData(id) || [], desc = "";
-	    if(0 < array.length)descKey = array[0];
+	    array = valueField.split(/[,;\|\s]/), descKey, data = Select.getData(id) || [], desc = "";
+	    if(0 < array.length)descKey = array[1];
+	    valueField = array[0];
 	    $(data).each(function(){
-	      if (v == this[slct.valueField])desc = this[descKey]; 
+	      if (v == this[valueField])desc = this[descKey]; 
 		});
 	   $(o).find(":input:first").val(desc);
       }
