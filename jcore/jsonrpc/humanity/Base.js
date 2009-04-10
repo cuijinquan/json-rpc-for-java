@@ -713,6 +713,7 @@ XuiLoading:function(o)
     /* data为请求刷新的对象，格式为[id,1或true表示过滤后面的字段,需要过滤的字段] */
     o.data.each(function(){s.push(this.join(","))});
     Base.AjaxObj = Ext.getBody();
+    if("undefined" != typeof Base && Base.XuiLoading)Base.XuiLoading();//show
     $.ajax({
     	cache:false,
     	async:o.bAsync && !!o.fn,
@@ -724,7 +725,10 @@ XuiLoading:function(o)
     	url: o.url || document.location.href,
     	type:"post",
     	dataType:"html",
-    	complete:function(obj){o.fn(obj.responseText)}
+    	complete:function(obj){
+    		if("undefined" != typeof Base && Base.myMask)Base.myMask.hide();//hidden
+    		o.fn(obj.responseText);
+    	}
     	}); 
     /*  JsonRpcClient().AJAX({ data: "__ajaxParam_=" + s.join('|') + s1.join("&"),  url: o.url || document.location.href,  bAsync: o.bAsync && !!o.fn,  clbkFun: function(){ try {  o.fn && o.fn(arguments[0]); }catch(e){} }});*/
   }, /* 创建图层 */
