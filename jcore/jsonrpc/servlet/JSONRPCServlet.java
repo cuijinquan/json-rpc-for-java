@@ -78,7 +78,7 @@ public class JSONRPCServlet extends HttpServlet {
 				for (int i = 0; i < arrTmp.length; i++){
 					String[] aT = arrTmp[i].split("[\\|:]");
 					try{
-						Object o = Class.forName(aT[1]);
+						Object o = Class.forName(aT[1]).newInstance();
 						brg.registerObject(aT[0], o);
 						o = null;
 					}catch (Exception e){
