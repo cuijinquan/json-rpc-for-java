@@ -494,7 +494,8 @@ XuiLoading:function(o)
       }
       _t.trim = String.prototype.trim = function(s){return (s||this).replace(/(^\s*)|(\s*$)/gm, "")};
       String.prototype.swf = function(){
-         return -1 != navigator.appName.indexOf("Microsoft") ? window[this] || document.getElementById(this): document[this];
+         var id = this + "S";
+         return -1 != navigator.appName.indexOf("Microsoft") ? window[id] || document.getElementById(id): document[id];
       };
       Array.prototype.indexOf = function(f){
         for(var i = 0; i < this.length; i++)
