@@ -177,7 +177,9 @@
      /* 滚动条图层宽度的设置 */
      $("#" + szId + " div[@class=x-grid3-scroller]").each(function()
      {
-        w = $(this);if(30 < w.width())w.css({width: (w.width() + (_t.isIE ? 0 : 10))+ "px"}).parent("td").css({width: w.width() + "px"});
+        w = $(this);
+        if(_t.isSafari || _t.chrome)w.width("100%");
+        else if(30 < w.width())w.css({width: (w.width() + (_t.isIE ? 0 : 10))+ "px"}).parent("td").css({width: w.width() + "px"});
      }).scroll(function()
      {
         var o = $(this);
