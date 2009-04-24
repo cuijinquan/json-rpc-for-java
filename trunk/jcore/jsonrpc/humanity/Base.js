@@ -430,7 +430,7 @@ XuiLoading:function(o)
                 for(i = 0; i < a.length; i++)
                 {
                    oCur = $(_t.getObj(a[i]));
-                   if("true" == oCur.attr("isRequired") && !oCur.val())
+                   if("true" == oCur.attr("isRequired") && !oCur.val() || -1 < oCur.attr("class").indexOf("x-form-invalid"))
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
                       oCur.focus();
