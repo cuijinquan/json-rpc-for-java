@@ -261,11 +261,13 @@
        oE[szId] = o.id,
        this.addEvent(oE, "blur", function()
            {  /* 隐藏输入对象为空 */
+              var bEdit = "true" == _t.getSlctObj(_t.descObj.id)['allowEdit'];
               if(!_t.inputObj.value)
               { /* 允许输入新值就将描述输入对象的值赋予它，否则就设置空值 */
-                if(_t.getSlctObj(_t.descObj.id)['allowEdit']) _t.inputObj.value = _t.descObj.value;
+                if(bEdit) _t.inputObj.value = _t.descObj.value;
                 else _t.descObj.value = '', _t.delInvalid(_t.descObj);
               }
+              if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "", _t.delInvalid(_t.descObj);
               
               o["_blur_"]=true,_t.hiddenSelectDiv()
            })
