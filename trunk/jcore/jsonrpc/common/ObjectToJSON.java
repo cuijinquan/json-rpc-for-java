@@ -167,7 +167,7 @@ public class ObjectToJSON implements Serializable{
 				if(null != szObjName)
 				{
 					if(1 < buf.length())buf.append(",");
-				    buf.append("name:\"").append(szObjName).append("\"");
+				    buf.append("_name_:\"").append(szObjName).append("\"");
 				}
 				if(1 < buf.length())buf.append(",");
 				buf.append("\"_id_\":\"").append(this.o.hashCode()).append("\"");
@@ -392,7 +392,7 @@ public class ObjectToJSON implements Serializable{
 		if(null != szObjName)
 		{
 			if(1 < buf.length())buf.append(",");
-		    buf.append("name:\"").append(szObjName).append("\"");
+		    buf.append("_name_:\"").append(szObjName).append("\"");
 		}
 		if(1 < buf.length())buf.append(",");
 		buf.append("\"_id_\":\"").append(this.o.hashCode()).append("\"");

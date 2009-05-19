@@ -24,17 +24,18 @@ function JsonRpcClient(url) {
 			{
 			   return String.fromCharCode(arguments[1]);
 			})), _this.xml && (delete _this.xml.onreadystatechange, delete _this.xml);
-			if("undefined" != typeof Base && Base.myMask)Base.myMask.hide();
+			// if("undefined" != typeof Base && Base.myMask)Base.myMask.hide();
 	    }};
 	    if(-1 == o.url.indexOf("http:"))o.url = [lct.protocol, "//", lct.host].join("") + o.url;
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
 			o.bAsync && (this.xml.onreadystatechange = function () {
 				fncbk();
 			});
-			if("undefined" != typeof Base && Base.XuiLoading)Base.XuiLoading();
+			// if("undefined" != typeof Base && Base.XuiLoading)Base.XuiLoading();
 			this.xml.open("POST", o.url + (-1 < o.url.indexOf("?") ? '&' : '?')
 			 + "xui="+ new Date().getTime()
-			 + ("undefined" != typeof g_szJsessionid ? "&jsessionid="+ g_szJsessionid : ""), o.bAsync, "", "");
+			 // + ("undefined" != typeof g_szJsessionid ? "&jsessionid="+ g_szJsessionid : "")
+			 , o.bAsync, "", "");
 			this.xml.setRequestHeader("XUIAJAX",1);
 			this.xml.setRequestHeader("CMHS","JsonRpc");
 			this.xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -97,7 +98,7 @@ function JsonRpcClient(url) {
 	};
 	this.fnMakeObj = function (o, oRstObj) {
 		var oT = oRstObj;
-		o.name && (oT = (oRstObj[o.name] = {}));
+		o._name_ && (oT = (oRstObj[o._name_] = {}));
 		for (var k in o) {
 			if ("methods" == k) {
 				for (var i = o[k].length - 1; i >= 0; i--)
@@ -105,7 +106,7 @@ function JsonRpcClient(url) {
 				delete o[k];
 			} else {
 				if (o[k] && "object" == o[k]["constructor"])
-					o[k]["name"] = k, _this.fnMakeObj(o[k], oT);
+					o[k]["_name_"] = k, _this.fnMakeObj(o[k], oT);
 				else oT[k] = o[k];
 			}
 		}
@@ -140,11 +141,11 @@ function JsonRpcClient(url) {
 	   return _this._LoadJsObj.getRpcObj(s);
 	};
 }
-var rpc = JsonRpcClient(),
-    XUI = function()
+var rpc = JsonRpcClient()
+    /*,XUI = function()
     {
         var o = "undefined" == typeof Base && rpc.LoadJsObj("Base") || Base, a = o.A(arguments).concat([o]), k, i, p = a[0];
         for(i = 1; i < a.length; i++)
            for(k in a[i])if(!p[k])p[k] = a[i][k];
         return p;
-    };
+    }*/;
