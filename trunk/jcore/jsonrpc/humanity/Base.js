@@ -168,7 +168,7 @@ showObj:function(szNameOrId, bDisb)
 ,/* 传递Xpath szData指定的数据，并更新flash区域的查询 */
 doUpdateCollection:function(szCollectionId, szData)
 {
-  szCollectionId.swf().doUpdateCollection(this.getAllInput(szData));
+  (szCollectionId + "S").swf().doUpdateCollection(this.getAllInput(szData));
 },getAllInput:function(s)
 {
    var a = [], _t = Base,o = $(s || ":input:not(:checkbox[@checked=false])"), ecd = _t.decodeStr, s;
