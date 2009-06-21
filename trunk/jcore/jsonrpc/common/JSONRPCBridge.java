@@ -23,6 +23,8 @@ public class JSONRPCBridge implements Serializable{
 	private static final long serialVersionUID = 1L;
 	// 为了集群中使用内存复制使用
 	private transient HttpSession session = null;
+	
+	public transient static String ObjIdMapName = "_ObjIdMapName_";
 	// 注册中的对象
 	private Map globalMap = Collections.synchronizedMap(new HashMap());
 	
@@ -221,6 +223,8 @@ public class JSONRPCBridge implements Serializable{
 	public String ExecObjectMethod(HttpServletRequest request, String szParm)
 	{
 		try {
+			if(null != this.session)
+			   this.session.setAttribute(ObjIdMapName, new HashMap());
 			szParm = Tools.decodeUnicodeHtm(szParm);
 			JSONObject oJson = new JSONObject(szParm);
 			String szName = oJson.getString("_id_"), 
@@ -359,6 +363,10 @@ public class JSONRPCBridge implements Serializable{
 	public JSONRPCBridge setSession(HttpSession session) {
 		this.session = session;
 		return this;
+	}
+
+	public HttpSession getSession() {
+		return session;
 	}
 
 }
