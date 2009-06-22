@@ -95,7 +95,7 @@ public class ObjectToJSON implements Serializable{
 	 */
 	public String toJSON(String szObjName)
 	{
-		if(null != this.brige.getSession())
+		if(null != this.brige && null != this.brige.getSession())
 		{
 			Map mTmp = (Map)this.brige.getSession().getAttribute(JSONRPCBridge.ObjIdMapName);
 			// 已经处理过的对象，防止递归对象的处理
