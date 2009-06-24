@@ -153,8 +153,6 @@ public class JSONRPCServlet extends HttpServlet {
 			}
 			if(null != bout)
 			{
-				String s = new String(bout, "UTF-8");
-				System.out.println(s);
 				response.setIntHeader("Content-Length", bout.length);
 				out.write(bout);
 			}
