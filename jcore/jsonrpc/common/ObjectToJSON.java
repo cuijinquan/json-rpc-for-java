@@ -95,17 +95,6 @@ public class ObjectToJSON implements Serializable{
 	 */
 	public String toJSON(String szObjName)
 	{
-		if(null != this.brige && null != this.brige.getSession())
-		{
-			Map mTmp = (Map)this.brige.getSession().getAttribute(JSONRPCBridge.ObjIdMapName);
-			// 已经处理过的对象，防止递归对象的处理
-			if(null != mTmp)
-			{
-				if(null != mTmp.get(this.o.hashCode() + ""))
-					return "null";
-				else mTmp.put(this.o.hashCode() + "", "1");
-			}
-		}
 		StringBuffer buf = new StringBuffer();
 		String szSimpleTypeReg = "^(boolean|char|byte|short|int|long|float|double)$";
 		String szSimpleArrTypeReg = "^class \\[([A-Z])";
@@ -217,6 +206,20 @@ public class ObjectToJSON implements Serializable{
     	    	}
     	    	return "[" + buf.append("]").toString();
 			}
+			
+			// 递归对象的犯错处理
+			if(null != this.brige && null != this.brige.getSession())
+			{
+				Map mTmp = (Map)this.brige.getSession().getAttribute(JSONRPCBridge.ObjIdMapName);
+				// 已经处理过的对象，防止递归对象的处理
+				if(null != mTmp)
+				{
+					if(null != mTmp.get(this.o.hashCode() + ""))
+						return "null";
+					else mTmp.put(this.o.hashCode() + "", "1");
+				}
+			}
+			
 			// 如果是其它复合对象，就对其反射并生成其方法信息、属性信息
 			if(null != brige)
 				brige.registerObject(this.o.hashCode(), this.o);
