@@ -170,6 +170,7 @@ doUpdateCollection:function(szCollectionId, szData)
 {
   var o = szCollectionId.swf();
    if(o && o.doUpdateCollection)o.doUpdateCollection(this.getAllInput(szData));
+   else window[szCollectionId + "_cache"] = function(){doUpdateCollection(szCollectionId, szData)};
 },getAllInput:function(s)
 {
    var a = [], _t = Base,o = $(s || ":input:not(:checkbox[@checked=false])"), ecd = _t.decodeStr, s;
