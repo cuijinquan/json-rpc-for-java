@@ -19,7 +19,7 @@ public class JSONObject {
      * whilst Java's null is equivalent to the value that JavaScript calls
      * undefined.
      */
-     private static final class Null {
+     public static final class Null {
 
         /**
          * Make a Null object.
