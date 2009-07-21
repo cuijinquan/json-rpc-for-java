@@ -1,31 +1,31 @@
 {   
-    //初始化宽度. id: tabs标签的id 
+    // 初始化宽度. id: tabs标签的id 
     initWidth : function(id){
-      var width = $("#" + id).width();
-      $("#" + id).width(width);
-      $("#" + id + "xui_tabs").width(width-2);
-      $("#" + id + " div.x-tab-panel-header").width(width-2);
-      $("#" + id + " div.x-tab-panel-body").each(function(){
-        $(this).width(width-5);
+      var o = $("#" + id), width = o.width(), o1;
+      o.width(width);
+      (o1 = $("#" + id + "xui_tabs")).width(width - 2);
+      o.find("div.x-tab-panel-header").width(width - 2);
+      o.find("div.x-tab-panel-body").each(function(){
+        $(this).width(width - 5);
       });
+      return o1;
     },
     
-    //初始化宽度. id: tabs标签的id, active:设置选中tab的id
+    // 初始化宽度. id: tabs标签的id, active:设置选中tab的id
     TabsInit:function(id, active){
        XUI(this);
-       this.initWidth(id);
-       var i=1, tabs = $("#"+id+"xui_tabs")[0], _t = this;
-       tabs.headers = new Object();
+       var i = 1, tabs = this.initWidth(id)[0], _t = this;
+       tabs.headers = {};
        $("#" + id + " span.x-tab-strip-text").each(function(){
           var o = $(this), p = o.parent(), w = p.width(), li=_t.p(o[0], "LI");
           p.width('100%');
           if(o.width() < 122){
             p.width(w);
           }  
-          tabs.headers["index"+i] = {"id":li.id}; 
+          tabs.headers["index" + i] = {"id": li.id}; 
           i++;
        });
-       tabs.max = i-1;
+       tabs.max = i - 1;
         try{this.setActiveTab(id, active);}catch(e){}
        /* 增加对collection在tab里高度和宽度显示不正常的控制*/
        _t.RstClct = [];
@@ -37,15 +37,15 @@
     
     //关闭标签页.id: tabs标签的id, o:li组件
     closeTab : function(id, o){
-      var tabs = $("#"+id+"xui_tabs")[0],
+      var myTab = $("#" + id), tabs = $("#" + id + "xui_tabs")[0],
       li = "LI" == o.nodeName ? o : this.p(o, "LI"),
-      b = $("#" + id + " #" + li.id + "_body"), 
+      b = myTab.find("#" + li.id + "_body"), 
       index = parseInt(li.attributes['index'].nodeValue) + 1,
-      h = tabs.headers["index"+index];
+      h = tabs.headers["index" + index];
       var name = li.className,length = name.indexOf("x-item-disabled");
       if (length > -1)return false; 
       if(h){
-        next = $("#" + id + " #" + h["id"] + " span.x-tab-strip-text")[0];
+        next = myTab.find("#" + h["id"] + " span.x-tab-strip-text")[0];
         this.tabLoad(id, next);
       }
       this.tabScrollRightHandler(id);
@@ -68,19 +68,10 @@
     //将为name的class样式，增加或者是删除在指定的对象上.如果返回是真的的话,表示增加或者删除成功
     toggleStyle : function(cStyle, o, show){
       if (!o)return false;
-      var name = o.className,length = name.indexOf(cStyle);
-      if(show){
-        if(length <= -1){
-          o.className += " " + cStyle;
-          return true;
-        }  
-      }else{
-        if(length > -1){
-          o.className = name.substring(0,length);
-          return true;
-        }  
-      }
-      return false;
+      o = $(o);
+      var bRst = o.attr("className").indexOf(cStyle); 
+      show ? o.addClass(cStyle) : o.removeClass(cStyle);
+      return bRst;
     },
     
     //如果指定的tab页被隐藏，则滑动至可见. id:标签页tabs的id，active:滑动到指定标签页的id
@@ -88,13 +79,13 @@
       try{
         var o = $("#" + id + " #" + active)[0], 
         index = parseInt(o.attributes['index'].nodeValue),
-        tabs = $("#"+id+"xui_tabs")[0], left = tabs.left || 1,
+        tabs = $("#" + id + "xui_tabs")[0], left = tabs.left || 1,
         speed = 400;
         if(index < left){
-          for(var i=0; i<left-index; i++)
+          for(var i = 0; i < left - index; i++)
             this.tabScrollLeftHandler(id, speed);
         } else {
-          for(var i=left; i<index-1; i++)
+          for(var i = left; i < index - 1; i++)
 	        this.tabScrollRightHandler(id, speed);
         }
       }catch(e){alert(e.message);}
@@ -102,24 +93,24 @@
     
     //设置选中的tab页. id:标签页tabs的id，active:指定选中的标签页的id
     setActiveTab : function(id, active){
-     var o = $("#" + id + " #" + active)[0];
+     var myTab = $("#" + id), o = myTab.find("#" + active)[0];
      if(o){
       this.moveToTab(id, active);
       this.tabLoad(id, o);
      } else {
-      var ftab = $("#" + id +" span.x-tab-strip-text")[0];
+      var ftab = myTab.find("span.x-tab-strip-text")[0];
       this.tabLoad(id, ftab);
      }
     },
     
     //获取显示了的标签页的整个宽度
     getDisplayWidth : function(id, index){
-      var tabs = $("#"+id+"xui_tabs")[0], count = 0;
-      for(var i=index; i<=tabs.max; i++){
-        var h = tabs.headers["index"+i];
-        var hid = "#" + id + " #" + h["id"];
-        var show = $(hid).css("display");
-        if ("none" != show) count += $(hid).width();
+      var tabs = $("#" + id + "xui_tabs")[0], count = 0, myTab = $("#" + id);
+      for(var i = index; i <= tabs.max; i++){
+        var h = tabs.headers["index" + i];
+        var hid = "#" + h["id"];
+        var show = myTab.find(hid).css("display");
+        if ("none" != show) count += show.width();
       }
       return count;
     },
@@ -127,22 +118,22 @@
     //标签页向左滑动函数.
     tabScrollRightHandler : function(id, speed){
       speed = speed || 25;
-      var tabs = $("#"+id+"xui_tabs")[0],
+      var tabs = $("#" + id + "xui_tabs")[0],
       index = tabs.left || 1, 
-      index = (1 != index) && "sub"==tabs.action?(index+1):index;
-      var h = tabs.headers["index"+index];
-      current = $("#" + id + " #" + h["id"])[0];
+      index = (1 != index) && "sub" == tabs.action ? (index + 1): index;
+      var h = tabs.headers["index" + index], myTab = $("#" + id);
+      current = myTab.find("#" + h["id"])[0];
       if("none" == $(current).css("display")){
         tabs.left = ++index;
         h = tabs.headers["index"+index];
-        current = $("#" + id + " #" + h["id"])[0];
+        current = myTab.find("#" + h["id"])[0];
       }
       var eachw = $(current).width() < 140 ? 140 : $(current).width(), 
       r = parseInt($(current).css("right")), timer = null, 
       count = tabs.getElementsByTagName("LI").length, prew = tabs.w || 0,
       twidth = $(tabs).width(),
-      rslider = $("#" + id + " #xui_tab_r_slider")[0], 
-      lslider = $("#" + id + " #xui_tab_l_slider")[0];
+      rslider = myTab.find("#xui_tab_r_slider")[0], 
+      lslider = myTab.find("#xui_tab_l_slider")[0];
       if (!tabs.stop){
           var tmpw = 0;
 	      for(i=count-1; i>=0; i--){
@@ -161,48 +152,48 @@
       }
       if (r >= (eachw + prew)){
         this.toggleStyle("x-tab-scroller-left-disabled", lslider, false);
-        tabs.left = ++index;tabs.w = prew + eachw;tabs.action="add";
+        tabs.left = ++index, tabs.w = prew + eachw, tabs.action = "add";
         tabs.stop = undefined;
 		clearTimeout(timer);        
       } else {
         r += speed;
-        $("#"+id+" li.x-tab-with-icon").each(function(){
-          $(this).css("right", (r+"px"));
+         myTab.find("li.x-tab-with-icon").each(function(){
+          $(this).css("right", (r + "px"));
         });  
-        timer = setTimeout("Tab.tabScrollRightHandler('"+id+"');", 10);
+        timer = setTimeout("Tab.tabScrollRightHandler('" + id + "');", 13);
       }
     },
     
     //标签页向左滑动函数.  
     tabScrollLeftHandler : function(id, speed){
       speed = speed || 25;
-      var tabs = $("#"+id+"xui_tabs")[0], index = (tabs.left) || 1, 
-      index = "add"==tabs.action?(index-1):index, 
-      h = tabs.headers["index"+index],
-      current = $("#" + id + " #" + h["id"])[0];
+      var tabs = $("#" + id + "xui_tabs")[0], index = (tabs.left) || 1, myTab = $("#" + id), 
+      index = "add" == tabs.action ? (index - 1): index, 
+      h = tabs.headers["index" + index],
+      current = myTab.find("#" + h["id"])[0];
       if("none" == $(current).css("display")){
         tabs.left = --index;
-        h = tabs.headers["index"+index];
-        current = $("#" + id + " #" + h["id"])[0];
+        h = tabs.headers["index" + index];
+        current = myTab("#" + h["id"])[0];
       }
-      var eachw = $(current).width() < 140 ? 140 : $(current).width(), 
-      r = parseInt($(current).css("right")), timer = null, prew = tabs.w || 0,
-      rslider = $("#" + id + " #xui_tab_r_slider")[0], 
-      lslider = $("#" + id + " #xui_tab_l_slider")[0];
+      var oCur = $(current), eachw = oCur.width() < 140 ? 140 : oCur.width(), 
+      r = parseInt(oCur.css("right")), timer = null, prew = tabs.w || 0,
+      rslider = myTab.find("#xui_tab_r_slider")[0], 
+      lslider = myTab.find("#xui_tab_l_slider")[0];
 	  if(r<0) {
 	    this.toggleStyle("x-tab-scroller-left-disabled", lslider, true);
 	    return;
 	  }
       if(r <= prew-eachw){
         this.toggleStyle("x-tab-scroller-right-disabled", rslider, false);
-        tabs.left = --index; tabs.w = prew - eachw;tabs.action="sub";
+        tabs.left = --index; tabs.w = prew - eachw;tabs.action = "sub";
         clearTimeout(timer);
       } else {
         r -= speed;
-        $("#"+id+" li.x-tab-with-icon").each(function(){
-          $(this).css("right", (r+"px"));
-        });  
-        timer = setTimeout("Tab.tabScrollLeftHandler('"+id+"');", 10);
+         myTab.find("li.x-tab-with-icon").each(function(){
+          $(this).css("right", (r + "px"));
+        }); 
+        timer = setTimeout("Tab.tabScrollLeftHandler('" + id + "');", 10);
       }
     },
     
@@ -211,10 +202,10 @@
         var o = "LI" == span.nodeName ? span : this.p(span,"LI"), 
         name = o.className,length = name.indexOf("x-item-disabled");
         if (length > -1)return false;
-	    var tab = document.getElementById(id+"xui_tabs"), aid = tab.active || "xui_no_active",
-	    active = $("#"+id+" #"+aid)[0],
-	    abody = $("#" + id + " #" + aid + "_body")[0],
-	    cbody = $("#"+id + " #" + o.id + "_body")[0];
+	    var tab = document.getElementById(id + "xui_tabs"), aid = tab.active || "xui_no_active", oTab = $("#" + id), 
+	    active = oTab.find("#"+aid)[0],
+	    abody = oTab.find("#" + aid + "_body")[0],
+	    cbody = oTab.find("#" + o.id + "_body")[0];
 	    this.toggleStyle("x-tab-strip-active", active, false);
 	    this.toggleStyle("x-hide-display", abody, true);
 	    this.toggleStyle("x-tab-strip-over", o, false);
@@ -230,7 +221,7 @@
     
     //设置onmouse over和out的样式
 	tabOver : function(o, show){
-	  var name = o.className,length = name.indexOf("x-item-disabled");
+	  var name = o.className, length = name.indexOf("x-item-disabled");
       if (length > -1)return false; 
       /*
 	  if (name.indexOf("x-tab-strip-active") <= -1){
@@ -242,8 +233,8 @@
     
     //点击标签页头，高亮显示标题
     tablist : function(id, o){
-      var div = $("#" + id + "tabslist"), li = this.p(o, "LI"),
-      left = $(li).offset().left+"px", top = ($(li).offset().top+23)+"px";
+      var div = $("#" + id + "tabslist"), li = this.p(o, "LI"), oLi = $(li), 
+      left = oLi.offset().left + "px", top = (oLi.offset().top + 23)+"px";
       div.css({"display":"block", "left":left, "top":top});
       _t = this;
       $(document).bind("click", function(e){
@@ -251,7 +242,7 @@
         e = e || window.event, src = e.target || e.srcElement;
         if ("x-tab-strip-close2" == src.className)return;
         var p = _t.p(src, "DIV");
-        if (p && id2 == ("#"+p.id))return;
+        if (p && id2 == ("#" + p.id))return;
         if ("none" != div.css("display")){
 	     div.css("display", "none");
 	    }
@@ -260,11 +251,11 @@
     
     //判断是否所有的标签页都是隐藏的
     isAllHide : function(id){
-      var tabs = $("#"+id+"xui_tabs")[0];
-      for(var i=1; i<=tabs.max; i++){
-        var h = tabs.headers["index"+i];
-        var hid = "#" + id + " #" + h["id"];
-        var show = $(hid).css("display");
+      var tabs = $("#" + id + "xui_tabs")[0], oTab = $("#" + id);
+      for(var i = 1; i <= tabs.max; i++){
+        var h = tabs.headers["index" + i];
+        var hid = "#" + h["id"];
+        var show = oTab.find(hid).css("display");
         if ("none" != show) return false;
       }
       return true;
@@ -272,13 +263,13 @@
     
     //获取下一个非隐藏的标签页
     getNextShowTab : function(id, index){
-      var tabs = $("#"+id+"xui_tabs")[0];
+      var tabs = $("#" + id + "xui_tabs")[0];
       if(this.isAllHide(id))return undefined;
-      var h = tabs.headers["index"+index];
-      index = index%tabs.max;
-      var nh = tabs.headers["index"+(index+1)];
+      var h = tabs.headers["index" + index];
+      index = index % tabs.max;
+      var nh = tabs.headers["index" + (index + 1)];
       if(nh && nh["id"]){
-        var css = $("#"+id+" #"+nh["id"]).css("display");
+        var css = $("#" + id + " #" + nh["id"]).css("display");
         if("none" == css){
           index++;return this.getNextShowTab(id, index);
         }else{
@@ -291,10 +282,10 @@
     
     //将隐藏的标签页显示
     showTab : function(id, o, index){
-      var tabs = $("#"+id+"xui_tabs")[0], hide = this.isAllHide(id);
+      var tabs = $("#" + id + "xui_tabs")[0], hide = this.isAllHide(id);
       var li = this.p(o, "LI"),
       b = this.toggleStyle("x-menu-item-checked", li, false), 
-      h = tabs.headers["index"+index],
+      h = tabs.headers["index" + index],
       cid = "#" + id + " #" + h["id"], cbid = cid + "_body", 
       next = undefined, nid = "", nbid = "";
       if (!b){
@@ -329,8 +320,8 @@
     
     //点击标签页的下拉选框菜单时，滑动到对应的标签页上
     slidet : function(id, o, index){
-      var tabs = $("#"+id+"xui_tabs")[0],
-      h = tabs.headers["index"+index], active = h["id"],
+      var tabs = $("#" + id + "xui_tabs")[0],
+      h = tabs.headers["index" + index], active = h["id"],
       current = $("#" + id + " #" + active)[0];
       if("none" == $(current).css("display"))return;
       this.setActiveTab(id, active);
