@@ -3,7 +3,7 @@
     initWidth : function(id){
       var o = $("#" + id), width = o.width(), o1;
       o.width(width);
-      (o1 = $("#" + id + "xui_tabs")).width(width - 2);
+      (o1 = $("#" + id)).width(width - 2);
       o.find("div.x-tab-panel-header").width(width - 2);
       o.find("div.x-tab-panel-body").each(function(){
         $(this).width(width - 5);
@@ -27,17 +27,11 @@
        });
        tabs.max = i - 1;
         try{this.setActiveTab(id, active);}catch(e){}
-       /* 增加对collection在tab里高度和宽度显示不正常的控制*/
-       _t.RstClct = [];
-       _t.RstClct[id] || (_t.RstClct[id] = new Function(),
-         _t.RstClct[id].start = function(){},
-         _t.RstClct[id].add = function(fn){var fnt = _t.RstClct[id].start;_t.RstClct[id].start = function(){fnt();fn()}}
-       );
     },
     
     //关闭标签页.id: tabs标签的id, o:li组件
     closeTab : function(id, o){
-      var myTab = $("#" + id), tabs = $("#" + id + "xui_tabs")[0],
+      var myTab = $("#" + id), tabs = $("#" + id)[0],
       li = "LI" == o.nodeName ? o : this.p(o, "LI"),
       b = myTab.find("#" + li.id + "_body"), 
       index = parseInt(li.attributes['index'].nodeValue) + 1,
@@ -79,7 +73,7 @@
       try{
         var o = $("#" + id + " #" + active)[0], 
         index = parseInt(o.attributes['index'].nodeValue),
-        tabs = $("#" + id + "xui_tabs")[0], left = tabs.left || 1,
+        tabs = $("#" + id)[0], left = tabs.left || 1,
         speed = 400;
         if(index < left){
           for(var i = 0; i < left - index; i++)
@@ -105,7 +99,7 @@
     
     //获取显示了的标签页的整个宽度
     getDisplayWidth : function(id, index){
-      var tabs = $("#" + id + "xui_tabs")[0], count = 0, myTab = $("#" + id);
+      var tabs = $("#" + id)[0], count = 0, myTab = $("#" + id);
       for(var i = index; i <= tabs.max; i++){
         var h = tabs.headers["index" + i];
         var hid = "#" + h["id"];
@@ -118,7 +112,7 @@
     //标签页向左滑动函数.
     tabScrollRightHandler : function(id, speed){
       speed = speed || 25;
-      var tabs = $("#" + id + "xui_tabs")[0],
+      var tabs = $("#" + id)[0],
       index = tabs.left || 1, 
       index = (1 != index) && "sub" == tabs.action ? (index + 1): index;
       var h = tabs.headers["index" + index], myTab = $("#" + id);
@@ -167,7 +161,7 @@
     //标签页向左滑动函数.  
     tabScrollLeftHandler : function(id, speed){
       speed = speed || 25;
-      var tabs = $("#" + id + "xui_tabs")[0], index = (tabs.left) || 1, myTab = $("#" + id), 
+      var tabs = $("#" + id)[0], index = (tabs.left) || 1, myTab = $("#" + id), 
       index = "add" == tabs.action ? (index - 1): index, 
       h = tabs.headers["index" + index],
       current = myTab.find("#" + h["id"])[0];
@@ -197,26 +191,20 @@
       }
     },
     
-    //加载tab页的内容. 
+    /* 隐藏之前可见的tab，显示n指定的tab */
     tabLoad : function(id, span, hide){
-        var o = "LI" == span.nodeName ? span : this.p(span,"LI"), 
-        name = o.className,length = name.indexOf("x-item-disabled");
+        var o = $("LI" == span.nodeName ? span : this.p(span,"LI")),  szId = o.attr('id'),
+        name = o.attr('class'),length = name.indexOf("x-item-disabled");
         if (length > -1)return false;
-	    var tab = document.getElementById(id + "xui_tabs"), aid = tab.active || "xui_no_active", oTab = $("#" + id), 
-	    active = oTab.find("#"+aid)[0],
-	    abody = oTab.find("#" + aid + "_body")[0],
-	    cbody = oTab.find("#" + o.id + "_body")[0];
-	    this.toggleStyle("x-tab-strip-active", active, false);
-	    this.toggleStyle("x-hide-display", abody, true);
-	    this.toggleStyle("x-tab-strip-over", o, false);
-	    this.toggleStyle("x-tab-strip-active", o, true);
-	    this.toggleStyle("x-hide-display", cbody, false);
-	    tab.active = o.id;
+	    var oTab = $("#" + id), aid = oTab.attr('active') || "xui_no_active";
+	    oTab.find("#" + szId + "_body").removeClass("x-hide-display");
+	    oTab.find("#"+aid).removeClass("x-tab-strip-active");
+	    oTab.find("#" + aid + "_body").addClass("x-hide-display");
+	    o.removeClass("x-tab-strip-over").addClass("x-tab-strip-active");
+	    oTab.attr('active', szId);
 	    if(hide){
-	      $(o).css("display", "none");
+	      o.css("display", "none");
 	    }
-	    /* 对collection Resize的控制 */
-	    if(2 == arguments.length && this.RstClct)this.RstClct[id].start(), this.RstClct[id].start = function(){};
     },
     
     //设置onmouse over和out的样式
@@ -251,7 +239,7 @@
     
     //判断是否所有的标签页都是隐藏的
     isAllHide : function(id){
-      var tabs = $("#" + id + "xui_tabs")[0], oTab = $("#" + id);
+      var tabs = $("#" + id)[0], oTab = $("#" + id);
       for(var i = 1; i <= tabs.max; i++){
         var h = tabs.headers["index" + i];
         var hid = "#" + h["id"];
@@ -263,7 +251,7 @@
     
     //获取下一个非隐藏的标签页
     getNextShowTab : function(id, index){
-      var tabs = $("#" + id + "xui_tabs")[0];
+      var tabs = $("#" + id)[0];
       if(this.isAllHide(id))return undefined;
       var h = tabs.headers["index" + index];
       index = index % tabs.max;
@@ -282,7 +270,7 @@
     
     //将隐藏的标签页显示
     showTab : function(id, o, index){
-      var tabs = $("#" + id + "xui_tabs")[0], hide = this.isAllHide(id);
+      var tabs = $("#" + id)[0], hide = this.isAllHide(id);
       var li = this.p(o, "LI"),
       b = this.toggleStyle("x-menu-item-checked", li, false), 
       h = tabs.headers["index" + index],
@@ -320,7 +308,7 @@
     
     //点击标签页的下拉选框菜单时，滑动到对应的标签页上
     slidet : function(id, o, index){
-      var tabs = $("#" + id + "xui_tabs")[0],
+      var tabs = $("#")[0],
       h = tabs.headers["index" + index], active = h["id"],
       current = $("#" + id + " #" + active)[0];
       if("none" == $(current).css("display"))return;

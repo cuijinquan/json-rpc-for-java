@@ -237,7 +237,6 @@ XuiLoading:function(o)
       };
       
       if(window.dialogArguments)window.opener = window.dialogArguments;
-      Ext.BLANK_IMAGE_URL = g_sysInfo[2] + "default/s.gif";
         $(function(){
          /* 键盘事件的统一入口处理 */
          $($(document)[0]).keydown(function(e) {
@@ -246,21 +245,7 @@ XuiLoading:function(o)
             else if(window.event) k = window.event.keyCode || 0, c = window.event.ctrlKey || 0;
             if(c && 192 == k)
               top.frames[2].document.getElementById('ksjr').focus();
-             /* collection键盘的上下键、回车导航 */
-             if(Collection.oCur)
-            { 
-               if("function" != typeof Collection.oCur.attr)Collection.oCur = $(Collection.oCur);
-               var o = Collection.oCur, n = o.attr("lrnum"), oRs = o.find("div.x-grid3-body div.x-grid3-row"),
-                     oR = $(oRs[n]), fn;
-               n = parseInt(n || (n = 0));
-               if(0 <= n)
-               {
-                  /* 回车 */
-                  if(13 == k){fn = oR.attr("onclick");if("function" == typeof fn)fn.call(oR[0])}
-                  else if(38 == k && 0 < n){Collection.setLightRow(o.attr('id'), n - 1)}
-                  else if(40 == k && oRs.length - 1 > n){Collection.setLightRow(o.attr('id'), n + 1)}
-               }
-            }
+             
             /* 回车进入下一输入焦点*/
             if(document.activeElement && 13 == k)
             {
@@ -271,45 +256,7 @@ XuiLoading:function(o)
                }
             }
          });});
-         window.XuiComboBox = Ext.extend(Ext.form.ComboBox,{
-            forceSelection: true,
-            mode: 'local',
-            triggerAction: 'all',
-            emptyText: '\u8bf7\u9009\u62e9...',
-            allowDomMove:true,
-            selectOnFocus:true, 
-            resizable:true,
-            mySlc:function(s, id, cbk)
-            {
-               s && (this.onSelect=function(o){
-                  this.setValue(o.data[s]);
-                  this.collapse();
-                  if("function" == typeof cbk)cbk(o.data);
-               }); 
-               return this;
-            }
-          });
-         window.XuiDateField = Ext.extend(Ext.form.DateField,{
-    	 defaultAutoCreate : {tag: "input", type: "text", size: 21, maxLength:21, autocomplete: "off"}
-    	 ,onResize:function(){
-    	   if(!this.wrap)return this;
-    	   this.wrap.setWidth("100%");
-    	   this.el.setWidth(this.wrap.getWidth() - this.trigger.getWidth() + 2);
-    	   $(this.el.dom).css('top',-1);
-    	    
-    	   var a = window.xuiResize.a, fn, t = this, fn1 = arguments.callee;
-    	   if(!a[t.el.dom.name])
-    	   {
-    	      a[t.el.dom.name] = true;
-    	      fn = window.xuiResize.start;
-    	      window.xuiResize.start = function()
-    	      {
-    	         setTimeout(function(){fn1.apply(t)}, 13);
-    	         fn();
-    	      };
-    	   }
-    	  }
-        });
+         
         $(window).resize(window.xuiResize = function(){window.xuiResize.start()});
         window.xuiResize.start = function(){},window.xuiResize.a = [];       
         var ua = navigator.userAgent.toLowerCase(), _t = this;
@@ -505,19 +452,7 @@ XuiLoading:function(o)
         return -1;
       };
       $(document).ready(function(){
-      if(!_t.getDom("xuiSelectShdow"))
-      {
-       var a1 = [];
-       a1.push("<div class=\"x-shadow\" id=\"xuiSelectShdow\">");
-       a1.push("<div class=\"xst\"><div class=\"xstl\"></div><div class=\"xstc\" id=\"xuislctsd1\"></div><div class=\"xstr\"></div></div>");
-       a1.push("<div class=\"xsc\" id=\"xuislctsd2\"><div class=\"xsml\" id=\"showdxsml\"></div><div class=\"xsmc\" id=\"xuislctsd3\"></div><div class=\"xsmr\"></div></div>");
-       a1.push("<div class=\"xsb\"><div class=\"xsbl\"></div><div class=\"xsbc\" id=\"xuislctsd4\"></div><div class=\"xsbr\"></div></div></div>");
-       _t.insertHtml(document.body, "beforeend", a1.join(""));
-       a1 = null;
-       if(_t.bIE && 5 < _t.nVer && 7 > _t.nVer)
-       	  _t.getDom("xuiSelectShdow").style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=30) progid:DXImageTransform.Microsoft.Blur(pixelradius=4)";
-      }
-      $(window).error(function(){return false});
+         $(window).error(function(){return false});
       });
       Function.prototype.bind = function(o)
 	  {
