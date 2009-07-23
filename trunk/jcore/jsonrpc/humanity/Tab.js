@@ -65,7 +65,7 @@
       o = $(o);
       var bRst = o.attr("className").indexOf(cStyle); 
       show ? o.addClass(cStyle) : o.removeClass(cStyle);
-      return bRst;
+      return -1 < bRst;
     },
     
     //如果指定的tab页被隐藏，则滑动至可见. id:标签页tabs的id，active:滑动到指定标签页的id
