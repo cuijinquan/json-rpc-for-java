@@ -145,12 +145,14 @@ hideObj:function(szNameOrId)
 {
   var o = $("#" + szNameOrId);
   if(0 < o.length)
-  {
-     if("x-panel" == o.attr("class"))o = o.parent("div");
      o.hide();
+  else
+  {
+     o = $(":input[@name=" + szNameOrId + "]");
+     o = Base.p(o[0], "DIV");o = Base.p(o, "DIV");
+     $(o).hide();
   }
-  else (o = $(":input[@name=" + szNameOrId + "]").parent("div").parent("div")).hide();
-}, /* 显示指定名字或id的对象 */
+},  /* 显示指定名字或id的对象 */
 showObj:function(szNameOrId, bDisb)
 {
   var o = $("#" + szNameOrId);
