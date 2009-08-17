@@ -183,7 +183,8 @@
         tabs.left = --index; tabs.w = prew - eachw;tabs.action = "sub";
         clearTimeout(timer);
       } else {
-        r -= speed;
+         r -= speed;
+         if(isNaN(r))r = 0;
          myTab.find("li.x-tab-with-icon").each(function(){
           $(this).css("right", (r + "px"));
         }); 
