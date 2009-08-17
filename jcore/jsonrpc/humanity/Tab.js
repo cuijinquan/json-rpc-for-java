@@ -198,6 +198,7 @@
         name = o.attr('class'),length = name.indexOf("x-item-disabled");
         if (length > -1)return false;
 	    var oTab = $("#" + id), aid = oTab.attr('active') || "xui_no_active";
+	    if(szId == aid)return false;
 	    oTab.find("#" + szId + "_body").removeClass("x-hide-display");
 	    oTab.find("#"+aid).removeClass("x-tab-strip-active");
 	    oTab.find("#" + aid + "_body").addClass("x-hide-display");
