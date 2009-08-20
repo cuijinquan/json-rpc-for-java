@@ -206,6 +206,7 @@
            this.onSelect(e, i);
            this.bIE ? (e.keyCode = 9) : '';
            this.hidden(e);
+           $(this.p(this.descObj, "DIV")).parent().next().find(":input:first").focus();
            break;
         case 38: /* 上 */
            i = this.lightRow(i - 1);
