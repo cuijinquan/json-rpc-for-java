@@ -248,14 +248,25 @@ XuiLoading:function(o)
               top.frames[2].document.getElementById('ksjr').focus();
              
             /* 回车进入下一输入焦点*/
-            if(document.activeElement && 13 == k)
+             if(document.activeElement && 13 == k)
             {
-               var szNdNm = document.activeElement.nodeName;
-               if("INPUT" == szNdNm || "TEXTAREA" == szNdNm || "SELECT" == szNdNm)
+               var oCur = document.activeElement, szNdNm = oCur.nodeName, a = $("input,textarea,select,button"), i = 0, bStart = false;
+               if("INPUT" == szNdNm || "TEXTAREA" == szNdNm || "SELECT" == szNdNm || "BUTTON" == szNdNm)
                {
-                  ;
+                   for(i = 0; i <  a.length; i++)
+                   {
+                      if("hidden" == $(a[i]).attr("type"))continue;
+                      if(bStart)
+                      {
+                         $(a[i]).focus();
+                         break;
+                      }
+                      else if(a[i] == oCur)bStart = true;
+                   }
+                   return false;
                }
             }
+            return true;
          });});
          
         $(window).resize(window.xuiResize = function(){window.xuiResize.start()});
@@ -402,7 +413,7 @@ XuiLoading:function(o)
              }
              else
              {
-               if(!o.length)o = $(":input:not(:checkbox[@checked=false])");
+               if("undefined" == typeof o.length)o = $(":input:not(:checkbox[@checked=false])");
                if(o.length)
                try{
                  o.each(function()
