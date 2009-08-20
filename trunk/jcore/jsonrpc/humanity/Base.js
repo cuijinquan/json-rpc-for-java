@@ -137,7 +137,9 @@ fsubmit:function(n, oWin)
 {
    var o = $("#" + s);
    if(0 < o.length)return o;
-   return $(":input[@name=" + s + "]");
+   o = $(":input[@name=" + s + "]");
+   if(0 < o.length)return o;
+   return $(":input[@name=dto(" + s + ")]");
 }, /* 隐藏指定名字或id的对象 */
 hideObj:function(szNameOrId)
 {
@@ -283,7 +285,7 @@ XuiLoading:function(o)
         jQuery.fn.extend({
            getValue:(_t.getValue = function(s){
              var s1;
-             if(s)s1 = $(":input[@name=" + s + "]").val();
+             if(s)s1 = $(_t.getObj(s)).val();
              else s1 = this.val()
              if("undefined" == (s1 || typeof s1))s1 = "";
              return s1;
@@ -292,7 +294,7 @@ XuiLoading:function(o)
               if(!s)return this;
               if(2 == arguments.length)
               {
-                 var oIpt = $(":input[@name=" + s + "]");
+                 var oIpt = $(_t.getObj(s));
                  if(0 == oIpt.length)
                    Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
                  else oIpt.val(s2);
@@ -301,14 +303,25 @@ XuiLoading:function(o)
            }),
            setFocus:(_t.setFocus = function(s){
               var o = this;
-              if(s)o = $(":input[@name=" + s + "]");
+              if(s)o = $(_t.getObj(s));
               if(0 == o.length)o = ("#" + s);
               o.focus();
            }),
            setReadOnly:(_t.setReadOnly = function(s, b){
               var o = this;
-              if(s)o = $("#" + s.replace(/\)|\(/g, "_"));
-              o = o.add(o.find("*"));
+              if(s)
+              {
+                 o = $("#" + s);
+                 if(0 == o.size())
+                 {
+                         $(":input").each(function(){
+                         if(this.name == s || this.name == "dto(" + s + ")")
+                         {
+                            o = $(this).parent().parent();
+                         }
+                    });
+                 }
+              }
               if("undefined" == typeof b || true == b)
                    o.attr("readonly", "readonly").addClass("readOnly");
               else o.removeAttr("readonly").removeClass("readOnly");
@@ -335,7 +348,7 @@ XuiLoading:function(o)
                 var i,a = s.split(/[,;\|\s]/);
                 for(i = 0; i < a.length; i++)
                 {
-                  o = _t.getObj(a[i]).parent("div").parent("div");
+                  o = _t.getObj(a[i]).parent().parent();
                   if(0 == o.find("b").length)
                   _t.insertHtml(o.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
                   o.find("input:first").attr("isRequired", "true");
@@ -357,7 +370,7 @@ XuiLoading:function(o)
                 var i,a = s.split(/[,;\|\s]/);
                 for(i = 0; i < a.length; i++)
                 {
-                  o = _t.getObj(a[i]).parent("div").parent("div");
+                  o = _t.getObj(a[i]).parent().parent();
                   o.find("b").remove();
                   o.find("input:first").removeAttr("isRequired");
                 }
