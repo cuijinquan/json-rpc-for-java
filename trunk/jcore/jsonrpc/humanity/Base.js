@@ -80,7 +80,6 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
            script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
            script = script.replace(/\/\/--><!\]\]>\s*$/, "");
         }
-        s = s.substr(s.indexOf("<body>") + 6);
         if(!szDesId)
         {
           s = s.replace(/^\s*<div[^>]*>/gmi, "");
@@ -119,7 +118,6 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
            script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
            script = script.replace(/\/\/--><!\]\]>\s*$/, "");
         }
-        s = s.substr(s.indexOf("<body>") + 6);
         if(!destId)
         {
           s = s.replace(/^\s*<div[^>]*>/gmi, "");
@@ -183,7 +181,6 @@ doUpdateCollection:function(szCollectionId, szData)
       	a.push(this.name + "=" + s);
    });
    else{
-      alert(2);
       var p = s.split("&"), u;
       for(var i = 0; i < p.length; i++)
       {
