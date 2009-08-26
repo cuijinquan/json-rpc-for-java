@@ -10,7 +10,7 @@
   }, setData:function(szId,a){this.getSlctObj("S" + szId)["collection"] = a;},
   getData:function(szId) /* 获取下拉列表数据 */
   {
-    var rst = this.getSlctObj(szId)["collection"], i, s, o, k, key = "_id_";
+    var rst = this.getSlctObj(szId)["collection"], i, s, o, k, key = "_id";
     if(rst && 0 < rst.length && "" == rst[0][key].replace(/\d/g, ""))
     {
         for(i = 0; i < rst.length; i++)
@@ -19,7 +19,8 @@
           for(k in o)
              if(key != k)
                 s.push(o[k]);
-          rst[i][key] = s.join("\t");
+          if(0 < s.length)
+          rst[i][key] = s.join(",");
         }
     }
     return this.data || this.getSlctObj(szId)["collection"] || []
@@ -47,7 +48,7 @@
   getSelectDataStr:function(oE, w)
   {
     var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;position: relative;left:0;top:0\">"], i, j, o, k,
-        b = this.getSlctObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
+        b = this.getSlctObj(oE.id)["displayFields"], bDisp = !b, key = "_id";
     !bDisp && (b = b.split(/[,;\|\/]/));
     for(i = 0; i < a.length; i++)
     {
@@ -139,7 +140,7 @@
     var n, id = this.descObj.id, b = [], c = [], a = (this.getData(id), this.getSlctObj(id)["collection"]);
     if(!a || 0 == a.length)return 0;
     for(n = 0; n < a.length; n++)
-      if(-1 < a[n]["_id_"].indexOf(s))
+      if(-1 < a[n]["_id"].indexOf(s +","))
          b.push(a[n]);
       else c.push(a[n]);
     this.data = b.concat(c);
