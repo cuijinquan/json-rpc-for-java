@@ -153,12 +153,21 @@ public class Translate {
 				System.getProperties().setProperty("socksProxyPort", szPort);
 				break;
 			case proxyFtpType:
+				System.setProperty("ftpProxyPort", szPort);
+			    System.setProperty("ftpProxyHost", szProxyServer);
+			    System.setProperty("ftpProxySet", "true");
+			        
 				System.getProperties().put( "ftpProxySet", "true");
 				System.getProperties().put( "ftpProxyHost", szProxyServer);
 				System.getProperties().put( "ftpProxyPort", szPort);
 				break;
 			case proxyHttpType:
 			default:
+				System.setProperty("http.proxyType", "4");
+			    System.setProperty("http.proxyPort", szPort);
+	            System.setProperty("http.proxyHost", szProxyServer);
+	            System.setProperty("http.proxySet", "true");
+	        
 				System.getProperties().put("proxySet", "true");
 				System.getProperties().put("proxyHost", szProxyServer);
 				System.getProperties().put("proxyPort", szPort);
