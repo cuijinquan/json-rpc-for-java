@@ -82,7 +82,7 @@
 	}, /* 初始化要显示的日期div */
 	initDivHtml:function()
 	{
-	    var i, j, a = ["<ul class=\"x-menu-list\"><li class=\"x-menu-list-item x-menu-date-item\"><div style=\"-moz-user-select: none; width: 175px;\" class=\"x-date-picker x-unselectable\"><table style=\"width: 175px;\" cellspacing=\"0\"><tbody>", "<tr><td class=\"x-date-left\"><a onclick=\"DatePicker.month--,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"javascript:void(0)\" title=\"\u4e0a\u6708(Ctrl+Left)\">&nbsp;</a></td><td class=\"x-date-middle\" align=\"center\"><table style=\"width: auto;\" class=\"x-btn-wrap x-btn\" border=\"0\" cellpadding=\"0\"cellspacing=\"0\"><tbody><tr class=\"x-btn-with-menu\"><td class=\"x-btn-left\"><i>&nbsp;</i></td><td class=\"x-btn-center\"><em unselectable=\"on\" onclick=\"DatePicker.showXuiSlctMY()\"><button class=\"x-btn-text\" type=\"button\" id=\"xuiCurYear\"></button></em></td><td class=\"x-btn-right\"><i>&nbsp;</i></td></tr></tbody></table></td><td class=\"x-date-right\"><a onclick=\"DatePicker.month++,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"javascript:void(0)\" title=\"\u4e0b\u6708(Ctrl+Right)\">&nbsp;</a></td></tr>"];
+	    var i, j, a = ["<ul class=\"x-menu-list\"><li class=\"x-menu-list-item x-menu-date-item\"><div style=\"-moz-user-select: none; width: 176.5px;\" class=\"x-date-picker x-unselectable\"><table style=\"width: 175px;\" cellspacing=\"0\"><tbody>", "<tr><td class=\"x-date-left\"><a onclick=\"DatePicker.month--,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"javascript:void(0)\" title=\"\u4e0a\u6708(Ctrl+Left)\">&nbsp;</a></td><td class=\"x-date-middle\" align=\"center\"><table style=\"width: auto;\" class=\"x-btn-wrap x-btn\" border=\"0\" cellpadding=\"0\"cellspacing=\"0\"><tbody><tr class=\"x-btn-with-menu\"><td class=\"x-btn-left\"><i>&nbsp;</i></td><td class=\"x-btn-center\"><em unselectable=\"on\" onclick=\"DatePicker.showXuiSlctMY()\"><button class=\"x-btn-text\" type=\"button\" id=\"xuiCurYear\"></button></em></td><td class=\"x-btn-right\"><i>&nbsp;</i></td></tr></tbody></table></td><td class=\"x-date-right\"><a onclick=\"DatePicker.month++,DatePicker.addDate(0)\" class=\"x-unselectable\" style=\"-moz-user-select: none;\" href=\"javascript:void(0)\" title=\"\u4e0b\u6708(Ctrl+Right)\">&nbsp;</a></td></tr>"];
 		/* 中间 start */
 		a.push("<tr><td colspan=\"3\"><table class=\"x-date-inner\" cellspacing=\"0\"><thead><tr><th title=\"\u661f\u671f\u5929\"><span>\u65e5</span></th><th title=\"\u661f\u671f\u4e00\"><span>\u4e00</span></th><th title=\"\u661f\u671f\u4e8c\"><span>\u4e8c</span></th><th title=\"\u661f\u671f\u4e09\"><span>\u4e09</span></th><th title=\"\u661f\u671f\u56db\"><span>\u56db</span></th><th title=\"\u661f\u671f\u4e94\"><span>\u4e94</span></th><th title=\"\u661f\u671f\u516d\"><span>\u516d</span></th></tr></thead><tbody id=\"xuiDatePicker\">");
 		for (j = 0; j < 6; j++) {
@@ -443,7 +443,7 @@
 	    var _t = this;
 	      o = _t.dpIpt = (o || _t.FromEventObj(e));
 		  var bFirst = !_t.XuiDatePicker, s = (o['value'] || "").trim(),
-		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-layer x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
+		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
 		  /* 第一次需要做初始化处理 */
 		  if(bFirst)
 		  {
@@ -461,7 +461,8 @@
 		  else s = new Date(), _t.setDate(s.getFullYear(), s.getMonth() + 1, s.getDate());
 		  _t.updataTBody();
 		  if(!(o.readOnly || o.disabled))
-		     _t.showDiv(o, oDiv, _t.bIE ? 173: 175, 0, 0);/* IE8: 173 * 201 */
+		     _t.showDiv(o, oDiv, _t.bIE ? 170: 175, 0, 0);/* IE8: 173 * 201 */
+		  (oDiv = $(oDiv)).height(oDiv.height() - 4);
 	},onblur: function(e, oIpt)
 	{
 	    var _t = DatePicker, o = _t.XuiDatePicker;
