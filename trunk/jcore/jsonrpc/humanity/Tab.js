@@ -4,9 +4,9 @@
       var o = $("#" + id), width = o.width(), o1;
       o.width(width);
       (o1 = $("#" + id)).width(width - 2);
-      o.find("div.x-tab-panel-header").width(width - 2);
+      o.find("div.x-tab-panel-header").width(width - 2-2);
       o.find("div.x-tab-panel-body").each(function(){
-        $(this).width(width - 5);
+        $(this).width(width - 5-2);
       });
       return o1;
     },
