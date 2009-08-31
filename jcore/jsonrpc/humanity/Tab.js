@@ -124,7 +124,7 @@
       }
       var eachw = $(current).width() < 140 ? 140 : $(current).width(), 
       r = parseInt($(current).css("right")), timer = null, 
-      count = tabs.getElementsByTagName("LI").length, prew = tabs.w || 0,
+      count = tabs.getElementsByTagName("LI").length/2, prew = tabs.w || 0,
       twidth = $(tabs).width(),
       rslider = myTab.find("#xui_tab_r_slider")[0], 
       lslider = myTab.find("#xui_tab_l_slider")[0];
@@ -207,6 +207,10 @@
 	    if(hide){
 	      o.css("display", "none");
 	    }
+	    //set focus of flirst input text
+	    var input = oTab.find("#" + szId + "_body" + " input:first");
+	    if(0 < input.length)$(input).focus();
+	    
     },
     
     //设置onmouse over和out的样式
