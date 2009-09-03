@@ -49,6 +49,7 @@ PopMsgWin:function(o)
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
 {
+   mkClctDt();
    var form, reqCode;
    if (!szUrl && (form = $("form:first")[0])
             && form.action && "undefind" != typeof 
@@ -102,6 +103,7 @@ AjaxSyn : function(id, isAsync){
   return this.AjaxUpdateUi(id, null, null, null, null, isAsync);
 },
 AjaxTab: function(tabId, szReqCode, url, data, destId){
+   mkClctDt();
    var _t = this, separator = url &&  -1 < url.indexOf("?") ? "&" : "?";
    (szReqCode && (url = contextPath + url + separator + "reqCode=" + szReqCode)) || (url = contextPath + url);
    data || (data = ":input:not(:checkbox[@checked=false])");
@@ -132,6 +134,7 @@ fsubmit:function(n, oWin)
 {
     Base.AjaxObj = Ext.getBody();
     this.XuiLoading();
+    mkClctDt();
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
 {
@@ -293,6 +296,11 @@ XuiLoading:function(o)
         _t.isIE5 = _t.isW3C && _t.isIE;
         _t.isNS6 = _t.isW3C && "Netscape" == navigator.appName;
         window.getAllInput = _t.getAllInput;
+        window.mkClctDt = function(){
+               var a = window.mkClct || [], i,o;
+               for(i = a.length; 0 <= --i;)
+                   if(o = a[i].swf())o.mkSubmit();
+           };
         jQuery.fn.extend({
            getValue:(_t.getValue = function(s){
              var s1;
@@ -653,6 +661,7 @@ XuiLoading:function(o)
   }, /* 异步刷新区域的封装，还没有实现完整 */
   updateUi:function(o)
   {
+    mkClctDt();
     var s = [], s1 = [""], o1, _t = this, s2;
     if(!o.data)return alert("updateUi调用参数不正确，没有指定参数data");
     /* post数据，格式为["aac001", "#myTab:input", "divId1"] */
