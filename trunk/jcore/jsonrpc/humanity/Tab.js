@@ -206,6 +206,7 @@
 	    oTab.find("#" + aid + "_body").addClass("x-hide-display");
 	    o.removeClass("x-tab-strip-over").addClass("x-tab-strip-active");
 	    oTab.attr('active', szId);
+	    this.setValue("_tabActive_", szId);
 	    if(hide){
 	      o.css("display", "none");
 	    }
