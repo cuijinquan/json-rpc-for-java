@@ -254,7 +254,9 @@ XuiLoading:function(o)
              if(document.activeElement && 13 == k)
             {
                var oCur = document.activeElement, szNdNm = oCur.nodeName, a = $("input,textarea,select,button"), i = 0, bStart = false;
-               if("INPUT" == szNdNm || "TEXTAREA" == szNdNm || "SELECT" == szNdNm || "BUTTON" == szNdNm)
+                if("BUTTON" == szNdNm)
+                   $(oCur).click();
+               else if("INPUT" == szNdNm || "TEXTAREA" == szNdNm || "SELECT" == szNdNm)
                {
                    for(i = 0; i <  a.length; i++)
                    {
