@@ -1,17 +1,17 @@
 {   
-    // \u521d\u59cb\u5316\u5bbd\u5ea6. id: tabs\u6807\u7b7e\u7684id 
+    /* 初始化宽度. id: tabs标签的id */
     initWidth : function(id){
       var o = $("#" + id), width = o.width(), o1;
       o.width(width);
-      (o1 = $("#" + id)).width(width - 2);
-      o.find("div.x-tab-panel-header").width(width - 2-2);
+      (o1 = $("#" + id)).width(width - 10);
+      o.find("div.x-tab-panel-header").width(width - 4);
       o.find("div.x-tab-panel-body").each(function(){
-        $(this).width(width - 5-2);
+        $(this).width(width - 14);
       });
       return o1;
     },
     
-    // \u521d\u59cb\u5316\u5bbd\u5ea6. id: tabs\u6807\u7b7e\u7684id, active:\u8bbe\u7f6e\u9009\u4e2dtab\u7684id
+    /* 初始化宽度. id: tabs标签的id, active:设置选中tab的id */
     TabsInit:function(id, active){
        XUI(this);
        var i = 1, tabs = this.initWidth(id)[0], _t = this;
@@ -29,7 +29,7 @@
         try{this.setActiveTab(id, active);}catch(e){}
     },
     
-    //\u5173\u95ed\u6807\u7b7e\u9875.id: tabs\u6807\u7b7e\u7684id, o:li\u7ec4\u4ef6
+    /* 关闭标签页.id: tabs标签的id, o:li组件 */
     closeTab : function(id, o){
       var myTab = $("#" + id), tabs = $("#" + id)[0],
       li = "LI" == o.nodeName ? o : this.p(o, "LI"),
@@ -47,19 +47,19 @@
       this.disableTab(id, li.id);
     },
     
-    //\u5c06tab\u9875\u7f6e\u7070. id:tabs\u6807\u7b7e\u7684id, tab:\u9700\u8981\u7f6e\u7070\u6807\u7b7e\u9875\u7684id
+    /* 将tab页置灰. id:tabs标签的id, tab:需要置灰标签页的id */
     disableTab : function(id, tab){
       var li = $("#" + id + " #" + tab), _t = this;
       this.toggleStyle("x-item-disabled", li[0], true);
     },
     
-    //\u5c06\u7f6e\u7070\u7684tab\u9875\u6062\u590d. id:tabs\u6807\u7b7e\u7684id, tab:\u9700\u8981\u7f6e\u7070\ufffd\ufffd\ufffd\u7b7e\u9875\u7684id
+    /* 将置灰的tab页恢复. id:tabs标签的id, tab:需要置灰 签页的id*/
     enableTab : function(id, tab){
       var li = $("#" + id + " #" + tab), _t = this;
       this.toggleStyle("x-item-disabled", li[0], false);
     },
     
-    //\u5c06\u4e3aname\u7684class\u6837\u5f0f\uff0c\u589e\u52a0\u6216\u8005\u662f\u5220\u9664\u5728\u6307\u5b9a\u7684\u5bf9\u8c61\u4e0a.\u5982\u679c\u8fd4\u56de\u662f\u771f\u7684\u7684\u8bdd,\u8868\u793a\u589e\u52a0\u6216\u8005\u5220\u9664\u6210\u529f
+    /* 将为name的class样式，增加或者是删除在指定的对象上.如果返回是真的的话,表示增加或者删除成功 */
     toggleStyle : function(cStyle, o, show){
       if (!o)return false;
       o = $(o);
@@ -68,7 +68,7 @@
       return -1 < bRst;
     },
     
-    //\u5982\u679c\u6307\u5b9a\u7684tab\u9875\u88ab\u9690\u85cf\uff0c\u5219\u6ed1\u52a8\u81f3\u53ef\u89c1. id:\u6807\u7b7e\u9875tabs\u7684id\uff0cactive:\u6ed1\u52a8\u5230\u6307\u5b9a\u6807\u7b7e\u9875\u7684id
+    /* 如果指定的tab页被隐藏，则滑动至可见. id:标签页tabs的id，active:滑动到指定标签页的id */
     moveToTab : function(id, active){
       try{
         var o = $("#" + id + " #" + active)[0], 
@@ -85,7 +85,7 @@
       }catch(e){alert(e.message);}
     },
     
-    //\u8bbe\u7f6e\u9009\u4e2d\u7684tab\u9875. id:\u6807\u7b7e\u9875tabs\u7684id\uff0cactive:\u6307\u5b9a\u9009\u4e2d\u7684\u6807\u7b7e\u9875\u7684id
+    /* 设置选中的tab页. id:标签页tabs的id，active:指定选中的标签页的id */
     setActiveTab : function(id, active){
      var myTab = $("#" + id), o = myTab.find("#" + active)[0];
      if(o){
@@ -97,7 +97,7 @@
      }
     },
     
-    //\u83b7\u53d6\u663e\u793a\u4e86\u7684\u6807\u7b7e\u9875\u7684\u6574\u4e2a\u5bbd\u5ea6
+    /* 获取显示了的标签页的整个宽度 */
     getDisplayWidth : function(id, index){
       var tabs = $("#" + id)[0], count = 0, myTab = $("#" + id);
       for(var i = index; i <= tabs.max; i++){
@@ -109,7 +109,7 @@
       return count;
     },
     
-    //\u6807\u7b7e\u9875\u5411\u5de6\u6ed1\u52a8\u51fd\u6570.
+    /* 标签页向左滑动函数. */
     tabScrollRightHandler : function(id, speed){
       speed = speed || 25;
       var tabs = $("#" + id)[0],
@@ -159,7 +159,7 @@
       }
     },
     
-    //\u6807\u7b7e\u9875\u5411\u5de6\u6ed1\u52a8\u51fd\u6570.  
+    /*标签页向左滑动函数.*/  
     tabScrollLeftHandler : function(id, speed){
       speed = speed || 25;
       var tabs = $("#" + id)[0], index = (tabs.left) || 1, myTab = $("#" + id), 
@@ -214,7 +214,7 @@
 	    if(0 < input.length)$(input).focus();
     },
     
-    //\u8bbe\u7f6eonmouse over\u548cout\u7684\u6837\u5f0f
+    /*设置onmouse over和out的样式*/
 	tabOver : function(o, show){
 	  var name = o.className, length = name.indexOf("x-item-disabled");
       if (length > -1)return false; 
@@ -222,7 +222,7 @@
 	  this.toggleStyle("x-tab-strip-over", o, show);
     },
     
-    //\u70b9\u51fb\u6807\u7b7e\u9875\u5934\uff0c\u9ad8\u4eae\u663e\u793a\u6807\u9898
+    /*点击标签页头，高亮显示标题*/
     tablist : function(id, o){
       var div = $("#" + id + "tabslist"), li = this.p(o, "LI"), oLi = $(li), 
       left = oLi.offset().left + "px", top = (oLi.offset().top + 23)+"px";
@@ -240,7 +240,7 @@
       });
     },
     
-    //\u5224\u65ad\u662f\u5426\u6240\u6709\u7684\u6807\u7b7e\u9875\u90fd\u662f\u9690\u85cf\u7684
+    /*判断是否所有的标签页都是隐藏的*/
     isAllHide : function(id){
       var tabs = $("#" + id)[0], oTab = $("#" + id);
       for(var i = 1; i <= tabs.max; i++){
@@ -252,7 +252,7 @@
       return true;
     },
     
-    //\u83b7\u53d6\u4e0b\u4e00\u4e2a\u975e\u9690\u85cf\u7684\u6807\u7b7e\u9875
+    /*获取下一个非隐藏的标签页*/
     getNextShowTab : function(id, index){
       var tabs = $("#" + id)[0];
       if(this.isAllHide(id))return undefined;
@@ -271,7 +271,7 @@
       }
     },
     
-    //\u5c06\u9690\u85cf\u7684\u6807\u7b7e\u9875\u663e\u793a
+    /*将隐藏的标签页显示*/
     showTab : function(id, o, index){
       var tabs = $("#" + id)[0], hide = this.isAllHide(id);
       var li = this.p(o, "LI"),
@@ -309,7 +309,7 @@
       }  
     },
     
-    //\u70b9\u51fb\u6807\u7b7e\u9875\u7684\u4e0b\u62c9\u9009\u6846\u83dc\u5355\u65f6\uff0c\u6ed1\u52a8\u5230\u5bf9\u5e94\u7684\u6807\u7b7e\u9875\u4e0a
+    /*点击标签页的下拉选框菜单时，滑动到对应的标签页上*/
     slidet : function(id, o, index){
       var tabs = $("#")[0],
       h = tabs.headers["index" + index], active = h["id"],
