@@ -173,6 +173,7 @@ showObj:function(szNameOrId, bDisb)
 ,/* 传递Xpath szData指定的数据，并更新flash区域的查询 */
 doUpdateCollection:function(szCollectionId, szData, szReqCode)
 {
+  mkClctDt();
   var o = szCollectionId.swf(), _t = this;
    if(o && o.doUpdateCollection)o.doUpdateCollection(this.getAllInput(szData), szReqCode || null);
    else window[szCollectionId + "S_cache"] = function(){_t.doUpdateCollection(szCollectionId, szData, szReqCode)};
