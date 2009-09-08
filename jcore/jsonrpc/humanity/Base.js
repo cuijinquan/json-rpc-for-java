@@ -214,7 +214,7 @@ XuiLoading:function(o)
       window.confirm = function(s, fn, fn1)
       {
          var o = {type:1, message:String(s)};
-         if(fn)o.okScript = fn;if(fn)o.errScript = fn;
+         if(fn)o.okScript = fn;if(fn1)o.errScript = fn1;
          return Base.PopMsgWin(o);
       };
       window.open = function(s, t,p)
