@@ -92,7 +92,7 @@
               return a[i][d];
           }
       }
-      return "";
+      return s;
   },/* 通过描述得到value */
   getValueByDesc:function(s)
   {
