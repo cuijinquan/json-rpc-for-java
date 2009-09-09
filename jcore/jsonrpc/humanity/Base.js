@@ -321,7 +321,7 @@ XuiLoading:function(o)
                    Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
                  else{
                      oIpt.val(s2);
-                     if("hidden" == oIpt.attr("type") && "INPUT" == oIpt.prev().attr("nodeName"))
+                     if("hidden" == oIpt.attr("type") && "INPUT" == oIpt.prev().attr("nodeName") && oIpt.prev().id)
                         (oIpt = oIpt.prev()).val(Select.getDescByValue(s2, oIpt[0]));
                  }
               }
