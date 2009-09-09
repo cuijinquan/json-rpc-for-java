@@ -319,7 +319,11 @@ XuiLoading:function(o)
                  var oIpt = $(_t.getObj(s));
                  if(0 == oIpt.length)
                    Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
-                 else oIpt.val(s2);
+                 else{
+                     oIpt.val(s2);
+                     if("hidden" == oIpt.attr("type") && "INPUT" == oIpt.prev().attr("nodeName"))
+                        (oIpt = oIpt.prev()).val(Select.getDescByValue(s2, oIpt[0]));
+                 }
               }
               else this.val(s);
            }),

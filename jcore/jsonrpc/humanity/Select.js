@@ -80,6 +80,19 @@
         inputObj.value = descObj.value = s;
      if(e)this.preventDefault(e), this.stopPropagation(e);
      return this;
+  },/* 通过value获得描述 */
+  getDescByValue:function(s,o){
+      o || (o = this.descObj)
+      var obj = slctIptData[o.id],a = obj.valueField.split(/[,;\|\s]/), d = a[a.length - 1], i, v = a[0];
+      a = obj.collection;
+      for(i = a.length; 0 <= --i;)
+      {
+          if(a[i][v] == s)
+          {
+              return a[i][d];
+          }
+      }
+      return "";
   },/* 通过描述得到value */
   getValueByDesc:function(s)
   {
