@@ -484,7 +484,7 @@ XuiLoading:function(o)
        if(7 > _t.nVer)
          try{document.execCommand("BackgroundImageCache", false, true)}catch(e){}
       }
-      _t.trim = String.prototype.trim = function(s){return (s||this).replace(/(^\s*)|(\s*$)/gm, "")};
+      _t.trim = String.prototype.trim = function(s){return (s||this.toString()).replace(/(^\s*)|(\s*$)/gm, "")};
       String.prototype.swf = function(){
          var id = this + "S";
          return -1 != navigator.appName.indexOf("Microsoft") ? window[id] || document.getElementById(id): document[id];
@@ -784,12 +784,12 @@ XuiLoading:function(o)
   /* 事件返回false */
   preventDefault:function(e)
   {
-      e = e || window.event;
+      e = e || window.event || {};
       return e.preventDefault ? e.preventDefault() : (e.returnValue = false);
   }, /* 停止事件往上层传递 */
   stopPropagation:function(e)
   {
-     e = e || window.event;
+     e = e || window.event || {};
      return e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
   }, /* 在对象el中插入html代码 */
   insertHtml:function(el, where, html){
