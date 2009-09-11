@@ -4,6 +4,7 @@
     xuiDPRows: null, /* body */
     xuiCurYear:null, xuiSlctMY:null,
     slctM: 0, slctY: 0,
+    szSfmVal:"",/* 时分秒值 */
     year:0, month:0,day:0,
     dpMax: null, dpMin: null, /* 允许的最大年月日和最小的年月日 */
     pkData: [], /* 初始化一年的数据 */
@@ -23,11 +24,10 @@
 	       b = [this.year, this.month, this.day, false], 
 	       this.year = this.month = this.day = 0,
 	       this.setDate.apply(this, b);
-	    
 	    if(a[3])this.year = parseInt(a[0], 10),this.month = parseInt(a[1], 10),this.day = parseInt(a[2], 10);
-	    
 	    this.initPkData(this.year, this.month, this.day);
-	},showXuiSlctMY: function(y)
+	},/* 显示下拉图层 */
+	showXuiSlctMY: function(y)
 	{
 	   var o = this.xuiSlctMY, oTb = this.getByTagName("TABLE", o)[0], i, 
 	       j, r, k = 4, p, oldY = this.year, yy = y || this.slctY || oldY,
@@ -139,18 +139,23 @@
 	     r.push([a[0], a[1], nCur, c.join(" ")]);
 	  }
 	  return r;
-	},setValueD: function(e)
+	},/* 设置value值 */
+	setValueD: function(e)
 	{
-	   if(this.dpIpt.readOnly || this.dpIpt.disabled)return false;
-	   this.month = parseInt(this.month, 10);
-	   this.day = parseInt(this.day, 10);
-	   this.year = parseInt(this.year, 10);
-	   if(!this.isInvalid(this.year, this.month, this.day))
+	   var _t = this, s;
+	   if(_t.dpIpt.readOnly || _t.dpIpt.disabled)return false;
+	   _t.month = parseInt(_t.month, 10);
+	   _t.day = parseInt(_t.day, 10);
+	   _t.year = parseInt(_t.year, 10);
+	   if(!_t.isInvalid(_t.year, _t.month, _t.day))
 	   {
+	       if(!_t.szSfmVal)_t.szSfmVal = _t.dpIpt.value.substr(10);
 		   if(!e)
-		   this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, 
-		     9 < this.day ? this.day : (0 < this.day ? "0" + this.day : 0)].join("-");
-		   else this.dpIpt.value = [this.year, 9 < this.month ? this.month : "0" + this.month, this.day].join("-");
+		   s = [_t.year, 9 < _t.month ? _t.month : "0" + _t.month, 
+		     9 < _t.day ? _t.day : (0 < _t.day ? "0" + _t.day : 0)].join("-");
+		   else s = [_t.year, 9 < _t.month ? _t.month : "0" + _t.month, _t.day].join("-");
+		   if(10 == s.length) s += _t.szSfmVal;
+		   _t.dpIpt.value = s.substr(0, _t.dpIpt.maxLength || 10);
 	   }
 	},
 	updataTBody: function(e)
@@ -209,203 +214,211 @@
 	   this.pkData[1] = this.isLeapYear(y) ? 29 : 28;
 	   
 	   return this.day = n, this.month = m, this.year = y, this.updataTBody(), this;
+	},/* 自动补全，修正闰年日期 */
+	fnBq:function()
+	{
+	    var o = this.dpIpt, n = o.value.length, a = o.value.split(/[-\\s:\.]/);
+	   if(3 <= a.length)
+	    {
+	       this.initPkData(a[0], a[1], a[2]);
+	       if(this.isLeapYear(this.year) && 1 == this.month && this.day > this.pkData[this.month - 1])
+	         o.value = this.year + "-" + a[1] + "-"
+	                     + this.pkData[this.month - 1]
+	                     + o.value.substr(10,  o.value.length - 10); 
+	    }
+	    if(4 == n || 7 == n)o.value += "-";
+	    if(10 < o.maxLength)
+	    {
+	        if(10 == n)o.value += " ";
+	        else if(13 == n || 16 == n)o.value += ":";
+	    }
+	    this.fnMvIstPoint(o, o.value.length, o.value.length, null);
+	},/* 使得中心fn的过程中不触发oninput */
+	fnNoInput:function(fn){
+	  var _t = this;
+	   _t.bBoBq = true;fn();setTimeout(function(){_t.bBoBq = false},13);
 	}, /* 键盘事件处理 */
     onkeydown:function(e, oIpt)
    {
      e = e || window.event;
-     var n = e.which || e.keyCode;
-     if("none" == this.XuiDatePicker.style.display)
+     var n = e.which || e.keyCode, _t = this, x, k;
+     if("none" == _t.XuiDatePicker.style.display)
      {
-        if(40 == n && e.ctrlKey)this.showSelectDiv(e, oIpt);
+        if(40 == n && e.ctrlKey)_t.showSelectDiv(e, oIpt);
         return true;
      }
-     switch(n)
+      switch(n)
      {
-        case 46:
+        case 46: /* del */
+                 return true; 
+        case 8: /* 退格键盘 */
+               _t.fnNoInput(function(){
+                  if(document.selection)document.selection.clear();
+                  _t.fnMvIstPoint(oIpt, oIpt.value.length, oIpt.value.length, null);
+               });
+               return true;
         case 35:
         case 36:
         case 109:
         case 116:
-        case 8:
         case 9:
-           return true;
-        /* Ctrl + s */
-        case 83:
+               return true;
+        case 83: /* ctrl + s */
            if(e.ctrlKey)
            {
-             this.stopPropagation(e),this.preventDefault(e);
-             return this.showXuiSlctMY(),false;
+             _t.stopPropagation(e),_t.preventDefault(e);
+             return _t.showXuiSlctMY(),false;
            }
+           return false;
            break;       
         /*Esc 关闭图层*/
         case 27:
-           if("block" == this.xuiSlctMY.style.display)
-                this.hiddenXuiSlctMY();
-           else this.hidden();
+           if("block" == _t.xuiSlctMY.style.display)
+                _t.hiddenXuiSlctMY();
+           else _t.hidden();
            break;
         /* 回车选择 */
         case 13:
            if(e.ctrlKey)
            {
-              this.selectToday();
+              _t.selectToday();
               return true;
            }
-           if("block" == this.xuiSlctMY.style.display)
+           if("block" == _t.xuiSlctMY.style.display)
            {
-              this.slctOk();
+              _t.slctOk();
               return true;
            }
-           this.hidden();
-           this.bIE ? (e.keyCode = 9) : '';
-           this.setValueD();
+           _t.hidden();
+           _t.bIE ? (e.keyCode = 9) : '';
+           _t.setValueD();
            break;
         case 38: /* 上 */
            n = -7;
-           var bSMy = "block" == this.xuiSlctMY.style.display;
+           var bSMy = "block" == _t.xuiSlctMY.style.display;
            if(e.ctrlKey)
            {
               if(bSMy)
 	          {
-	              this.slctY = (this.slctY || this.year) - 1;
-	              this.showXuiSlctMY(false);
+	              _t.slctY = (_t.slctY || _t.year) - 1;
+	              _t.showXuiSlctMY(false);
 	              return true;
 	          }
-              else n = 0,this.year--,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
+              else n = 0,_t.year--,_t.pkData[1] = _t.isLeapYear(_t.year) ? 29 : 28;
            }
-           if(!bSMy)this.addDate(n);
-           this.stopPropagation(e),this.preventDefault(e);
+           if(!bSMy)_t.addDate(n);
+           _t.stopPropagation(e),_t.preventDefault(e);
            return false;
         case 40: /* 下 */
            n = 7;
-           var bSMy = "block" == this.xuiSlctMY.style.display;
+           var bSMy = "block" == _t.xuiSlctMY.style.display;
            if(e.ctrlKey)
            {
               if(bSMy)
 	          {
-	              this.slctY = (this.slctY || this.year) + 1;
-	              this.showXuiSlctMY(false);
+	              _t.slctY = (_t.slctY || _t.year) + 1;
+	              _t.showXuiSlctMY(false);
 	              return true;
 	          }
-              else n = 0,this.year++,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
+              else n = 0,_t.year++,_t.pkData[1] = _t.isLeapYear(_t.year) ? 29 : 28;
            }
-           if(!bSMy)this.addDate(n);
-           this.stopPropagation(e),this.preventDefault(e);
+           if(!bSMy)_t.addDate(n);
+           _t.stopPropagation(e),_t.preventDefault(e);
            return false;
         case 37: /* 左 */
            n = -1;
-           var bSMy = "block" == this.xuiSlctMY.style.display;
+           var bSMy = "block" == _t.xuiSlctMY.style.display;
            if(e.ctrlKey)
            {
               if(bSMy)
 	          {
-	              this.slctM = (this.slctM || this.month) - 1;
-	              if(1 > this.slctM)this.slctM = 12;
-	              this.showXuiSlctMY(false);
+	              _t.slctM = (_t.slctM || _t.month) - 1;
+	              if(1 > _t.slctM)_t.slctM = 12;
+	              _t.showXuiSlctMY(false);
 	              return true;
 	          }
 	          else
 	          {
-	              this.month--;
-	              if(1 > this.month)this.month = 12, this.year--,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
-	              var nTmp = this.pkData[this.month - 1];
-	              if(2 == this.month && nTmp < this.day)
-	                 this.day = nTmp;
+	              _t.month--;
+	              if(1 > _t.month)_t.month = 12, _t.year--,_t.pkData[1] = _t.isLeapYear(_t.year) ? 29 : 28;
+	              var nTmp = _t.pkData[_t.month - 1];
+	              if(2 == _t.month && nTmp < _t.day)
+	                 _t.day = nTmp;
 	              n = 0;
               }
            }
-           if(!bSMy)this.addDate(n);
-           this.stopPropagation(e),this.preventDefault(e);
+           if(!bSMy)_t.addDate(n);
+           _t.stopPropagation(e),_t.preventDefault(e);
            return false;
         case 39: /* 右 */
            n = 1;
-           var bSMy = "block" == this.xuiSlctMY.style.display;
+           var bSMy = "block" == _t.xuiSlctMY.style.display;
            if(e.ctrlKey)
            {
               if(bSMy)
 	          {
-	              this.slctM = (this.slctM || this.month) + 1;
-	              if(12 < this.slctM)this.slctM = 1;
-	              this.showXuiSlctMY(false);
+	              _t.slctM = (_t.slctM || _t.month) + 1;
+	              if(12 < _t.slctM)_t.slctM = 1;
+	              _t.showXuiSlctMY(false);
 	              return true;
 	          }
 	          else
 	          {
-	              this.month++;
-	              var nTmp = this.pkData[this.month - 1];
-	              if(12 < this.month)this.month = 1, this.year++,this.pkData[1] = this.isLeapYear(this.year) ? 29 : 28;
-	              if(2 == this.month && nTmp < this.day)
-	                 this.day = nTmp;
+	              _t.month++;
+	              var nTmp = _t.pkData[_t.month - 1];
+	              if(12 < _t.month)_t.month = 1, _t.year++,_t.pkData[1] = _t.isLeapYear(_t.year) ? 29 : 28;
+	              if(2 == _t.month && nTmp < _t.day)
+	                 _t.day = nTmp;
 	              n = 0;
               }
            }
-           if(!bSMy)this.addDate(n);
-           this.stopPropagation(e),this.preventDefault(e);
+           if(!bSMy)_t.addDate(n);
+           _t.stopPropagation(e),_t.preventDefault(e);
            return false;
         default:
-           n = String.fromCharCode(n);
-           if('0' <= n && n <= '9' || n == '-')
+           x = oIpt.value.length;k = "";
+           if(0 < x)k = oIpt.value.substr(x - 1, 1);
+           if(     ((4 > x || 15 == x || 18 == x) && 48 <= n && n <= 57)           /* 年4位 0-9 */
+                || ((4 == x || 7 == x) && n == 189)        /* 5、8位 -符号 */
+                || ((12 == x || 15 == x) && n == 186)     /* 13、16位 :符号 */
+                || (10 == x && n == 32)                         /* 10位 空格 */
+                || (5 == x && 48 <= n && n <= 49)          /* 月第一位, 0 -1 */
+                /* 月第二位：0[1 - 9], 1[0-2] */
+                || (6 == x && ((0 == k && 49 <= n && n <= 57) || (1 == k && 48 <= n && n <= 50)))
+                || (8 == x && 48 <= n && n <= 51)        /* 日第一位 0 - 2 */
+                /* 日第二位，[0-2][0-9],[3][0-1] */
+                || (9 == x && 48 <= n && (2 >= k && 48 <= n && n <= 57 || 3 == k && 48 <= n && n <= 49))
+                /* 小时第一位 */ 
+                || (11 == x && 48 <= n && n <= 50)
+                /* 小时第二位 */ 
+                || (12 == x && ((1 >= k && 48 <= n && n <= 57) || (2 == k && 48 <= n && n <= 51)))
+                /* 分、秒第一位 */
+                || ((14 == x || 17 == x) && 48 <= n && n <= 53)
+              )
              return true;
-           this.stopPropagation(e),this.preventDefault(e);
+           _t.stopPropagation(e),_t.preventDefault(e);
            return false;
      }
   },onInput: function(e, o)
    {
-     if(!(o.readOnly || o.disabled))return false;
+     if(o.readOnly || o.disabled)return false;
      this.event = e = e || window.event;
      return this.RunOne(function(){
         this.stopPropagation(e),this.preventDefault(e);
-        if(o.readOnly || o.disabled)return false;
-        var _t = this;
+        /* 记录时分秒值 */
+        var _t = this,d =  o.value.length;
+        if(o.value && 18 <= d)
+           _t.szSfmVal =  o.value.substr(10, d - 10);
+        else if(18 <= (o.maxLength || 0))
+        {
+           d = new Date(); _t.szSfmVal =  " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();delete d;
+        }else _t.szSfmVal = "";
         if(_t.isIE)
         {
          _t.detachEvent(o, "propertychange", _t[o.id] && _t[o.id].onpropertychange || o["onpropertychange"] || function(){});
          o["onpropertychange"] = null;
         }
-        if(!o["_oldVl"])o["_oldVl"] = o.value;
-        var s = this.trim(o.value), s2 = s.replace(/(^\-*)|(\-*^)|([^\d\-])/g, "").replace(/\-\-/g, "-"), a = s2.split("-");
-        if(s)
-        {
-           switch(a.length)
-           {
-              case 1:
-                 if(10000 < a[0])a[0] = a[0].substr(0, 4);
-                 break;
-              case 2:
-                 var n = parseInt(a[1], 10);
-                 if(12 < n)a[1] = "12";
-                 else if(1 > n && 2 == a[1].length)a[1] = "0" + 1;
-                 if(0 == a[1].length)
-                    a.pop();
-                 break;
-              case 3:
-                 var n = parseInt(a[1], 10);
-                 if(12 < n)a[1] = "12";
-                 else if(1 > n)a[1] = "0" + 1;
-                 
-                 if(0 == a[2].length)
-                 {
-                    a.pop();
-                    break;
-                 }                 
-                 var a1 = (this.pkData = [31,this.isLeapYear(a[0]) ? 29 : 28,31,30,31,30,31,31,30,31,30,31]),
-                     m = a1[n];
-                 n = parseInt(a[2], 10);
-                 if(1 > n && 2 == a[2].length)a[2] = 1;else if(m < n)a[2] = m;
-                 a[0] && (this.year = a[0]), a[1] && (this.month = a[1]), a[2] && (this.day = a[2]);
-                 this.updataTBody(e);
-                 break;
-              default:;
-           }
-           s2 = a.join("-");
-           if(s != s2)
-           {
-               if((s2.length > o["_oldVl"].length || /\-$/g.test(s)) && (7 == s2.length || 4 == s2.length))
-                 s2 += "-";
-               o.value = s2;
-           }
-           else if((s2.length > o["_oldVl"].length || /\-$/g.test(s)) && (7 == s2.length || 4 == s2.length))
-              s2 += "-", o.value = s2;
-        }
+        _t.fnBq();
         o["_oldVl"] = o.value;
         if(_t.isIE)
 	    {
@@ -462,7 +475,7 @@
 		  _t.updataTBody();
 		  if(!(o.readOnly || o.disabled))
 		     _t.showDiv(o, oDiv, _t.bIE ? 170: 175, 0, 0);/* IE8: 173 * 201 */
-		  (oDiv = $(oDiv)).height(oDiv.height() - 4);
+		  (oDiv = $(oDiv)).height(oDiv.height());
 	},onblur: function(e, oIpt)
 	{
 	    var _t = DatePicker, o = _t.XuiDatePicker;
