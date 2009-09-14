@@ -402,6 +402,7 @@
   },onInput: function(e, o)
    {
      if(o.readOnly || o.disabled ||  this.bBoBq)return false;
+     this.bBoBq = true;
      this.event = e = e || window.event;
      return this.RunOne(function(){
         this.stopPropagation(e),this.preventDefault(e);
@@ -428,6 +429,7 @@
 	       });
 	    }
      });
+     this.bBoBq = false;
    },click:function(e, o)
 	{
 	   if(-1 < o.className.indexOf("x-date-disabled"))return this;
