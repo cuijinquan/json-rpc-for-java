@@ -1097,7 +1097,7 @@ XuiLoading:function(o)
       hs[5] = parseInt(oDiv.style.height, 10);
       hs[6] = parseInt(oDiv.style.left, 10);
       hs[7] = parseInt(oDiv.style.width, 10);
-      if(hs[4] + hs[5] > hs[1] + document.documentElement.scrollTop)oDiv.style.top = (hs[4] - hs[5] - $(o).height()) + "px";
+      if(hs[4] + hs[5] > hs[1] + document.documentElement.scrollTop + 40)oDiv.style.top = (hs[4] - hs[5] - $(o).height()) + "px";
       if(hs[6] + hs[7] > hs[3] + document.documentElement.scrollLeft)oDiv.style.left = (hs[6] - hs[7] - $(o).width()) + "px";
       this.showShadow(oDiv);
 	}	
