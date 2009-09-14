@@ -217,6 +217,7 @@
 	},/* 自动补全，修正闰年日期 */
 	fnBq:function()
 	{
+	    if(null == this.dpIpt)return;
 	    var o = this.dpIpt, n = o.value.length, a = o.value.split(/[-\\s:\.]/);
 	   if(3 <= a.length)
 	    {
