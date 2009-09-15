@@ -23,16 +23,20 @@ PopMsgWin:function(o)
            width:450,
            buttons: {"ok": "确定"},
            fn: function(btn){
-              if("ok" == btn)
+             if("ok" == btn)
               {
                 if(o.okScript)
                   try{if("function" == typeof o.okScript)o.okScript();else eval(o.okScript)}catch(e){};
-                if(o.okUrl)location.href = contextPath + o.okUrl;
+                setTimeout(function(){
+                   if(o.okUrl)location.href = contextPath + o.okUrl;
+                },333);
               }
               else if("no" == btn)
               {
                  if(o.errScript)try{if("function" == typeof o.errScript)o.errScript();else eval(o.errScript)}catch(e){};
-                 if(o.errUrl)location.href = contextPath + o.errUrl;
+                 setTimeout(function(){
+                    if(o.errUrl)location.href = contextPath + o.errUrl;
+                 },333);
               }
               if(o.field)
               {
