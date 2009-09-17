@@ -168,43 +168,47 @@
          parseInt(obj.displayWidth, 10), parseInt(o.style.height, 10));
      (o = $(o)).css({overflowY:'auto'});
      if(170 > o.attr('scrollHeight'))o.css({overflowY:'visible'});
-  }, /* 检索过滤处理 */
+  },/* 使得中心fn的过程中不触发oninput */
+	fnNoInput:function(fn){
+	  var _t = this;
+	   _t.bBoBq = true;fn();setTimeout(function(){_t.bBoBq = false},13);
+	}, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
      var _t = this;
-     return this.RunOne(function()
-     {
-       _t.stopPropagation(e),_t.preventDefault(e);
-       if(oIpt.readOnly || oIpt.disabled)return false;
-       if(_t.isIE)
-       {
-         _t.descObj = oIpt;
-         _t.detachEvent(oIpt, "propertychange", _t[oIpt.id] && _t[oIpt.id].onpropertychange || oIpt["onpropertychange"] || function(){});
-         oIpt["onpropertychange"] = null;
-       }
-       _t.getData(oIpt.id);
-       var n = 0, o = _t.SelectDiv, oT = _t.getSlctObj(oIpt.id),
-           s = oIpt.value.replace(/(^\s+)|(\s+$)/g, "");
-       if(o)
-       {
-	       /* 检索、过滤处理，并返回过滤得到的结果条数 */
-	       n = _t.updata(s); /* _t.getData(oIpt.id); */
-	       /* 从码表中尝试获取值，如果没有找到,如果允许编辑就用描述字段内容 */
-	       s = _t.getValueByDesc(s) || oT["allowEdit"] && s || "";
-	       _t.setValueX(s, 2, e);
-	       /* if(oIpt.getAttribute("oldValue") != s || 0 == n)_t.setValueX("", 2, e); */
-	       if(0 < n)
-	          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
-	       else s && !oT["allowEdit"] && this.addInvalid(oIpt);
-       }
-       if(_t.isIE)
-	   {
-	       _t.addEvent(oIpt, "propertychange",  (_t[oIpt.id] || (_t[oIpt.id] = {})).onpropertychange = function(e)
+     if(_t.bBoBq)return false;
+     _t.fnNoInput(function(){
+	       _t.stopPropagation(e),_t.preventDefault(e);
+	       if(oIpt.readOnly || oIpt.disabled)return false;
+	       if(_t.isIE)
 	       {
-	          _t.onInput.call(_t, e, oIpt);
-	       });
-	   }
-     }, Select);
+	         _t.descObj = oIpt;
+	         _t.detachEvent(oIpt, "propertychange", _t[oIpt.id] && _t[oIpt.id].onpropertychange || oIpt["onpropertychange"] || function(){});
+	         oIpt["onpropertychange"] = null;
+	       }
+	       _t.getData(oIpt.id);
+	       var n = 0, o = _t.SelectDiv, oT = _t.getSlctObj(oIpt.id),
+	           s = oIpt.value.replace(/(^\s+)|(\s+$)/g, "");
+	       if(o)
+	       {
+		       /* 检索、过滤处理，并返回过滤得到的结果条数 */
+		       n = _t.updata(s); /* _t.getData(oIpt.id); */
+		       /* 从码表中尝试获取值，如果没有找到,如果允许编辑就用描述字段内容 */
+		       s = _t.getValueByDesc(s) || oT["allowEdit"] && s || "";
+		       _t.setValueX(s, 2, e);
+		       /* if(oIpt.getAttribute("oldValue") != s || 0 == n)_t.setValueX("", 2, e); */
+		       if(0 < n)
+		          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
+		       else s && !oT["allowEdit"] && this.addInvalid(oIpt);
+	       }
+	       if(_t.isIE)
+		   {
+		       _t.addEvent(oIpt, "propertychange",  (_t[oIpt.id] || (_t[oIpt.id] = {})).onpropertychange = function(e)
+		       {
+		          _t.onInput.call(_t, e, oIpt);
+		       });
+		   }
+	   });
   }, /* 键盘事件处理 */
   onkeydown:function(e, oIpt)
   {
