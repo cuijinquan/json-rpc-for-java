@@ -50,6 +50,7 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 		InputStream f = null;
 		try
 		{
+			String szCharset = "UTF-8"; // UTF-8  GBK
 			f = Tools.getResourceAsStream("jcore/jsonrpc/humanity/" + szName + ".js");
 			if(null != f)
 			{
@@ -58,15 +59,15 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 				int j = 0;
 				while(1024 == (j = f.read(b, 0, 1024)))
 				{
-					buf.append(new String(b, "UTF-8"));
+					buf.append(new String(b, szCharset));
 				}
 				if(0 < j)
 				{
 					byte []b1 = new byte[j];
 					System.arraycopy(b, 0, b1, 0, j);
-					buf.append(new String(b1, "UTF-8"));
+					buf.append(new String(b1, szCharset));
 				}
-				String s = Content.JS(buf.toString().trim()).replaceAll("\\/\\*[^\\*]+\\*\\/", "");
+				String s = Content.JS(buf.toString().trim());// Content.JS(buf.toString().trim()).replaceAll("\\/\\*[^\\*]+\\*\\/", "");
 //				s = Content.JS(s);
 				s = s.replaceFirst("^\\\\ufeff", "");
 //				s = s.replaceAll("([\\t ]*\\r\\n[\\t ]*)+", "\r\n");
