@@ -263,7 +263,7 @@
     if(!o)
     {
        this.SelectDiv = o = this.createDiv({id:"_Xui_SelectDiv"});
-       this.addEvent(o, "mousemove", fns).addEvent(o, "mousedown", fns)
+       this.addEvent(o, "mousedown", fns)
            .addEvent(o, "scroll", fns)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.bind(_t.hiddenSelectDiv));
        this.oShdow = this.getDom("xuiSelectShdow");
