@@ -142,21 +142,34 @@
 	},/* 设置value值 */
 	setValueD: function(e)
 	{
-	   var _t = this, s;
-	   if(_t.dpIpt.readOnly || _t.dpIpt.disabled)return false;
+	   var _t = this, s,o = _t.dpIpt, d =  o.value.length, nTmp;
+	   if(o.readOnly || o.disabled)return false;
+	   _t.fnNoInput(function(){
+        if(!o.maxLength || 19 < o.maxLength)
+            o.maxLength = 10;
+        if(o.value && 10 <= d)
+           _t.szSfmVal =  o.value.substr(10, d - 10);
+        if(19 <= o.maxLength)
+        {
+           d = new Date(); _t.szSfmVal =  " " + (10 > (nTmp = d.getHours()) ? "0" + nTmp: nTmp)
+                + ":" + (10 > (nTmp = d.getMinutes()) ? "0" + nTmp: nTmp) + ":" + 
+                (10 > (nTmp = d.getSeconds()) ? "0" + nTmp: nTmp);delete d;
+        }else _t.szSfmVal = "";
+        
 	   _t.month = parseInt(_t.month, 10);
 	   _t.day = parseInt(_t.day, 10);
 	   _t.year = parseInt(_t.year, 10);
 	   if(!_t.isInvalid(_t.year, _t.month, _t.day))
 	   {
-	       if(!_t.szSfmVal)_t.szSfmVal = _t.dpIpt.value.substr(10);
+	       if(!_t.szSfmVal && 10 < o.maxLength)_t.szSfmVal = o.value.substr(10);
 		   if(!e)
 		   s = [_t.year, 9 < _t.month ? _t.month : "0" + _t.month, 
 		     9 < _t.day ? _t.day : (0 < _t.day ? "0" + _t.day : 0)].join("-");
 		   else s = [_t.year, 9 < _t.month ? _t.month : "0" + _t.month, _t.day].join("-");
-		   if(10 == s.length) s += _t.szSfmVal;
-		   _t.dpIpt.value = s.substr(0, _t.dpIpt.maxLength || 10);
+		   if(10 == s.length && 10 < o.maxLength) s += _t.szSfmVal;
+		   o.value = s.substr(0, o.maxLength || 10);
 	   }
+	   });
 	},
 	updataTBody: function(e)
 	{
@@ -402,19 +415,12 @@
      }
   },onInput: function(e, o)
    {
-     if(o.readOnly || o.disabled ||  this.bBoBq)return false;
+     var _t = this;
+     if(o.readOnly || o.disabled ||  _t.bBoBq)return false;
      this.bBoBq = true;
      this.event = e = e || window.event;
-     return this.RunOne(function(){
         this.stopPropagation(e),this.preventDefault(e);
         /* 记录时分秒值 */
-        var _t = this,d =  o.value.length;
-        if(o.value && 18 <= d)
-           _t.szSfmVal =  o.value.substr(10, d - 10);
-        else if(18 <= (o.maxLength || 0))
-        {
-           d = new Date(); _t.szSfmVal =  " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();delete d;
-        }else _t.szSfmVal = "";
         if(_t.isIE)
         {
          _t.detachEvent(o, "propertychange", _t[o.id] && _t[o.id].onpropertychange || o["onpropertychange"] || function(){});
@@ -429,7 +435,6 @@
 	          _t.onInput.call(_t, e, o);
 	       });
 	    }
-     });
      this.bBoBq = false;
    },click:function(e, o)
 	{

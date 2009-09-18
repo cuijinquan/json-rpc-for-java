@@ -142,11 +142,11 @@ fsubmit:function(n, oWin)
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
 {
-   var o = $("#" + s);
+   var o = $(":input[@name=" + s + "]");
    if(0 < o.length)return o;
-   o = $(":input[@name=" + s + "]");
+   o =  $(":input[@name=dto(" + s + ")]");
    if(0 < o.length)return o;
-   return $(":input[@name=dto(" + s + ")]");
+   return $("#" + s);
 }, /* 隐藏指定名字或id的对象 */
 hideObj:function(szNameOrId)
 {
@@ -430,7 +430,7 @@ XuiLoading:function(o)
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
                       oCur.focus();
-                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text() + " \u4e0d\u80fd\u4e3a\u7a7a");
+                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text().replace(/^\s*\**/, "") + " 不能为空");
                       return false;
                    }
                 }
