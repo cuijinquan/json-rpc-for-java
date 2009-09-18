@@ -198,8 +198,8 @@
 		       _t.setValueX(s, 2, e);
 		       /* if(oIpt.getAttribute("oldValue") != s || 0 == n)_t.setValueX("", 2, e); */
 		       if(0 < n)
-		          this.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
-		       else s && !oT["allowEdit"] && this.addInvalid(oIpt);
+		          _t.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
+		       else s && !oT["allowEdit"] && _t.addInvalid(oIpt);
 	       }
 	       if(_t.isIE)
 		   {
