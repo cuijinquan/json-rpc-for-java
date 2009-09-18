@@ -289,13 +289,7 @@
               if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "", _t.delInvalid(_t.descObj);
               
               o["_blur_"]=true,_t.hiddenSelectDiv()
-           })
-           .addEvent(oE, "mousemove", function(e)
-               {
-                 o["tmer"] && _t.clearTimer(o["tmer"]),
-                 _t.updata(oE.value),
-                 _t.fnMvIstPoint(oE, oE.value.length, oE.value.length, e);
-               });
+           });
     }
     _t.updata(oE.value);
     o.style['height'] = Math.min(15 * _t.getData(oE.id).length, 170) + 'px';
