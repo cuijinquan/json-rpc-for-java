@@ -343,7 +343,7 @@ XuiLoading:function(o)
               o.focus();
            }),
            setReadOnly:(_t.setReadOnly = function(s, b){
-              var o = this;
+              var o = this, p;
               if(s)
               {
                  o = $("#" + s);
@@ -352,9 +352,15 @@ XuiLoading:function(o)
                          $(":input").each(function(){
                          if(this.name == s || this.name == "dto(" + s + ")")
                          {
-                            o = $(this).parent().parent();
+                            o = $(this);
+                            if("hidden" == o.attr("type"))o = o.prev();
+                            p = o.parent().parent();
+                            if("undefined" == typeof b || true == b)
+                                o.attr("readonly", "readonly"), p.addClass("readOnly");
+                            else o.removeAttr("readonly"),p.removeClass("readOnly");
                          }
-                    });
+                        });
+                    return this;
                  }
               }
               if("undefined" == typeof b || true == b)

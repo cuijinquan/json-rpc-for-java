@@ -142,8 +142,8 @@
 	},/* 设置value值 */
 	setValueD: function(e)
 	{
+	   if("undefined" == typeof this.dpIpt.value || this.dpIpt.readOnly || this.dpIpt.disabled)return false;
 	   var _t = this, s,o = _t.dpIpt, d =  o.value.length, nTmp;
-	   if(o.readOnly || o.disabled)return false;
 	   _t.fnNoInput(function(){
         if(!o.maxLength || 19 < o.maxLength)
             o.maxLength = 10;
@@ -256,6 +256,7 @@
    {
      e = e || window.event;
      var n = e.which || e.keyCode, _t = this, x, k;
+     if(!_t.XuiDatePicker)return false;
      if("none" == _t.XuiDatePicker.style.display)
      {
         if(40 == n && e.ctrlKey)_t.showSelectDiv(e, oIpt);
@@ -464,6 +465,7 @@
 	    e && (this.stopPropagation(e),this.preventDefault(e));
 	    var _t = this;
 	      o = _t.dpIpt = (o || _t.FromEventObj(e))
+	    if(o.readOnly || o.disabled || "undefined" == typeof o.value)return false;
 		  var bFirst = !_t.XuiDatePicker, s = (o['value'] || "").trim(),
 		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
 		 _t.fnNoInput(function(){
@@ -490,7 +492,7 @@
 	},onblur: function(e, oIpt)
 	{
 	    var _t = DatePicker, o = _t.XuiDatePicker;
-	    o["tmer"] = _t.regTimer(function(e)
+	    if(o)o["tmer"] = _t.regTimer(function(e)
 	    {
 		    return _t.hidden(), true;
 	    }, 333);
