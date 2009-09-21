@@ -160,7 +160,7 @@ hideObj:function(szNameOrId)
      $(o).hide();
   }
 },  /* 显示指定名字或id的对象 */
-showObj:function(szNameOrId, bDisb)
+showObj:function(szNameOrId)
 {
   var o = $("#" + szNameOrId);
   if(0 < o.length)
