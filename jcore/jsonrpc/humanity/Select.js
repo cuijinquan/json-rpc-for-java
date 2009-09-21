@@ -34,8 +34,8 @@
   {
     var o = this.SelectDiv, tb = this.getByTagName("table",o), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
     if(!b)return false;
-    if(r.length > o["_lstNum"] && -1 < o["_lstNum"])
-       r[o["_lstNum"]].className='slcthand';
+    if(r.length > o["_lstNum"])
+       r[o["_lstNum"] || 0].className='slcthand';
     if(0 > n)n = r.length - 1;
     if(r.length <= n)n = 0;
     r[n].className='cursor slctOver'; 
@@ -116,7 +116,6 @@
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
   {
-     if(-1 == oTr)return false;
      var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getSlctObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
@@ -214,8 +213,8 @@
   onkeydown:function(e, oIpt)
   {
      e = e || window.event;
-     var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getSlctObj(oIpt.id), i = o["_lstNum"] || -1;
-     if("undefined" == typeof o["_lstNum"])o["_lstNum"] = -1;
+     var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getSlctObj(oIpt.id), i = o["_lstNum"] || 0;
+     if(-1 == o["_lstNum"])o["_lstNum"] = 0, i = -1;
      switch(n)
      {
         /* 接受连续退格键 e.repeat, 8 */
@@ -272,7 +271,7 @@
     }
     szId = o.id;
     /* 状态的处理: 输入对象的id保留 */
-    o[szId] = oE.id, o["_lstNum"] = 0, o["_blur_"]= false, fns();
+    o[szId] = oE.id, o["_lstNum"] = -1, o["_blur_"]= false, fns();
 
     /* 修正显示图层的上下位置 */
     /* if(190 < p.top - document.documentElement.scrollTop)p.top =  p.top - (o.clientHeight || 170) - h;*/
