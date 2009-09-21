@@ -34,8 +34,8 @@
   {
     var o = this.SelectDiv, tb = this.getByTagName("table",o), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
     if(!b)return false;
-    if(r.length > o["_lstNum"])
-       r[o["_lstNum"] || 0].className='slcthand';
+    if(r.length > o["_lstNum"] && -1 < o["_lstNum"])
+       r[o["_lstNum"]].className='slcthand';
     if(0 > n)n = r.length - 1;
     if(r.length <= n)n = 0;
     r[n].className='cursor slctOver'; 
@@ -116,6 +116,7 @@
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
   {
+     if(-1 == oTr)return false;
      var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getSlctObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
@@ -213,7 +214,8 @@
   onkeydown:function(e, oIpt)
   {
      e = e || window.event;
-     var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getSlctObj(oIpt.id), i = o["_lstNum"] || 0;
+     var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getSlctObj(oIpt.id), i = o["_lstNum"] || -1;
+     if("undefined" == typeof o["_lstNum"])o["_lstNum"] = -1;
      switch(n)
      {
         /* 接受连续退格键 e.repeat, 8 */
@@ -296,7 +298,6 @@
     o.innerHTML = _t.getSelectDataStr(oE, w);
     var nTm = new Date().getTime();
     _t.show();
-    this.lightRow(0);
     e && this.stopPropagation(e),this.preventDefault(e);
     });    
   }, /* 隐藏图层的方法 */

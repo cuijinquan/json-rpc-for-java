@@ -195,7 +195,7 @@
          n++;
        }
        this.xuiCurYear.innerHTML = this.year + "\u5e74" + this.month + "\u6708";
-       this.setValueD(e);
+       /*this.setValueD(e); 防止获取焦点的时候自动填写值*/
        /* ie 下collection编辑列中发生焦点无法移动在不可见位置错误修正 */
 	   !this.dpIpt["xuiBlur"] && this.dpIpt.focus();
 	},addDate: function(n)
@@ -459,12 +459,14 @@
 	}, /*显示图层*/
 	showSelectDiv: function(e,o)
 	{
+	    this.bBoBq = true;
 	    this.event = e = e || window.event;
 	    e && (this.stopPropagation(e),this.preventDefault(e));
 	    var _t = this;
-	      o = _t.dpIpt = (o || _t.FromEventObj(e));
+	      o = _t.dpIpt = (o || _t.FromEventObj(e))
 		  var bFirst = !_t.XuiDatePicker, s = (o['value'] || "").trim(),
 		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
+		 _t.fnNoInput(function(){
 		  /* 第一次需要做初始化处理 */
 		  if(bFirst)
 		  {
@@ -484,6 +486,7 @@
 		  if(!(o.readOnly || o.disabled))
 		     _t.showDiv(o, oDiv, _t.bIE ? 170: 175, 0, 0);/* IE8: 173 * 201 */
 		  (oDiv = $(oDiv)).height(oDiv.height());
+		  });
 	},onblur: function(e, oIpt)
 	{
 	    var _t = DatePicker, o = _t.XuiDatePicker;
