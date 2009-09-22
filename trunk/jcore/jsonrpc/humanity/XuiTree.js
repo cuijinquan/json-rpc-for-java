@@ -390,7 +390,7 @@
            a.push(s.join(' '));
            a.push("\"");
            /* 事件 */
-           a.push(" onclick=\"var o = $(this).find('a');if(1 == o.size())o.click()\"  onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
+           a.push(" onclick=\"var o = $(this).find('A');if(1 == o.size())o.click()\"  onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
            a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event)\"");
            a.push(">");
            /* 缩进的计算 */
@@ -446,7 +446,9 @@
            if(bHvCld)a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').doExpand(event, true)\"");
            a.push("/>");
            /* 当前节点图标 */
-           a.push("<img unselectable=\"on\" class=\"" + this.nodeIcon + "\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>");
+            if(-1 < this.nodeIcon.indexOf("."))
+                 a.push("<img height=16 width=16  unselectable=\"on\"  src=\"" + g_sysInfo[2] + "tree/" + this.nodeIcon + "\"/>");
+           else a.push("<img unselectable=\"on\" class=\"" + this.nodeIcon + "\" src=\"" + g_sysInfo[2] + "default/s.gif\"/>");
            /* checkbox */
            a.push(this.insertBfLabel(this));
            /* 描述部分 */
