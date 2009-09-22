@@ -325,6 +325,13 @@ XuiLoading:function(o)
               if(!s)return this;
               if(2 == arguments.length)
               {
+                 if("string" != typeof s2 && s2['time'])
+                 {
+                     var o = s2, fnT = function(n){return 10 > n? "0" + n: n};o.month++;
+                     s2 = [o.fullYear, fnT(o.month), fnT(o.date)].join("-");
+                     if(o.seconds || o.hours || o.minutes)
+                     s2 += " " + [fnT(o.hours), fnT(o.minutes), fnT(o.seconds)].join(":");
+                 }
                  var oIpt = $(_t.getObj(s));
                  if(0 == oIpt.length)
                    Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
