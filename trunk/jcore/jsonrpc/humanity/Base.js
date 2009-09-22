@@ -12,8 +12,13 @@
 getMenuData:function()
 {
    return window.topMenu || (window.topMenu = top.frames[0].topMenu);
-},
-/* 弹出消息提示 */
+},/* 根据输入对象,获取输入对象布局的div对象 */
+getInputDiv:function(o)
+{
+   var _t = this;
+   if(o)return $(_t.p(_t.p(_t.getObj(o)[0], "DIV"), "DIV"));
+   return o;
+},/* 弹出消息提示 */
 PopMsgWin:function(o)
 {
    Base.PopMsgWin.obj = o;
@@ -146,7 +151,9 @@ fsubmit:function(n, oWin)
    if(0 < o.length)return o;
    o =  $(":input[@name=dto(" + s + ")]");
    if(0 < o.length)return o;
-   return $("#" + s);
+   o = $("#" + s);
+   if(0 < o.length)return o;
+   return s;
 }, /* 隐藏指定名字或id的对象 */
 hideObj:function(szNameOrId)
 {
@@ -337,7 +344,8 @@ XuiLoading:function(o)
                    Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
                  else{
                      oIpt.val(s2);
-                     if("hidden" == oIpt.attr("type") && "INPUT" == oIpt.prev().attr("nodeName") && oIpt.prev().attr('id'))
+                     oIpt = Base.getInputDiv(oIpt).find(":input");
+                     if(-1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
                         (oIpt = oIpt.prev()).val(Select.getDescByValue(s2, oIpt[0]));
                  }
               }
@@ -360,8 +368,9 @@ XuiLoading:function(o)
                          if(this.name == s || this.name == "dto(" + s + ")")
                          {
                             o = $(this);
-                            if("hidden" == o.attr("type"))o = o.prev();
-                            p = o.parent().parent();
+                            // if("hidden" == o.attr("type"))o = o.prev();
+                            p = Base.getInputDiv(o);
+                            o = $(p.find(":input")[0]);
                             if("undefined" == typeof b || true == b)
                                 o.attr("readonly", "readonly"), p.addClass("readOnly");
                             else o.removeAttr("readonly"),p.removeClass("readOnly");
@@ -396,7 +405,7 @@ XuiLoading:function(o)
                 var i,a = s.split(/[,;\|\s]/);
                 for(i = 0; i < a.length; i++)
                 {
-                  o = _t.getObj(a[i]).parent().parent();
+                  o = _t.getInputDiv(a[i]);
                   if(0 == o.find("b").length)
                   _t.insertHtml(o.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
                   o.find("input:first").attr("isRequired", "true");
@@ -404,7 +413,7 @@ XuiLoading:function(o)
              }
              else o.each(function()
              {
-                var o1 = $(this).parent("div").parent("div");
+                var o1 = _t.getInputDiv(this);
                 if(0 == o1.find("b").length)
                 _t.insertHtml(o1.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
                 o1.find("input:first").attr("isRequired", "true");
@@ -418,14 +427,14 @@ XuiLoading:function(o)
                 var i,a = s.split(/[,;\|\s]/);
                 for(i = 0; i < a.length; i++)
                 {
-                  o = _t.getObj(a[i]).parent().parent();
+                  o = Base.getInputDiv(a[i]);// _t.getObj(a[i]).parent().parent();
                   o.find("b").remove();
                   o.find("input:first").removeAttr("isRequired");
                 }
              }
              else o.each(function()
              {
-                var o1 = $(this).parent("div").parent("div");
+                var o1 = Base.getInputDiv(this);// $(this).parent("div").parent("div");
                 o1.find("b").remove();
                 o1.find("input:first").removeAttr("isRequired");
              });
@@ -459,7 +468,7 @@ XuiLoading:function(o)
                    if("true" == oCur.attr("isRequired") && !oCur.val())
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
-                      oCur.focus();alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text() + " \u4e0d\u80fd\u4e3a\u7a7a");
+                      oCur.focus();alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text().replace(/^\s*\**/, "") + "  不能为空");
                       bR = false;
                       throw "stop";
                    }

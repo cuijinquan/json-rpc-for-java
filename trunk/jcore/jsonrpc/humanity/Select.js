@@ -73,11 +73,12 @@
   }, /* 给对象设置value */
   setValueX:function(s, n,e)
   {
-     var descObj = this.descObj, inputObj = this.inputObj;
+     var _t = this, descObj = this.descObj, inputObj = this.inputObj, bEdit = "true" == _t.getSlctObj(_t.descObj.id)['allowEdit'];
      if(1 == n && descObj)descObj.value = s;
      else if(2 == n && inputObj)inputObj.value = s;
      else if(descObj && inputObj)
         inputObj.value = descObj.value = s;
+      if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "", _t.delInvalid(_t.descObj);
      if(e)this.preventDefault(e), this.stopPropagation(e);
      return this;
   },/* 通过value获得描述 */

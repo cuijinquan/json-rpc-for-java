@@ -390,7 +390,7 @@
            a.push(s.join(' '));
            a.push("\"");
            /* 事件 */
-           a.push(" onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
+           a.push(" onclick=\"var o = $(this).find('a');if(1 == o.size())o.click()\"  onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
            a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event)\"");
            a.push(">");
            /* 缩进的计算 */
