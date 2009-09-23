@@ -1092,6 +1092,9 @@ XuiLoading:function(o)
 	/*param:参数需要是数组,例如["aac001", "aac002"]*/
 	openBtnWin : function(url, param, width, height){
 	   var p = "", _this = this, o = null;
+	  width || (width = 950);
+	   height || (height = 760);
+	   if(param)
 	   $(param).each(function(){
 	     var value = _this.getObj(this).val();
 	     if(null != value){
