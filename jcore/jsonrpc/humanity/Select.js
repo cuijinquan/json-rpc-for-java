@@ -126,8 +126,8 @@
        if(oT['valueField'])
        { /* value处理 */
          a = (oT['valueField'] || "").split(/[,; ]/);
-         this.setValueX(dt[n][a[0]], 2, e);
          oIpt.value = (1 < a.length ? dt[n][a[1]] : dt[n][a[0]]);
+         this.setValueX(dt[n][a[0]], 2, e);
        } /* 回调处理 */
        cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
        o["_lstNum"] = n;
