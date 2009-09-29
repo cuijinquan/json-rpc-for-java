@@ -142,7 +142,7 @@
 	},/* 设置value值 */
 	setValueD: function(e)
 	{
-	   if("undefined" == typeof this.dpIpt.value || this.dpIpt.readOnly || this.dpIpt.disabled)return false;
+	   if("undefined" == typeof this.dpIpt.value || this.dpIpt.readOnly || this.dpIpt.disabled || "focus" == (window.event || {}).type)return false;
 	   var _t = this, s,o = _t.dpIpt, d =  o.value.length, nTmp;
 	   _t.fnNoInput(function(){
         if(!o.maxLength || 19 < o.maxLength)
@@ -195,7 +195,8 @@
          n++;
        }
        this.xuiCurYear.innerHTML = this.year + "\u5e74" + this.month + "\u6708";
-       /*this.setValueD(e); 防止获取焦点的时候自动填写值*/
+       /*this.setValueD(e); 防止获取焦点的时候自动填写值，但是会导致无法选择新的年月*/
+       this.setValueD(e);
        /* ie 下collection编辑列中发生焦点无法移动在不可见位置错误修正 */
 	   !this.dpIpt["xuiBlur"] && this.dpIpt.focus();
 	},addDate: function(n)

@@ -33,7 +33,7 @@
   lightRow:function(n,flg,e)
   {
     var o = this.SelectDiv, tb = this.getByTagName("table",o), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
-    if(!b || !o || -1 == o["_lstNum"])return false;
+    if(!b || !o || -1 == o["_lstNum"])return  o["_lstNum"] = 0,false;
     if(r.length > o["_lstNum"])
        r[o["_lstNum"] || 0].className='slcthand';
     if(0 > n)n = r.length - 1;
