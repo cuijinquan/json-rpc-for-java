@@ -73,7 +73,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
    if(szReqCode)Base.setValue("reqCode", szReqCode);
    $(document).ready(function()
    {
-     var obj = _t.getObj(szProperty), szId;
+     var obj = szProperty && _t.getObj(szProperty) || $(document), szId;
      obj.attr('id', szId = obj.attr('id') || szProperty);
      ("undefined" == typeof isAsync)&&(isAsync = !szDesId);
      if(!szReqCode && obj.attr('reqCode'))Base.setValue("reqCode", szReqCode = obj.attr('reqCode'));
@@ -235,7 +235,7 @@ XuiLoading:function(o)
       };
       window.open = function(s, t,p)
       {
-          var i,a = (p||"").replace(/\s/g, '').split(","), b, g = "=";
+          var i,a = (p||"").toLowerCase().replace(/\s/g, '').split(","), b, g = "=", u = s.split(/\?/);
           for(i = 0; i < a.length; i++)
           {
              b = a[i].split(g);
@@ -254,6 +254,8 @@ XuiLoading:function(o)
           }
           a.push("center=1");a.push("help=0");a.push("resizable=1");a.push("scroll=1");a.push("status=0");
           p = a.join(";").replace(/=/g, ":");
+          if(-1 == s.indexOf("jsessionid"))u[u.length - 1] += "&jsessionid=" + g_szJsessionid;
+          s = u.join("?");
           return window.showModalDialog(s, window, p);
       };
       
