@@ -139,6 +139,8 @@ public class JSONRPCServlet extends HttpServlet {
 	    if (null != this.config)
 		myInit(this.config, brg);
 	    JsonRpcRegister.registerObject(request, "_LoadJsObj", LoadJsObj.class);
+	    searchAllClass(request, JSONRPCServlet.class.getResource(szPkg).getFile());
+	    bInit = true;
 	    OutputStream out = null;
 	    // String szGzip = request.getHeader("Accept-Encoding");
 	    // if (null != szGzip && -1 < szGzip.indexOf("gzip")
@@ -184,8 +186,6 @@ public class JSONRPCServlet extends HttpServlet {
 	    out.flush();
 	    out.close();
 	    session.setAttribute(Content.RegSessionJSONRPCName, brg);
-	    searchAllClass(request, JSONRPCServlet.class.getResource(szPkg).getFile());
-	    bInit = true;
 	}
     }
 }
