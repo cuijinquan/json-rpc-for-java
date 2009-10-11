@@ -11,7 +11,7 @@
   getData:function(szId) /* 获取下拉列表数据 */
   {
     var rst = this.getSlctObj(szId)["collection"], i, s, o, k, key = "_id";
-    if((rst && 0 < rst.length && !rst[0][key]) || "" == rst[0][key].replace(/\d/g, ""))
+    if(rst && 0 < rst.length && (!rst[0][key] || "" == rst[0][key].replace(/\d/g, "")))
     {
         for(i = 0; i < rst.length; i++)
         {
@@ -69,7 +69,11 @@
       a1.push("</tr>");
     }
     a1.push("</table></div>");
-    return a1.join("")
+    var s = a1.join("");
+    this.bHvRplc = false;
+    if(0 < this.descObj.value.length)
+        s = s.replace(new RegExp("(>.*)(" + this.descObj.value + ")(.*<)", "gm"), (this.bHvRplc = true, "$1<b>$2</b>$3"));
+    return s;
   }, /* 给对象设置value */
   setValueX:function(s, n,e)
   {
@@ -151,13 +155,15 @@
   {
     if(!this.descObj)return this;
     if(0 == s.length)return this.data = null, this;
-    var n, id = this.descObj.id, b = [], c = [], a = (this.getData(id), this.getSlctObj(id)["collection"]);
+    var n, id = this.descObj.id, b = [], w = [], c = [], a = (this.getData(id), this.getSlctObj(id)["collection"]);
     if(!a || 0 == a.length)return 0;
     for(n = 0; n < a.length; n++)
       if(-1 < a[n]["_id"].indexOf(s +","))
          b.push(a[n]);
+      else  if(-1 < a[n]["_id"].indexOf(s))
+         w.push(a[n]);
       else c.push(a[n]);
-    this.data = b.concat(c);
+    this.data = b.concat(w).concat(c);
     return b.length;
   },/* 显示图层 */
   show: function()
@@ -198,9 +204,7 @@
 		       s = _t.getValueByDesc(s) || oT["allowEdit"] && s || "";
 		       _t.setValueX(s, 2, e);
 		       /* if(oIpt.getAttribute("oldValue") != s || 0 == n)_t.setValueX("", 2, e); */
-		       if(0 < n)
 		          _t.delInvalid(oIpt), _t.showSelectDiv(e, {width: o.style.width}, oIpt, _t.data);
-		       else s && !oT["allowEdit"] && _t.addInvalid(oIpt);
 	       }
 	       if(_t.isIE)
 		   {
@@ -245,6 +249,8 @@
     var b3 = (3 == arguments.length), _t = this;
     e = e || window.event;
     return this.RunOne(function(){
+       _t.data = [];
+      if(0 == _t.getData(oE.id).length)$('_Xui_SelectDiv').hide();
       if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
       var o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
         oR = this.getOffset(oE),h = oR[3], w = parseInt((obj||{}).width || $(oE.parentNode).width()),
@@ -296,6 +302,7 @@
     _t.updata(oE.value);
     o.style['height'] = Math.min(15 * _t.getData(oE.id).length, 170) + 'px';
     o.innerHTML = _t.getSelectDataStr(oE, w);
+    if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"] = 0);
     var nTm = new Date().getTime();
     _t.show();
     e && this.stopPropagation(e),this.preventDefault(e);
