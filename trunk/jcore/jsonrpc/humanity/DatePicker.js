@@ -145,7 +145,7 @@
 	   if("undefined" == typeof this.dpIpt.value || this.dpIpt.readOnly || this.dpIpt.disabled || "focus" == (window.event || {}).type)return false;
 	   var _t = this, s,o = _t.dpIpt, d =  o.value.length, nTmp;
 	   _t.fnNoInput(function(){
-        if(!o.maxLength || 19 < o.maxLength)
+        if(!o.maxLength || 23 < o.maxLength)
             o.maxLength = 10;
         if(o.value && 10 <= d)
            _t.szSfmVal =  o.value.substr(10, d - 10);
