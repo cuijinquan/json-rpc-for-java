@@ -347,7 +347,7 @@ XuiLoading:function(o)
                  else{
                      oIpt.val(s2);
                      oIpt = Base.getInputDiv(oIpt).find(":input");
-                     if(-1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
+                     if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
                         (oIpt = oIpt.prev()).val(Select.getDescByValue(s2, oIpt[0]));
                  }
               }
