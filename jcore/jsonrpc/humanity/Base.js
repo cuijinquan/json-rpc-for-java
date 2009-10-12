@@ -357,11 +357,13 @@ XuiLoading:function(o)
            }),
            setFocus:(_t.setFocus = function(s){
               var o = this;
+              $(document).ready(function(){
               if(s)o = $(_t.getObj(s));
               if(0 == o.length)o = ("#" + s);
-               if("hidden" == o.attr("type") && "INPUT" == o.prev().attr("nodeName"))
+              if("hidden" == o.attr("type") && "INPUT" == o.prev().attr("nodeName"))
                  o = o.prev();
               o.focus();
+              });
            }),
            setReadOnly:(_t.setReadOnly = function(s, b){
               var o = this, p;
