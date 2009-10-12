@@ -31,6 +31,7 @@ PopMsgWin:function(o)
              if("ok" == btn)
               {
                 if(o.field)o.field.setFocus();
+                if("undefined" != typeof g_fcsfld && g_fcsfld)g_fcsfld.setFocus(),g_fcsfld = null;
                 if(o.okScript)
                   try{if("function" == typeof o.okScript)o.okScript();else eval(o.okScript)}catch(e){};
                 setTimeout(function(){
@@ -40,6 +41,7 @@ PopMsgWin:function(o)
               else if("no" == btn)
               {
                  if(o.field)o.field.setFocus();
+                 if("undefined" != typeof g_fcsfld && g_fcsfld)g_fcsfld.setFocus(),g_fcsfld = null;
                  if(o.errScript)try{if("function" == typeof o.errScript)o.errScript();else eval(o.errScript)}catch(e){};
                  setTimeout(function(){
                     if(o.errUrl)location.href = contextPath + o.errUrl;
@@ -458,10 +460,10 @@ XuiLoading:function(o)
                 for(i = 0; i < a.length; i++)
                 {
                    oCur = $(_t.getObj(a[i]));
-                   if("true" == oCur.attr("isRequired") && !oCur.val() || -1 < (oCur.attr("class") || '').indexOf("x-form-invalid"))
+                   if("true" == oCur.attr("isRequired") && !oCur.val().trim() || -1 < (oCur.attr("class") || '').indexOf("x-form-invalid"))
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
-                      oCur.focus();
+                      g_fcsfld = oCur.attr("name") || oCur.attr("id");
                       alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text().replace(/^\s*\**/, "") + " 不能为空");
                       return false;
                    }
@@ -475,10 +477,11 @@ XuiLoading:function(o)
                  o.each(function()
                  {
                    var oCur = $(this);
-                   if("true" == oCur.attr("isRequired") && !oCur.val())
+                   if("true" == oCur.attr("isRequired") && !oCur.val().trim())
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
-                      oCur.focus();alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text().replace(/^\s*\**/, "") + "  不能为空");
+                      g_fcsfld = oCur.attr("name") || oCur.attr("id");
+                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text().replace(/^\s*\**/, "") + "  不能为空");
                       bR = false;
                       throw "stop";
                    }
