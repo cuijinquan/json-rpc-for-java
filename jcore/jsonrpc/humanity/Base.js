@@ -30,6 +30,7 @@ PopMsgWin:function(o)
            fn: function(btn){
              if("ok" == btn)
               {
+                if(o.field)o.field.setFocus();
                 if(o.okScript)
                   try{if("function" == typeof o.okScript)o.okScript();else eval(o.okScript)}catch(e){};
                 setTimeout(function(){
@@ -38,6 +39,7 @@ PopMsgWin:function(o)
               }
               else if("no" == btn)
               {
+                 if(o.field)o.field.setFocus();
                  if(o.errScript)try{if("function" == typeof o.errScript)o.errScript();else eval(o.errScript)}catch(e){};
                  setTimeout(function(){
                     if(o.errUrl)location.href = contextPath + o.errUrl;
@@ -51,10 +53,10 @@ PopMsgWin:function(o)
            },
            icon: aTp[o.type || 0]
        };
-   if(o.field)this.getObj(o.field).focus();
    if(3 == o.type)obj.value = obj.msg,obj.multiline = true,delete obj.msg;
    if(o.errUrl || o.errScript || 1 == o.type)obj.buttons = {"ok": "确定", "no": "取消"};
    Ext.MessageBox.show(obj);
+   setTimeout(function(){$("button.x-btn-text").focus()}, 1333);
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
 {
@@ -357,6 +359,8 @@ XuiLoading:function(o)
               var o = this;
               if(s)o = $(_t.getObj(s));
               if(0 == o.length)o = ("#" + s);
+               if("hidden" == o.attr("type") && "INPUT" == o.prev().attr("nodeName"))
+                 o = o.prev();
               o.focus();
            }),
            setReadOnly:(_t.setReadOnly = function(s, b){
@@ -452,7 +456,7 @@ XuiLoading:function(o)
                 for(i = 0; i < a.length; i++)
                 {
                    oCur = $(_t.getObj(a[i]));
-                   if("true" == oCur.attr("isRequired") && !oCur.val() || -1 < oCur.attr("class").indexOf("x-form-invalid"))
+                   if("true" == oCur.attr("isRequired") && !oCur.val() || -1 < (oCur.attr("class") || '').indexOf("x-form-invalid"))
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
                       oCur.focus();
