@@ -210,8 +210,11 @@
 	    if(hide){
 	      o.css("display", "none");
 	    }
+	    if(widow.event)
+	     $(document).ready(function(){
 	    var input = oTab.find("#" + szId + "_body" + " input:first");
 	    if(0 < input.length)$(input).focus();
+	    });
     },
     
     /*设置onmouse over和out的样式*/
