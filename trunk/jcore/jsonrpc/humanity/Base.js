@@ -393,21 +393,16 @@ XuiLoading:function(o)
                    o.attr("readonly", "readonly").addClass("readOnly");
               else o.removeAttr("readonly").removeClass("readOnly");
            }),
-           enabledButton:(_t.enabledButton = function(s){
-              var o = this, s1 = "x-btn-disabled", s2 = "disabled";
-              if(s)o = $("#" + s);
-             o.removeClass("z-btn-dsb");
-			 o.bind("hover");
-			 o.bind("click");
+          enabledButton:(_t.enabledButton = function(s){
+ 			 var o = this;
+             if(s)o = $("#" + s);
+             o.btn().enable();
               
            }),
            disabledButton:(_t.disabledButton = function(s){
-              var o = this, s1 = "x-btn-disabled", s2 = "disabled";
+              var o = this;
               if(s)o = $("#" + s);
-              //o = o.add(o.find("*"));
-              o.unbind();
-              o.addClass(s1);
-              o.attr(s2, s2);
+              o.btn().init().disable();
            }),
            addRedStar:(_t.addRedStar = function(s)
            {
