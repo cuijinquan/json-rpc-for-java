@@ -1,6 +1,7 @@
 {
    XuiTreeCc: [], /* cache */
    curTree: null, /* 当前激活的tree */
+   idCnt:1,
    ext: function(oSrc, oDes)
    {
       for(var k in oSrc)
@@ -258,15 +259,14 @@
         /* 高亮选中 */
         select: function(o, e)
         {
-           var s = "x-tree-selected", o = $(o);
+           var s = "x-tree-selected", o = $(o), szId;
            if(this.tree.lastSlctNd && o != this.tree.lastSlctNd)this.tree.lastSlctNd.removeClass(s);
            (this.tree.lastSlctNd = o).addClass(s);
-           this.tree.lastSlctNode = this.tree.allTreeCc[o.parent().attr("id")];
+           this.tree.lastSlctNode = this.tree.allTreeCc[szId = o.parent().attr("id")];
            e && o.find(":checkbox:first").click();
            XuiTree.curTree = this.tree;
            var oTree = $(XuiTree.curTree.tree.insertDom), nTop = oTree.attr("scrollTop"), nTp = o.offset().top, nH = oTree.attr('clientHeight');
-           
-           o[0].scrollIntoView && o[0].scrollIntoView(0 < nTop && nTp < nH || (nTop + nH) < nTp);
+           this.fnSciv($("#" + XuiTree.curTree.id)[0], o.find("a")[0]);
            return this;
         },
          /* 展开切换 */
@@ -372,7 +372,7 @@
            if(0 == this.depth)
               a.push("<ul class=\"x-tree-root-ct x-tree-lines\">");
            a.push("<li class=\"x-tree-node depth" + this.depth + "\" id=\"" + this.id + "\">");
-           a.push("<div unselectable=\"on\" class=\"");
+           a.push("<div id=\"i" + (XuiTree.idCnt++) + "\" unselectable=\"on\" class=\"");
            s.push("depth" + this.depth);
            /* 选择状态 */
            if(this.isSelected)s.push("x-tree-selected");
