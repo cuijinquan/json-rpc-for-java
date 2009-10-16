@@ -18,6 +18,14 @@ getInputDiv:function(o)
    var _t = this;
    if(o)return $(_t.p(_t.p(_t.getObj(o)[0], "DIV"), "DIV"));
    return o;
+},/* 将容器中的对象滚动到可见区域 */
+fnSciv:function(c, a, b, n)
+{
+		if("string" == typeof c)
+		c = $("#" + c)[0], a = $("#" + a)[0];
+		c.scrollTop = a.offsetTop;c.scrollTop = c.scrollTop;
+		if((b || n && 0 < --n) && "BODY" != c.nodeName)
+		  this.fnSciv(c.parentNode, c, b);
 },/* 弹出消息提示 */
 PopMsgWin:function(o)
 {
