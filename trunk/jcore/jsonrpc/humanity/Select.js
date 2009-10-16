@@ -28,9 +28,9 @@
   lightRow:function(n,flg,e)
   {
     var o = this.SelectDiv, tb = this.getByTagName("table",o), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
-    if(!b || !o || -1 == o["_lstNum"])return  o["_lstNum"] = 0,false;
+    if(!b || !o)return  false;
     if(r.length > o["_lstNum"])
-       r[o["_lstNum"] || 0].className='slcthand';
+       r[0 <= o["_lstNum"]? o["_lstNum"] : 0].className='slcthand';
     if(0 > n)n = r.length - 1;
     if(r.length <= n)n = 0;
     r[n].className='cursor slctOver'; 
@@ -164,7 +164,7 @@
   show: function()
   { 
    	 var o = this.SelectDiv, obj = this.getSlctObj(this.descObj.id);
-   	 if(null == obj.displayWidth)obj.displayWidth = o.style.width;
+   	 if(null == obj.displayWidth)obj.displayWidth = obj.clientWidth;
    	 if(0 < this.getData(this.descObj.id).length)
        this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
          parseInt(obj.displayWidth, 10), parseInt(o.style.height, 10));
