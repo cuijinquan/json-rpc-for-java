@@ -1122,6 +1122,20 @@ XuiLoading:function(o)
 	},
     showDiv: function(o, oDiv, w, h, left)
 	{
+	if(this.bIE)
+	{
+	  var nS = document.body.scrollHeight;
+	  obj = o.getBoundingClientRect();
+	  oDiv.style.left = obj.left + "px";
+	  oDiv.style.top  = obj.bottom + "px";
+	  oDiv.style.width = (w || (obj.right - obj.left)) + "px";
+	  if(h)$(oDiv).height(h);
+	  oDiv.style.position = "absolute";
+	  oDiv.style.zIndex = 10000;
+	  oDiv.style.display = 'block';
+	  if(document.body.scrollHeight > nS)oDiv.style.top = (obj.bottom - $(o).height() - $(oDiv).height()) + "px";
+	}else
+	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
 	      hs = [ document.documentElement.scrollHeight, document.documentElement.clientHeight,
 	             document.documentElement.scrollWidth, document.documentElement.clientWidth],
@@ -1132,7 +1146,6 @@ XuiLoading:function(o)
 
       if(h)p["height"] = parseInt(h, 10) + 'px'; 
       for(k in p)style[k] = p[k];
-      // $()
       style["display"] = "block";
       /* 修正显示定位 */
       style["height"] = $(oDiv).height() + "px";
@@ -1144,6 +1157,7 @@ XuiLoading:function(o)
       hs[7] = parseInt(oDiv.style.width, 10);
       if(hs[4] + hs[5] > hs[1] + document.documentElement.scrollTop + 40)oDiv.style.top = (hs[4] - hs[5] - $(o).height()) + "px";
       if(hs[6] + hs[7] > hs[3] + document.documentElement.scrollLeft)oDiv.style.left = (hs[6] - hs[7] - $(o).width()) + "px";
+      }
       this.showShadow(oDiv);
 	}	
 }
