@@ -24,12 +24,7 @@
         }
     }
     return this.data || this.getSlctObj(szId)["collection"] || []
-  },scrollIntoView: function(c, el){
-        if(!c)return this;
-        var o = $(el), a = [parseInt(c.clientHeight, 10), parseInt(o.offset().top, 10), o.height(), parseInt(c.scrollTop, 10)];
-        c.scrollTop = a[1] + a[2] - a[0];
-        c.scrollTop = c.scrollTop;
-    }, /* 高亮显示指定的行 */
+  }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
   {
     var o = this.SelectDiv, tb = this.getByTagName("table",o), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
@@ -39,7 +34,7 @@
     if(0 > n)n = r.length - 1;
     if(r.length <= n)n = 0;
     r[n].className='cursor slctOver'; 
-    if(!flg && 0 <= n && r.length > n)this.scrollIntoView(this.p(tb[0], "DIV"), r[n]);/*  r[n].scrollIntoView(true)*/
+    if(!flg && 0 <= n && r.length > n)this.fnSciv(this.SelectDiv, r[n]);
     o["_lstNum"] = n;
     if(3 == arguments.length)
       return this.stopPropagation(e),this.preventDefault(e), false;
