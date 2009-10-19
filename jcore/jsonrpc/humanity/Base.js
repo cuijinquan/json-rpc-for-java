@@ -371,8 +371,13 @@ XuiLoading:function(o)
               $(document).ready(function(){
               if(s)o = $(_t.getObj(s));
               if(0 == o.length)o = ("#" + s);
-              if("hidden" == o.attr("type") && "INPUT" == o.prev().attr("nodeName"))
-                 o = o.prev();
+              if("hidden" == o.attr("type"))
+              {
+                 if("INPUT" == o.prev().attr("nodeName"))
+                      o = o.prev();/* 对下拉树的支持 */
+              }
+              else if("DIV" == o.attr("nodeName"))
+                  o = o.find(":input:first");
               o.focus();
               });
            }),
