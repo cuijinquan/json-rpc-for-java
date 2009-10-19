@@ -346,6 +346,7 @@ XuiLoading:function(o)
               if(!s)return this;
               if(2 == arguments.length)
               {
+                 s2 || (s2 = "");
                  if("string" != typeof s2 && s2['time'])
                  {
                      var o = s2, fnT = function(n){return 10 > n? "0" + n: n};o.month++;
@@ -363,7 +364,7 @@ XuiLoading:function(o)
                         (oIpt = oIpt.prev()).val(Select.getDescByValue(s2, oIpt[0]));
                  }
               }
-              else this.val(s);
+              else this.val(s || "");
            }),
            setFocus:(_t.setFocus = function(s){
               var o = this;
