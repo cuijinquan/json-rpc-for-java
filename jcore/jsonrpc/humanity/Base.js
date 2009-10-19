@@ -815,12 +815,12 @@ XuiLoading:function(o)
    /* 给o增加class为s */
    addClass: function(s, o)
    {
-      o.className = (o.className || s).replace(new RegExp( "\\s?" + s, "g"), "") + " " + s;
+      $(o).addClass(s);
       return this;
    }, /* 去除o中s的class */
    delClass: function(s, o)
    {
-      o.className = (o.className || "").replace(new RegExp( "\\s?" + s, "g"), "");
+      $(o).removeClass(s);
       return this;
    },
   FromEventObj: function(e){return (e = e || window.event).target || e.srcElement},

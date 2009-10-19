@@ -77,7 +77,7 @@
      else if(2 == n && inputObj)inputObj.value = s;
      else if(descObj && inputObj)
         inputObj.value = descObj.value = s;
-      if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "", _t.delInvalid(_t.descObj);
+      if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "";
      if(e)this.preventDefault(e), this.stopPropagation(e);
      return this;
   },/* 通过value获得描述 */
@@ -286,11 +286,10 @@
               var bEdit = "true" == _t.getSlctObj(_t.descObj.id)['allowEdit'];
               if(!_t.inputObj.value)
               { /* 允许输入新值就将描述输入对象的值赋予它，否则就设置空值 */
-                if(bEdit) _t.inputObj.value = _t.descObj.value;
-                else _t.descObj.value = '', _t.delInvalid(_t.descObj);
+                 if(bEdit) _t.inputObj.value = _t.descObj.value;
+                else if(_t.descObj.value)_t.descObj.value = '';
               }
-              if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "", _t.delInvalid(_t.descObj);
-              
+              if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "";
               o["_blur_"]=true,_t.hiddenSelectDiv()
            });
     }
