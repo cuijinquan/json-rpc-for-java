@@ -265,8 +265,7 @@
            this.tree.lastSlctNode = this.tree.allTreeCc[szId = o.parent().attr("id")];
            e && o.find(":checkbox:first").click();
            XuiTree.curTree = this.tree;
-           var oTree = $(XuiTree.curTree.tree.insertDom), nTop = oTree.attr("scrollTop"), nTp = o.offset().top, nH = oTree.attr('clientHeight');
-           this.fnSciv($("#" + XuiTree.curTree.id)[0], o.find("a")[0]);
+           this.fnSciv($("#" + XuiTree.curTree.id).parent().parent()[0], o.find("a").parent()[0]);
            return this;
         },
          /* 展开切换 */
@@ -390,7 +389,7 @@
            a.push(s.join(' '));
            a.push("\"");
            /* 事件 */
-           a.push(" onclick=\"var o = $(this).find('A');if(1 == o.size())o.click()\"  onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
+           a.push(" onclick=\"var o = $(this).find('a');o.click()\"  onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
            a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event)\"");
            a.push(">");
            /* 缩进的计算 */
