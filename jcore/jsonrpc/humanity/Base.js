@@ -287,7 +287,7 @@ XuiLoading:function(o)
                var oCur = document.activeElement, szNdNm = oCur.nodeName, a = $("input,textarea,select,button"), i = 0, bStart = false;
                 if("BUTTON" == szNdNm)
                    $(oCur).click();
-               else if("INPUT" == szNdNm || "TEXTAREA" == szNdNm || "SELECT" == szNdNm)
+               else if("INPUT" == szNdNm || "SELECT" == szNdNm)
                {
                    for(i = 0; i <  a.length; i++)
                    {
