@@ -168,7 +168,7 @@
 		   else s = [_t.year, 9 < _t.month ? _t.month : "0" + _t.month, _t.day].join("-");
 		   if(10 == s.length && 10 < o.maxLength) s += _t.szSfmVal;
 		   o.value = s.substr(0, o.maxLength || 10);
-		   o.onchange();
+		   if(o.onchange)o.onchange();
 	   }
 	   });
 	},
