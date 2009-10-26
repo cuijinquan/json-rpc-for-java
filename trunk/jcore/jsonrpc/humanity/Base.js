@@ -378,7 +378,7 @@ XuiLoading:function(o)
               }
               else if("DIV" == o.attr("nodeName"))
                   o = o.find(":input:first");
-              g_fcsfld = o[0];
+              window.g_fcsfld = o.attr("name") || o.attr("id");
               o.focus();
               });
            }),
@@ -473,7 +473,7 @@ XuiLoading:function(o)
                    if("true" == oCur.attr("isRequired") && !oCur.val().trim() || -1 < (oCur.attr("class") || '').indexOf("x-form-invalid"))
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
-                      g_fcsfld = oCur.attr("name") || oCur.attr("id");
+                      window.g_fcsfld = oCur.attr("name") || oCur.attr("id");
                       alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text().replace(/^\s*\**/, "") + " 不能为空");
                       return false;
                    }
