@@ -378,6 +378,7 @@ XuiLoading:function(o)
               }
               else if("DIV" == o.attr("nodeName"))
                   o = o.find(":input:first");
+              g_fcsfld = o[0];
               o.focus();
               });
            }),
