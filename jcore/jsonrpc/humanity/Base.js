@@ -417,7 +417,7 @@ XuiLoading:function(o)
            disabledButton:(_t.disabledButton = function(s){
               var o = this;
               if(s)o = $("#" + s);
-              o.btn().init().disable();
+              o.btn().disable();
            }),
            addRedStar:(_t.addRedStar = function(s)
            {
