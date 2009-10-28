@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -66,6 +67,40 @@ public class Tools {
 			throw new IOException("Could not find resource " + resource);
 		return url;
 	}
+	
+	 private static final char c[] = { '<', '>', '&', '\"'};
+	 private static final String expansion[] = {"&lt;", "&gt;", "&amp;", "&quot;"};
+	 /**
+	  * 将串中的 <, >, &, " 编码为html的表示方式
+	  * @param s
+	  * @return
+	  */
+	public static String HTMLEncode(String s) {
+	      StringBuffer st = new StringBuffer();
+	      for (int i = 0; i < s.length(); i++) {
+	          boolean copy = true;
+	          char ch = s.charAt(i);
+	          for (int j = 0; j < c.length ; j++) {
+	            if (c[j]==ch) {
+	                st.append(expansion[j]);
+	                copy = false;
+	                break;
+	            }
+	          }
+	          if (copy) st.append(ch);
+	      }
+	      return st.toString();
+	    }
+	
+	/**
+	 * html方式的解码
+	 * @param s
+	 * @return
+	 */
+	public static String HTMLDecode(String s) {
+		  if(null == s || 0 == (s = s.trim()).length())return s;
+	      return s.replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&quot;", "\"");
+	    }
 
 	/***************************************************************************
 	 * 解码html方式编码的中文汉字 ，例如将： "&#24322;&#24120;" 解码为 "异常"
@@ -76,8 +111,14 @@ public class Tools {
 	 */
 	public static String decodeUnicodeHtm(String szStr) {
 		Pattern p = Pattern.compile("&#(\\d+);", Pattern.MULTILINE);
-		Matcher m = p.matcher(java.net.URLDecoder.decode(szStr));
+		Matcher m = null;
+		try {
+			m = p.matcher(java.net.URLDecoder.decode(szStr, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		StringBuffer buf = new StringBuffer();
+		if(null != m)
 		while (m.find())
 			m.appendReplacement(buf, (char) Integer.valueOf(m.group(1))
 					.intValue()
@@ -101,6 +142,44 @@ public class Tools {
 		StringBuffer buf = new StringBuffer();
 		while (m.find())
 			m.appendReplacement(buf, "&#" + (int) m.group(0).toCharArray()[0] + ";");
+		m.appendTail(buf);
+		return buf.toString();
+	}
+	
+	/**
+	 * 将s中的汉字转换为\u4E00-\u9FA5这样的形式
+	 * @param s
+	 * @return
+	 */
+	public static String encodeUnicode2Js(String s)
+	{
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0, j = s.length(); i < j; i++)
+		{
+			int n = (int)s.charAt(i);
+			if(0x4E00 <= n && n <= 0x9FA5)
+			   buf.append("\\u" + Integer.toHexString(n));
+			else buf.append((char)n);
+		}
+		return buf.toString();
+	}
+	
+	/**
+	 * 将s中的汉字转换为\u4E00-\u9FA5这样的形式
+	 * @param s
+	 * @return
+	 */
+	public static String decodeUnicode4Js(String szStr)
+	{
+		if (null == szStr || 0 == szStr.trim().length())
+			return szStr;
+		Pattern p = Pattern.compile("\\u([0-9A-Fa-f])", Pattern.MULTILINE);
+		Matcher m = p.matcher(szStr);
+		StringBuffer buf = new StringBuffer();
+		while (m.find())
+		{
+			m.appendReplacement(buf, "" + (char)Integer.parseInt( m.group(0), 16));
+		}
 		m.appendTail(buf);
 		return buf.toString();
 	}

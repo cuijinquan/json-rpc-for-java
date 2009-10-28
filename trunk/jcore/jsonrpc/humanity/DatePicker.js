@@ -412,7 +412,13 @@
                 /* 分、秒第一位 */
                 || ((14 == x || 17 == x) && 48 <= n && n <= 53)
               )
-             return true;
+              {
+                 /*var okvl = (oIpt['okvl'] || "") + String.fromCharCode(n); 
+                  oIpt['okvl'] = okvl;
+                  oIpt.value = okvl + oIpt.value.substr(okvl.length); 
+                  $(oIpt).selection(okvl.length, oIpt.value.length);*/
+                 return true;
+             }
            _t.stopPropagation(e),_t.preventDefault(e);
            return false;
      }
@@ -465,7 +471,7 @@
 	    this.bBoBq = true;
 	    this.event = e = e || window.event;
 	    e && (this.stopPropagation(e),this.preventDefault(e));
-	    var _t = this;
+	    var _t = this;$(o).selection(0, o.value.length);
 	      o = _t.dpIpt = (o || _t.FromEventObj(e))
 	    if(o.readOnly || o.disabled || "undefined" == typeof o.value)return false;
 		  var bFirst = !_t.XuiDatePicker, s = (o['value'] || "").trim(),
