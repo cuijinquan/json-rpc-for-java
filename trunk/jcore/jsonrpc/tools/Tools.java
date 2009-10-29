@@ -114,8 +114,8 @@ public class Tools {
 		Matcher m = null;
 		try {
 			m = p.matcher(java.net.URLDecoder.decode(szStr, "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			return szStr;
 		}
 		StringBuffer buf = new StringBuffer();
 		if(null != m)
