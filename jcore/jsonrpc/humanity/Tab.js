@@ -15,6 +15,7 @@
     TabsInit:function(id, active){
        XUI(this);
        var i = 1, tabs = this.initWidth(id)[0], _t = this;
+       if(!tabs)return this;
        tabs.headers = {};
        $("#" + id + " span.x-tab-strip-text").each(function(){
           var o = $(this), p = o.parent(), w = p.width(), li=_t.p(o[0], "LI");
