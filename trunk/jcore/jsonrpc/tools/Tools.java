@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -157,7 +156,8 @@ public class Tools {
 		for(int i = 0, j = s.length(); i < j; i++)
 		{
 			int n = (int)s.charAt(i);
-			if(0x4E00 <= n && n <= 0x9FA5)
+			// if(0x4E00 <= n && n <= 0x9FA5)
+			if(255 < n && n <= 0)
 			   buf.append("\\u" + Integer.toHexString(n));
 			else buf.append((char)n);
 		}
@@ -173,7 +173,7 @@ public class Tools {
 	{
 		if (null == szStr || 0 == szStr.trim().length())
 			return szStr;
-		Pattern p = Pattern.compile("\\u([0-9A-Fa-f])", Pattern.MULTILINE);
+		Pattern p = Pattern.compile("\\\\u([0-9A-Fa-f])", Pattern.MULTILINE);
 		Matcher m = p.matcher(szStr);
 		StringBuffer buf = new StringBuffer();
 		while (m.find())
