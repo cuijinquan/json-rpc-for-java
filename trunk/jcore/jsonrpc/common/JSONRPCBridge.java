@@ -282,6 +282,7 @@ public class JSONRPCBridge implements Serializable{
 					if(szMeshod.equals(m[i].getName()) && oParams.length() == m[i].getParameterTypes().length)
 					{
 						try {
+							boolean bCnt = false;
 							// 构造参数
 							Object []aParam = new Object[oParams.length()];
 							// 函数参数类型
@@ -291,8 +292,14 @@ public class JSONRPCBridge implements Serializable{
 							{
 								// 如果类型不匹配，就进行一系列转换
 								// 将整数向日期进行转换
+								if(-1 == oParams.get(j).getClass().getName().toLowerCase().indexOf(m[i].getParameterTypes()[j].getName().toLowerCase()))
+								{
+									bCnt = true;
+									break;
+								}
 								aParam[j] = Tools.convertObject(oTyps[j], aParam[j] = oParams.get(j));
 							}
+							if(bCnt)continue;
 							oTyps = null;
 							oParams = null;
 							Object oRst = null;
