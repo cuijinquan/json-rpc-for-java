@@ -308,32 +308,31 @@ public class Tools {
 		// 将整数向日期进行转换
 		if (null != oValue && !szNm.equals(oValue.getClass().getName())
 				&& null != oValue) {
-			String s = oValue.toString().trim(), szTmp01 = s.replaceAll(
-					"[^\\d\\.\\-]", "");
+			String s = oValue.toString().trim();// , szTmp01 = s.replaceAll("[^\\d\\.\\-]", "");
 			// 支持的参数类型、复合类型对象传入的处理
 			// 防止无效的值在强制转换中发生异常
 			try {
 				if (szNm.equals("java.util.Date"))
-					return new Date(Long.parseLong(szTmp01));
+					return new Date(Long.parseLong(s));
 				else if (szNm.equals("java.math.BigDecimal"))
-					return new BigDecimal(szTmp01);
+					return new BigDecimal(s);
 				else if (szNm.equals("boolean")
 						|| szNm.equals("java.lang.Boolean"))
-					return new Boolean(szTmp01);
+					return new Boolean(s);
 				else if (szNm.equals("char")
 						|| szNm.equals("java.lang.Character"))
 					return new Character(s.charAt(0));
 				else if (szNm.equals("float") || szNm.equals("java.lang.Float"))
-					return new Float(szTmp01);
+					return new Float(s);
 				else if (szNm.equals("java.lang.Short"))
-					return new Short(szTmp01);
+					return new Short(s);
 				else if (szNm.equals("int") || szNm.equals("java.lang.Integer"))
-					return new Integer(szTmp01);
+					return new Integer(s);
 				else if (szNm.equals("long") || szNm.equals("java.lang.Long"))
-					return new Long(szTmp01);
+					return new Long(s);
 				else if (szNm.equals("double")
 						|| szNm.equals("java.lang.Double"))
-					return new Double(szTmp01);
+					return new Double(s);
 				else if (szNm.equals("java.lang.String")) {
 					return s;
 				} else {
