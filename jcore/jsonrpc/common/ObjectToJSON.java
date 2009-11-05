@@ -41,7 +41,7 @@ public class ObjectToJSON implements Serializable{
 	 * @param string
 	 * @return
 	 */
-	private static String quote(String string) {
+	private static String quote(String string, boolean bJh) {
 	        if (null == string || 0 == string.length()) 
 	            return "\"\"";
 
@@ -78,8 +78,13 @@ public class ObjectToJSON implements Serializable{
 	                break;
 	            default:
 	                if (c < ' ' || c >= 128) {
-	                    t = "000" + Integer.toHexString(c);
-	                    sb.append("\\u" + t.substring(t.length() - 4));
+	                	if(bJh)
+	                		sb.append(c);
+	                	else
+	                	{
+		                    t = "000" + Integer.toHexString(c);
+		                    sb.append("\\u" + t.substring(t.length() - 4));
+	                	}
 	                } else {
 	                    sb.append(c);
 	                }
@@ -89,7 +94,18 @@ public class ObjectToJSON implements Serializable{
 	        return sb.toString();
 	}
 	
+	private boolean bJh = false;
 	
+	public ObjectToJSON setBJh(boolean b)
+	{
+		bJh = b;
+		return this;
+	}
+	public String toJSON()
+	{
+		bJh = true;
+		return toJSON(null);
+	}
 	/***************************************************************************
 	 * 返回对象的JSON格式
 	 */
@@ -110,9 +126,9 @@ public class ObjectToJSON implements Serializable{
 			
 			// 特殊对象的处理
 			if(szClassName.equals("java.lang.String"))
-				return buf.append(quote(o.toString())).toString();
+				return buf.append(quote(o.toString(), bJh)).toString();
 			else if(szClassName.equals("java.lang.Object"))
-				return buf.append(quote(o.toString())).toString();
+				return buf.append(quote(o.toString(), bJh)).toString();
 			else if(szClassName.equals("java.util.Date") || szClassName.equals("java.sql.Timestamp"))
 			{
 				Date oDate = (Date)o;
@@ -160,7 +176,7 @@ public class ObjectToJSON implements Serializable{
 					{
 						if(0 < i)
 							buf.append(",");
-						buf.append("\"").append(entry.getKey()).append("\":").append(new ObjectToJSON(entry.getValue(), brige).toJSON(null));
+						buf.append("\"").append(entry.getKey()).append("\":").append(new ObjectToJSON(entry.getValue(), brige).setBJh(bJh).toJSON(null));
 						i++;
 					}
 				}
@@ -169,8 +185,11 @@ public class ObjectToJSON implements Serializable{
 					if(1 < buf.length())buf.append(",");
 				    buf.append("_name_:\"").append(szObjName).append("\"");
 				}
+				if(!bJh)
+				{
 				if(1 < buf.length())buf.append(",");
-				buf.append("\"_id_\":\"").append(this.o.hashCode()).append("\"");
+				buf.append("_id_:").append(this.o.hashCode());
+				}
 				return "{" + buf.append("}").toString();
 			}
 			// 接口是List
@@ -183,7 +202,7 @@ public class ObjectToJSON implements Serializable{
 					{
 						if(0 < x)
 							buf.append(",");
-						buf.append(new ObjectToJSON(lst.get(i), brige).toJSON(null));
+						buf.append(new ObjectToJSON(lst.get(i), brige).setBJh(bJh).toJSON(null));
 						x++;
 					}
 				}
@@ -197,11 +216,11 @@ public class ObjectToJSON implements Serializable{
     	    	if(0 < tmp09.length)
     	    	{
     	    		if(null != tmp09[0])
-    	    	    buf.append(new ObjectToJSON(tmp09[0], brige).toJSON(null));
+    	    	    buf.append(new ObjectToJSON(tmp09[0], brige).setBJh(bJh).toJSON(null));
 	    	    	for(int j = 1; j < tmp09.length; j++)
 	    	    	{
 	    	    		if(null != tmp09[j])
-	    	    			buf.append(",").append(new ObjectToJSON(tmp09[j], brige).toJSON(null));
+	    	    			buf.append(",").append(new ObjectToJSON(tmp09[j], brige).setBJh(bJh).toJSON(null));
 	    	    	}
     	    	}
     	    	return "[" + buf.append("]").toString();
@@ -227,7 +246,7 @@ public class ObjectToJSON implements Serializable{
 			Method []oMs = c.getMethods();
 			// 可能在应用中需要过滤，不将这些方法输出：
 			// "main","getClass","wait","wait","wait","equals","toString","notify","notifyAll"
-			if(0 < oMs.length)
+			if(!bJh && 0 < oMs.length)
 			{
 				buf.append("\"methods\":[");
 				String szFlt = "(notifyAll)|(getClass)|(wait)|(wait)|(equals)|(notify)|(main)|(hashCode)|(toString)";
@@ -364,11 +383,11 @@ public class ObjectToJSON implements Serializable{
 					    	    	if(0 < tmp09.length)
 					    	    	{
 					    	    		if(null != tmp09[0])
-					    	    		buf.append(new ObjectToJSON(tmp09[0], brige).toJSON(null));
+					    	    		buf.append(new ObjectToJSON(tmp09[0], brige).setBJh(bJh).toJSON(null));
 						    	    	for(int j = 1; j < tmp09.length; j++)
 						    	    	{
 						    	    		if(null != tmp09[j])
-						    	    		buf.append(",").append(new ObjectToJSON(tmp09[j], brige).toJSON(null));
+						    	    		buf.append(",").append(new ObjectToJSON(tmp09[j], brige).setBJh(bJh).toJSON(null));
 						    	    	}
 					    	    	}
 					    	    	break;
@@ -392,7 +411,7 @@ public class ObjectToJSON implements Serializable{
 						    	if("sun.reflect.ReflectionFactory".equals(oValue.getClass().getName()))
 						    		buf.append("null");
 						    	else
-						    		buf.append(new ObjectToJSON(oValue, brige).toJSON(null));
+						    		buf.append(new ObjectToJSON(oValue, brige).setBJh(bJh).toJSON(null));
 						    }
 					    }
 				    }
@@ -408,8 +427,11 @@ public class ObjectToJSON implements Serializable{
 			if(1 < buf.length())buf.append(",");
 		    buf.append("_name_:\"").append(szObjName).append("\"");
 		}
+		if(!bJh)
+		{
 		if(1 < buf.length())buf.append(",");
 		buf.append("\"_id_\":\"").append(this.o.hashCode()).append("\"");
+		}
 		return "{" + buf.append("}").toString();
 	}
 
