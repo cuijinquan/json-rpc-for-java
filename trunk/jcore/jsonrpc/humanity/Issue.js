@@ -43,7 +43,14 @@
       if(0 < length && o.maxLength != length){
         Base.addInvalid(o);
         alert("输入期号不完整！");
-      }else{
+      }else if (o.max && o.value > o.max){
+        Base.addInvalid(o);
+        alert("输入期号不能大于" + o.max);
+      } else if (o.min && o.value < o.min){
+        Base.addInvalid(o);
+        alert("输入期号不能小于" + o.min);
+      }
+      else{
         Base.delInvalid(o);
       }
     },
