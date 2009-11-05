@@ -8,6 +8,8 @@
            if(1 < arg.length){
              integralNum = arg[1][0] || integralNum, decimalNum = arg[1][1] || decimalNum;
              if(2 < arg[1].length){
+               if (0 == arg[1][2]) max = 0;
+               if (0 == arg[1][3]) min = 0; 
                max = arg[1][2] || max, min = arg[1][3] || min;
              }
            }
