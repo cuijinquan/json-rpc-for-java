@@ -23,7 +23,7 @@
     },
     checkPaste : function(evt){
       var e = (evt || event || window.event),o = e.srcElement || e.target,
-      data = this.getData(), s = Issue.getContent(o, data),reg = Issue.getRegStr(s);
+      data = Issue.getData(), s = Issue.getContent(o, data),reg = Issue.getRegStr(s);
       o.reg = eval(reg + ";");
       isReg = Issue.regcheck(o, o.reg, data);
       if(!isReg && e.preventDefault) e.preventDefault();
