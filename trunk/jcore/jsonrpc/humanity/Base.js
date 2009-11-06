@@ -332,7 +332,7 @@ XuiLoading:function(o)
         window.mkClctDt = function(){
                var a = window.mkClct || [], i,o;
                for(i = a.length; 0 <= --i;)
-                   if(o = a[i].swf())o.mkSubmit();
+                   if((o = a[i].swf()) && "function" == typeof o.mkSubmit)o.mkSubmit();
            };
         jQuery.fn.extend({
            getValue:(_t.getValue = function(s){
