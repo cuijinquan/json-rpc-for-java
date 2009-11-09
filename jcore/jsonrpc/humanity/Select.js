@@ -11,7 +11,7 @@
   getData:function(szId) /* 获取下拉列表数据 */
   {
     var rst = this.getSlctObj(szId)["collection"], i, s, o, k, key = "_id";
-    if(rst && 0 < rst.length && (!rst[0][key] || "" == rst[0][key].replace(/\d/g, "")))
+    if(rst && 0 < rst.length && rst[0] && (!rst[0][key] || "" == rst[0][key].replace(/\d/g, "")))
     {
         for(i = 0; i < rst.length; i++)
         {
@@ -67,7 +67,7 @@
     var s = a1.join("");
     this.bHvRplc = false;
     if(0 < this.descObj.value.length)
-        s = s.replace(new RegExp("(>.*)(" + this.descObj.value + ")(.*<)", "gm"), (this.bHvRplc = true, "$1<b>$2</b>$3"));
+        s = s.replace(new RegExp("(>[^><]*)(" + this.descObj.value.replace(/([()\|\$\.\\])/g, "\\\1") + ")([^><]*<)", "gm"), (this.bHvRplc = true, "$1<b>$2</b>$3"));
     return s;
   }, /* 给对象设置value */
   setValueX:function(s, n,e)
@@ -103,14 +103,14 @@
          if(b2)
 	     for(i = 0; i < a.length; i++)
 	     {
-	        if(s == a[i][b[1]])
+	        if(a[i] && s == a[i][b[1]])
 	          return a[i][b[0]];
 	     }
 	     for(i = 0; i < a.length; i++)
 	     {
-	        if(-1 < a[i][b[0]].indexOf(s))
+	        if(a[i] && a[i][b[0]] && -1 < String(a[i][b[0]]).indexOf(s))
 	          return a[i][b[0]];
-	     }	     
+	     }
      }
      return null;
   }, /* 选择的处理 */
@@ -153,11 +153,12 @@
     var n, id = this.descObj.id, b = [], w = [], c = [], a = (this.getData(id), this.getSlctObj(id)["collection"]);
     if(!a || 0 == a.length)return 0;
     for(n = 0; n < a.length; n++)
-      if(-1 < a[n]["_id"].indexOf(s +","))
+      if(a[n]){
+      if(a[n]["_id"] && -1 < a[n]["_id"].indexOf(s +","))
          b.push(a[n]);
-      else  if(-1 < a[n]["_id"].indexOf(s))
+      else  if(a[n]["_id"] && -1 < a[n]["_id"].indexOf(s))
          w.push(a[n]);
-      else c.push(a[n]);
+      else c.push(a[n]);}
     this.data = b.concat(w).concat(c);
     return b.length;
   },/* 显示图层 */
