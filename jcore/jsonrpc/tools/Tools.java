@@ -422,6 +422,7 @@ public class Tools {
      */
     public static String getPYChar(String c)
     {
+    	    if(null == c || 0 == c.trim().length())return c;
             byte[] array = new byte[2];
             array = String.valueOf(c).getBytes();
             int i = (short)(array[0] - '\0' + 256) * 256 + ((short)(array[1] - '\0' + 256));
