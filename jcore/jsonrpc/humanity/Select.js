@@ -100,12 +100,13 @@
      /* 指定了两个字段:value，和描述字段 */
      if(oT['valueField'])
      {
-         if(b2)
+         if(b2 && a)
 	     for(i = 0; i < a.length; i++)
 	     {
 	        if(a[i] && s == a[i][b[1]])
 	          return a[i][b[0]];
 	     }
+	     if(a)
 	     for(i = 0; i < a.length; i++)
 	     {
 	        if(a[i] && a[i][b[0]] && -1 < String(a[i][b[0]]).indexOf(s))
