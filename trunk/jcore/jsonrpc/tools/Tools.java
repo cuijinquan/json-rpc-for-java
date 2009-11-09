@@ -425,6 +425,7 @@ public class Tools {
     	    if(null == c || 0 == c.trim().length())return c;
             byte[] array = new byte[2];
             array = String.valueOf(c).getBytes();
+            if(2 > array.length)return c;
             int i = (short)(array[0] - '\0' + 256) * 256 + ((short)(array[1] - '\0' + 256));
             if ( i < 0xB0A1) return "*";
             if ( i < 0xB0C5) return "a";
