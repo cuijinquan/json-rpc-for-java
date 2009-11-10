@@ -112,7 +112,7 @@ public class Tools {
 		Pattern p = Pattern.compile("&#(\\d+);", Pattern.MULTILINE);
 		Matcher m = null;
 		try {
-			m = p.matcher(java.net.URLDecoder.decode(szStr, "UTF-8"));
+			m = p.matcher(java.net.URLDecoder.decode(HTMLDecode(szStr), "UTF-8"));
 		} catch (Exception e) {
 			return szStr;
 		}
