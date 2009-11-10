@@ -5,11 +5,12 @@
         return this.doFun(function(){
            var arg = Digit.check.arguments, o = Digit.check.arguments[0],
            integralNum=18, decimalNum=0, max =999999999999, min=-999999999999;
+           if (o.register) return;
            if(1 < arg.length){
              integralNum = arg[1][0] || integralNum, decimalNum = arg[1][1] || decimalNum;
              if(2 < arg[1].length){
                if (0 == arg[1][2]) max = 0;
-               if (0 == arg[1][3]) min = 0; 
+               if (0 == arg[1][3]) min = 0;
                max = arg[1][2] || max, min = arg[1][3] || min;
              }
            }
@@ -21,11 +22,11 @@
            if(0 < decimalNum) reg += "(\\.\\d{0," + decimalNum + "})?";
            reg += "$/";
            o.reg = eval(reg + ";"), o.max = max, o.min = min, o.mylen = 3;
-           Digit.addEvent(o, "paste", this.str_onpaste);
-           Digit.addEvent(o, "drop", this.sz_ondrop);
+           //Digit.addEvent(o, "paste", this.str_onpaste);
+           //Digit.addEvent(o, "drop", this.sz_ondrop);
            Digit.addEvent(o, "keypress", this.sz_onkeypress);
-           Digit.addEvent(o, "blur", this.sz_onblur);
-           
+           Digit.addEvent(o, "blur", this.sz_onblur.bind(this));
+           o.register = true;
         });
       }catch(e){alert(e.message)}
     },
@@ -54,9 +55,14 @@
       } 
       return isReg;
     },
-    
+    fnNoInput:function(fn){
+	  var _t = this;
+	   _t.bBoBq = true;fn();setTimeout(function(){_t.bBoBq = false},13);
+	},
     sz_onblur : function(evt){
-      var e = (evt || event || window.event),o = e.srcElement || e.target;
+      var e = (evt || event || window.event),o = e.srcElement || e.target, _t = this;
+      if(_t.bBoBq)return false;
+      _t.fnNoInput(function(){
       if (o.reg.test(o.value)){
         if ("" == o.value || 
 		    ("false" == o.isRequired && "" == o.value) || 
@@ -66,8 +72,10 @@
 		}
       }
       Base.addInvalid(o);
-      setTimeout(function(){o.focus(),o.select();},1);
-      alert("输入值必须在[" + o.min + " - " + o.max + "]之间,并且小数点位数正确");
+      o.name.setFocus();
+      // setTimeout(function(){o.focus(),o.select();},1);
+      alert("\u8f93\u5165\u503c\u5fc5\u987b\u5728[" + o.min + " - " + o.max + "]\u4e4b\u95f4,\u5e76\u4e14\u5c0f\u6570\u70b9\u4f4d\u6570\u6b63\u786e");
+      });
     },
     
     regInput : function(obj, reg, inputStr){
@@ -102,11 +110,12 @@
       }catch(e){alert(e.message);}
     },
     
+    //防止正在执行的函数被重复执行
     doFun : function(fn){
-      if(this.executed)return false;
-      this.executed = true;
+      if(Digit.executed)return false;
+      Digit.executed = true;
       fn.apply(this);
-      this.executed = false;
+      Digit.executed = false;
     },
     
     addEvent : function(o, type, fn){
