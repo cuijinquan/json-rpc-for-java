@@ -11,7 +11,9 @@
 	      return false;
         }
       }
-      input.value = Utils.trim(input.value).replace(/[^\dX]/g,"");
+      input.value = Utils.trim(input.value).replace(/[^\dXx]/g,"");
+      if (input.value && 'x' == input.value.substr(input.value.length-1,1))
+      	 input.value = input.value.toUpperCase();
       if(true == empty && Utils.isStrEmpty(input.value)){
         Base.delInvalid(input);
         return true;
