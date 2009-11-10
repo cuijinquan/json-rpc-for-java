@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URL;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -139,7 +140,8 @@ public class JSONRPCServlet extends HttpServlet {
 	    if (null != this.config)
 		myInit(this.config, brg);
 	    JsonRpcRegister.registerObject(request, "_LoadJsObj", LoadJsObj.class);
-	    searchAllClass(request, JSONRPCServlet.class.getResource(szPkg).getFile());
+	    URL url = JSONRPCServlet.class.getResource(szPkg);
+	    if(null != url)searchAllClass(request, url.getFile());
 	    bInit = true;
 	    OutputStream out = null;
 	    // String szGzip = request.getHeader("Accept-Encoding");

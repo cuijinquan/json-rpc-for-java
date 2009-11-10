@@ -281,11 +281,9 @@
         case 9:
                return true;
         case 83: /* ctrl + s */
+           _t.stopPropagation(e),_t.preventDefault(e);
            if(e.ctrlKey)
-           {
-             _t.stopPropagation(e),_t.preventDefault(e);
              return _t.showXuiSlctMY(),false;
-           }
            return false;
            break;       
         /*Esc 关闭图层*/
