@@ -130,12 +130,7 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
            script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
            script = script.replace(/\/\/--><!\]\]>\s*$/, "");
         }
-        if(!destId)
-        {
-          s = s.replace(/^\s*<div[^>]*>/gmi, "");
-          s = s.substr(0, s.lastIndexOf("</div>"));
-        }
-        if(s && -1 < s.indexOf("<div"))o.innerHTML = s;
+        if(o && s)$(o).replaceWith(s);
         try{script && eval(script)}catch(e){alert("异步调用错误:执行返回的脚本出错" + ",错误消息是:" + e.message);}
      }});
    });
