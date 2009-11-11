@@ -89,31 +89,20 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
      obj.attr('id', szId = obj.attr('id') || szProperty);
      ("undefined" == typeof isAsync)&&(isAsync = !szDesId);
      if(!szReqCode && obj.attr('reqCode'))Base.setValue("reqCode", szReqCode = obj.attr('reqCode'));
-     _t.updateUi({url:szUrl,bAsync: isAsync,postData:[_t.getAllInput(szData)],data:[[szDesId || szId,1,""]],fn:function(s){
-        
-        var o = null; 
-        if(0 < obj.length)
-          o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
-        var script = "", n = s.indexOf("<script");
-        if(-1 < n)
+    if(-1 < n)
         {
            script = s.substr(n);
            script = script.substr(0, script.lastIndexOf("</" + "script>"));
            script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
            script = script.replace(/\/\/--><!\]\]>\s*$/, "");
         }
-        if(!szDesId)
-        {
-          s = s.replace(/^\s*<div[^>]*>/gmi, "");
-          s = s.substr(0, s.lastIndexOf("</div>"));
-        }
         try{
           script && ((false == isAsync)&& eval(script) || setTimeout(function(){eval(script)}, 777));
         }catch(e){
           alert("\u5f02\u6b65\u8c03\u7528\u9519\u8bef:\u6267\u884c\u8fd4\u56de\u7684\u811a\u672c\u51fa\u9519" + ",\u9519\u8bef\u6d88\u606f\u662f:" + e.message);
-        }
+        }        
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
-          if(o && s && -1 < s.indexOf("<div")){o[0].innerHTML = s;}
+          if(o && s)o.replaceWith(s);
         }
      }});
    });
