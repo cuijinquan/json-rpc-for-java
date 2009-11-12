@@ -109,7 +109,6 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
           if(o && s)o.replaceWith(s);/* 这样可以解决grid、label异步变色的问题，但是会发生浏览器错误 if(o && s && -1 < s.indexOf("<div")){o[0].innerHTML = s;}*/
         }
-     }});
    });
    if(false == isAsync){return (Base.PopMsgWin.obj||{}).type;}
 },
