@@ -297,7 +297,7 @@
            });
     }
     _t.updata(oE.value);
-    i(_t.getData(oE.id).length)
+    if(_t.getData(oE.id).length)
         o.style['height'] = Math.min(15 * _t.getData(oE.id).length, 170) + 'px';
     o.innerHTML = _t.getSelectDataStr(oE, w);
     if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"] = 0);
