@@ -89,7 +89,12 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
      obj.attr('id', szId = obj.attr('id') || szProperty);
      ("undefined" == typeof isAsync)&&(isAsync = !szDesId);
      if(!szReqCode && obj.attr('reqCode'))Base.setValue("reqCode", szReqCode = obj.attr('reqCode'));
-    if(-1 < n)
+     _t.updateUi({url:szUrl,bAsync: isAsync,postData:[_t.getAllInput(szData)],data:[[szDesId || szId,1,""]],fn:function(s){
+        var o = null; 
+        if(0 < obj.length)
+          o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
+        var script = "", n = s.indexOf("<script");
+        if(-1 < n) 
         {
            script = s.substr(n);
            script = script.substr(0, script.lastIndexOf("</" + "script>"));
@@ -109,7 +114,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
           if(o && s)o.replaceWith(s);/* 这样可以解决grid、label异步变色的问题，但是会发生浏览器错误 if(o && s && -1 < s.indexOf("<div")){o[0].innerHTML = s;}*/
         }
-   });
+    }});
+   }); 
    if(false == isAsync){return (Base.PopMsgWin.obj||{}).type;}
 },
 /*控制是否异步执行的简便方法， id:需要异步刷新的id，isAsync:是否异步标志,true为异步,false为同步*/
