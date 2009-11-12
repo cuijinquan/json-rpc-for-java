@@ -314,6 +314,7 @@ XuiLoading:function(o)
         _t.isNS6 = _t.isW3C && "Netscape" == navigator.appName;
         window.getAllInput = _t.getAllInput;
         window.mkClctDt = function(){
+               $("#_Xui_SelectDiv").hide();
                var a = window.mkClct || [], i,o;
                for(i = a.length; 0 <= --i;)
                    if((o = a[i].swf()) && "function" == typeof o.mkSubmit)o.mkSubmit();
