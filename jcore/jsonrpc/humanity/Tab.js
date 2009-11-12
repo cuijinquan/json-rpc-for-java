@@ -211,7 +211,7 @@
 	    if(hide){
 	      o.css("display", "none");
 	    }
-	    if(widow.event)
+	    if(window.event)
 	     $(document).ready(function(){
 	    var input = oTab.find("#" + szId + "_body" + " input:first");
 	    if(0 < input.length)$(input).focus();
