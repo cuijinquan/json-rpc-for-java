@@ -87,13 +87,14 @@
       date = year+"-"+month+"-"+day;
       if(Utils.isNotNull(birthday)) birthday.value = date;
       if(Utils.isNotNull(sex)){ 
-        if (input.value.substr(16,1)%2==1){
+        if (input.value.substr(14,1)%2==1){
           this.setDescByValue(sex, "1");
 	    }  
-	    if (input.value.substr(16,1)%2==0){
+	    if (input.value.substr(14,1)%2==0){
 	      this.setDescByValue(sex, "2");
 	    }
-      } 
+      }
+       
       input.value = IdCard.upgrade(input.value);    
       Base.delInvalid(input);
       return true;
