@@ -85,6 +85,7 @@
       o || (o = this.descObj)
       var obj = slctIptData[o.id],a = obj.valueField.split(/[,;\|\s]/), d = a[a.length - 1], i, v = a[0];
       a = obj.collection;
+      if(a)
       for(i = a.length; 0 <= --i;)
       {
           if(a[i][v] == s)
@@ -296,7 +297,8 @@
            });
     }
     _t.updata(oE.value);
-    o.style['height'] = Math.min(15 * _t.getData(oE.id).length, 170) + 'px';
+    i(_t.getData(oE.id).length)
+        o.style['height'] = Math.min(15 * _t.getData(oE.id).length, 170) + 'px';
     o.innerHTML = _t.getSelectDataStr(oE, w);
     if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"] = 0);
     var nTm = new Date().getTime();
