@@ -29,6 +29,7 @@ fnSciv:function(c, a, b, n)
 },/* 弹出消息提示 */
 PopMsgWin:function(o)
 {
+   if(!o)return false;
    Base.PopMsgWin.obj = o;
    var aTp = [Ext.MessageBox.INFO, Ext.MessageBox.QUESTION, Ext.MessageBox.WARNING, Ext.MessageBox.ERROR], obj = {
            title: '系统提示信息',
