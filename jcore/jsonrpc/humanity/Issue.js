@@ -1,10 +1,12 @@
 {
     check : function(o){
       o.maxLength = 6;
-      Digit.addEvent(o, "keypress", this.checkPress);
-      Digit.addEvent(o, "paste", this.checkPaste);
-      Digit.addEvent(o, "drop", this.checkDrop);
-      Digit.addEvent(o, "blur", this.checkBlur);
+      o = $(o);
+      if(!o.attr('mybind'))
+      {
+          o.attr('mybind', true);
+	      o.keypress(this.checkPress.bind(this)).blur(this.checkBlur.bind(this));
+      }
     },
     getRegStr : function(s){
       var n = s.length;
