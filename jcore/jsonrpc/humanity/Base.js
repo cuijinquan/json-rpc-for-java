@@ -152,10 +152,10 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
      }});
    });
 },
-fsubmit:function(n, oWin)
+fsubmit:function(n, oWin, bNLd)
 {
     Base.AjaxObj = Ext.getBody();
-    this.XuiLoading();
+    if(false != bNLd)this.XuiLoading();
     mkClctDt();
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
