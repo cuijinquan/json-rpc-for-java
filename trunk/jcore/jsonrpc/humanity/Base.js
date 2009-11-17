@@ -1134,7 +1134,6 @@ XuiLoading:function(o)
 	if(this.bIE)
 	{
 	  var nS = document.body.scrollHeight;
-	  var nS = document.body.scrollHeight;
 	  obj = o.getBoundingClientRect();
 	  oDiv.style.left = (obj.left + document.documentElement.scrollLeft) + "px";
 	  oDiv.style.top  = (obj.bottom + document.documentElement.scrollTop)+ "px";
