@@ -157,7 +157,7 @@ public class Tools {
 		{
 			int n = (int)s.charAt(i);
 			// if(0x4E00 <= n && n <= 0x9FA5)
-			if(255 < n && n <= 0)
+			if(255 < n || n <= 0)
 			   buf.append("\\u" + Integer.toHexString(n));
 			else buf.append((char)n);
 		}
