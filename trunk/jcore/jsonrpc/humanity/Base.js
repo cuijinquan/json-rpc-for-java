@@ -235,6 +235,16 @@ XuiLoading:function(o)
   init: function()
   {
       if("undefined" != typeof Base)return this;
+       /* 计时 */
+     $(window).unload(function(){
+        top.g_nPgCntTm = new Date().getTime()
+     }).load(function(){
+        var  n = new Date().getTime();
+        "undefined" == typeof top.g_nPgCntTm && (top.g_nPgCntTm = n);
+        "undefined" == typeof g_nJspTmCnt && (g_nJspTmCnt = 0);
+        top.status = "\u9875\u9762\u52a0\u8f7d\u7528\u65f6: " +  g_nJspTmCnt + "/" + ((n - top.g_nPgCntTm) / 1000) + "\u79d2";
+     });
+     
       if(-1 == String(window.alert).indexOf("PopMsgWin"))
       window.alert = function(s)
       {
