@@ -747,6 +747,12 @@ XuiLoading:function(o)
     o.data.each(function(){s.push(this.join(","))});
     Base.AjaxObj = Ext.getBody();
     if("undefined" != typeof Base && Base.XuiLoading)Base.XuiLoading();//show
+    o.url = o.url || document.location.href;
+    if("undefined" != typeof g_szJsessionid)
+    {
+        if(-1 == o.url.indexOf("?"))o.url += "?jsessionid=" + g_szJsessionid
+        else o.url += "&jsessionid=" + g_szJsessionid
+    }
     $.ajax({
     	cache:false,
     	async:o.bAsync && !!o.fn,
