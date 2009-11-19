@@ -102,11 +102,11 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
            script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
            script = script.replace(/\/\/--><!\]\]>\s*$/, "");
         }
-        if(!szDesId)
+        /*if(!szDesId)
         {
           s = s.replace(/^\s*<div[^>]*>/gmi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
-        }
+        }*/
         try{
           script && ((false == isAsync)&& eval(script) || setTimeout(function(){eval(script)}, 777));
         }catch(e){
