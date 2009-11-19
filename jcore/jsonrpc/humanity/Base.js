@@ -113,8 +113,9 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
           alert("\u5f02\u6b65\u8c03\u7528\u9519\u8bef:\u6267\u884c\u8fd4\u56de\u7684\u811a\u672c\u51fa\u9519" + ",\u9519\u8bef\u6d88\u606f\u662f:" + e.message);
         }        
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
-        if(o && s && -1 < s.indexOf("<div")){o[0].innerHTML = s;}
-         /*  if(o && s)o.replaceWith(s);这样可以解决grid、label异步变色的问题，但是会发生浏览器错误 */
+        /*if(o && s && -1 < s.indexOf("<div")){o[0].innerHTML = s;}*/
+         //* 
+          if(o && s)o.replaceWith(s);// 这样可以解决grid、label异步变色的问题，但是会发生浏览器错误 */
         }
     }});
    }); 
