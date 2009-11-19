@@ -30,9 +30,9 @@
         try{this.setActiveTab(id, active);}catch(e){}
     },
     
-    /* 关闭标签页.id: tabs标签的id, o:li组件 */
+    /* 关闭标签页.id: tabs标签的id, o:需要关闭tab的id属性值 */
     closeTab : function(id, o){
-      var myTab = $("#" + id), tabs = $("#" + id)[0],
+      var myTab = $("#" + id), tabs = $("#" + id)[0], o = $("#"+o)[0],
       li = "LI" == o.nodeName ? o : this.p(o, "LI"),
       b = myTab.find("#" + li.id + "_body"), 
       index = parseInt(li.attributes['index'].nodeValue) + 1,
@@ -43,9 +43,19 @@
         next = myTab.find("#" + h["id"] + " span.x-tab-strip-text")[0];
         this.tabLoad(id, next);
       }
-      this.tabScrollRightHandler(id);
+      $(li).css("display", "none");
       $(b).css("display", "none");
       this.disableTab(id, li.id);
+    },
+    
+    /* 显示标签页.id: tabs标签的id, o:需要显示tab的id属性值 */
+    showTab : function(id, o){
+      var myTab = $("#" + id), tabs = $("#" + id)[0], o = $("#"+o)[0],
+      li = "LI" == o.nodeName ? o : this.p(o, "LI"),
+      b = myTab.find("#" + li.id + "_body");
+      $(li).css("display", "block");
+      $(b).css("display", "block");
+      this.enableTab(id, li.id);
     },
     
     /* 将tab页置灰. id:tabs标签的id, tab:需要置灰标签页的id */
@@ -274,45 +284,7 @@
         return undefined;
       }
     },
-    
-    /*将隐藏的标签页显示*/
-    showTab : function(id, o, index){
-      var tabs = $("#" + id)[0], hide = this.isAllHide(id);
-      var li = this.p(o, "LI"),
-      b = this.toggleStyle("x-menu-item-checked", li, false), 
-      h = tabs.headers["index" + index],
-      cid = "#" + id + " #" + h["id"], cbid = cid + "_body", 
-      next = undefined, nid = "", nbid = "";
-      if (!b){
-		$(li).addClass("x-menu-item-checked").removeClass("x-menu-item-unchecked");
-		$(cid).css("display", "block");
-      } else {
-        $(li).addClass("x-menu-item-unchecked");
-        $(cid).css("display", "none");
-        if (this.isAllHide(id)){
-          $(cid).css("display", "block");
-          return;
-        }
-        if (tabs.active == h["id"]){
-	        next = this.getNextShowTab(id,index);
-	        if (next){
-	          nid = "#" + id + " #" + next; nbid = nid + "_body";
-              $(cid).removeClass("x-tab-strip-active");
-              $(nid).addClass("x-tab-strip-active");
-              $(cbid).addClass("x-hide-display");
-              $(nbid).removeClass("x-hide-display");
-              tabs.active = next;
-              tabs.left = index+1;
-              tabs.action = "add";
-            } else {
-              $(cbid).addClass("x-hide-display");
-            }
-        } else { 
-          $(cbid).addClass("x-hide-display");
-        }
-      }  
-    },
-    
+        
     /*点击标签页的下拉选框菜单时，滑动到对应的标签页上*/
     slidet : function(id, o, index){
       var tabs = $("#")[0],
