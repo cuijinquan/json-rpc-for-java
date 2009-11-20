@@ -291,7 +291,7 @@ XuiLoading:function(o)
             if(e)k = e.which || e.charCode || e.keyCode, c = e.metaKey || e.ctrlKey;
             else if(window.event) k = window.event.keyCode || 0, c = window.event.ctrlKey || 0;
             if(c && 192 == k)
-              top.frames[2].document.getElementById('ksjr').focus();
+              top.frames[1].document.getElementById('menuId').focus();
              
             /* 回车进入下一输入焦点*/
              if(document.activeElement && 13 == k)
