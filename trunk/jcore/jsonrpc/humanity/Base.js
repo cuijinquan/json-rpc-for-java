@@ -239,6 +239,8 @@ XuiLoading:function(o)
        /* 计时 */
      $(window).unload(function(){
         top.g_nPgCntTm = new Date().getTime()
+        var o = getCcObj();
+        if(o && "function" == typeof o.getCodeList)o.getCodeList();
      }).load(function(){
         var  n = new Date().getTime();
         "undefined" == typeof top.g_nPgCntTm && (top.g_nPgCntTm = n);
