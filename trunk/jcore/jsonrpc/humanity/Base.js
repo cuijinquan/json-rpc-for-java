@@ -101,6 +101,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
            script = script.substr(0, script.lastIndexOf("</" + "script>"));
            script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
            script = script.replace(/\/\/--><!\]\]>\s*$/, "");
+           s = s.substr(0, n) + s.substr(n2);
         }
         /*if(!szDesId)
         {
@@ -115,7 +116,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
         /*if(o && s && -1 < s.indexOf("<div")){o[0].innerHTML = s;}*/
          //* 
-          if(o && s)o.replaceWith(s);// 这样可以解决grid、label异步变色的问题，但是会发生浏览器错误 */
+          if(o && "#document" != o.attr("nodeName") && s)o.replaceWith(s);// 这样可以解决grid、label异步变色的问题，但是会发生浏览器错误 */
         }
     }});
    }); 
