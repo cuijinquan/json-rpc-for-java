@@ -1,14 +1,7 @@
 {   
     /* 初始化宽度. id: tabs标签的id */
     initWidth : function(id){
-      var o = $("#" + id), width = o.width(), o1;
-      o.width(width);
-      (o1 = $("#" + id)).width(width - 10);
-      o.find("div.x-tab-panel-header").width(width - 4);
-      o.find("div.x-tab-panel-body").each(function(){
-        $(this).width(width - 14);
-      });
-      return o1;
+      return $("#" + id);
     },
     
     /* 初始化宽度. id: tabs标签的id, active:设置选中tab的id */
