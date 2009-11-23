@@ -213,8 +213,9 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
    var a = [], _t = Base,o = $(s || ":input:not(:checkbox[@checked=false])"), ecd = _t.decodeStr, s;
    if(0 < o.size())
    o.each(function(){
+      if ("checkbox" == this.type && false == this.checked)return true; //排除没有勾选的checkbox
+      if ("radio" == this.type && false == this.checked)return true;    //排除没有选择的radiobox
       if(this.name && (s = escape(ecd($(this).val()))))
-      if (!("checkbox" == this.type && false == this.checked))/*排除checkbox不为true*/
       	a.push(this.name + "=" + s);
    });
    else{
