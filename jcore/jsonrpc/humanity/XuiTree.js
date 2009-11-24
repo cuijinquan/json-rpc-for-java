@@ -156,10 +156,10 @@
            {
               var bCkd = oSelf.isChecked, p = oSelf.parent,
                  szId = oSelf.getCheckBoxId();
-             if(oSelf.tree.doChildCheckedFlg && p)
+             if(oSelf.doChildCheckedFlg && p) /* modify by liding, before:oSelf.tree.doChildCheckedFlg */
              {
-                 bCkd = bCkd || p.isChecked;
-	             while(p && (null == p.checkValue || p.isChecked) && p != oSelf.tree)
+                 /*bCkd = bCkd || p.isChecked;
+	             /*while(p && (null == p.checkValue || p.isChecked) && p != oSelf.tree)
 	             {
 	                if(p.isChecked)
 	                {
@@ -167,12 +167,12 @@
 	                   break;
 	                }
 	                p = p.parent;
-	             }
+	             }commented by liding*/
              }
              return [ "<input style=\"cursor:default\" onclick=\"return XuiTree.getTreeNode('",
                 oSelf.tree.id, "','", oSelf.id, "')",
                 ".checked(this.checked, "
-                ,oSelf.tree.doChildCheckedFlg,
+                ,oSelf.doChildCheckedFlg, /* modify by liding, before:oSelf.tree.doChildCheckedFlg */
                 ", event,this)\" type=\"checkbox\" value=\"",
                 oSelf.checkValue,
                 "\"",
@@ -229,7 +229,7 @@
            	  oCeckBox = this.Dom.prev().find(":checkbox:first"),
               szId = oCeckBox.attr("id");
            }
-           if(bDoCld && _t.tree.doChildCheckedFlg && 0 < _t.childNodes.length)
+           if(bDoCld && 0 < _t.childNodes.length) /* modify by liding, before:bDoCld && _t.tree.doChildCheckedFlg && 0 < _t.childNodes.length */
            {
               _t.Dom.find("div.x-tree-node-el :checkbox").each(function()
              {
