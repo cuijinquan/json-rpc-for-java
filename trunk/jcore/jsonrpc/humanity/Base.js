@@ -91,7 +91,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
      ("undefined" == typeof isAsync)&&(isAsync = !szDesId);
      if(!szReqCode && obj.attr('reqCode'))Base.setValue("reqCode", szReqCode = obj.attr('reqCode'));
      _t.updateUi({url:szUrl,bAsync: isAsync,postData:[_t.getAllInput(szData)],data:[[szDesId || szId,1,""]],fn:function(s){
-        var o = null; 
+        var o = null, szStyle = "";  
         if(0 < obj.length)
           o = "INPUT" == obj[0].nodeName ? $(_t.p(obj[0],"DIV")).parent("div") : obj;
         var script = "", n = s.indexOf("<script");
@@ -103,21 +103,27 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
            script = script.replace(/\/\/--><!\]\]>\s*$/, "");
            s = s.substr(0, n);
         }
-        if(!szDesId)
+         if(!szDesId)
         {
+          if(-1 < (n = s.indexOf(">")))
+          {
+               szStyle = s.substr(0, n);
+               if(-1 < (n = szStyle.indexOf("style=\"")))
+               {
+                 szStyle = szStyle.substr(n + 7);
+                 szStyle = szStyle.substr(0, szStyle.indexOf('"'));
+               }else szStyle = ""; 
+          }
           s = s.replace(/^\s*<div[^>]*>/gmi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
-        }/**/
+        }
         try{
           script && ((false == isAsync)&& eval(script) || setTimeout(function(){eval(script)}, 777));
         }catch(e){
           alert("\u5f02\u6b65\u8c03\u7528\u9519\u8bef:\u6267\u884c\u8fd4\u56de\u7684\u811a\u672c\u51fa\u9519" + ",\u9519\u8bef\u6d88\u606f\u662f:" + e.message);
         }        
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
-        //*
-        if(o && "#document" != o.attr("nodeName") && s){o[0].innerHTML = s;}//*/
-         //* 
-          // if(o && "#document" != o.attr("nodeName") && s)o.replaceWith(s);// \u8fd9\u6837\u53ef\u4ee5\u89e3\u51b3grid\u3001label\u5f02\u6b65\u53d8\u8272\u7684\u95ee\u9898\uff0c\u4f46\u662f\u4f1a\u53d1\u751f\u6d4f\u89c8\u5668\u9519\u8bef */
+        if(o && "#document" != o.attr("nodeName") && s){o[0].innerHTML = s;if(szStyle)o.attr('style', szStyle)}
         }
     }});
    }); 
