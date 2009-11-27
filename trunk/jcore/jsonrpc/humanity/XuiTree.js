@@ -117,7 +117,7 @@
         tree: null,        /* 树对象 */
         seq: 0,            /* 当前父亲节点内的序号 */
         html: null,        /* html代码 */
-        doParentCheckedFlg: false, /* 默认会执行父亲节点的选择方法 */
+        doParentCheckedFlg: true, /* 默认会执行父亲节点的选择方法 */
         doChildCheckedFlg: true,  /* 默认会执行子节点的选择方法 */
         label: null,       /* 描述 */
         depth: 0,          /* 深度 */
