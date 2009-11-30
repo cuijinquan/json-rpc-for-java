@@ -72,6 +72,7 @@ public class JSONRPCServlet extends HttpServlet {
 		searchAllClass(request, fs[i].getAbsolutePath());
 	    else {
 		String s1 = fs[i].getAbsolutePath().substring(rootPath.length() - 1);
+		if(-1 < s1.indexOf(".svn"))continue;
 		s1 = s1.substring(0, s1.indexOf(".")).replaceAll("\\\\", ".");
 		String pknm = "jcore.jsonrpc.rpcobj";
 		if (s1.startsWith(pknm))
