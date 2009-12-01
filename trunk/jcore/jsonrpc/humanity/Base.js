@@ -217,6 +217,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
    });
 },getAllInput:function(s)
 {
+   if(s.execGetAllInput())return s;
    var a = [], _t = Base,o = $(s || ":input:not(:checkbox[@checked=false])"), ecd = _t.decodeStr, s;
    if(0 < o.size())
    o.each(function(){
@@ -234,7 +235,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
         a.push(u[0] + "=" + s);
       }
    }
-   return a.join("&");
+   return a.join("&").execGetAllInput(true);
 },
 /* Ajax转转统一控制 */
 XuiLoading:function(o)
