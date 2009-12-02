@@ -261,10 +261,13 @@ XuiLoading:function(o)
      });
      
       if(-1 == String(window.alert).indexOf("PopMsgWin"))
+      {
+      window.alt = window.alert;
       window.alert = function(s)
       {
          return Base.PopMsgWin(s);
       };
+      }
       window.confirm = function(s, fn, fn1)
       {
          var o = {type:1, message:String(s)};
