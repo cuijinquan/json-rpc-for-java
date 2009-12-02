@@ -276,6 +276,11 @@ public class JSONRPCBridge implements Serializable{
 				// 注入 reqeust 对象 end
 				
 				// 这里不能采用getSpecifyNameMethod获取方法的原因是，因为参数可能有复合对象
+				// 构造参数
+				Object []aParam = null;
+				// 函数参数类型
+				Class []oTyps = null;
+				Method mExec = null;
 				for(int i = 0; i < m.length; i++)
 				{
 					// 函数名匹配，参数个数也必须同时匹配，才进行执行
@@ -284,57 +289,60 @@ public class JSONRPCBridge implements Serializable{
 						try {
 							boolean bCnt = false;
 							// 构造参数
-							Object []aParam = new Object[oParams.length()];
+							aParam = new Object[oParams.length()];
 							// 函数参数类型
-							Class []oTyps = m[i].getParameterTypes();
+							oTyps = m[i].getParameterTypes();
 							// 构造参数对象
 							for(int j = 0; j < aParam.length; j++)
 							{
 								// 如果类型不匹配，就进行一系列转换
 								// 将整数向日期进行转换
+								// 数字类型进行松散匹配
 								if(-1 == oParams.get(j).getClass().getName().toLowerCase().indexOf(m[i].getParameterTypes()[j].getName().toLowerCase()))
-								{
 									bCnt = true;
-									break;
-								}
 								aParam[j] = Tools.convertObject(oTyps[j], aParam[j] = oParams.get(j));
 							}
 							if(bCnt)continue;
 							oTyps = null;
 							oParams = null;
-							Object oRst = null;
-							try
-							{
-								oRst = m[i].invoke(o, aParam);
-							} catch (Exception e) 
-							{
-								if(null != json)
-								{
-									String szErrMsg = e.getMessage();
-									if(null == szErrMsg && null != e.getCause())
-										szErrMsg = e.getCause().getMessage();
-									json.setErrMsg(szErrMsg);
-									szErrMsg = null;
-								}
-							}
-							aParam = null;
-							if(null != oRst)
-							{
-								// 不是简单类型就注册他
-								if(!Tools.isSimpleType(oRst))
-								{
-									// 设置顶级对象
-									registerObject(oRst.hashCode(), oRst).registerParentObject(oRst.hashCode(), nParentHashCode);
-								}
-								String szOut = new ObjectToJSON(oRst, this).toJSON(null);
-								return szOut;
-							}
-							return "null";
+							mExec = m[i];
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 						break;
 					}
+				}
+				// 方法寻找完之后再执行调用
+				if(null != mExec)
+				{
+					Object oRst = null;
+					try
+					{
+						oRst = mExec.invoke(o, aParam);
+					} catch (Exception e) 
+					{
+						if(null != json)
+						{
+							String szErrMsg = e.getMessage();
+							if(null == szErrMsg && null != e.getCause())
+								szErrMsg = e.getCause().getMessage();
+							json.setErrMsg(szErrMsg);
+							szErrMsg = null;
+						}
+					}
+					aParam = null;
+					if(null != oRst)
+					{
+						// 不是简单类型就注册他
+						if(!Tools.isSimpleType(oRst))
+						{
+							// 设置顶级对象
+							registerObject(oRst.hashCode(), oRst).registerParentObject(oRst.hashCode(), nParentHashCode);
+						}
+						String szOut = new ObjectToJSON(oRst, this).toJSON(null);
+						return szOut;
+					}
+					return "null";
 				}
 			}
 		} catch (ParseException e) {
