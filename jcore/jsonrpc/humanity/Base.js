@@ -114,7 +114,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
                  szStyle = szStyle.substr(0, szStyle.indexOf('"'));
                }else szStyle = ""; 
           }
-          s = s.replace(/^\s*<div[^>]*>/gmi, "");
+          s = s.replace(/^\s*<div[^>]*>/mi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
         try{
@@ -153,7 +153,7 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
         }
         if(!destId)
         {
-          s = s.replace(/^\s*<div[^>]*>/gmi, "");
+          s = s.replace(/^\s*<div[^>]*>/mi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
         if(s && -1 < s.indexOf("<div"))o.innerHTML = s;
