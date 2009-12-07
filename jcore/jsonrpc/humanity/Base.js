@@ -259,20 +259,45 @@ XuiLoading:function(o)
         top.status = "\u9875\u9762\u52a0\u8f7d\u7528\u65f6: " +  g_nJspTmCnt + "/" + ((n - top.g_nPgCntTm) / 1000) + "\u79d2";
      });
      
-      if(-1 == String(window.alert).indexOf("PopMsgWin"))
+      if(-1 == String(window.alert).indexOf("g_fcsfld"))
       {
       window.alt = window.alert;
-      window.alert = function(s)
+      window.cfm = window.confirm;
+      window.alert = function(o)
       {
-         return Base.PopMsgWin(s);
+          if("undefined" != typeof g_fcsfld && g_fcsfld)g_fcsfld.setFocus(),g_fcsfld = null;
+          if("string" == typeof o)return window.alt(o);
+          var fnTmp = window.alt;
+          if(0 < o.type)
+          {
+              if(window.cfm(o.message))
+              {
+                  if(o.okScript)eval(o.okScript);
+                  if(o.okUrl)location.href = contextPath + o.okUrl;
+              }
+              else 
+              {
+                 if(o.errScript)eval(o.errScript);
+                 if(o.errUrl)location.href = contextPath + o.errUrl;
+              }
+          }
+          else
+          {
+              alt(o.message);
+              if(o.okScript)eval(o.okScript);
+              if(o.okUrl)location.href = contextPath + o.okUrl;
+          }
+          /*return Base.PopMsgWin(o);*/
       };
-      }
-      window.confirm = function(s, fn, fn1)
+       window.confirm = function(s, fn, fn1)
       {
+         if(1 == arguments.length)return window.cfm(s);
          var o = {type:1, message:String(s)};
          if(fn)o.okScript = fn;if(fn1)o.errScript = fn1;
          return Base.PopMsgWin(o);
       };
+      }
+     
       window.open = function(s, t,p)
       {
           var i,a = (p||"").toLowerCase().replace(/\s/g, '').split(","), b, g = "=", u = s.split(/\?/);
