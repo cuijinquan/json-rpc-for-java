@@ -14,7 +14,10 @@
     sz_onblur : function(evt){
       var e = (evt || event || window.event),o = e.srcElement || e.target;
       o.value = o.value.trim();
-      if(0 == o.value.length)return true;
+      if(0 == o.value.length){
+        Base.delInvalid(o);
+      	return true;
+      }
       if (!o.reg.test(o.value)){
       	Base.addInvalid(o);
       	o = $(o);
