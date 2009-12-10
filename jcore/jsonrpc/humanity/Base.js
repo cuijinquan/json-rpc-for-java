@@ -239,8 +239,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 /* Ajax转转统一控制 */
 XuiLoading:function(o)
 {
-   if("undefined" != typeof Base.AjaxObj)
-   /*(Base.myMask = new Ext.LoadMask(Base.AjaxObj, {msg:"Please wait..."})).show();*/
+   /*if("undefined" != typeof Base.AjaxObj)
+   (Base.myMask = new Ext.LoadMask(Base.AjaxObj, {msg:"Please wait..."})).show();*/
 },
   init: function()
   {
