@@ -389,8 +389,8 @@
            a.push(s.join(' '));
            a.push("\"");
            /* 事件 */
-           a.push(" onclick=\"var o = $(this).find('a');o.click()\"  onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
-           a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event)\"");
+           a.push(" onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
+           a.push(" onclick=\"var o = $(this).find('a');o[0].href && opn(o[0].href, o[0].target || '', '');XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event)\"");
            a.push(">");
            /* 缩进的计算 */
            if(0 < this.depth)
