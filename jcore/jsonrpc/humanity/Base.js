@@ -267,7 +267,7 @@ XuiLoading:function(o)
       window.alert = function(o)
       {
           if("undefined" != typeof g_fcsfld && g_fcsfld)g_fcsfld.setFocus(),g_fcsfld = null;
-          if("string" == typeof o)return window.alt(o);
+          if("string" == typeof o || null == o || "undefined" == typeof o)return window.alt(o);
           var fnTmp = window.alt;
           if(0 < o.type)
           {
