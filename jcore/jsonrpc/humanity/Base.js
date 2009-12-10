@@ -296,9 +296,7 @@ XuiLoading:function(o)
          var o = {type:1, message:String(s)};
          if(fn)o.okScript = fn;if(fn1)o.errScript = fn1;
          return Base.PopMsgWin(o);
-      };
-      }
-     
+      };window.opn = window.open;
       window.open = function(s, t,p)
       {
           var i,a = (p||"").toLowerCase().replace(/\s/g, '').split(","), b, g = "=", u = s.split(/\?/);
@@ -324,6 +322,7 @@ XuiLoading:function(o)
           s = u.join("?");
           return window.showModalDialog(s, window, p);
       };
+      }
       
       if(window.dialogArguments)window.opener = window.dialogArguments;
         $(function(){
