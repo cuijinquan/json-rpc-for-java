@@ -240,7 +240,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 XuiLoading:function(o)
 {
    if("undefined" != typeof Base.AjaxObj)
-   (Base.myMask = new Ext.LoadMask(Base.AjaxObj, {msg:"Please wait..."})).show();
+   /*(Base.myMask = new Ext.LoadMask(Base.AjaxObj, {msg:"Please wait..."})).show();*/
 },
   init: function()
   {
@@ -827,6 +827,7 @@ XuiLoading:function(o)
   {
      var o = null, b = !!arguments[0] || false,
          p = arguments[0], k;
+      p && !p["id"] && (p["id"] = "_Xui_SelectDiv");
      if(p && p["id"] && (o = this.getDom(p["id"])))return o;
      o = document.createElement("div");
      if(b)
