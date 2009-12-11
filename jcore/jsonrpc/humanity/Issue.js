@@ -1,6 +1,6 @@
 {
     check : function(o){
-      o.maxLength = 6;
+      o.maxLength = 6; o.max = max; o.min = min;
       o = $(o);
       if(!o.attr('mybind'))
       {
