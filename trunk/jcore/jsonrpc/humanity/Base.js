@@ -318,6 +318,7 @@ XuiLoading:function(o)
           }
           a.push("center=1");a.push("help=0");a.push("resizable=1");a.push("scroll=1");a.push("status=0");
           p = a.join(";").replace(/=/g, ":");
+          if(1 == u.length)u[0] += "?";
           if(-1 == s.indexOf("jsessionid"))u[u.length - 1] += "&jsessionid=" + g_szJsessionid;
           s = u.join("?");
           return window.showModalDialog(s, window, p);
