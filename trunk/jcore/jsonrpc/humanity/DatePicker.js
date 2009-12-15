@@ -497,6 +497,11 @@
 		  });
 	},onblur: function(e, oIpt)
 	{
+	    var n = oIpt.maxLength, nL = oIpt.value.trim().length;
+	    Base.delInvalid(oIpt);
+	    HidTip();
+	    if(4 <= n && 25 >= n && 0 < nL)
+	       if(n != nL)Base.addInvalid(oIpt),$(oIpt).focus().tip('请注意，日期数据长度不够');
 	    var _t = DatePicker, o = _t.XuiDatePicker;
 	    if(o)o["tmer"] = _t.regTimer(function(e)
 	    {
