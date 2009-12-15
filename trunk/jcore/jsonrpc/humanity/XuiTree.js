@@ -190,7 +190,7 @@
            if(!szId)return this;
            if("boolean" != typeof this.tree.oldData[szId] || null == this.tree.oldData[szId])
              this.tree.oldData[szId] = o.isChecked;
-           if(bCkd == _t.tree.oldData[szId])/* 还原 */
+           if(!bCkd == _t.tree.oldData[szId])/* 还原 modify by liding, before: if(bCkd ==*/
               delete _t.tree.addData[szId], delete _t.tree.delData[szId];
            else
            {
@@ -206,7 +206,7 @@
            {
               if(0 < o.childNodes[i].childNodes.length)this.upCkBxDataAllCld(o.childNodes[i], b);
               else
-              {
+              {  o.childNodes[i].isChecked = b; /* add by liding */
                  szId = [o.id, d, i].join("_");
                  this.upCkBxData(szId, b, o.childNodes[i]);
               }
@@ -237,7 +237,8 @@
              });
              _t.upCkBxDataAllCld(_t, bCkd);
            }
-           _t.upCkBxData(szId, bCkd, _t), oCeckBox.attr("checked", _t.isChecked = bCkd);
+           _t.isChecked = bCkd; /* add by liding */
+           _t.upCkBxData(szId, bCkd, _t), oCeckBox.attr("checked", bCkd); /* modified by liding, before: ("checked", _t.isChecked = bCkd)*/
            _t.regTimer(function(o)
            {
              $(document.getElementsByName(_t.tree.id + "_add")[0]).val(_t.getAddData());
