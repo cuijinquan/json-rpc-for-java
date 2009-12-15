@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -132,13 +133,15 @@ public class ObjectToJSON implements Serializable{
 			else if(szClassName.equals("java.util.Date") || szClassName.equals("java.sql.Timestamp"))
 			{
 				Date oDate = (Date)o;
+				Timestamp tstp = new Timestamp(oDate.getTime());
 				int m = oDate.getMonth() + 1;
 				// 来看需要返回JavaScript Date类型，就将下面的注释打开
 				// return buf.append("new Date(").append(((Date)o).getTime()).append(")").toString();
 
 				buf.append("'").append(oDate.getYear() + 1900)
 				.append("-").append(9 < m ? "" + m : "0" + m)
-				.append("-").append(9 < oDate.getDay() ? "" + oDate.getDay(): "0" + oDate.getDay());
+				// 邓详静 2009-12-12 22:54:34 有问题 oDate.getDay() 应该是oDate.getDate() 
+				.append("-").append(9 < oDate.getDate() ? "" + oDate.getDate(): "0" + oDate.getDate());
 				if(0 < oDate.getHours() && 0 < oDate.getMinutes())
 					buf.append(" ").append(9 < oDate.getHours() ? "" + oDate.getHours(): "0" + oDate.getHours())
 				.append(":").append(9 < oDate.getMinutes() ? "" + oDate.getMinutes(): "0" + oDate.getMinutes())
