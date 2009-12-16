@@ -488,6 +488,7 @@
 		  var bFirst = !_t.XuiDatePicker, s = (o['value'] || "").trim(),
 		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
 		 _t.fnNoInput(function(){
+		 window.hdAll.start();
 		 if(!o.onkeyup)$(o).keyup(function(){_t.onkeyup(e, o)});
 		  /* 第一次需要做初始化处理 */
 		  if(bFirst)

@@ -34,13 +34,15 @@
    upperNode: function()
     {
        var o = XuiTree.curTree.lastSlctNode;
+       if(!o)return this;
        if(0 < o.childNodes.length && o.isExpand)
           o.isExpand = false, o.doExpand();
        else if(o.parent)o.parent.select(o.parent.Dom.prev("div")[0], null);
     },
     pervNode: function()
     {
-       var o = XuiTree.curTree.lastSlctNode, szId = o.id, o1, o2, bNoP = true;
+       var o = XuiTree.curTree.lastSlctNode;if(!o)return this;
+       var szId = o.id, o1, o2, bNoP = true;
        o1 = (o2 = $("#" + szId)).prev("li");
        if(0 == o1.size())o1 = o2.parent().parent(), bNoP = false;
        if(0 < o1.size())
@@ -63,9 +65,24 @@
     },
     nextNode: function()
     {
-       var o = XuiTree.curTree.lastSlctNode, szId = o.id, o1, o2 = $("#" + szId);
+       var o = XuiTree.curTree.lastSlctNode;if(!o)return this;
+       var szId = o.id, o1, o2 = $("#" + szId), o3;
        if(0 < o.childNodes.length && o.isExpand)
-           o.select(o2.find("li:first div")[0], null);
+       {
+           o1 = o2.find("li:first div")[0];
+           o3 = o2.find("div.x-tree-selected");
+           if(0 < o3.length && o1 == o3[0])
+           {
+              o1 = o3.find("div:first");
+              if(0 == o1.length)
+              {
+                  o1 = o3.parent().find("div");
+                  if(1 < o1.length)o1 = o1[1];
+                  else o1 = o1[0];
+              }else o1 = o1[0];
+           }
+           o.select(o1, null);
+       }
        else
        {
           o1 = o2.next("li:first");
@@ -260,13 +277,14 @@
         /* 高亮选中 */
         select: function(o, e)
         {
-           var s = "x-tree-selected", o = $(o), szId;
+           var s = "x-tree-selected", o = $(o), szId, oT;
            if(this.tree.lastSlctNd && o != this.tree.lastSlctNd)this.tree.lastSlctNd.removeClass(s);
            (this.tree.lastSlctNd = o).addClass(s);
-           this.tree.lastSlctNode = this.tree.allTreeCc[szId = o.parent().attr("id")];
+           if(oT = this.tree.allTreeCc[szId = o.parent().attr("id")])
+               this.tree.lastSlctNode = oT;
            e && o.find(":checkbox:first").click();
            XuiTree.curTree = this.tree;
-           this.fnSciv($("#" + XuiTree.curTree.id).parent().parent()[0], o.find("a").parent()[0]);
+           this.fnSciv($("#" + XuiTree.curTree.id)[0], o.find("a").parent()[0]);
            return this;
         },
          /* 展开切换 */
@@ -391,7 +409,7 @@
            a.push("\"");
            /* 事件 */
            a.push(" onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
-           a.push(" onclick=\"var o = $(this).find('a');o[0].href && -1 == o[0].href.indexOf('javascript') && opn(o[0].href, o[0].target || '', '');XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event)\"");
+           a.push(" onclick=\"var o = $(this).find('a');o[0].href && -1 == o[0].href.indexOf('javascript') && opn(o[0].href, o[0].target || '', '') || -1 < o[0].href.indexOf('javascript') && eval(o[0].href);XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event)\"");
            a.push(">");
            /* 缩进的计算 */
            if(0 < this.depth)
