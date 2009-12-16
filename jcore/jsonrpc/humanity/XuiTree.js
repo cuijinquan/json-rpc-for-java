@@ -102,6 +102,7 @@
 	      case 38 : this.pervNode();  break;  /* Arrow up */
 	      case 39 : this.lowerNode(); break;  /* Arrow right, expand child node */
 	      case 40 : this.nextNode();  break;  /* Arrow down */
+	      case 13:$("#" + XuiTree.curTree.id).find("div.x-tree-selected").click();break;
 	    }
     },/* 更新当前的树数据为初始化修改前的状态 */
     upDataTree:function(id)
