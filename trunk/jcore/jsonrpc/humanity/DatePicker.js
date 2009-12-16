@@ -97,7 +97,8 @@
 		a.push("</tbody></table></td></tr><tr><td colspan=\"3\" class=\"x-date-bottom\" align=\"center\"><table onclick=\"DatePicker.selectToday()\" style=\"width: auto;\" class=\"x-btn-wrap x-btn\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr><td class=\"x-btn-left\"><i>&nbsp;</i></td><td class=\"x-btn-center\"><em unselectable=\"on\"><button class=\"x-btn-text\" type=\"button\">\u4eca\u5929</button></em></td><td class=\"x-btn-right\"><i>&nbsp;</i></td></tr></tbody></table></td></tr></tbody></table><div id=\"xuiSlctMY\" class=\"x-date-mp\" style=\"display: none; width: 175px; height: 193px; position: absolute; left: 0px; top: 0px; z-index: auto;\"><table cellspacing=\"0\" border=\"0\" style=\"width: 175px; height: 193px;\"><tbody><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">1</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">2</a></td><td align=\"center\" class=\"x-date-mp-ybtn\"><a class=\"x-date-mp-prev\" onclick=\"DatePicker.showXuiSlctMY(DatePicker.oldYear -= 10)\"></a></td><td align=\"center\" class=\"x-date-mp-ybtn\"><a class=\"x-date-mp-next\" onclick=\"DatePicker.showXuiSlctMY(DatePicker.oldYear += 10)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">3</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">4</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">5</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">6</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">7</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">8</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">9</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">10</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr><td class=\"x-date-mp-month\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">11</a></td><td class=\"x-date-mp-month x-date-mp-sep\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\">12</a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td><td class=\"x-date-mp-year\"><a href=\"javascript:void(0)\" onclick=\"DatePicker.slctMY(event,this)\"></a></td></tr><tr class=\"x-date-mp-btns\"><td colspan=\"4\"><button class=\"x-date-mp-ok\" type=\"button\" onclick=\"DatePicker.slctOk()\">\u786e\u5b9a</button><button class=\"x-date-mp-cancel\" type=\"button\" onclick=\"DatePicker.hiddenXuiSlctMY()\">\u53d6\u6d88</button></td></tr></tbody></table></div></div></li></ul>");
 
 	    return a.join("");
-	}, isInvalid: function(y, m, d)
+	},/* 判断是否在有效的时间段访问内*/ 
+	isInvalid: function(y, m, d)
 	{
 	      var dpMax = null, dpMin = null, nCurTm, bRst = true;
 	      if(this.dpMax)
@@ -171,6 +172,7 @@
 		   if(o.onchange)o.onchange();
 	   }
 	   });
+	   Base.delInvalid(o);HidTip();
 	},
 	updataTBody: function(e)
 	{
@@ -253,6 +255,17 @@
 	fnNoInput:function(fn){
 	  var _t = this;
 	   _t.bBoBq = true;fn();setTimeout(function(){_t.bBoBq = false},13);
+	}/* 数据有效检查 */
+	,onkeyup:function(e, oIpt){
+	    var n = oIpt.maxLength, s = oIpt.value.trim(), nL = s.length;
+	    Base.delInvalid(oIpt);HidTip();
+	    if(0 < nL)
+	    {
+		    if(4 <= n && 25 >= n)
+		       if(n != nL && 10 > nL)Base.addInvalid(oIpt),$(oIpt).focus().tip('请注意，日期数据长度不够: ' + nL + "/" + n);
+		    if(oIpt.max && oIpt.max < s || oIpt.min && s < oIpt.min)Base.addInvalid(oIpt),$(oIpt).focus().tip('请注意，日期数据不在有效的数据范围内: <br>'
+		         +  (oIpt.min || '*') + " < " + s + " < " + (oIpt.max || "*"));
+	    }
 	}, /* 键盘事件处理 */
     onkeydown:function(e, oIpt)
    {
@@ -475,6 +488,7 @@
 		  var bFirst = !_t.XuiDatePicker, s = (o['value'] || "").trim(),
 		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
 		 _t.fnNoInput(function(){
+		 if(!o.onkeyup)$(o).keyup(function(){_t.onkeyup(e, o)});
 		  /* 第一次需要做初始化处理 */
 		  if(bFirst)
 		  {
@@ -497,11 +511,6 @@
 		  });
 	},onblur: function(e, oIpt)
 	{
-	    var n = oIpt.maxLength, nL = oIpt.value.trim().length;
-	    Base.delInvalid(oIpt);
-	    HidTip();
-	    if(4 <= n && 25 >= n && 0 < nL)
-	       if(n != nL)Base.addInvalid(oIpt),$(oIpt).focus().tip('请注意，日期数据长度不够');
 	    var _t = DatePicker, o = _t.XuiDatePicker;
 	    if(o)o["tmer"] = _t.regTimer(function(e)
 	    {
