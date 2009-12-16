@@ -23,7 +23,10 @@ fnSciv:function(c, a, b, n)
 {
 		if("string" == typeof c)
 		c = $("#" + c)[0], a = $("#" + a)[0];
-		c.scrollTop = a.offsetTop;c.scrollTop = c.scrollTop;
+		if(0 == (c.scrollTop = a.offsetTop))
+		   c.scrollTop = $(a).position().top;
+		c.scrollTop = c.scrollTop;
+		if(!c.scrollTop)return;
 		if((b || n && 0 < --n) && "BODY" != c.nodeName)
 		  this.fnSciv(c.parentNode, c, b);
 },/* 弹出消息提示 */
