@@ -14,7 +14,7 @@
 	       o.css({left:oPos.left + "px", top: (oPos.top + oI.height()) + "px", width:oTb.width() + 'px'});
 	       o.show();
 	       
-           if(1 < oSlct.length)
+          if(1 < oSlct.length)
            {
              for(i = oSlct.length - 2; 0 <= --i; )
                $(oSlct[i]).removeClass("x-tree-selected");
@@ -24,11 +24,15 @@
            }
        }).keydown(function(e)
        {
+           if(9 == e.which)return true;
            o.show();
            XuiTree.curTree = XuiTree.XuiTreeCc[id];
            o.keydown(e);
+           $(this).focus();
        }).change(function(){
            if(0 == this.value.trim().length)$(this).next().val('');
+       }).blur(function(){
+           if(!$(this).next().val())this.value = '';
        });
        /* 后面图标的点击 */
        oTb.click(function(){oI.focus()});
