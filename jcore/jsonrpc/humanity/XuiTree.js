@@ -2,6 +2,7 @@
    XuiTreeCc: [], /* cache */
    curTree: null, /* 当前激活的tree */
    idCnt:1,
+   slctCls:"div.x-tree-selected",
    ext: function(oSrc, oDes)
    {
       for(var k in oSrc)
@@ -70,7 +71,7 @@
        if(0 < o.childNodes.length && o.isExpand)
        {
            o1 = o2.find("li:first div")[0];
-           o3 = o2.find("div.x-tree-selected");
+           o3 = o2.find(XuiTree.slctCls);
            if(0 < o3.length && o1 == o3[0])
            {
               o1 = o3.find("div:first");
@@ -102,7 +103,7 @@
 	      case 38 : this.pervNode();  break;  /* Arrow up */
 	      case 39 : this.lowerNode(); break;  /* Arrow right, expand child node */
 	      case 40 : this.nextNode();  break;  /* Arrow down */
-	      case 13:$("#" + XuiTree.curTree.id).find("div.x-tree-selected").click();break;
+	      case 13:$("#" + XuiTree.curTree.id).find(XuiTree.slctCls).click();break;
 	    }
     },/* 更新当前的树数据为初始化修改前的状态 */
     upDataTree:function(id)
@@ -496,7 +497,9 @@
            	  this.Dom = $("#" + this.id).find("ul.x-tree-node-ct:first"),
               this.isExpand = true, this.doExpand();
               if(this.tree.bExpandAll)this.expandAll(), this.tree.bExpandAll = false;
-              this.select(this.Dom.prev("div")[0], null);
+              /*没有任何选择的时候就默认选择第一行*/
+              /*if(0 == $("#" + this.insertDom.id).find(XuiTree.slctCls).length)*/
+                  this.select(this.Dom.prev("div")[0], null);
            }
            return this;
         }
