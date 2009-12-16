@@ -245,6 +245,20 @@ XuiLoading:function(o)
   init: function()
   {
       if("undefined" != typeof Base)return this;
+      window.hdAll = {start:function(){
+       /* 隐藏下拉、日期图层 */
+       $("#_Xui_SelectDiv").hide();
+       $("#_Xui_DatePicker").hide();
+    },
+    push:function(fn)
+    {
+       var f = this.start;
+       this.start = function()
+       {
+          f();
+          fn();
+       };
+    }};
       Array.prototype.each = function(f){var t = this, i = 0;for(;i < t.length; i++)f.apply(t[i], [t[i]]);return this};
        /* 计时 */
      $(window).unload(function(){
