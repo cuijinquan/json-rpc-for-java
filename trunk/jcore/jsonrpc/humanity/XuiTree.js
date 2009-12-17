@@ -220,7 +220,7 @@
         upCkBxDataAllCld: function(o, b)
         {
            var szId = o.id, i = 0, d = o.depth + 1, j = o.childNodes.length;
-           this.upCkBxData(szId, b, o);
+           /* this.upCkBxData(szId, b, o); commented by liding */
            for(; i < j; i++)
            {
               if(0 < o.childNodes[i].childNodes.length)this.upCkBxDataAllCld(o.childNodes[i], b);
