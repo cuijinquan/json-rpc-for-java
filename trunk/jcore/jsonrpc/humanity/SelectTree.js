@@ -24,7 +24,7 @@
            }
        }).keydown(function(e)
        {
-           if(9 == e.which)return true;
+           if(9 == e.which)return o.hide(),true;
            o.show();
            XuiTree.curTree = XuiTree.XuiTreeCc[id];
            o.keydown(e);
