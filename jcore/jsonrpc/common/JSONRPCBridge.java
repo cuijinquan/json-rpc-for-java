@@ -302,10 +302,10 @@ public class JSONRPCBridge implements Serializable{
 									bCnt = true;
 								aParam[j] = Tools.convertObject(oTyps[j], aParam[j] = oParams.get(j));
 							}
+							mExec = m[i];
 							if(bCnt)continue;
 							oTyps = null;
 							oParams = null;
-							mExec = m[i];
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
