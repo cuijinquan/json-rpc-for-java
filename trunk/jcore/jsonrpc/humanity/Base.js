@@ -806,9 +806,11 @@ XuiLoading:function(o)
     o.url = o.url || document.location.href;
     if("undefined" != typeof g_szJsessionid)
     {
-        if(-1 == o.url.indexOf("?"))o.url += "?jsessionid=" + g_szJsessionid
-        else o.url += "&jsessionid=" + g_szJsessionid
-    }
+        if(-1 == o.url.indexOf("?"))o.url += "?jsessionid=" + g_szJsessionid;
+        else o.url += "&jsessionid=" + g_szJsessionid;
+    }/* 防止缓存 */
+    if(-1 == o.url.indexOf("?"))o.url += "?tm=" + new Date().getTime();
+    else o.url += "&tm=" + new Date().getTime();
     $.ajax({
     	cache:false,
     	async:o.bAsync && !!o.fn,
