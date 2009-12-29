@@ -183,7 +183,9 @@ public class JSONRPCServlet extends HttpServlet {
 	    }
 	    // 返回注册中的对象
 	    else {
-		bout = brg.getRegObjsToString().getBytes();
+	    	String s = brg.getRegObjsToString();
+//	    	System.out.println(s);
+	    	bout = s.getBytes();
 	    }
 	    if (null != bout) {
 		response.setIntHeader("Content-Length", bout.length);

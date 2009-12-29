@@ -36,7 +36,7 @@ public abstract class JsonRpcObject implements IJsonRpcObject,Serializable
 		return this.request;
 	}
 	
-	private String errMsg = "";
+	public String errMsg = "";
 	
 	 /***
 	  * 获取异常、错误消息使用
