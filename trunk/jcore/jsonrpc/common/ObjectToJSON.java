@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jcore.jsonrpc.tools.GetAllSupersProperty;
 import jcore.jsonrpc.tools.Tools;
 
 /***
@@ -94,7 +95,7 @@ public class ObjectToJSON implements Serializable{
 	        sb.append('"');
 	        return sb.toString();
 	}
-	
+	// 不输出编号的标志
 	private boolean bJh = false;
 	
 	public ObjectToJSON setBJh(boolean b)
@@ -113,6 +114,7 @@ public class ObjectToJSON implements Serializable{
 	public String toJSON(String szObjName)
 	{
 		StringBuffer buf = new StringBuffer();
+		// 简单类型模式
 		String szSimpleTypeReg = "^(boolean|char|byte|short|int|long|float|double)$";
 		String szSimpleArrTypeReg = "^class \\[([A-Z])";
 		Pattern p = Pattern.compile(szSimpleTypeReg);
@@ -134,20 +136,21 @@ public class ObjectToJSON implements Serializable{
 			{
 				Date oDate = (Date)o;
 				Timestamp tstp = new Timestamp(oDate.getTime());
-				int m = oDate.getMonth() + 1;
-				// 来看需要返回JavaScript Date类型，就将下面的注释打开
-				// return buf.append("new Date(").append(((Date)o).getTime()).append(")").toString();
-
-				buf.append("'").append(oDate.getYear() + 1900)
-				.append("-").append(9 < m ? "" + m : "0" + m)
-				// 邓详静 2009-12-12 22:54:34 有问题 oDate.getDay() 应该是oDate.getDate() 
-				.append("-").append(9 < oDate.getDate() ? "" + oDate.getDate(): "0" + oDate.getDate());
-				if(0 < oDate.getHours() && 0 < oDate.getMinutes())
-					buf.append(" ").append(9 < oDate.getHours() ? "" + oDate.getHours(): "0" + oDate.getHours())
-				.append(":").append(9 < oDate.getMinutes() ? "" + oDate.getMinutes(): "0" + oDate.getMinutes())
-				.append(":").append(9 < oDate.getSeconds() ? "" + oDate.getSeconds(): "0" + oDate.getSeconds())
-				.append(".").append("000");
-				buf.append("'");
+				// 直接使用Timestamp的toString
+				buf.append("'").append(tstp.toString()).append("'");
+//				int m = oDate.getMonth() + 1;
+//				// 来看需要返回JavaScript Date类型，就将下面的注释打开
+//				// return buf.append("new Date(").append(((Date)o).getTime()).append(")").toString();
+//				buf.append("'").append(oDate.getYear() + 1900)
+//				.append("-").append(9 < m ? "" + m : "0" + m)
+//				// 邓详静 2009-12-12 22:54:34 有问题 oDate.getDay() 应该是oDate.getDate() 
+//				.append("-").append(9 < oDate.getDate() ? "" + oDate.getDate(): "0" + oDate.getDate());
+//				if(0 < oDate.getHours() && 0 < oDate.getMinutes())
+//					buf.append(" ").append(9 < oDate.getHours() ? "" + oDate.getHours(): "0" + oDate.getHours())
+//				.append(":").append(9 < oDate.getMinutes() ? "" + oDate.getMinutes(): "0" + oDate.getMinutes())
+//				.append(":").append(9 < oDate.getSeconds() ? "" + oDate.getSeconds(): "0" + oDate.getSeconds())
+//				.append(".").append("000");
+//				buf.append("'");
 				return buf.toString();
 			}
 			// 简单类型的对象封装类
@@ -246,7 +249,7 @@ public class ObjectToJSON implements Serializable{
 			if(null != brige)
 				brige.registerObject(this.o.hashCode(), this.o);
 			// 成员方法的处理
-			Method []oMs = c.getMethods();
+			Method []oMs = GetAllSupersProperty.getMethods(c);// c.getMethods();
 			// 可能在应用中需要过滤，不将这些方法输出：
 			// "main","getClass","wait","wait","wait","equals","toString","notify","notifyAll"
 			if(!bJh && 0 < oMs.length)
@@ -275,7 +278,7 @@ public class ObjectToJSON implements Serializable{
 			}
 			
 			// 成员变量的处理
-			Field []f = c.getDeclaredFields(); // c.getFields();
+			Field []f = GetAllSupersProperty.getFields(c);// c.getDeclaredFields(); // c.getFields();
 			if(0 < f.length)
 			{
 				String szFlter = "(serialVersionUID)";
