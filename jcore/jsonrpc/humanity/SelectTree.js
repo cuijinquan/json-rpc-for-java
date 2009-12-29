@@ -20,7 +20,7 @@
                $(oSlct[i]).removeClass("x-tree-selected");
               oSlct = oSlct[oSlct.length - 1];
               XuiTree.curTree.select(oSlct, null);
-              Base.fnSciv($("#" + id)[0], oSlct);top.document.title = [oSlct.id, new Date().getTime()]; 
+              Base.fnSciv($("#" + id)[0], oSlct);
            }
        }).keydown(function(e)
        {
