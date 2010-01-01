@@ -2,9 +2,44 @@ package jcore.jsonrpc.tools;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GetAllSupersProperty {
 
+	/**
+	 * 去除不要的属性，去除重复的属性
+	 * @param fRst
+	 * @return
+	 */
+	public static Field [] cleanField(Field []fRst)
+	{
+		List lst = new ArrayList();
+		Map m = new HashMap();
+		if(0 < fRst.length)
+		{
+			for(int i = fRst.length; --i >= 0;)
+			{
+				String s = fRst[i].getName();
+				if( s.equals("log") || 
+					 s.equals("serialVersionUID") || 
+					 s.equals("request") || 
+					 -1 < s.indexOf("class$"))
+					continue;
+				if(null == m.get(s))
+				{
+					lst.add(fRst[i]);
+					m.put(s, "1");
+				}
+			}
+		}
+		Field []mt = new Field[lst.size()];
+		System.arraycopy(lst.toArray(), 0, mt, 0, mt.length);
+		lst = null;
+		return mt;
+	}
 	
 	public static Field[] getDeclaredFields(Class c)
 	{
@@ -44,9 +79,38 @@ public class GetAllSupersProperty {
 			c = c.getSuperclass();
 		}
 		
-		return fRst;
+		return cleanField(fRst);
 	}
 	
+	/**
+	 * 去除不要的方法，去除重复的方法名
+	 * @param fRst
+	 * @return
+	 */
+	public static Method [] cleanMethod(Method []fRst)
+	{
+		List lst = new ArrayList();
+		Map m = new HashMap();
+		if(0 < fRst.length)
+		{
+			for(int i = fRst.length; --i >= 0;)
+			{
+				String s = fRst[i].getName();
+				
+				if( -1 < "(notifyAll)|(getClass)|(wait)|(wait)|(equals)|(notify)|(main)|(hashCode)|(toString)".indexOf("(" + s + ")"))
+					continue;
+				if(null == m.get(s))
+				{
+					lst.add(fRst[i]);
+					m.put(s, "1");
+				}
+			}
+		}
+		Method []mt = new Method[lst.size()];
+		System.arraycopy(lst.toArray(), 0, mt, 0, mt.length);
+		lst = null;
+		return mt;
+	}
     public static Method [] getMethods(Class c)
     {
     	Method []fRst = c.getMethods();
@@ -61,7 +125,7 @@ public class GetAllSupersProperty {
 			fRst1 = null;
 			c = c.getSuperclass();
 		}
-		return fRst;
+		return cleanMethod(fRst);
     }
 	
 }
