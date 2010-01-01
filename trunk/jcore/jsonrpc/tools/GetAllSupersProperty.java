@@ -97,7 +97,7 @@ public class GetAllSupersProperty {
 			{
 				String s = fRst[i].getName();
 				
-				if( -1 < "(notifyAll)|(getClass)|(wait)|(wait)|(equals)|(notify)|(main)|(hashCode)|(toString)".indexOf("(" + s + ")"))
+				if( -1 < "getUs,getSimpleUidService,getBaseSystemService,getDao,getUser,getService(getRequest)(setRequest)()(notifyAll)|(getClass)|(wait)|(wait)|(equals)|(notify)|(main)|(hashCode)|(toString)".indexOf("(" + s + ")"))
 					continue;
 				if(null == m.get(s))
 				{
