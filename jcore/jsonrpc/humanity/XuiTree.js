@@ -223,9 +223,15 @@
            /* this.upCkBxData(szId, b, o); commented by liding */
            for(; i < j; i++)
            {
-              if(0 < o.childNodes[i].childNodes.length)this.upCkBxDataAllCld(o.childNodes[i], b);
-              else
-              {  o.childNodes[i].isChecked = b; /* add by liding */
+              if(0 < o.childNodes[i].childNodes.length) {
+              	/* add by liding */
+	            o.childNodes[i].isChecked = b;
+	            szId = [o.id, d, i].join("_");
+	            this.upCkBxData(szId, b, o.childNodes[i]);
+              	this.upCkBxDataAllCld(o.childNodes[i], b);
+	            /* add by liding */
+              } else {  
+              	 o.childNodes[i].isChecked = b; /* add by liding */
                  szId = [o.id, d, i].join("_");
                  this.upCkBxData(szId, b, o.childNodes[i]);
               }
