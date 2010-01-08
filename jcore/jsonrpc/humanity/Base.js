@@ -33,44 +33,7 @@ fnSciv:function(c, a, b, n)
 PopMsgWin:function(o)
 {
    if(!o)return false;
-   Base.PopMsgWin.obj = o;
-   var aTp = [Ext.MessageBox.INFO, Ext.MessageBox.QUESTION, Ext.MessageBox.WARNING, Ext.MessageBox.ERROR], obj = {
-           title: '系统提示信息',
-           msg: o.message || o,
-           width:450,
-           buttons: {"ok": "确定"},
-           fn: function(btn){
-             if("ok" == btn)
-              {
-                if(o.field)o.field.setFocus();
-                if("undefined" != typeof g_fcsfld && g_fcsfld)g_fcsfld.setFocus(),g_fcsfld = null;
-                if(o.okScript)
-                  try{if("function" == typeof o.okScript)o.okScript();else eval(o.okScript)}catch(e){};
-                setTimeout(function(){
-                   if(o.okUrl)location.href = contextPath + o.okUrl;
-                },333);
-              }
-              else if("no" == btn)
-              {
-                 if(o.field)o.field.setFocus();
-                 if("undefined" != typeof g_fcsfld && g_fcsfld)g_fcsfld.setFocus(),g_fcsfld = null;
-                 if(o.errScript)try{if("function" == typeof o.errScript)o.errScript();else eval(o.errScript)}catch(e){};
-                 setTimeout(function(){
-                    if(o.errUrl)location.href = contextPath + o.errUrl;
-                 },333);
-              }
-              if(o.field)
-              {
-                var oIp = Base.getObj(o.field);
-                if(0 < oIp.length)oIp.focus();else (oIp = Base.getObj("dto(" + o.field + ")")).focus();
-              }
-           },
-           icon: aTp[o.type || 0]
-       };
-   if(3 == o.type)obj.value = obj.msg,obj.multiline = true,delete obj.msg;
-   if(o.errUrl || o.errScript || 1 == o.type)obj.buttons = {"ok": "确定", "no": "取消"};
-   Ext.MessageBox.show(obj);
-   setTimeout(function(){$("button.x-btn-text").focus()}, 1333);
+   alert(o);
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
 {
@@ -166,7 +129,6 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
 },
 fsubmit:function(n, oWin, bNLd)
 {
-    Base.AjaxObj = Ext.getBody();
     if(false != bNLd)this.XuiLoading();
     mkClctDt();
     (oWin || window).document.forms[n || 0].submit();
@@ -291,7 +253,6 @@ XuiLoading:function(o)
               if(o.okScript)eval(o.okScript);
               if(o.okUrl)location.href = contextPath + o.okUrl;
           }
-          /*return Base.PopMsgWin(o);*/
       };
        window.confirm = function(s, fn, fn1)
       {
@@ -801,7 +762,6 @@ XuiLoading:function(o)
     });
     /* data为请求刷新的对象，格式为[id,1或true表示过滤后面的字段,需要过滤的字段] */
     o.data.each(function(){s.push(this.join(","))});
-    Base.AjaxObj = Ext.getBody();
     if("undefined" != typeof Base && Base.XuiLoading)Base.XuiLoading();//show
     o.url = o.url || document.location.href;
     if("undefined" != typeof g_szJsessionid)
