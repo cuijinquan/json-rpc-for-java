@@ -374,7 +374,7 @@ XuiLoading:function(o)
                      s2 += " " + [fnT(o.hours), fnT(o.minutes), fnT(o.seconds)].join(":");
                  }
                  var oIpt = $(_t.getObj(s));
-                 if(0 == oIpt.length)
+                 if(0 == oIpt.length || "INPUT" != $(oIpt[0]).attr("nodeName"))
                    Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
                  else{
                      oIpt.val(s2);
