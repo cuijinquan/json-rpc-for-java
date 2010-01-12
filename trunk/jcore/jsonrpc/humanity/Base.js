@@ -1146,7 +1146,7 @@ XuiLoading:function(o)
 	   height || (height = 760);
 	   if(param)
 	   $(param).each(function(){
-	     var value = _this.getObj(this).val();
+	     var os = _this.getObj(this), value = $(os[os.length - 1]).val();
 	     if(null != value){
 	        p += "&" + this + "=" + escape(_this.decodeStr(value));
 	      }
