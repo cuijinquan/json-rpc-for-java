@@ -3,16 +3,30 @@
   nVer: 0,
   replaceHtml: function(el, html) {
 	var oldEl = typeof el === "string" ? document.getElementById(el) : el;
-	if(this.isIE)return oldEl.innerHTML = html, oldEl;
+	if(this.isIE)return Base.clearChldNd(oldEl).innerHTML = html, oldEl;
 	var newEl = oldEl.cloneNode(false);
-	newEl.innerHTML = html;
+	Base.clearChldNd(newEl).innerHTML = html;
 	oldEl.parentNode.replaceChild(newEl, oldEl);
 	return newEl;
 },/* 获取top中的菜单数据 */
 getMenuData:function()
 {
    return window.topMenu || (window.topMenu = top.frames[0].topMenu);
-},/* 根据输入对象,获取输入对象布局的div对象 */
+},/* 防止内存泄漏 */
+clearChldNd:function(o)
+{
+    var i, t, k;
+    for(i = o.childNodes.length; --i >= 0;)
+    {
+        t = o.childNodes(i);
+        /* 清除属性 */
+        if(t.clearAttributes)t.clearAttributes();
+        if(t.childNodes && 0 < t.childNodes.length)Base.clearChldNd(t);
+        o.removeChild(t);
+    }
+    return o;
+}
+,/* 根据输入对象,获取输入对象布局的div对象 */
 getInputDiv:function(o)
 {
    var _t = this;
@@ -89,7 +103,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
           alert("\u5f02\u6b65\u8c03\u7528\u9519\u8bef:\u6267\u884c\u8fd4\u56de\u7684\u811a\u672c\u51fa\u9519" + ",\u9519\u8bef\u6d88\u606f\u662f:" + e.message);
         }        
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
-        if(o && "#document" != o.attr("nodeName") && s){o[0].innerHTML = s;if(szStyle)o.attr('style', szStyle)}
+        if(o && "#document" != o.attr("nodeName") && s){Base.clearChldNd(o[0]).innerHTML = s;if(szStyle)o.attr('style', szStyle)}
         }
     }});
    }); 
@@ -122,7 +136,7 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
           s = s.replace(/^\s*<div[^>]*>/mi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
-        if(s && -1 < s.indexOf("<div"))o.innerHTML = s;
+        if(s && -1 < s.indexOf("<div"))Base.clearChldNd(o).innerHTML = s;
         try{script && eval(script)}catch(e){alert("异步调用错误:执行返回的脚本出错" + ",错误消息是:" + e.message);}
      }});
    });
@@ -900,7 +914,7 @@ XuiLoading:function(o)
               el.insertBefore(frag, el.firstChild);
               return el.firstChild;
           }else{
-              el.innerHTML = html;
+              Base.clearChldNd(el).innerHTML = html;
               return el.firstChild;
           }
       case "beforeend":
@@ -910,7 +924,7 @@ XuiLoading:function(o)
               el.appendChild(frag);
               return el.lastChild;
           }else{
-              el.innerHTML = html;
+              Base.clearChldNd(el).innerHTML = html;
               return el.lastChild;
           }
       case "afterend":
