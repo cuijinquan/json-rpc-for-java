@@ -252,19 +252,29 @@ XuiLoading:function(o)
           {
               if(window.cfm(o.message))
               {
-                  if(o.okScript)eval(o.okScript);
+                  if(o.okScript){
+                    if("function" == typeof o.okScript)o.okScript();
+                    else eval(o.okScript);
+                  }
                   if(o.okUrl)location.href = contextPath + o.okUrl;
               }
               else 
               {
-                 if(o.errScript)eval(o.errScript);
+                 if(o.errScript)
+                 {
+                    if("function" == typeof o.errScript)o.errScript();
+                    else eval(o.errScript);
+                 }
                  if(o.errUrl)location.href = contextPath + o.errUrl;
               }
           }
           else
           {
               alt(o.message);
-              if(o.okScript)eval(o.okScript);
+              if(o.okScript){
+                    if("function" == typeof o.okScript)o.okScript();
+                    else eval(o.okScript);
+               }
               if(o.okUrl)location.href = contextPath + o.okUrl;
           }
       };
