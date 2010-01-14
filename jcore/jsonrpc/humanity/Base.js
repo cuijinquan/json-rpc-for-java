@@ -30,7 +30,7 @@ clearChldNd:function(o)
 getInputDiv:function(o)
 {
    var _t = this;
-   if(o)return $(_t.p(_t.p(_t.getObj(o)[0], "DIV"), "DIV"));
+   if(o)return $(_t.p(_t.p(_t.getObj(o)[0], "DIV", 10), "DIV", 10));
    return o;
 },/* 将容器中的对象滚动到可见区域 c:容器对象或id, a要求可见对象或id，b深度递归处理，n限定深度*/
 fnSciv:function(c, a, b, n)
@@ -148,10 +148,10 @@ fsubmit:function(n, oWin, bNLd)
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
 {
-   var o = $(":input[@name=" + s + "]");
-   if(0 < o.length)return o;
-   o =  $(":input[@name=dto(" + s + ")]");
-   if(0 < o.length)return o;
+   var o = document.getElementsByName(s);
+   if(o && 0 < o.length)return $(Base.A(o));
+   o =  document.getElementsByName("dto(" + s + ")");
+   if(o && 0 < o.length)return $(Base.A(o));
    o = $("#" + s);
    if(0 < o.length)return o;
    return s;
@@ -386,6 +386,7 @@ XuiLoading:function(o)
                      s2 = [o.fullYear, fnT(o.month), fnT(o.date)].join("-");
                      if(o.seconds || o.hours || o.minutes)
                      s2 += " " + [fnT(o.hours), fnT(o.minutes), fnT(o.seconds)].join(":");
+                     fnT = null;
                  }
                  var oIpt = $(_t.getObj(s));
                  if(0 == oIpt.length || "INPUT" != $(oIpt[0]).attr("nodeName"))
@@ -624,10 +625,10 @@ XuiLoading:function(o)
   bUnload: 1,
   a:[],nDatetime:24 * 60 * 60 * 1000,
   /* 获取对象o的父亲节点 ，例如 Base.p(o, 'TR') */
-  p:function(o,szTagName)
+  p:function(o,szTagName, n)
   {
     var i = 0;
-    while(o && i++ < 500)
+    while(o && i++ < (n || 500))
     {
       if(o = o.parentNode)
       {
