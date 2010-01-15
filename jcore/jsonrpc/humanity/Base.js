@@ -400,18 +400,21 @@ XuiLoading:function(o)
                      fnT = null;
                  }
                  var oIpt = $(_t.getObj(s));
-                 if(0 == oIpt.length || "INPUT" != $(oIpt[0]).attr("nodeName"))
-                   Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
-                 else{
-                     oIpt.val(s2);
-                     if("hidden" == oIpt.attr("type"))
-                     {
-	                     oIpt = Base.getInputDiv(oIpt)[0];
-	                     oIpt = $(Base.A(oIpt.getElementsByTagName("INPUT")));
-	                     if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
-	                        $(oIpt[0]).val(Select.getDescByValue(s2, oIpt[0]));
-                     }
-                 }
+                 if("TEXTAREA" != szNm)
+                 {
+	                 if(0 == oIpt.length || "INPUT" != szNm)
+	                   Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
+	                 else{
+	                     oIpt.val(s2);
+	                     if("hidden" == oIpt.attr("type"))
+	                     {
+		                     oIpt = Base.getInputDiv(oIpt)[0];
+		                     oIpt = $(Base.A(oIpt.getElementsByTagName("INPUT")));
+		                     if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
+		                        $(oIpt[0]).val(Select.getDescByValue(s2, oIpt[0]));
+	                     }
+	                 }
+                 }else oIpt.val(s2);
               }
               else this.val(s || "");
               window.bBoBq = false;
