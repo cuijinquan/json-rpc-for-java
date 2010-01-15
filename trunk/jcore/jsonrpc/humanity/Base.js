@@ -409,7 +409,7 @@ XuiLoading:function(o)
 	                     oIpt = Base.getInputDiv(oIpt)[0];
 	                     oIpt = $(Base.A(oIpt.getElementsByTagName("INPUT")));
 	                     if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
-	                        (oIpt = oIpt.prev()).val(Select.getDescByValue(s2, oIpt[0]));
+	                        $(oIpt[0]).val(Select.getDescByValue(s2, oIpt[0]));
                      }
                  }
               }
