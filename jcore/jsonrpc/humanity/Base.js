@@ -387,9 +387,9 @@ XuiLoading:function(o)
            }),
            setValue:(_t.setValue = function(s, s2){
               if(!s)return this;
+              window.bBoBq = true;
               if(2 == arguments.length)
               {
-                 window.bBoBq = true;
                  s2 || (s2 = "");
                  if("string" != typeof s2 && s2['time'])
                  {
@@ -408,9 +408,9 @@ XuiLoading:function(o)
                      if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
                         (oIpt = oIpt.prev()).val(Select.getDescByValue(s2, oIpt[0]));
                  }
-                 window.bBoBq = false;
               }
               else this.val(s || "");
+               window.bBoBq = false;
            }),
            setFocus:(_t.setFocus = function(s){
               var o = this;
