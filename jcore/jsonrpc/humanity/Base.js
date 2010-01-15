@@ -29,7 +29,7 @@ clearChldNd:function(o)
 ,/* 根据输入对象,获取输入对象布局的div对象 */
 getInputDiv:function(o)
 {
-   var _t = this;
+   var _t = Base;
    if(o)return $(_t.p(_t.p(_t.getObj(o)[0], "DIV", 10), "DIV", 3));
    return o;
 },/* 将容器中的对象滚动到可见区域 c:容器对象或id, a要求可见对象或id，b深度递归处理，n限定深度*/
