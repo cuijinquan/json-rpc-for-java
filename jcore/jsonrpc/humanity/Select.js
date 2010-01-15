@@ -176,12 +176,12 @@
   },/* 使得中心fn的过程中不触发oninput */
 	fnNoInput:function(fn){
 	  var _t = this;
-	   _t.bBoBq = true;fn();setTimeout(function(){_t.bBoBq = false},13);
+	   window.bBoBq = true;fn();setTimeout(function(){window.bBoBq = false},13);
 	}, /* 检索过滤处理 */
   onInput:function(e, oIpt)
   {
      var _t = this;
-     if(_t.bBoBq)return false;
+     if(window.bBoBq)return false;
      _t.fnNoInput(function(){
 	       _t.stopPropagation(e),_t.preventDefault(e);
 	       if(oIpt.readOnly || oIpt.disabled)return false;
