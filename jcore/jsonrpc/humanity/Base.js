@@ -30,7 +30,7 @@ clearChldNd:function(o)
 getInputDiv:function(o)
 {
    var _t = this;
-   if(o)return $(_t.p(_t.p(_t.getObj(o)[0], "DIV", 10), "DIV", 10));
+   if(o)return $(_t.p(_t.p(_t.getObj(o)[0], "DIV", 10), "DIV", 3));
    return o;
 },/* 将容器中的对象滚动到可见区域 c:容器对象或id, a要求可见对象或id，b深度递归处理，n限定深度*/
 fnSciv:function(c, a, b, n)
@@ -404,13 +404,17 @@ XuiLoading:function(o)
                    Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
                  else{
                      oIpt.val(s2);
-                     oIpt = Base.getInputDiv(oIpt).find(":input");
-                     if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
-                        (oIpt = oIpt.prev()).val(Select.getDescByValue(s2, oIpt[0]));
+                     if("hidden" == oIpt.attr("type"))
+                     {
+	                     oIpt = Base.getInputDiv(oIpt)[0];
+	                     oIpt = $(Base.A(oIpt.getElementsByTagName("INPUT")));
+	                     if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
+	                        (oIpt = oIpt.prev()).val(Select.getDescByValue(s2, oIpt[0]));
+                     }
                  }
               }
               else this.val(s || "");
-               window.bBoBq = false;
+              window.bBoBq = false;
            }),
            setFocus:(_t.setFocus = function(s){
               var o = this;
