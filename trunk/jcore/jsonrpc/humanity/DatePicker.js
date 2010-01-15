@@ -254,7 +254,7 @@
 	},/* 使得中心fn的过程中不触发oninput */
 	fnNoInput:function(fn){
 	  var _t = this;
-	   _t.bBoBq = true;fn();setTimeout(function(){_t.bBoBq = false},13);
+	   window.bBoBq = true;fn();setTimeout(function(){window.bBoBq = false},13);
 	}/* 数据有效检查 */
 	,onkeyup:function(e, oIpt){
 	    var n = oIpt.maxLength, s = oIpt.value.trim(), nL = s.length;
@@ -436,8 +436,8 @@
   },onInput: function(e, o)
    {
      var _t = this;
-     if(o.readOnly || o.disabled ||  _t.bBoBq)return false;
-     this.bBoBq = true;
+     if(o.readOnly || o.disabled ||  window.bBoBq)return false;
+     window.bBoBq = true;
      this.event = e = e || window.event;
         this.stopPropagation(e),this.preventDefault(e);
         /* 记录时分秒值 */
@@ -455,7 +455,7 @@
 	          _t.onInput.call(_t, e, o);
 	       });
 	    }
-     this.bBoBq = false;
+     window.bBoBq = false;
    },click:function(e, o)
 	{
 	   if(-1 < o.className.indexOf("x-date-disabled"))return this;
@@ -479,7 +479,7 @@
 	}, /*显示图层*/
 	showSelectDiv: function(e,o)
 	{
-	    this.bBoBq = true;
+	    window.bBoBq = true;
 	    this.event = e = e || window.event;
 	    e && (this.stopPropagation(e),this.preventDefault(e));
 	    var _t = this;$(o).selection(0, o.value.length);
