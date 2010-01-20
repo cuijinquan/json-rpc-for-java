@@ -98,7 +98,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
         try{
-          script && ((false == isAsync)&& eval(script) || setTimeout(function(){eval(script)}, 777));
+          if(script){if(false == isAsync)eval(script);else setTimeout(function(){eval(script)}, 777)};
         }catch(e){
           alert("\u5f02\u6b65\u8c03\u7528\u9519\u8bef:\u6267\u884c\u8fd4\u56de\u7684\u811a\u672c\u51fa\u9519" + ",\u9519\u8bef\u6d88\u606f\u662f:" + e.message);
         }        
