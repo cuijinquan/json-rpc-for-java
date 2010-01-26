@@ -399,7 +399,7 @@ XuiLoading:function(o)
                      s2 += " " + [fnT(o.hours), fnT(o.minutes), fnT(o.seconds)].join(":");
                      fnT = null;
                  }
-                 var oIpt = $(_t.getObj(s));
+                 var oIpt = $(_t.getObj(s)), szNm = $(oIpt[0]).attr("nodeName");
                  if("TEXTAREA" != szNm)
                  {
 	                 if(0 == oIpt.length || "INPUT" != szNm)
