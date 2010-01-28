@@ -120,6 +120,7 @@
       index = tabs.left || 1, 
       index = (1 != index) && "sub" == tabs.action ? (index + 1): index;
       var h = tabs.headers["index" + index], myTab = $("#" + id);
+      if("undefined" == typeof h)return this;
       current = myTab.find("#" + h["id"])[0];
       if("none" == $(current).css("display")){
         tabs.left = ++index;
