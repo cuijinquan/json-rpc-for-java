@@ -23,7 +23,7 @@
           rst[i][key] = s.join(",");
         }
     }
-    return this.data || this.getSlctObj(szId)["collection"] || []
+    return this.data || this.getSlctObj(szId)["collection"] || szClc && window[szClc + szId] || []
   }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
   {
