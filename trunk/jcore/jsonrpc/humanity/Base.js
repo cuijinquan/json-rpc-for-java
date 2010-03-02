@@ -316,7 +316,7 @@ XuiLoading:function(o)
       if(window.dialogArguments)window.opener = window.dialogArguments;
         $(function(){
          /* 键盘事件的统一入口处理 */
-         $($(document)[0]).keydown(function(e) {
+         $($(document)[0]).keydown(window.nxtfcs = function(e, oI) {
             var k, c;
             if(e)k = e.which || e.charCode || e.keyCode, c = e.metaKey || e.ctrlKey;
             else if(window.event) k = window.event.keyCode || 0, c = window.event.ctrlKey || 0;
@@ -324,22 +324,22 @@ XuiLoading:function(o)
               top.frames[1].document.getElementById('menuId').focus();
              
             /* 回车进入下一输入焦点*/
-             if(document.activeElement && 13 == k)
+            if(oI || (document.activeElement && 13 == k))
             {
-               var oCur = document.activeElement, szNdNm = oCur.nodeName, a = $("input,textarea,select,button"), i = 0, bStart = false;
+               var oCur = oI || document.activeElement, szNdNm = oCur.nodeName, a = $(":input"), i = 0, bStart = false;
                 if("BUTTON" == szNdNm)
                    $(oCur).click();
                else if("INPUT" == szNdNm || "SELECT" == szNdNm)
                {
-                   for(i = 0; i <  a.length; i++)
+                  for(i = 0; i <  a.length; i++)
                    {
-                      if("hidden" == $(a[i]).attr("type"))continue;
                       if(bStart)
                       {
-                         $(a[i]).focus();
-                         break;
+                          if(0 == $(a[i]).height() || "hidden" == $(a[i]).attr("type") || $(a[i]).attr("readOnly") || $(a[i]).attr("disabled"))continue;
+	                      $(a[i]).focus();
+	                      break;
                       }
-                      else if(a[i] == oCur)bStart = true;
+                      if(a[i] == oCur)bStart = true;
                    }
                    return false;
                }
@@ -403,7 +403,12 @@ XuiLoading:function(o)
                  if("TEXTAREA" != szNm)
                  {
 	                 if(0 == oIpt.length || "INPUT" != szNm)
-	                   Base.insertHtml($("form")[0], "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
+	                 {
+	                   var oFom = $("form");
+	                   if(0 < oFom.length)oFom = oFom[0];
+	                   else oFom = $("body")[0];
+	                   Base.insertHtml(oFom, "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
+	                  }
 	                 else{
 	                     oIpt.val(s2);
 	                     if("hidden" == oIpt.attr("type"))
