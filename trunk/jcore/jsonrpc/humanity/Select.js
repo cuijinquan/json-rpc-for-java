@@ -226,9 +226,9 @@
         /* 回车选择 */
         case 13:
            this.onSelect(e, i);
-           this.bIE ? (e.keyCode = 9) : '';
            this.hidden(e);
-           $(this.p(this.descObj, "DIV")).parent().next().find(":input:first").focus();
+           this.bIE ? (e.keyCode = 9) : '';
+           window.nxtfcs(e, this.descObj);
            break;
         case 38: /* 上 */
            i = this.lightRow(i - 1);
