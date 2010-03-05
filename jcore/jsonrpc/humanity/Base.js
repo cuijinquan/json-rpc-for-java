@@ -201,7 +201,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
    o.each(function(){
       if ("checkbox" == this.type && false == this.checked)return true; //排除没有勾选的checkbox
       if ("radio" == this.type && false == this.checked)return true;    //排除没有选择的radiobox
-      if(this.name && (s = escape(ecd($(this).val()))))
+      if(this.name && (s = encodeURIComponent(ecd($(this).val()))))
       	a.push(this.name + "=" + s);
    });
    else{
@@ -209,7 +209,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
       for(var i = 0; i < p.length; i++)
       {
         u = p[i].split("=");
-        if(u[0] && (s = escape(ecd(u[1]))))
+        if(u[0] && (s = encodeURIComponent(ecd(u[1]))))
         a.push(u[0] + "=" + s);
       }
    }
