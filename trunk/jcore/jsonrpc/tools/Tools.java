@@ -109,14 +109,18 @@ public class Tools {
 	 * @return
 	 */
 	public static String decodeUnicodeHtm(String szStr) {
+		if(null == szStr || 0 == szStr.trim().length())return szStr;
 		Pattern p = Pattern.compile("&#(\\d+);", Pattern.MULTILINE);
 		Matcher m = null;
 		try
 		{
-			szStr = java.net.URLDecoder.decode(szStr, "UTF-8");
+			if(null != szStr && szStr.replaceAll("%[0-9A-Fa-F]+", "").length() != szStr.length())
+				szStr = java.net.URLDecoder.decode(szStr, "UTF-8");
 	    } catch (Exception e) {}
+	    if(null != szStr && szStr.replaceAll("&[A-Za-z]+;", "").length() != szStr.length())
+	    	szStr = HTMLDecode(szStr);
 		try {
-			m = p.matcher(szStr = HTMLDecode(szStr));
+			m = p.matcher(szStr);
 		} catch (Exception e) {
 			return szStr;
 		}
