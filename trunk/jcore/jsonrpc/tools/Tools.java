@@ -111,8 +111,12 @@ public class Tools {
 	public static String decodeUnicodeHtm(String szStr) {
 		Pattern p = Pattern.compile("&#(\\d+);", Pattern.MULTILINE);
 		Matcher m = null;
+		try
+		{
+			szStr = java.net.URLDecoder.decode(szStr, "UTF-8");
+	    } catch (Exception e) {}
 		try {
-			m = p.matcher(java.net.URLDecoder.decode(HTMLDecode(szStr), "UTF-8"));
+			m = p.matcher(szStr = HTMLDecode(szStr));
 		} catch (Exception e) {
 			return szStr;
 		}

@@ -328,7 +328,7 @@ XuiLoading:function(o)
             {
                var oCur = oI || document.activeElement, szNdNm = oCur.nodeName, a = $(":input"), i = 0, bStart = false;
                 if("BUTTON" == szNdNm)
-                   $(oCur).click();
+                   ;// $(oCur).click();
                else if("INPUT" == szNdNm || "SELECT" == szNdNm)
                {
                   for(i = 0; i <  a.length; i++)
