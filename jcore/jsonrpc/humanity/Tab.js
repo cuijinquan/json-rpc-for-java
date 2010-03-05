@@ -93,7 +93,7 @@
     setActiveTab : function(id, active){
      var myTab = $("#" + id), o = myTab.find("#" + active)[0];
      if(o){
-      this.moveToTab(id, active);
+      /* this.moveToTab(id, active);*/
       this.tabLoad(id, o);
      } else {
       var ftab = myTab.find("span.x-tab-strip-text")[0];
