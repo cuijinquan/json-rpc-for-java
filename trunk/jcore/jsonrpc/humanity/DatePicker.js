@@ -8,6 +8,9 @@
     year:0, month:0,day:0,
     dpMax: null, dpMin: null, /* 允许的最大年月日和最小的年月日 */
     pkData: [], /* 初始化一年的数据 */
+    upi4ajx:function(){
+     if(DatePicker.dpIpt && DatePicker.dpIpt.name)DatePicker.dpIpt = document.getElementsByName(DatePicker.dpIpt.name)[0];
+  },
     initPkData:function(nY, m, d)
     {
        var o = new Date(this.year = parseInt(nY, 10), (this.month = parseInt(m, 10)) - 1, 
@@ -143,6 +146,7 @@
 	},/* 设置value值 */
 	setValueD: function(e)
 	{
+	   DatePicker.upi4ajx();
 	   if("undefined" == typeof this.dpIpt.value || this.dpIpt.readOnly || this.dpIpt.disabled || "focus" == (window.event || {}).type)return false;
 	   var _t = this, s,o = _t.dpIpt, d =  o.value.length, nTmp;
 	   _t.fnNoInput(function(){
@@ -235,6 +239,7 @@
 	fnBq:function()
 	{
 	    if(null == this.dpIpt)return;
+	    DatePicker.upi4ajx();
 	    var o = this.dpIpt, n = o.value.length, a = o.value.split(/[-\\s:\.]/);
 	   if(3 <= a.length)
 	    {
@@ -257,6 +262,7 @@
 	   window.bBoBq = true;fn();setTimeout(function(){window.bBoBq = false},13);
 	}/* 数据有效检查 */
 	,onkeyup:function(e, oIpt){
+	    DatePicker.upi4ajx();
 	    var n = oIpt.maxLength, s = oIpt.value.trim(), nL = s.length;
 	    Base.delInvalid(oIpt);HidTip();
 	    if(0 < nL)
@@ -272,6 +278,7 @@
      e = e || window.event;
      var n = e.which || e.keyCode, _t = this, x, k;
      if(!_t.XuiDatePicker)return false;
+     DatePicker.upi4ajx();
      if("none" == _t.XuiDatePicker.style.display)
      {
         if(40 == n && e.ctrlKey)_t.showSelectDiv(e, oIpt);
@@ -438,6 +445,7 @@
      var _t = this;
      if(o.readOnly || o.disabled ||  window.bBoBq)return false;
      window.bBoBq = true;
+     DatePicker.upi4ajx();
      this.event = e = e || window.event;
         this.stopPropagation(e),this.preventDefault(e);
         /* 记录时分秒值 */
@@ -459,6 +467,7 @@
    },click:function(e, o)
 	{
 	   if(-1 < o.className.indexOf("x-date-disabled"))return this;
+	   DatePicker.upi4ajx();
 	   var a = o.title.split("-");
 	   this.year = a[0],this.month = a[1],this.day = a[2];
 	   e && (this.stopPropagation(e),this.preventDefault(e));

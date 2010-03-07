@@ -4,6 +4,10 @@
   descObj:null,    /* 存放描述的输入对象 */
   oFrom:null,      /* 计算图层宽度的对象 */
   oShdow:null,     /* 阴影图层对象 */
+  upi4ajx:function(){
+     if(Select.descObj && Select.descObj.id)Select.descObj = document.getElementById(Select.descObj.id);
+     if(Select.inputObj && Select.inputObj.name)Select.inputObj = document.getElementsByName(Select.inputObj.name)[0];
+  },
   getSlctObj:function(szId)
   {
     return (window.slctIptData || {})[szId]||{};
@@ -72,6 +76,7 @@
   }, /* 给对象设置value */
   setValueX:function(s, n,e)
   {
+     Select.upi4ajx();
      var _t = this, descObj = this.descObj, inputObj = this.inputObj, bEdit = "true" == _t.getSlctObj(_t.descObj.id)['allowEdit'];
      if(1 == n && descObj)descObj.value = s;
      else if(2 == n && inputObj)inputObj.value = s;
@@ -118,6 +123,7 @@
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
   {
+     Select.upi4ajx();
      var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getSlctObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
