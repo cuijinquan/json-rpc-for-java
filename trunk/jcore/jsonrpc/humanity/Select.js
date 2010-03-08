@@ -5,8 +5,10 @@
   oFrom:null,      /* 计算图层宽度的对象 */
   oShdow:null,     /* 阴影图层对象 */
   upi4ajx:function(){
-     if(Select.descObj && Select.descObj.id)Select.descObj = document.getElementById(Select.descObj.id);
-     if(Select.inputObj && Select.inputObj.name)Select.inputObj = document.getElementsByName(Select.inputObj.name)[0];
+     if(Select.descObj && Select.descObj.id)this.descObj = Select.descObj = document.getElementById(Select.descObj.id);
+     if(Select.inputObj && Select.inputObj.name)this.inputObj = Select.inputObj = document.getElementsByName(Select.inputObj.name)[0];
+     if(this.descObj && this.descObj.id)this.descObj = Select.descObj = document.getElementById(this.descObj.id);
+     if(this.inputObj && this.inputObj.name)this.inputObj = Select.inputObj = document.getElementsByName(this.inputObj.name)[0];
   },
   getSlctObj:function(szId)
   {
@@ -27,6 +29,7 @@
           rst[i][key] = s.join(",");
         }
     }
+    if(this.data && 0 == this.data.length)this.data = null;
     return this.data || this.getSlctObj(szId)["collection"] || szClc && window[szClc + szId] || []
   }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
@@ -123,7 +126,7 @@
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
   {
-     Select.upi4ajx();
+     this.updata(Select.descObj.value);
      var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getSlctObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
@@ -222,6 +225,7 @@
   onkeydown:function(e, oIpt)
   {
      e = e || window.event;
+     Select.upi4ajx();
      var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getSlctObj(oIpt.id), i = o["_lstNum"] || 0;
      if(-1 == o["_lstNum"])o["_lstNum"] = 0, i = -1;
      switch(n)
@@ -241,6 +245,7 @@
            this.stopPropagation(e),this.preventDefault(e);
            return false;
         case 40: /* 下 */
+           this.show();
            i = this.lightRow(i + 1);
            this.stopPropagation(e),this.preventDefault(e);
            return false;
