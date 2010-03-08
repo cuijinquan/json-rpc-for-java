@@ -10,6 +10,7 @@
     pkData: [], /* 初始化一年的数据 */
     upi4ajx:function(){
      if(DatePicker.dpIpt && DatePicker.dpIpt.name)DatePicker.dpIpt = document.getElementsByName(DatePicker.dpIpt.name)[0];
+     if(this.dpIpt && this.dpIpt.name)this.dpIpt = document.getElementsByName(this.dpIpt.name)[0];
   },
     initPkData:function(nY, m, d)
     {
