@@ -6,9 +6,8 @@
   oShdow:null,     /* 阴影图层对象 */
   upi4ajx:function(){
      if(Select.descObj && Select.descObj.id)this.descObj = Select.descObj = document.getElementById(Select.descObj.id);
-     if(Select.inputObj && Select.inputObj.name)this.inputObj = Select.inputObj = document.getElementsByName(Select.inputObj.name)[0];
      if(this.descObj && this.descObj.id)this.descObj = Select.descObj = document.getElementById(this.descObj.id);
-     if(this.inputObj && this.inputObj.name)this.inputObj = Select.inputObj = document.getElementsByName(this.inputObj.name)[0];
+     this.inputObj = Select.inputObj = $(this.descObj).next()[0];
   },
   getSlctObj:function(szId)
   {
