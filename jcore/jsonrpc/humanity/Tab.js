@@ -86,7 +86,7 @@
           for(var i = left; i < index - 1; i++)
 	        this.tabScrollRightHandler(id, speed);
         }
-      }catch(e){alert(e.message);}
+      }catch(e){}
     },
     
     /* 设置选中的tab页. id:标签页tabs的id，active:指定选中的标签页的id */
