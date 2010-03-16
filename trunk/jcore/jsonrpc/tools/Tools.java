@@ -114,7 +114,7 @@ public class Tools {
 		Matcher m = null;
 		try
 		{
-			if(null != szStr && szStr.replaceAll("%[0-9A-Fa-F]+", "").length() != szStr.length())
+			if(null != szStr && szStr.replaceAll("%[0-9A-Fa-f]+", "").length() != szStr.length())
 				szStr = java.net.URLDecoder.decode(szStr, "UTF-8");
 	    } catch (Exception e) {}
 	    if(null != szStr && szStr.replaceAll("&[A-Za-z]+;", "").length() != szStr.length())
