@@ -164,6 +164,7 @@ hideObj:function(szNameOrId)
   else
   {
      o = $(":input[@name=" + szNameOrId + "]");
+     if(0 == o.length)o = $(":input[@name=dto(" + szNameOrId + ")]");
      o = Base.p(o[0], "DIV");o = Base.p(o, "DIV");
      $(o).hide();
   }
@@ -250,6 +251,7 @@ XuiLoading:function(o)
           var fnTmp = window.alt;
           if(0 < o.type)
           {
+              if(!(o.okScript || o.okUrl || o.errScript || o.errUrl))return window.alt(o.message);
               if(window.cfm(o.message))
               {
                   if(o.okScript){
