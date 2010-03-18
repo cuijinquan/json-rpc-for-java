@@ -509,6 +509,7 @@ XuiLoading:function(o)
                 var i,a = s.split(/[,;\|\s]/);
                 for(i = 0; i < a.length; i++)
                 {
+                  if(0 >=$(Base.getObj(a[i])).length)continue;
                   o = Base.getInputDiv(a[i]);// _t.getObj(a[i]).parent().parent();
                   o.find("b").remove();
                   o.find("input:first").removeAttr("isRequired");
