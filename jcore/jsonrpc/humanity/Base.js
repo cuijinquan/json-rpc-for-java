@@ -185,15 +185,18 @@ showObj:function(szNameOrId)
   }
 }
 ,/* 传递Xpath szData指定的数据，并更新flash区域的查询 */
-doUpdateCollection:function(szCollectionId, szData, szReqCode,szCallBackFn)
+doUpdateCollection:function(szCollectionId, szData, szReqCode)
 {
-  var o, _t = this,s;
+  var o, _t = this,s, argF = arguments[arguments.length - 1];
   $(document).ready(function(){
      setTimeout(function(){
      o = szCollectionId.swf();
      mkClctDt();
-      if($.isFunction(szCallBackFn))window[s = szCollectionId + "DataChgCbk"] = szCallBackFn;
-   	  szCollectionId.setDataCmpltCbk(s);
+      if($.isFunction(argF))
+      {
+         window[s = szCollectionId + "DataChgCbk"] = argF;
+   	     szCollectionId.setDataCmpltCbk(s);
+   	  }
       if(o && o.doUpdateCollection){o.doUpdateCollection(_t.getAllInput(szData),szReqCode || null);}
      else window[szCollectionId+"S_cache"]=function(){_t.doUpdateCollection(szCollectionId,szData,szReqCode);}
      },777);
