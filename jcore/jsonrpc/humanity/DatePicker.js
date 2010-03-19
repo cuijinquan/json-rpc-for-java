@@ -443,28 +443,6 @@
      }
   },onInput: function(e, o)
    {
-     var _t = this;
-     if(o.readOnly || o.disabled ||  window.bBoBq)return false;
-     window.bBoBq = true;
-     DatePicker.upi4ajx();
-     this.event = e = e || window.event;
-        this.stopPropagation(e),this.preventDefault(e);
-        /* 记录时分秒值 */
-        if(_t.isIE)
-        {
-         _t.detachEvent(o, "propertychange", _t[o.id] && _t[o.id].onpropertychange || o["onpropertychange"] || function(){});
-         o["onpropertychange"] = null;
-        }
-        _t.fnBq();
-        o["_oldVl"] = o.value;
-        if(_t.isIE)
-	    {
-	       _t.addEvent(o, "propertychange",  (_t[o.id] || (_t[o.id] = {})).onpropertychange = function(e)
-	       {
-	          _t.onInput.call(_t, e, o);
-	       });
-	    }
-     window.bBoBq = false;
    },click:function(e, o)
 	{
 	   if(-1 < o.className.indexOf("x-date-disabled"))return this;
