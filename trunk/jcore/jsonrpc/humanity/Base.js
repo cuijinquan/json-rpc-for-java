@@ -49,7 +49,7 @@ PopMsgWin:function(o)
    if(!o)return false;
    alert(o);
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
-AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
+AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,callBackFn)
 {
    mkClctDt();
    var form, reqCode;
@@ -103,7 +103,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
           alert("\u5f02\u6b65\u8c03\u7528\u9519\u8bef:\u6267\u884c\u8fd4\u56de\u7684\u811a\u672c\u51fa\u9519" + ",\u9519\u8bef\u6d88\u606f\u662f:" + e.message);
         }        
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
-        if(o && "#document" != o.attr("nodeName") && s){Base.clearChldNd(o[0]).innerHTML = s;if(szStyle)o.attr('style', szStyle)}
+        if(o && "#document" != o.attr("nodeName") && s){Base.clearChldNd(o[0]).innerHTML = s;if(szStyle)o.attr('style', szStyle);if($.isFunction(callBackFn))callBackFn();}
         }
     }});
    }); 
@@ -113,7 +113,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync)
 AjaxSyn : function(id, isAsync){
   return this.AjaxUpdateUi(id, null, null, null, null, isAsync);
 },
-AjaxTab: function(tabId, szReqCode, url, data, destId){
+AjaxTab: function(tabId, szReqCode, url, data, destId,szCallBackFn){
    mkClctDt();
    var _t = this, separator = url &&  -1 < url.indexOf("?") ? "&" : "?";
    (szReqCode && (url = contextPath + url + separator + "reqCode=" + szReqCode)) || (url = contextPath + url);
@@ -136,6 +136,7 @@ AjaxTab: function(tabId, szReqCode, url, data, destId){
           s = s.replace(/^\s*<div[^>]*>/mi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
+        if($.isFunction(szCallBackFn))szCallBackFn();
         if(s && -1 < s.indexOf("<div"))Base.clearChldNd(o).innerHTML = s;
         try{script && eval(script)}catch(e){alert("异步调用错误:执行返回的脚本出错" + ",错误消息是:" + e.message);}
      }});
@@ -184,15 +185,17 @@ showObj:function(szNameOrId)
   }
 }
 ,/* 传递Xpath szData指定的数据，并更新flash区域的查询 */
-doUpdateCollection:function(szCollectionId, szData, szReqCode)
+doUpdateCollection:function(szCollectionId, szData, szReqCode,szCallBackFn)
 {
-  var o, _t = this;
+  var o, _t = this,s;
   $(document).ready(function(){
      setTimeout(function(){
      o = szCollectionId.swf();
      mkClctDt();
-     if(o && o.doUpdateCollection)o.doUpdateCollection(_t.getAllInput(szData), szReqCode || null);
-     else window[szCollectionId + "S_cache"] = function(){_t.doUpdateCollection(szCollectionId, szData, szReqCode)};
+      if($.isFunction(szCallBackFn))window[s = szCollectionId + "DataChgCbk"] = szCallBackFn;
+   	  szCollectionId.setDataCmpltCbk(s);
+      if(o && o.doUpdateCollection){o.doUpdateCollection(_t.getAllInput(szData),szReqCode || null);}
+     else window[szCollectionId+"S_cache"]=function(){_t.doUpdateCollection(szCollectionId,szData,szReqCode);}
      },777);
    });
 },getAllInput:function(s)
