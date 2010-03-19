@@ -95,7 +95,7 @@
     /* 键盘的接收 */
     onkeydown: function(e)
     {
-	    e = window.event || e; var key = e.keyCode || e.which;
+	    e = window.event || e; var key = e.keyCode || e.which,o;
 	    if(XuiTree.curTree)
 	    switch(key)
 	    {
@@ -103,7 +103,22 @@
 	      case 38 : this.pervNode();  break;  /* Arrow up */
 	      case 39 : this.lowerNode(); break;  /* Arrow right, expand child node */
 	      case 40 : this.nextNode();  break;  /* Arrow down */
-	      case 13:$("#" + XuiTree.curTree.id).find(XuiTree.slctCls).click();break;
+	      case 13:
+	         key = $("#" + XuiTree.curTree.id).find(XuiTree.slctCls);
+	         o = key.find("a");
+	         if(0 < o.length)
+	         {
+	            if(o.attr("onclick"))
+		         	o.click();
+		         else if(o.attr("href"))window.location = o.attr("href");
+	         }
+	         else
+	         {
+		         if(key.attr("onclick"))
+		         	key.click();
+		         else if(key.attr("href"))window.location = key.attr("href");
+	         }
+	         break;
 	    }
     },/* 更新当前的树数据为初始化修改前的状态 */
     upDataTree:function(id)
