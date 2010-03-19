@@ -103,7 +103,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,ca
           alert("\u5f02\u6b65\u8c03\u7528\u9519\u8bef:\u6267\u884c\u8fd4\u56de\u7684\u811a\u672c\u51fa\u9519" + ",\u9519\u8bef\u6d88\u606f\u662f:" + e.message);
         }        
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
-        if(o && "#document" != o.attr("nodeName") && s){Base.clearChldNd(o[0]).innerHTML = s;if(szStyle)o.attr('style', szStyle);if($.isFunction(callBackFn))callBackFn();}
+        if(o && "#document" != o.attr("nodeName") && s){Base.clearChldNd(o[0]).innerHTML = s;if(szStyle)o.attr('style', szStyle);}
+		if($.isFunction(callBackFn))callBackFn();
         }
     }});
    }); 
@@ -136,8 +137,8 @@ AjaxTab: function(tabId, szReqCode, url, data, destId,szCallBackFn){
           s = s.replace(/^\s*<div[^>]*>/mi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
-        if($.isFunction(szCallBackFn))szCallBackFn();
         if(s && -1 < s.indexOf("<div"))Base.clearChldNd(o).innerHTML = s;
+        if($.isFunction(szCallBackFn))szCallBackFn();
         try{script && eval(script)}catch(e){alert("异步调用错误:执行返回的脚本出错" + ",错误消息是:" + e.message);}
      }});
    });
