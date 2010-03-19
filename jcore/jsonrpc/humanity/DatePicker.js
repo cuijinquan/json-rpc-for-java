@@ -122,9 +122,9 @@
 	      if(dpMax || dpMin)
 	      {
 	         nCurTm = new Date(y, m - 1, d).getTime();
-	         if(dpMax && dpMin)bRst = nCurTm < dpMax && nCurTm > dpMin;
-	         else if(dpMax && !dpMin)bRst = nCurTm < dpMax;
-	         else if(dpMin && !dpMax)bRst = nCurTm > dpMin;
+	         if(dpMax && dpMin)bRst = nCurTm <= dpMax && nCurTm >= dpMin;
+	         else if(dpMax && !dpMin)bRst = nCurTm <= dpMax;
+	         else if(dpMin && !dpMax)bRst = nCurTm >= dpMin;
 	      }
 	      return !bRst;
 	},
@@ -271,7 +271,7 @@
 		    if(4 <= n && 25 >= n)
 		       if(n != nL && 10 > nL)Base.addInvalid(oIpt),$(oIpt).focus().tip('请注意，日期数据长度不够: ' + nL + "/" + n);
 		    if(oIpt.max && oIpt.max < s || oIpt.min && s < oIpt.min)Base.addInvalid(oIpt),$(oIpt).focus().tip('请注意，日期数据不在有效的数据范围内: <br>'
-		         +  (oIpt.min || '*') + " < " + s + " < " + (oIpt.max || "*"));
+		         +  (oIpt.min || '*') + " <= " + s + " <= " + (oIpt.max || "*"));
 	    }
 	}, /* 键盘事件处理 */
     onkeydown:function(e, oIpt)
