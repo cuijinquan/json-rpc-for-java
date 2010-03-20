@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -132,10 +131,13 @@ public class ObjectToJSON implements Serializable{
 				return buf.append(quote(o.toString(), bJh)).toString();
 			else if(szClassName.equals("java.lang.Object"))
 				return buf.append(quote(o.toString(), bJh)).toString();
-			else if(szClassName.equals("java.util.Date") || szClassName.equals("java.sql.Timestamp"))
+			else if(szClassName.equals("java.util.Date") || szClassName.equals("java.sql.Date") || szClassName.equals("java.sql.Timestamp"))
 			{
-				Date oDate = (Date)o;
-				Timestamp tstp = new Timestamp(oDate.getTime());
+				Timestamp tstp = null;
+				if(o instanceof java.util.Date)
+				   tstp = new Timestamp(((java.util.Date)o).getTime());
+				else if(o instanceof java.sql.Date)
+					   tstp = new Timestamp(((java.sql.Date)o).getTime());
 				// 直接使用Timestamp的toString
 				buf.append("'").append(tstp.toString()).append("'");
 //				int m = oDate.getMonth() + 1;
