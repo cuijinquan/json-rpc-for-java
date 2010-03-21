@@ -345,7 +345,7 @@ public class JSONRPCBridge implements Serializable{
 					return "null";
 				}
 			}
-		} catch (ParseException e) {
+		} catch (ParseException e) {e.printStackTrace();
 		}
 		return "false";
 	}
