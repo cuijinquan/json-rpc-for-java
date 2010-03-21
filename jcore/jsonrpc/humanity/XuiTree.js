@@ -147,6 +147,7 @@
         childNodes:[],     /* 子节点 */
         isChecked: false,  /* 多个选择点的状态 */
         isSelected: false, /* 选择状态 */
+        bRmOld: true, /* 记住最后的点击位置 */
         isExpand:   false, /* 是否是展开的状态 */
         tree: null,        /* 树对象 */
         seq: 0,            /* 当前父亲节点内的序号 */
@@ -308,6 +309,8 @@
            e && o.find(":checkbox:first").click();
            XuiTree.curTree = this.tree;
            this.fnSciv($("#" + XuiTree.curTree.id)[0], o.find("a").parent()[0]);
+           if(this.tree.bRmOld)
+           $.cookie(this.tree.id, o.attr('id'));
            return this;
         },
          /* 展开切换 */
@@ -373,6 +376,16 @@
            }
            else oUl.hide(), oDiv.addClass("x-tree-node-collapsed"),setCls();
            e && (this.stopPropagation(e),this.preventDefault(e));
+           if(this.tree.bRmOld)
+           {
+               s = $.cookie(this.tree.id);
+               if(s)
+               {
+	               s=$("#"+s);
+	               if(0 < s.length)
+	                  this.select(s[0], null);
+               }
+           }
            return this;
         }, /* 展开所有子节点 */
         expandAll: function()
@@ -521,7 +534,7 @@
               if(this.tree.bExpandAll)this.expandAll(), this.tree.bExpandAll = false;
               /*没有任何选择的时候就默认选择第一行*/
               /*if(0 == $("#" + this.insertDom.id).find(XuiTree.slctCls).length)*/
-                  this.select(this.Dom.prev("div")[0], null);
+              if(!this.tree.bRmOld || !$.cookie(this.tree.id))this.select(this.Dom.prev("div")[0], null);
            }
            return this;
         }

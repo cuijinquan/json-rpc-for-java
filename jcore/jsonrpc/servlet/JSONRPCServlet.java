@@ -177,6 +177,7 @@ public class JSONRPCServlet extends HttpServlet {
 	    in = null;
 	    byte[] bout = null;
 	    if (null != szData && 0 < szData.length()) {
+//	    	szData = Tools.decodeUnicodeHtm(szData.trim());
 		Object obj = brg.ExecObjectMethod(request, szData);
 		if (null != obj)
 		    bout = Tools.encodeUnicodeHtm(obj.toString()).getBytes("UTF-8");
