@@ -151,7 +151,7 @@
         childNodes:[],     /* 子节点 */
         isChecked: false,  /* 多个选择点的状态 */
         isSelected: false, /* 选择状态 */
-        bRmOld: true, /* 记住最后的点击位置 */
+        bRmOld: false, /* 记住最后的点击位置 */
         isExpand:   false, /* 是否是展开的状态 */
         tree: null,        /* 树对象 */
         seq: 0,            /* 当前父亲节点内的序号 */
@@ -593,6 +593,7 @@
         _t.draw();
         return true;
       }, nTm);
+      this.bRmOld = window['appMenu_bRmOld'] || false;
       return this;
    }
 }
