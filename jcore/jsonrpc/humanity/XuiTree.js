@@ -593,7 +593,7 @@
         _t.draw();
         return true;
       }, nTm);
-      this.bRmOld = window['appMenu_bRmOld'] || false;
+      this.tree.bRmOld = this.tree.bRmOld=window[this.tree.id.substr(0, this.tree.id.length - 4) + '_bRmOld'] || false;
       return this;
    }
 }
