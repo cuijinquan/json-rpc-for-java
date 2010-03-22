@@ -110,7 +110,11 @@
 	         {
 	            if(o.attr("onclick"))
 		         	o.click();
-		         else if(o.attr("href"))window.location = o.attr("href");
+		          else if(o.attr("href"))
+			      {
+			             if(o.attr("target"))opn(o.attr("href"), o.attr("target"));
+			             else window.location = o.attr("href");
+			       }
 	         }
 	         else
 	         {
@@ -311,6 +315,28 @@
            this.fnSciv($("#" + XuiTree.curTree.id)[0], o.find("a").parent()[0]);
            if(this.tree.bRmOld)
            $.cookie(this.tree.id, o.attr('id'));
+           
+           if(this.tree.bRmOld)
+           {
+                 var key = $("#" + this.tree.id).find(XuiTree.slctCls);
+		         o = key.find("a");
+		         if(0 < o.length)
+		         {
+		            if(o.attr("onclick"))
+			         	o.click();
+			         else if(o.attr("href"))
+			         {
+			             if(o.attr("target"))opn(o.attr("href"), o.attr("target"));
+			             else window.location = o.attr("href");
+			         }
+		         }
+		         else
+		         {
+			         if(key.attr("onclick"))
+			         	key.click();
+			         else if(key.attr("href"))window.location = key.attr("href");
+		         }
+           }
            return this;
         },
          /* 展开切换 */
