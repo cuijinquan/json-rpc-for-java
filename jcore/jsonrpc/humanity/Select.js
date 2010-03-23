@@ -29,7 +29,7 @@
         }
     }
     if(this.data && 0 == this.data.length)this.data = null;
-    return this.data || this.getSlctObj(szId)["collection"] || szClc && window[szClc + szId] || []
+    return this.data || this.getSlctObj(szId)["collection"] || []
   }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
   {
