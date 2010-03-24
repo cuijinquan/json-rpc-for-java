@@ -4,6 +4,7 @@
   descObj:null,    /* 存放描述的输入对象 */
   oFrom:null,      /* 计算图层宽度的对象 */
   oShdow:null,     /* 阴影图层对象 */
+  xfcSlctDivId: '_Xui_SelectDiv',
   upi4ajx:function(){
      if(Select.descObj && Select.descObj.id)this.descObj = Select.descObj = document.getElementById(Select.descObj.id);
      if(this.descObj && this.descObj.id)this.descObj = Select.descObj = document.getElementById(this.descObj.id);
@@ -46,10 +47,10 @@
       return this.stopPropagation(e),this.preventDefault(e), false;
     return n;
   },
-  getSelectDataStr:function(oE, w)
+  getSelectDataStr:function(oE, w, data)
   {
-    var _t = this, a = this.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;position: relative;left:0;top:0\">"], i, j, o, k,
-        b = this.getSlctObj(oE.id)["displayFields"], bDisp = !b, key = "_id";
+    var _t = Select, a = data || _t.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;position: relative;left:0;top:0\">"], i, j, o, k,
+        b = _t.getSlctObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
     !bDisp && (b = b.split(/[,;\|\/]/));
     for(i = 0; i < a.length; i++)
     {
@@ -59,21 +60,21 @@
       if(bDisp)
       {
           for(k in o)
-           if(key != k)
+           if(key != k && "_id" != k)
              a1.push("<td><nobr>"), a1.push(o[k]), a1.push("</nobr></td>");
       }
       else
       {
         for(j = 0; j < b.length; j++)
-          a1.push("<td><nobr>"), a1.push(o[b[j]]), a1.push("</nobr></td>");
+          if(key != b[j] && "_id" != b[j])a1.push("<td><nobr>"), a1.push(o[b[j]]), a1.push("</nobr></td>");
       }
       a1.push("</tr>");
     }
     a1.push("</table></div>");
     var s = a1.join("");
-    this.bHvRplc = false;
-    if(0 < this.descObj.value.length)
-        s = s.replace(new RegExp("(>[^><]*)(" + this.descObj.value.replace(/([()\|\$\.\\])/g, "\\\1") + ")([^><]*<)", "gm"), (this.bHvRplc = true, "$1<b>$2</b>$3"));
+    _t.bHvRplc = false;
+    if(0 < _t.descObj.value.length)
+        s = s.replace(new RegExp("(>[^><]*)(" + _t.descObj.value.replace(/([()\|\$\.\\])/g, "\\\1") + ")([^><]*<)", "gm"), (_t.bHvRplc = true, "$1<b>$2</b>$3"));
     return s;
   }, /* 给对象设置value */
   setValueX:function(s, n,e)
@@ -152,7 +153,7 @@
   },
   hidden: function()
   {
-     this.hiddenShadow(this.getDom("_Xui_SelectDiv"));
+     this.hiddenShadow(this.getDom(Select.xfcSlctDivId));
      this.updata((this.descObj || {}).value || "");
      this.descObj["xuiBlur"] && this.descObj["xuiBlur"]();
   }, /* 更新过滤后的data数据 */
@@ -258,7 +259,7 @@
     e = e || window.event;
     return this.RunOne(function(){
        _t.data = [];
-      if(0 == _t.getData(oE.id).length)$('_Xui_SelectDiv').hide();
+      if(0 == _t.getData(oE.id).length)$('#' + Select.xfcSlctDivId).hide();
       if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
       var o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
         oR = this.getOffset(oE),h = oR[3], w = parseInt((obj||{}).width || $(oE.parentNode).width()),
@@ -278,7 +279,7 @@
     _t.inputObj = (_t.descObj = oE).parentNode.getElementsByTagName("input")[1];
     if(!o)
     {
-       this.SelectDiv = o = this.createDiv({id:"_Xui_SelectDiv"});
+       this.SelectDiv = o = this.createDiv({id:Select.xfcSlctDivId});
        this.addEvent(o, "mousedown", fns)
            .addEvent(o, "scroll", fns)
            .addEvent(o, "mouseup", fns).addEvent(o, "mouseout", _t.bind(_t.hiddenSelectDiv));
