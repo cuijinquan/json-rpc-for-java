@@ -303,7 +303,7 @@
            return _t;
         },
         /* 高亮选中 */
-        select: function(o, e)
+        select: function(o, e, bClick)
         {
            var s = "x-tree-selected", o = $(o), szId, oT;
            if(this.tree.lastSlctNd && o != this.tree.lastSlctNd)this.tree.lastSlctNd.removeClass(s);
@@ -316,7 +316,7 @@
            if(this.tree.bRmOld)
            $.cookie(this.tree.id, o.attr('id'));
            
-           if(this.tree.bRmOld)
+           if(this.tree.bRmOld || bClick)/* 点击 */
            {
                  var key = $("#" + this.tree.id).find(XuiTree.slctCls);
 		         o = key.find("a");
@@ -472,7 +472,7 @@
            /* 事件 */
            a.push(" onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
            /* 去除 || -1 < o[0].href.indexOf('javascript') && eval(o[0].href)，防止javascript协议中的脚本执行两次 */
-           a.push(" onclick=\"if((window.event.target || window.event.srcElement) == this){var o = $(this).find('a');o[0].href && -1 == o[0].href.indexOf('javascript') && opn(o[0].href, o[0].target || '', '');}XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event)\"");
+           a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event, true)\"");
            a.push(">");
            /* 缩进的计算 */
            if(0 < this.depth)
