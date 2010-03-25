@@ -89,9 +89,9 @@
      if(e)this.preventDefault(e), this.stopPropagation(e);
      return this;
   },/* 通过value获得描述 */
-  getDescByValue:function(s,o){
-      o || (o = this.descObj)
-      var obj = slctIptData[o.id],a = obj.valueField.split(/[,;\|\s]/), d = a[a.length - 1], i, v = a[0];
+  getDescByValue:function(s,oId){
+      oId || (oId = this.descObj.id)
+      var obj = slctIptData[oId],a = obj.valueField.split(/[,;\|\s]/), d = a[a.length - 1], i, v = a[0];
       a = obj.collection;
       if(a)
       for(i = a.length; 0 <= --i;)
