@@ -60,7 +60,7 @@ function JsonRpcClient(url) {
 		AJAX({url:this.url, bAsync:bAsync, data:"{\"method\":\"" + this.methodName + "\",\"_id_\":\"" + this["_id_"] + "\",\"params\":" + (function (arg) {
 			var b = [], szTp ,o2json = function(oTmp1)
 			{
-			   var k, aTmp = [],v, fnTmp = function(oTmp)
+			   var k, aTmp = [],fnTmp = function(oTmp)
 			   {
 				   if ("number" == (szTp = typeof oTmp))
 				       return isFinite(oTmp) ? oTmp : 0;
@@ -73,7 +73,7 @@ function JsonRpcClient(url) {
 			   if("object" == typeof oTmp1 && oTmp1)
 			   {
 			      for(k in oTmp1)
-			         (v = oTmp1[k]) && aTmp.push("'" + k + "':" + fnTmp(v));
+			         oTmp1[k] && aTmp.push("'" + k + "':" + fnTmp(oTmp1[k]));
 			      return "\"{" + aTmp.join(",").replace(/([\r\n\t\b\f"])/gm, "\\$1") + "}\"";			
 			   }
 			   else return fnTmp(oTmp1);
