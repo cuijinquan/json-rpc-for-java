@@ -51,6 +51,8 @@
   {
     var _t = Select, a = data || _t.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;position: relative;left:0;top:0\">"], i, j, o, k,
         b = _t.getSlctObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
+     if(bDisp)
+        b = window['slctIptData']["S" + oE.id]["displayFields"], bDisp = !b;
     !bDisp && (b = b.split(/[,;\|\/]/));
     for(i = 0; i < a.length; i++)
     {
@@ -60,8 +62,9 @@
       if(bDisp)
       {
           for(k in o)
-           if(key != k && "_id" != k)
+           if(key != k && "_id" != k && "function" != typeof o[k])
              a1.push("<td><nobr>"), a1.push(o[k]), a1.push("</nobr></td>");
+           else a1.push("<td>&nbsp;</td>");
       }
       else
       {
@@ -139,7 +142,7 @@
          oIpt.value = (1 < a.length ? dt[n][a[1]] : dt[n][a[0]]);
          this.setValueX(dt[n][a[0]], 2, e);
        } /* 回调处理 */
-       cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt);")(dt, n, oIpt);
+       cbk && new Function("dt", "n", "oIpt", cbk +"(dt[n], oIpt,n);")(dt, n, oIpt);
        o["_lstNum"] = n;
      }else o["_over"] = 1;
      this.hidden(e);
@@ -177,11 +180,10 @@
   { 
    	 var o = this.SelectDiv, obj = this.getSlctObj(this.descObj.id);
    	 if(null == obj.displayWidth)obj.displayWidth = obj.clientWidth;
-   	 if(0 < this.getData(this.descObj.id).length)
+   	 /*if(0 < this.getData(this.descObj.id).length) 没有数据也显示图层，表示是下拉只是没有数据 */
        this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
-         parseInt(obj.displayWidth, 10), parseInt(o.style.height, 10));
+         parseInt(obj.displayWidth, 10), 150);
      (o = $(o)).css({overflowY:'auto'});
-     if(170 > o.attr('scrollHeight'))o.css({overflowY:'visible'});
   },/* 使得中心fn的过程中不触发oninput */
 	fnNoInput:function(fn){
 	  var _t = this;
@@ -298,6 +300,7 @@
        this.addEvent(oE, "blur", function()
            {  /* 隐藏输入对象为空 */
               var bEdit = "true" == _t.getSlctObj(_t.descObj.id)['allowEdit'];
+              /*if(false == bEdit)bEdit = "true" == window['slctIptData']["S" + _t.descObj.id]["allowEdit"];*/
               if(!_t.inputObj.value)
               { /* 允许输入新值就将描述输入对象的值赋予它，否则就设置空值 */
                  if(bEdit) _t.inputObj.value = _t.descObj.value;
@@ -308,8 +311,6 @@
            });
     }
     _t.updata(oE.value);
-    if(_t.getData(oE.id).length)
-        o.style['height'] = Math.min(15 * _t.getData(oE.id).length, 170) + 'px';
     o.innerHTML = _t.getSelectDataStr(oE, w);
     if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"] = 0);
     var nTm = new Date().getTime();
