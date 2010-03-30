@@ -408,8 +408,11 @@
                if(s)
                {
 	               s=$("#"+s);
-	               if(0 < s.length)
+	               if(0 < s.length && "undefined" == typeof this.tree.bExecClk)
+	               {
+	                  this.tree.bExecClk = true;
 	                  this.select(s[0], null);
+	               }
                }
            }
            return this;
@@ -593,7 +596,7 @@
         _t.draw();
         return true;
       }, nTm);
-      this.tree.bRmOld = this.tree.bRmOld=window[this.tree.id.substr(0, this.tree.id.length - 4) + '_bRmOld'] || false;
+      this.tree.bRmOld=window[this.tree.id.substr(0, this.tree.id.length - 4) + '_bRmOld'] || false;
       return this;
    }
 }

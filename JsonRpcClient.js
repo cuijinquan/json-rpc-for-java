@@ -34,7 +34,7 @@ function JsonRpcClient(url) {
 			// if("undefined" != typeof Base && Base.XuiLoading)Base.XuiLoading();
 			this.xml.open("POST", o.url + (-1 < o.url.indexOf("?") ? '&' : '?')
 			 + "xui="+ new Date().getTime()
-			 // + ("undefined" != typeof g_szJsessionid ? "&jsessionid="+ g_szJsessionid : "")
+			// + ("undefined" != typeof g_szJsessionid ? "&jsessionid="+ g_szJsessionid : "")
 			 , o.bAsync, "", "");
 			this.xml.setRequestHeader("XUIAJAX",1);
 			this.xml.setRequestHeader("CMHS","JsonRpc");
@@ -188,7 +188,7 @@ var Utf8 = {
 		} 
 		return string;
 	} 
-},rpc = JsonRpcClient()
+}var rpc = JsonRpcClient()
     /*,XUI = function()
     {
         var o = "undefined" == typeof Base && rpc.LoadJsObj("Base") || Base, a = o.A(arguments).concat([o]), k, i, p = a[0];
