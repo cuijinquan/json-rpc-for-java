@@ -57,8 +57,18 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 				StringBuffer buf = new StringBuffer();
 				byte []b = new byte[1024];
 				int j = 0;
+				boolean bFirst = true;
 				while(1024 == (j = f.read(b, 0, 1024)))
 				{
+					if(bFirst)
+					{
+						bFirst = false;
+						// UTF-8 文件头三个字节是：0xefbbbf
+						if(-17 == b[0] && -69 == b[1] && -65 == b[2])
+						{
+							b[0] = b[1] = b[2] = 0x20;
+						}
+					}
 					buf.append(new String(b, szCharset));
 				}
 				if(0 < j)
@@ -70,7 +80,7 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 				// buf.toString().trim();//
 				String s = Content.JS(buf.toString().trim());// Content.JS(buf.toString().trim()).replaceAll("\\/\\*[^\\*]+\\*\\/", "");
 //				s = Content.JS(s);
-				s = s.replaceFirst("^\\\\ufeff", "");
+//				s = s.replaceFirst("^\\\\ufeff", "");
 				s = s.replaceAll("\\t", "");
 				s = s.replaceAll("}\\s*", "}");
 				s = s.replaceAll("\\s*=\\s*", "=");

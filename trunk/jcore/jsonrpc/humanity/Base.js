@@ -175,12 +175,11 @@ showObj:function(szNameOrId)
 {
   var o = $("#" + szNameOrId);
   if(0 < o.length)
-  {
      o.show();
-  }
   else
   {
      o = $(":input[@name=" + szNameOrId + "]");
+     if(0 == o.length)o = $(":input[@name=dto(" + szNameOrId + ")]");
      o = Base.p(o[0], "DIV");o = Base.p(o, "DIV");
      $(o).show();
   }
@@ -204,21 +203,21 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
    });
 },getAllInput:function(s)
 {
-   var a = [], _t = Base,o = $(s || ":input:not(:checkbox[@checked=false])"), ecd = _t.decodeStr, s;
+   var a = [], _t = Base,o = $(s || ":input:not(:checkbox[@checked=false])"), ecd = _t.decodeStr;
    if(0 < o.size())
    o.each(function(){
       if ("checkbox" == this.type && false == this.checked)return true; //排除没有勾选的checkbox
       if ("radio" == this.type && false == this.checked)return true;    //排除没有选择的radiobox
-      if(this.name && (s = encodeURIComponent(ecd($(this).val()))))
-      	a.push(this.name + "=" + s);
+      if(this.name)
+      	s = encodeURIComponent(ecd($(this).val())), a.push(this.name + "=" + s);
    });
    else{
       var p = s.split("&"), u;
       for(var i = 0; i < p.length; i++)
       {
         u = p[i].split("=");
-        if(u[0] && (s = encodeURIComponent(ecd(u[1]))))
-        a.push(u[0] + "=" + s);
+        if(u[0])
+        s = encodeURIComponent(ecd(u[1])),a.push(u[0] + "=" + s);
       }
    }
    return a.join("&");
@@ -252,7 +251,7 @@ XuiLoading:function(o)
       window.alt = window.alert;
       window.cfm = window.confirm;
       window.alert = function(o)
-      {
+      {setTimeout(function(){
           if("undefined" != typeof g_fcsfld && g_fcsfld)g_fcsfld.setFocus(),g_fcsfld = null;
           if(!("object" == typeof o && null != o && o.hasOwnProperty('message')))return window.alt(o);
           var fnTmp = window.alt;
@@ -286,6 +285,7 @@ XuiLoading:function(o)
                }
               if(o.okUrl)location.href = contextPath + o.okUrl;
           }
+          }, 13);
       };
        window.confirm = function(s, fn, fn1)
       {
@@ -388,14 +388,27 @@ XuiLoading:function(o)
            };
         jQuery.fn.extend({
            getValue:(_t.getValue = function(s){
-             var s1;
-             if(s)s1 = $(_t.getObj(s)).val();
-             else s1 = this.val()
+             var s1, oI, szTp;
+             if(s)
+             {
+                 s1 = (oI = $(_t.getObj(s))).val();
+                 if("checkbox" == (szTp = $(oI[0]).attr("type")) && !oI.attr("checked"))
+                     s1 = null;
+                 if("radio" == szTp)
+                 {
+                     s1 = null;
+                     oI.each(function(){
+                         if(this.checked)s1 = this.value;
+                     });
+                 }
+             }
+             else s1=this.val();
              if("undefined" == (s1 || typeof s1))s1 = "";
              return s1;
            }),
            setValue:(_t.setValue = function(s, s2){
               if(!s)return this;
+              s2=("undefined" == typeof s2 ? "" : s2.replace(/"/gm,"&#34;").replace(/>/gm,"&gt;").replace(/</gm,"&lt;"));
               window.bBoBq = true;
               if(2 == arguments.length)
               {
@@ -419,14 +432,20 @@ XuiLoading:function(o)
 	                   Base.insertHtml(oFom, "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
 	                  }
 	                 else{
-	                     oIpt.val(s2);
 	                     if("hidden" == oIpt.attr("type"))
 	                     {
+	                         oIpt.val(s2);
 		                     oIpt = Base.getInputDiv(oIpt)[0];
 		                     oIpt = $(Base.A(oIpt.getElementsByTagName("INPUT")));
 		                     if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
 		                        $(oIpt[0]).val(Select.getDescByValue(s2, oIpt[0]));
 	                     }
+	                     else if("checkbox" == oIpt.attr("type"))oIpt.attr("checked", true),(oIpt.attr("name") + "__").setValue(s2);
+	                     else if("radio" == $(oIpt[0]).attr("type"))
+	                         oIpt.each(function(){
+	                             if(this.value == s2)this.checked = true,(this.name + "__").setValue(s2);
+	                         });
+	                     else oIpt.val(s2);
 	                 }
                  }else oIpt.val(s2);
               }
