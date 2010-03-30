@@ -64,7 +64,6 @@
           for(k in o)
            if(key != k && "_id" != k && "function" != typeof o[k])
              a1.push("<td><nobr>"), a1.push(o[k]), a1.push("</nobr></td>");
-           else a1.push("<td>&nbsp;</td>");
       }
       else
       {
@@ -92,9 +91,11 @@
      if(e)this.preventDefault(e), this.stopPropagation(e);
      return this;
   },/* 通过value获得描述 */
-  getDescByValue:function(s,oId){
-      oId || (oId = this.descObj.id)
-      var obj = slctIptData[oId],a = obj.valueField.split(/[,;\|\s]/), d = a[a.length - 1], i, v = a[0];
+  getDescByValue:function(s,o){
+      o || (o = this.descObj.id);
+      if("string" != typeof o)o = o.id;
+      if("undefined" == typeof window['slctIptData'])return "";
+      var obj = window['slctIptData'][o],a = obj.valueField.split(/[,;\|\s]/), d = a[a.length - 1], i, v = a[0];
       a = obj.collection;
       if(a)
       for(i = a.length; 0 <= --i;)
