@@ -475,7 +475,7 @@
            /* 事件 */
            a.push(" onmouseover=\"$(this).addClass('x-tree-node-over')\" onmouseout=\"$(this).removeClass('x-tree-node-over')\"");
            /* 去除 || -1 < o[0].href.indexOf('javascript') && eval(o[0].href)，防止javascript协议中的脚本执行两次 */
-           a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event, true)\"");
+           a.push(" onclick=\"return XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').select(this,event, true),false\"");
            a.push(">");
            /* 缩进的计算 */
            if(0 < this.depth)
