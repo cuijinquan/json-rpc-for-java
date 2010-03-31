@@ -184,7 +184,6 @@
    	 /*if(0 < this.getData(this.descObj.id).length) 没有数据也显示图层，表示是下拉只是没有数据 */
        this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
          parseInt(obj.displayWidth, 10), 150);
-     (o = $(o)).css({overflowY:'auto'});
   },/* 使得中心fn的过程中不触发oninput */
 	fnNoInput:function(fn){
 	  var _t = this;
