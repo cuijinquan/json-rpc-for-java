@@ -23,9 +23,9 @@ import jcore.jsonrpc.humanity.LoadJsObj;
 import jcore.jsonrpc.tools.Tools;
 
 /*******************************************************************************
- * JSON-RPC¶ÔwebµÄ·şÎñÍ¨µÀ
+ * JSON-RPCå¯¹webçš„æœåŠ¡é€šé“
  * 
- * @author ÏÄÌì
+ * @author å¤å¤©
  */
 public class JSONRPCServlet extends HttpServlet {
 	private final static int buf_size = 4096;
@@ -34,9 +34,9 @@ public class JSONRPCServlet extends HttpServlet {
 
 	private String charset = "UTF-8";
 
-	// Ö§³ÖGzip£¬Ä¬ÈÏ²»Ö§³Ö
+	// æ”¯æŒGzipï¼Œé»˜è®¤ä¸æ”¯æŒ
 	// private boolean bGzip = false;
-	// °²È«¼ì²éµÄÀà
+	// å®‰å…¨æ£€æŸ¥çš„ç±»
 	private ISecureCheck check = null;
 	private String secureCheck = null;
 
@@ -96,7 +96,7 @@ public class JSONRPCServlet extends HttpServlet {
 	}
 
 	/***************************************************************************
-	 * ÕâÀï³õÊ¼»¯Æô¶¯µÄÊ±ºòĞèÒª×¢²áµÄ¶ÔÏó
+	 * è¿™é‡Œåˆå§‹åŒ–å¯åŠ¨çš„æ—¶å€™éœ€è¦æ³¨å†Œçš„å¯¹è±¡
 	 */
 	public void myInit(ServletConfig config, JSONRPCBridge brg) {
 		String szPam = null;
@@ -109,7 +109,7 @@ public class JSONRPCServlet extends HttpServlet {
 			}
 		}
 		charset = "UTF-8";
-		// ÅäÖÃÖĞÖ¸¶¨Ä¬ÈÏÖ§³Ögzip
+		// é…ç½®ä¸­æŒ‡å®šé»˜è®¤æ”¯æŒgzip
 		// bGzip = "true".equals(config.getInitParameter("gzip"));
 		szPam = config.getInitParameter("regAppClassNames");
 		if (null != szPam && 0 < szPam.trim().length()) {
@@ -135,7 +135,7 @@ public class JSONRPCServlet extends HttpServlet {
 
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ClassCastException {
-		// °²È«´¦Àí
+		// å®‰å…¨å¤„ç†
 		if (null != check && !check.secureCheck(request, response))
 			return;
 		HttpSession session = request.getSession(false);
@@ -145,7 +145,7 @@ public class JSONRPCServlet extends HttpServlet {
 		if (null != session) {
 			JSONRPCBridge brg = (JSONRPCBridge) session
 					.getAttribute(Content.RegSessionJSONRPCName);
-			// Èç¹ûÊÇµÚÒ»´Î¾Í×¢²á¶ÔÏó
+			// å¦‚æœæ˜¯ç¬¬ä¸€æ¬¡å°±æ³¨å†Œå¯¹è±¡
 			if (null == brg) {
 				session.setAttribute(Content.RegSessionJSONRPCName,
 						brg = new JSONRPCBridge().setSession(session));
@@ -175,7 +175,7 @@ public class JSONRPCServlet extends HttpServlet {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					request.getInputStream(), charset));
 
-			// ¶ÁÈ¡requestÖĞµÄJSON¶ÔÏó
+			// è¯»å–requestä¸­çš„JSONå¯¹è±¡
 			CharArrayWriter data = new CharArrayWriter();
 			char buf[] = new char[buf_size];
 			int ret;
@@ -197,7 +197,7 @@ public class JSONRPCServlet extends HttpServlet {
 							"UTF-8");
 				}
 			}
-			// ·µ»Ø×¢²áÖĞµÄ¶ÔÏó
+			// è¿”å›æ³¨å†Œä¸­çš„å¯¹è±¡
 			else {
 				String s = brg.getRegObjsToString();
 				// System.out.println(s);

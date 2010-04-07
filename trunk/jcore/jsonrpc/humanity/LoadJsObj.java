@@ -10,18 +10,18 @@ import jcore.jsonrpc.common.face.IJsonRpcObject;
 import jcore.jsonrpc.tools.Tools;
 
 /***
- * »ñÈ¡JS¶ÔÏó
- * @author ÏÄÌì
+ * è·å–JSå¯¹è±¡
+ * @author å¤å¤©
  *
  */
 public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializable{
 	private static final long serialVersionUID = -1988214985561562945L;
 	
 	/***
-	 * »ñÈ¡Ò»¸öÎ´×¢²áµÄjava¶ÔÏó£¬¸Ã¶ÔÏóĞèÒª¼Ì³Ğ
+	 * è·å–ä¸€ä¸ªæœªæ³¨å†Œçš„javaå¯¹è±¡ï¼Œè¯¥å¯¹è±¡éœ€è¦ç»§æ‰¿
 	 * jcore.jsonrpc.common.JsonRpcObject
-	 * »òÊµÏÖ½Ó¿Újcore.jsonrpc.common.face.IJsonRpcObject
-	 * ²¢ÓĞÄ¬ÈÏµÄ¹¹Ôìº¯Êı
+	 * æˆ–å®ç°æ¥å£jcore.jsonrpc.common.face.IJsonRpcObject
+	 * å¹¶æœ‰é»˜è®¤çš„æ„é€ å‡½æ•°
 	 * @param szClassPathName
 	 * @return
 	 */
@@ -39,7 +39,7 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 	}
 	
 	/***
-	 * Í¨¹ıjs¶ÔÏóÃû»ñÈ¡¶ÔÏó£¬Çø·Ö´óĞ¡Ğ´
+	 * é€šè¿‡jså¯¹è±¡åè·å–å¯¹è±¡ï¼ŒåŒºåˆ†å¤§å°å†™
 	 * @param szName
 	 * @return
 	 * @throws Exception
@@ -63,7 +63,7 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 					if(bFirst)
 					{
 						bFirst = false;
-						// UTF-8 ÎÄ¼şÍ·Èı¸ö×Ö½ÚÊÇ£º0xefbbbf
+						// UTF-8 æ–‡ä»¶å¤´ä¸‰ä¸ªå­—èŠ‚æ˜¯ï¼š0xefbbbf
 						if(-17 == b[0] && -69 == b[1] && -65 == b[2])
 						{
 							b[0] = b[1] = b[2] = 0x20;
@@ -90,7 +90,7 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 				s = s.replaceAll("\\/\\/[^\\r\\n]\\n", "\\n");
 				oRst.setResult(s);
 			}
-			else oRst.setErrMsg("Ö¸¶¨µÄ¶ÔÏó²»´æÔÚ£¬ÇëÈ·ÈÏ´óĞ¡Ğ´ÊÇ·ñÕıÈ·¡£");
+			else oRst.setErrMsg("æŒ‡å®šçš„å¯¹è±¡ä¸å­˜åœ¨ï¼Œè¯·ç¡®è®¤å¤§å°å†™æ˜¯å¦æ­£ç¡®ã€‚");
 		}catch(Exception e)
 		{
 			e.printStackTrace();

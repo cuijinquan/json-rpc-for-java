@@ -7,31 +7,31 @@ import jcore.jsonrpc.common.JsonRpcObject;
 public interface IJsonRpcObject extends IResultObject{
 
 	/***
-	 * µ±·şÎñ¶ÔÏóÔÚÇëÇóÊ¹ÓÃµÄÊ±ºò£¬ÓÉ¿ò¼Ü×¢Èërequest¶ÔÏó
+	 * å½“æœåŠ¡å¯¹è±¡åœ¨è¯·æ±‚ä½¿ç”¨çš„æ—¶å€™ï¼Œç”±æ¡†æ¶æ³¨å…¥requestå¯¹è±¡
 	 * @param r
 	 * @return
 	 */
 	public JsonRpcObject setRequest(HttpServletRequest r);
 	
 	/***
-	 * »ñÈ¡request¶ÔÏó£¬Í¨¹ıËü¿ÉÒÔ»ñÈ¡µ½session¶ÔÏó
+	 * è·å–requestå¯¹è±¡ï¼Œé€šè¿‡å®ƒå¯ä»¥è·å–åˆ°sessionå¯¹è±¡
 	 * @return
 	 */
 	public HttpServletRequest getRequest();
 	
 	/***
-	 * ÊÍ·Å×ÊÔ´
+	 * é‡Šæ”¾èµ„æº
 	 */
 	public void release();
 	
 	/***
-	  * »ñÈ¡Òì³£¡¢´íÎóÏûÏ¢Ê¹ÓÃ
+	  * è·å–å¼‚å¸¸ã€é”™è¯¯æ¶ˆæ¯ä½¿ç”¨
 	  * @return
 	  */
 	public String getErrMsg();
 	
 	/***
-	 * ÉèÖÃÒì³£´íÎóÏûÏ¢
+	 * è®¾ç½®å¼‚å¸¸é”™è¯¯æ¶ˆæ¯
 	 */
 	public void setErrMsg(String s);
 }

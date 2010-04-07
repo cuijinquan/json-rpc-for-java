@@ -21,7 +21,7 @@ import jcore.jsonrpc.common.JSONObject;
 public class Tools {
 
 	/***************************************************************************
-	 * Í¨¹ıÂ·¾¶»ñÈ¡File¶ÔÏó
+	 * é€šè¿‡è·¯å¾„è·å–Fileå¯¹è±¡
 	 * 
 	 * @param resource
 	 * @return
@@ -46,7 +46,7 @@ public class Tools {
 
 
 	/***************************************************************************
-	 * Í¨¹ıÂ·¾¶»ñÈ¡URL¶ÔÏó
+	 * é€šè¿‡è·¯å¾„è·å–URLå¯¹è±¡
 	 * 
 	 * @param resource
 	 * @return
@@ -70,7 +70,7 @@ public class Tools {
 	 private static final char c[] = { '<', '>', '&', '\"'};
 	 private static final String expansion[] = {"&lt;", "&gt;", "&amp;", "&quot;"};
 	 /**
-	  * ½«´®ÖĞµÄ <, >, &, " ±àÂëÎªhtmlµÄ±íÊ¾·½Ê½
+	  * å°†ä¸²ä¸­çš„ <, >, &, " ç¼–ç ä¸ºhtmlçš„è¡¨ç¤ºæ–¹å¼
 	  * @param s
 	  * @return
 	  */
@@ -92,7 +92,7 @@ public class Tools {
 	    }
 	
 	/**
-	 * html·½Ê½µÄ½âÂë
+	 * htmlæ–¹å¼çš„è§£ç 
 	 * @param s
 	 * @return
 	 */
@@ -102,8 +102,8 @@ public class Tools {
 	    }
 
 	/***************************************************************************
-	 * ½âÂëhtml·½Ê½±àÂëµÄÖĞÎÄºº×Ö £¬ÀıÈç½«£º "&#24322;&#24120;" ½âÂëÎª "Òì³£"
-	 * ·ûºÏµÄºº×ÖÕıÔò±í´ïÊ½·¶Î§ÊÇ£º[\u4E00-\u9FA5]
+	 * è§£ç htmlæ–¹å¼ç¼–ç çš„ä¸­æ–‡æ±‰å­— ï¼Œä¾‹å¦‚å°†ï¼š "&#24322;&#24120;" è§£ç ä¸º "å¼‚å¸¸"
+	 * ç¬¦åˆçš„æ±‰å­—æ­£åˆ™è¡¨è¾¾å¼èŒƒå›´æ˜¯ï¼š[\u4E00-\u9FA5]
 	 * 
 	 * @param szStr
 	 * @return
@@ -135,8 +135,8 @@ public class Tools {
 	}
 	
 	/*****************************************************************************
-	 * ±àÂëÂë×Ö·û´®Îªhtml·½Ê½±àÂëµÄÖĞÎÄºº×Ö£¬ÀıÈç½«£º "Òì³£" ±àÂëÎª "&#24322;&#24120;"
-	 * ·ûºÏµÄºº×ÖÕıÔò±í´ïÊ½·¶Î§ÊÇ£º[\u4E00-\u9FA5]
+	 * ç¼–ç ç å­—ç¬¦ä¸²ä¸ºhtmlæ–¹å¼ç¼–ç çš„ä¸­æ–‡æ±‰å­—ï¼Œä¾‹å¦‚å°†ï¼š "å¼‚å¸¸" ç¼–ç ä¸º "&#24322;&#24120;"
+	 * ç¬¦åˆçš„æ±‰å­—æ­£åˆ™è¡¨è¾¾å¼èŒƒå›´æ˜¯ï¼š[\u4E00-\u9FA5]
 	 * 
 	 * @param szStr
 	 * @return
@@ -154,7 +154,7 @@ public class Tools {
 	}
 	
 	/**
-	 * ½«sÖĞµÄºº×Ö×ª»»Îª\u4E00-\u9FA5ÕâÑùµÄĞÎÊ½
+	 * å°†sä¸­çš„æ±‰å­—è½¬æ¢ä¸º\u4E00-\u9FA5è¿™æ ·çš„å½¢å¼
 	 * @param s
 	 * @return
 	 */
@@ -173,7 +173,7 @@ public class Tools {
 	}
 	
 	/**
-	 * ½«sÖĞµÄºº×Ö×ª»»Îª\u4E00-\u9FA5ÕâÑùµÄĞÎÊ½
+	 * å°†sä¸­çš„æ±‰å­—è½¬æ¢ä¸º\u4E00-\u9FA5è¿™æ ·çš„å½¢å¼
 	 * @param s
 	 * @return
 	 */
@@ -193,7 +193,7 @@ public class Tools {
 	}
 
 	/***************************************************************************
-	 * ÅĞ¶Ï¶ÔÏóoÊÇ·ñÊÇÎª²»ĞèÒª×¢²áµÄ"¼òµ¥"¶ÔÏó
+	 * åˆ¤æ–­å¯¹è±¡oæ˜¯å¦æ˜¯ä¸ºä¸éœ€è¦æ³¨å†Œçš„"ç®€å•"å¯¹è±¡
 	 * 
 	 * @param o
 	 * @return
@@ -208,13 +208,13 @@ public class Tools {
 		if (-1 < ",java.lang.String,java.util.Date,java.sql.Timestamp,java.lang.Boolean,java.lang.Character,java.lang.Short,java.lang.Integer,java.lang.Long,java.lang.Float,java.lang.Double,boolean,char,byte,short,int,long,float,double,"
 				.indexOf("," + szType + ",")
 				|| m.find()) {
-			// Çå³ı¶ÔÏóÊ¹ÓÃ¹ØÁª¹ØÏµ£¬±ãÓÚÄÚ´æµÄÓĞĞ§ÀûÓÃ
+			// æ¸…é™¤å¯¹è±¡ä½¿ç”¨å…³è”å…³ç³»ï¼Œä¾¿äºå†…å­˜çš„æœ‰æ•ˆåˆ©ç”¨
 			m = null;
 			pa = null;
 			szType = null;
 			return true;
 		}
-		// Çå³ı¶ÔÏóÊ¹ÓÃ¹ØÁª¹ØÏµ£¬±ãÓÚÄÚ´æµÄÓĞĞ§ÀûÓÃ
+		// æ¸…é™¤å¯¹è±¡ä½¿ç”¨å…³è”å…³ç³»ï¼Œä¾¿äºå†…å­˜çš„æœ‰æ•ˆåˆ©ç”¨
 		m = null;
 		pa = null;
 		szType = null;
@@ -222,7 +222,7 @@ public class Tools {
 	}
 
 	/***************************************************************************
-	 * ÅĞ¶Ï¶ÔÏóoÊµÏÖµÄËùÓĞ½Ó¿ÚÖĞÊÇ·ñÓĞszInterface 2008-08-07 ĞŞÕı¶à¼Ì³ĞÖĞÅĞ¶Ï½Ó¿ÚµÄ¹¦ÄÜ£¬ ÒÔ¼°ĞŞÕı½Ó¿Ú¼Ì³ĞºóµÄÅĞ¶Ï¹¦ÄÜ
+	 * åˆ¤æ–­å¯¹è±¡oå®ç°çš„æ‰€æœ‰æ¥å£ä¸­æ˜¯å¦æœ‰szInterface 2008-08-07 ä¿®æ­£å¤šç»§æ‰¿ä¸­åˆ¤æ–­æ¥å£çš„åŠŸèƒ½ï¼Œ ä»¥åŠä¿®æ­£æ¥å£ç»§æ‰¿åçš„åˆ¤æ–­åŠŸèƒ½
 	 * package test;
 	 * 
 	 * public interface ITest extends Serializable public interface ITest1
@@ -262,7 +262,7 @@ public class Tools {
 	}
 
 	/***************************************************************************
-	 * ´ÓcÖĞ»ñÈ¡µ½Ö¸¶¨Ãû×ÖµÄ·½·¨¶ÔÏó£¬²ÎÊıÀàĞÍ±ØĞë·ûºÏclsParmµÄÃèÊö£¬²¢³¢ÊÔ´ÓsuperÖĞ½øĞĞËÑË÷
+	 * ä»cä¸­è·å–åˆ°æŒ‡å®šåå­—çš„æ–¹æ³•å¯¹è±¡ï¼Œå‚æ•°ç±»å‹å¿…é¡»ç¬¦åˆclsParmçš„æè¿°ï¼Œå¹¶å°è¯•ä»superä¸­è¿›è¡Œæœç´¢
 	 * 
 	 * @param c
 	 * @param clsParm
@@ -281,7 +281,7 @@ public class Tools {
 	}
 
 	/***************************************************************************
-	 * ÔÚ¶ÔÏó¼Ì³ĞÁ´Â·ÖĞÑ°ÕÒÖ¸¶¨µÄfield¶ÔÏó
+	 * åœ¨å¯¹è±¡ç»§æ‰¿é“¾è·¯ä¸­å¯»æ‰¾æŒ‡å®šçš„fieldå¯¹è±¡
 	 * 
 	 * @param c
 	 * @param szName
@@ -304,7 +304,7 @@ public class Tools {
 	}
 
 	/***************************************************************************
-	 * ½«¶ÔÏóoValueÏòconvert2TypeNameÀàĞÍ½øĞĞ×ª»»
+	 * å°†å¯¹è±¡oValueå‘convert2TypeNameç±»å‹è¿›è¡Œè½¬æ¢
 	 * 
 	 * @param convert2TypeName
 	 * @param oValue
@@ -312,13 +312,13 @@ public class Tools {
 	 */
 	public static Object convertObject(Class convert2TypeName, Object oValue) {
 		String szNm = convert2TypeName.getName();
-		// Èç¹ûÀàĞÍ²»Æ¥Åä£¬¾Í½øĞĞÒ»ÏµÁĞ×ª»»
-		// ½«ÕûÊıÏòÈÕÆÚ½øĞĞ×ª»»
+		// å¦‚æœç±»å‹ä¸åŒ¹é…ï¼Œå°±è¿›è¡Œä¸€ç³»åˆ—è½¬æ¢
+		// å°†æ•´æ•°å‘æ—¥æœŸè¿›è¡Œè½¬æ¢
 		if (null != oValue && !szNm.equals(oValue.getClass().getName())
 				&& null != oValue) {
 			String s = oValue.toString().trim();// , szTmp01 = s.replaceAll("[^\\d\\.\\-]", "");
-			// Ö§³ÖµÄ²ÎÊıÀàĞÍ¡¢¸´ºÏÀàĞÍ¶ÔÏó´«ÈëµÄ´¦Àí
-			// ·ÀÖ¹ÎŞĞ§µÄÖµÔÚÇ¿ÖÆ×ª»»ÖĞ·¢ÉúÒì³£
+			// æ”¯æŒçš„å‚æ•°ç±»å‹ã€å¤åˆç±»å‹å¯¹è±¡ä¼ å…¥çš„å¤„ç†
+			// é˜²æ­¢æ— æ•ˆçš„å€¼åœ¨å¼ºåˆ¶è½¬æ¢ä¸­å‘ç”Ÿå¼‚å¸¸
 			try {
 				if (szNm.equals("java.util.Date"))
 					return new Date(Long.parseLong(s));
@@ -344,18 +344,18 @@ public class Tools {
 				else if (szNm.equals("java.lang.String")) {
 					return s;
 				} else {
-					// ¸´ºÏ¶ÔÏóµÄ´¦Àí
+					// å¤åˆå¯¹è±¡çš„å¤„ç†
 					if (s.startsWith("{") && s.endsWith("}")) {
 						boolean bMap = isInterface(convert2TypeName,
 								"java.util.Map");
-						// Èë¿Ú²ÎÊıµÄ·ûºÏ¶ÔÏóÀàĞÍ±ØĞëÊÇÄÜ¹»ÊµÀı»¯µÄ¶ÔÏó
+						// å…¥å£å‚æ•°çš„ç¬¦åˆå¯¹è±¡ç±»å‹å¿…é¡»æ˜¯èƒ½å¤Ÿå®ä¾‹åŒ–çš„å¯¹è±¡
 						Object oRst = bMap ? new HashMap() : convert2TypeName
 								.newInstance();
 						Map map = new JSONObject(s).getHashMap();
 						if (bMap)
 							return map;
 						else {
-							// µü´ú´«ÈëµÄ²ÎÊı
+							// è¿­ä»£ä¼ å…¥çš„å‚æ•°
 							Iterator it = map.entrySet().iterator();
 							map = null;
 							while (it.hasNext()) {
@@ -368,7 +368,7 @@ public class Tools {
 										field.setAccessible(true);
 										field.set(oRst, entry.getValue());
 									}
-									// Ñ°ÕÒset·½·¨
+									// å¯»æ‰¾setæ–¹æ³•
 									else {
 										Method mehod = getSpecifyNameMethod(
 												convert2TypeName,
@@ -377,7 +377,7 @@ public class Tools {
 														+ szKey.substring(0, 1)
 																.toUpperCase()
 														+ szKey.substring(1));
-										// ×¢ÈëÄÚÈİ
+										// æ³¨å…¥å†…å®¹
 										if (null != mehod)
 											try {
 												mehod.invoke(oRst,
@@ -404,19 +404,19 @@ public class Tools {
 	}
 	
 	/**
-     * ºº×Ö´®×ªÊ××ÖÄ¸Æ´ÒôËõĞ´
-     * @param str  //Òª×ª»»µÄºº×Ö×Ö·û´®
-     * @return String  //Æ´ÒôËõĞ´
+     * æ±‰å­—ä¸²è½¬é¦–å­—æ¯æ‹¼éŸ³ç¼©å†™
+     * @param str  //è¦è½¬æ¢çš„æ±‰å­—å­—ç¬¦ä¸²
+     * @return String  //æ‹¼éŸ³ç¼©å†™
      */
     public static String getPYString(String str)
     {
             String tempStr = "";
             for(int i=0; i<str.length(); i++) {
                     char c = str.charAt(i);
-                    if((int)c >= 33 && (int)c <=126) {//×ÖÄ¸ºÍ·ûºÅÔ­Ñù±£Áô
+                    if((int)c >= 33 && (int)c <=126) {//å­—æ¯å’Œç¬¦å·åŸæ ·ä¿ç•™
                             tempStr += String.valueOf(c);
                     }
-                    else {//ÀÛ¼ÓÆ´ÒôÉùÄ¸
+                    else {//ç´¯åŠ æ‹¼éŸ³å£°æ¯
                             tempStr += getPYChar( String.valueOf(c) );
                     }
             }
@@ -424,9 +424,9 @@ public class Tools {
     }
 
     /**
-     * È¡µ¥¸ö×Ö·ûµÄÆ´ÒôÉùÄ¸
-     * @param c  //Òª×ª»»µÄµ¥¸öºº×Ö
-     * @return String Æ´ÒôÉùÄ¸
+     * å–å•ä¸ªå­—ç¬¦çš„æ‹¼éŸ³å£°æ¯
+     * @param c  //è¦è½¬æ¢çš„å•ä¸ªæ±‰å­—
+     * @return String æ‹¼éŸ³å£°æ¯
      */
     public static String getPYChar(String c)
     {

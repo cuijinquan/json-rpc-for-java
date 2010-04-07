@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class TranslateServlet extends HttpServlet{
 	
-	// 代理信息
+	// 浠ｇ悊淇℃伅
 	private String szProxyServer = null;
 	private String szPort = null;
 	private String Charset = "UTF-8";
@@ -39,7 +39,7 @@ public class TranslateServlet extends HttpServlet{
 	}
 	
 	/***
-	 * 初始化配置并设置代理
+	 * 鍒濆鍖栭厤缃苟璁剧疆浠ｇ悊
 	 */
 	public void init(ServletConfig config) throws ServletException
 	{

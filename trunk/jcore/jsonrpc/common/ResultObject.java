@@ -9,7 +9,7 @@ public class ResultObject implements IResultObject,Serializable {
 	private String errMsg;
 	public transient Object result = null;
 	 /***
-	  * »ñÈ¡Òì³£¡¢´íÎóÏûÏ¢Ê¹ÓÃ
+	  * è·å–å¼‚å¸¸ã€é”™è¯¯æ¶ˆæ¯ä½¿ç”¨
 	  * @return
 	  */
 	public String getErrMsg()
@@ -20,7 +20,7 @@ public class ResultObject implements IResultObject,Serializable {
 	}
 	
 	/***
-	 * ÉèÖÃÒì³£´íÎóÏûÏ¢
+	 * è®¾ç½®å¼‚å¸¸é”™è¯¯æ¶ˆæ¯
 	 */
 	public void setErrMsg(String s)
 	{

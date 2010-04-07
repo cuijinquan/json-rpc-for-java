@@ -1,7 +1,7 @@
 package jcore.jsonrpc.common;
 
 /***
- * ³£Á¿¶¨Òå
+ * å¸¸é‡å®šä¹‰
  * @author summer
  *
  */
@@ -9,7 +9,7 @@ public class Content {
 	public static final String RegSessionJSONRPCName = "Reg_Session_JSONRPC_Name";
 	
 	/***
-	 * javaScript´úÂëÖĞÎÄ×ª»»£¬½«ÆäÖĞµÄÖĞ×ª»»Îª\u3434ÕâÑùµÄ¸ñÊ½
+	 * javaScriptä»£ç ä¸­æ–‡è½¬æ¢ï¼Œå°†å…¶ä¸­çš„ä¸­è½¬æ¢ä¸º\u3434è¿™æ ·çš„æ ¼å¼
 	 * @param szIn
 	 * @return
 	 */
