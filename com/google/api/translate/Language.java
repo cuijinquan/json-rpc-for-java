@@ -24,97 +24,97 @@ import java.util.List;
 
 /**
  * Defines language information for the Google Translate API.
-ar|en        °¢À­²®ÎÄµ½Ó¢Óï
-ko|en        ³¯ÏÊÓïµ½Ó¢Óï
-de|fr        µÂÓïµ½·¨Óï
-de|en        µÂÓïµ½Ó¢Óï
-ru|en        ¶íÓïµ½Ó¢Óï
-fr|de        ·¨Óïµ½µÂÓï
-fr|en        ·¨Óïµ½Ó¢Óï
-nl|en        ºÉÀ¼Óïµ½Ó¢Óï
-pt|en        ÆÏÌÑÑÀÓïµ½Ó¢Óï
-ja|en        ÈÕÓïµ½Ó¢Óï
-es|en        Î÷°àÑÀÓïµ½Ó¢Óï
-el|en        Ï£À°Óïµ½Ó¢Óï
-it|en        Òâ´óÀûÓïµ½Ó¢Óï
-en|ar        Ó¢Óïµ½°¢À­²®ÎÄ
-en|ko        Ó¢Óïµ½³¯ÏÊÓï
-en|de        Ó¢Óïµ½µÂÓï
-en|ru        Ó¢Óïµ½¶íÓï
-en|fr        Ó¢Óïµ½·¨Óï
-en|nl        Ó¢Óïµ½ºÉÀ¼Óï
-en|pt        Ó¢Óïµ½ÆÏÌÑÑÀÓï
-en|ja        Ó¢Óïµ½ÈÕÓï
-en|es        Ó¢Óïµ½Î÷°àÑÀÓï
-en|el        Ó¢Óïµ½Ï£À°Óï
-en|it        Ó¢Óïµ½Òâ´óÀûÓï
-en|zh-TW     Ó¢Óïµ½ÖĞÎÄ(·±Ìå)
-en|zh-CN     Ó¢Óïµ½ÖĞÎÄ(¼òÌå)
-zh|en        ÖĞÎÄµ½Ó¢Óï
-zh-TW|zh-CN  ÖĞÎÄ(·±Ìåµ½¼òÌå)
-zh-CN|zh-TW  ÖĞÎÄ(¼òÌåµ½·±Ìå)
+ar|en        é˜¿æ‹‰ä¼¯æ–‡åˆ°è‹±è¯­
+ko|en        æœé²œè¯­åˆ°è‹±è¯­
+de|fr        å¾·è¯­åˆ°æ³•è¯­
+de|en        å¾·è¯­åˆ°è‹±è¯­
+ru|en        ä¿„è¯­åˆ°è‹±è¯­
+fr|de        æ³•è¯­åˆ°å¾·è¯­
+fr|en        æ³•è¯­åˆ°è‹±è¯­
+nl|en        è·å…°è¯­åˆ°è‹±è¯­
+pt|en        è‘¡è„ç‰™è¯­åˆ°è‹±è¯­
+ja|en        æ—¥è¯­åˆ°è‹±è¯­
+es|en        è¥¿ç­ç‰™è¯­åˆ°è‹±è¯­
+el|en        å¸Œè…Šè¯­åˆ°è‹±è¯­
+it|en        æ„å¤§åˆ©è¯­åˆ°è‹±è¯­
+en|ar        è‹±è¯­åˆ°é˜¿æ‹‰ä¼¯æ–‡
+en|ko        è‹±è¯­åˆ°æœé²œè¯­
+en|de        è‹±è¯­åˆ°å¾·è¯­
+en|ru        è‹±è¯­åˆ°ä¿„è¯­
+en|fr        è‹±è¯­åˆ°æ³•è¯­
+en|nl        è‹±è¯­åˆ°è·å…°è¯­
+en|pt        è‹±è¯­åˆ°è‘¡è„ç‰™è¯­
+en|ja        è‹±è¯­åˆ°æ—¥è¯­
+en|es        è‹±è¯­åˆ°è¥¿ç­ç‰™è¯­
+en|el        è‹±è¯­åˆ°å¸Œè…Šè¯­
+en|it        è‹±è¯­åˆ°æ„å¤§åˆ©è¯­
+en|zh-TW     è‹±è¯­åˆ°ä¸­æ–‡(ç¹ä½“)
+en|zh-CN     è‹±è¯­åˆ°ä¸­æ–‡(ç®€ä½“)
+zh|en        ä¸­æ–‡åˆ°è‹±è¯­
+zh-TW|zh-CN  ä¸­æ–‡(ç¹ä½“åˆ°ç®€ä½“)
+zh-CN|zh-TW  ä¸­æ–‡(ç®€ä½“åˆ°ç¹ä½“)
  * @author Richard Midwinter
  */
 
 public final class Language {
 	/***
-	 * °¢À­²®ÎÄ
+	 * é˜¿æ‹‰ä¼¯æ–‡
 	 */
 	public static final String ARABIC = "ar";
 	/***
-	 * ÖĞÎÄ
+	 * ä¸­æ–‡
 	 */
 	public static final String CHINESE = "zh";
 	/***
-	 * ÖĞÎÄ(¼òÌå)
+	 * ä¸­æ–‡(ç®€ä½“)
 	 */
 	public static final String CHINESE_SIMPLIFIED = "zh-CN";
 	/***
-	 * ÖĞÎÄ(·±Ìå)
+	 * ä¸­æ–‡(ç¹ä½“)
 	 */
 	public static final String CHINESE_TRADITIONAL = "zh-TW";
 	/***
-	 * ºÉÀ¼Óï
+	 * è·å…°è¯­
 	 */
 	public static final String DUTCH = "nl";
 	/***
-	 * Ó¢Óï
+	 * è‹±è¯­
 	 */
 	public static final String ENGLISH = "en";
 	/***
-	 * ·¨Óï
+	 * æ³•è¯­
 	 */
 	public static final String FRENCH = "fr";
 	/***
-	 * µÂÓï
+	 * å¾·è¯­
 	 */
 	public static final String GERMAN = "de";
 	/***
-	 * Ï£À°Óï
+	 * å¸Œè…Šè¯­
 	 */
 	public static final String GREEK = "el";
 	/***
-	 * Òâ´óÀûÓï
+	 * æ„å¤§åˆ©è¯­
 	 */
 	public static final String ITALIAN = "it";
 	/***
-	 * ÈÕÓï
+	 * æ—¥è¯­
 	 */
 	public static final String JAPANESE = "ja";
 	/***
-	 * ³¯ÏÊÓï
+	 * æœé²œè¯­
 	 */
 	public static final String KOREAN = "ko";
 	/***
-	 * ÆÏÌÑÑÀÓï
+	 * è‘¡è„ç‰™è¯­
 	 */
 	public static final String PORTUGESE = "pt";
 	/***
-	 * ¶íÓï
+	 * ä¿„è¯­
 	 */
 	public static final String RUSSIAN = "ru";
 	/***
-	 * Î÷°àÑÀÓï
+	 * è¥¿ç­ç‰™è¯­
 	 */
 	public static final String SPANISH = "es";
 	

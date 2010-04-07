@@ -10,7 +10,7 @@ import java.util.Map;
 public class GetAllSupersProperty {
 
 	/**
-	 * È¥³ı²»ÒªµÄÊôĞÔ£¬È¥³ıÖØ¸´µÄÊôĞÔ
+	 * å»é™¤ä¸è¦çš„å±æ€§ï¼Œå»é™¤é‡å¤çš„å±æ€§
 	 * @param fRst
 	 * @return
 	 */
@@ -83,7 +83,7 @@ public class GetAllSupersProperty {
 	}
 	
 	/**
-	 * È¥³ı²»ÒªµÄ·½·¨£¬È¥³ıÖØ¸´µÄ·½·¨Ãû
+	 * å»é™¤ä¸è¦çš„æ–¹æ³•ï¼Œå»é™¤é‡å¤çš„æ–¹æ³•å
 	 * @param fRst
 	 * @return
 	 */

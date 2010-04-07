@@ -43,7 +43,7 @@ public class Translate {
 	private static final String INTERMEDIATE_LANGUAGE = Language.ENGLISH;
 	private static final String URL_STRING = "http://translate.google.com/translate_t?langpair=";
 	private static final String TEXT_VAR = "&text=";
-	private static final int RATE_DELAY = 10; // ÒÔÇ°µÄÖµ£º2000£¬ÎÒµÃ¸üĞ¡ÁË
+	private static final int RATE_DELAY = 10; // ä»¥å‰çš„å€¼ï¼š2000ï¼Œæˆ‘å¾—æ›´å°äº†
 	
 	public static final int proxyHttpType = 1;
 	public static final int proxySocketType = 2;
@@ -137,12 +137,12 @@ public class Translate {
 	}
 
 	/***
-	 * ÉèÖÃ´úÀí
-	 * @param szProxyServer  ´úÀí·şÎñÆ÷ip
-	 * @param szPort         ´úÀí·şÎñÆ÷µÄ¶Ë¿Ú
-	 * @param nType          ´úÀí·şÎñÆ÷µÄÀàĞÍ£ºTranslate.proxyHttpType,Translate.proxyFtpType,Translate.proxySocketType
-	 * @param szUser         ´úÀí·şÎñÆ÷µÄÓÃ»§Ãû£¬Èç¹û²»ĞèÒªÑéÖ¤¾ÍÓÃnull
-	 * @param szPassword     ´úÀí·şÎñÆ÷µÄÃÜÂë£¬Èç¹û²»ĞèÒªÑéÖ¤¾ÍÓÃnull
+	 * è®¾ç½®ä»£ç†
+	 * @param szProxyServer  ä»£ç†æœåŠ¡å™¨ip
+	 * @param szPort         ä»£ç†æœåŠ¡å™¨çš„ç«¯å£
+	 * @param nType          ä»£ç†æœåŠ¡å™¨çš„ç±»å‹ï¼šTranslate.proxyHttpType,Translate.proxyFtpType,Translate.proxySocketType
+	 * @param szUser         ä»£ç†æœåŠ¡å™¨çš„ç”¨æˆ·åï¼Œå¦‚æœä¸éœ€è¦éªŒè¯å°±ç”¨null
+	 * @param szPassword     ä»£ç†æœåŠ¡å™¨çš„å¯†ç ï¼Œå¦‚æœä¸éœ€è¦éªŒè¯å°±ç”¨null
 	 */
 	public static void setProxy(String szProxyServer, String szPort, int nType, String szUser, String szPassword) {
 		switch(nType)
@@ -204,7 +204,7 @@ public class Translate {
 
 				uc.setRequestProperty("User-Agent",
 						"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)");
-				// ÓÃpostµÄ·½Ê½ÄÜ·­Òë´óÓÚ1024×Ö½ÚµÄÄÚÈİ
+				// ç”¨postçš„æ–¹å¼èƒ½ç¿»è¯‘å¤§äº1024å­—èŠ‚çš„å†…å®¹
 				uc.setDoOutput(true);
 				OutputStream out = uc.getOutputStream();
 				out

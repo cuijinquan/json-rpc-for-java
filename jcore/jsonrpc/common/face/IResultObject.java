@@ -3,13 +3,13 @@ package jcore.jsonrpc.common.face;
 public interface IResultObject {
 
 	/***
-	 * »ñÈ¡´íÎó¡¢Òì³£ÏûÏ¢
+	 * è·å–é”™è¯¯ã€å¼‚å¸¸æ¶ˆæ¯
 	 * @return
 	 */
 	public String getErrMsg();
 	
 	/***
-	 * ÉèÖÃÒì³£´íÎóÏûÏ¢£¬µ±·¢ÉúÒì³£µÄÊ±ºò¿ò¼Ü×Ô¶¯×¥È¡Òì³£ÏûÏ¢²¢Í¨¹ıËü×¢Èë
+	 * è®¾ç½®å¼‚å¸¸é”™è¯¯æ¶ˆæ¯ï¼Œå½“å‘ç”Ÿå¼‚å¸¸çš„æ—¶å€™æ¡†æ¶è‡ªåŠ¨æŠ“å–å¼‚å¸¸æ¶ˆæ¯å¹¶é€šè¿‡å®ƒæ³¨å…¥
 	 * @param s
 	 */
 	public void setErrMsg(String s);

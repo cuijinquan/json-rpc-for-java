@@ -16,8 +16,8 @@ import jcore.jsonrpc.tools.GetAllSupersProperty;
 import jcore.jsonrpc.tools.Tools;
 
 /***
- * ¶ÔÏó×ª»»ÎªjsonµÄ´®ĞÎÊ½
- * @author ÏÄÌì
+ * å¯¹è±¡è½¬æ¢ä¸ºjsonçš„ä¸²å½¢å¼
+ * @author å¤å¤©
  *
  */
 public class ObjectToJSON implements Serializable{
@@ -26,10 +26,10 @@ public class ObjectToJSON implements Serializable{
 	private JSONRPCBridge brige = null;
 	
 	/***
-	 * ½«¶ÔÏóobj×ª»»Îª
-	 * @param obj   ½«Òª×ª»»µÄ¶ÔÏó
-	 * @param szCurRegPath ±»×ª»»¶ÔÏóµÄ×¢²áÃûÂ·¾¶
-	 * @param brige  ÇÅ½Ó¶ÔÏó
+	 * å°†å¯¹è±¡objè½¬æ¢ä¸º
+	 * @param obj   å°†è¦è½¬æ¢çš„å¯¹è±¡
+	 * @param szCurRegPath è¢«è½¬æ¢å¯¹è±¡çš„æ³¨å†Œåè·¯å¾„
+	 * @param brige  æ¡¥æ¥å¯¹è±¡
 	 */
 	public ObjectToJSON(Object obj, JSONRPCBridge brige)
 	{
@@ -38,7 +38,7 @@ public class ObjectToJSON implements Serializable{
 	}
 	
 	/***
-	 * ½«×Ö·û´®ÖĞĞèÒª×ªÒåµÄ×Ö·û½øĞĞ×ªÒå£¬ÀıÈç£º",\r\n\t\f\bÖĞÎÄ×Ö·ûµÈ
+	 * å°†å­—ç¬¦ä¸²ä¸­éœ€è¦è½¬ä¹‰çš„å­—ç¬¦è¿›è¡Œè½¬ä¹‰ï¼Œä¾‹å¦‚ï¼š",\r\n\t\f\bä¸­æ–‡å­—ç¬¦ç­‰
 	 * @param string
 	 * @return
 	 */
@@ -94,7 +94,7 @@ public class ObjectToJSON implements Serializable{
 	        sb.append('"');
 	        return sb.toString();
 	}
-	// ²»Êä³ö±àºÅµÄ±êÖ¾
+	// ä¸è¾“å‡ºç¼–å·çš„æ ‡å¿—
 	private boolean bJh = false;
 	
 	public ObjectToJSON setBJh(boolean b)
@@ -108,12 +108,12 @@ public class ObjectToJSON implements Serializable{
 		return toJSON(null);
 	}
 	/***************************************************************************
-	 * ·µ»Ø¶ÔÏóµÄJSON¸ñÊ½
+	 * è¿”å›å¯¹è±¡çš„JSONæ ¼å¼
 	 */
 	public String toJSON(String szObjName)
 	{
 		StringBuffer buf = new StringBuffer();
-		// ¼òµ¥ÀàĞÍÄ£Ê½
+		// ç®€å•ç±»å‹æ¨¡å¼
 		String szSimpleTypeReg = "^(boolean|char|byte|short|int|long|float|double)$";
 		String szSimpleArrTypeReg = "^class \\[([A-Z])";
 		Pattern p = Pattern.compile(szSimpleTypeReg);
@@ -123,10 +123,10 @@ public class ObjectToJSON implements Serializable{
 		{
 			Class c = o.getClass();
 			String szClassName = c.getName();
-			// Êı×éµÄ´¦Àí
+			// æ•°ç»„çš„å¤„ç†
 			Pattern pSz = Pattern.compile("^\\[L.+$");
 			
-			// ÌØÊâ¶ÔÏóµÄ´¦Àí
+			// ç‰¹æ®Šå¯¹è±¡çš„å¤„ç†
 			if(szClassName.equals("java.lang.String"))
 				return buf.append(quote(o.toString(), bJh)).toString();
 			else if(szClassName.equals("java.lang.Object"))
@@ -138,14 +138,14 @@ public class ObjectToJSON implements Serializable{
 				   tstp = new Timestamp(((java.util.Date)o).getTime());
 				else if(o instanceof java.sql.Date)
 					   tstp = new Timestamp(((java.sql.Date)o).getTime());
-				// Ö±½ÓÊ¹ÓÃTimestampµÄtoString
+				// ç›´æ¥ä½¿ç”¨Timestampçš„toString
 				buf.append("'").append(tstp.toString()).append("'");
 //				int m = oDate.getMonth() + 1;
-//				// À´¿´ĞèÒª·µ»ØJavaScript DateÀàĞÍ£¬¾Í½«ÏÂÃæµÄ×¢ÊÍ´ò¿ª
+//				// æ¥çœ‹éœ€è¦è¿”å›JavaScript Dateç±»å‹ï¼Œå°±å°†ä¸‹é¢çš„æ³¨é‡Šæ‰“å¼€
 //				// return buf.append("new Date(").append(((Date)o).getTime()).append(")").toString();
 //				buf.append("'").append(oDate.getYear() + 1900)
 //				.append("-").append(9 < m ? "" + m : "0" + m)
-//				// µËÏê¾² 2009-12-12 22:54:34 ÓĞÎÊÌâ oDate.getDay() Ó¦¸ÃÊÇoDate.getDate() 
+//				// é‚“è¯¦é™ 2009-12-12 22:54:34 æœ‰é—®é¢˜ oDate.getDay() åº”è¯¥æ˜¯oDate.getDate() 
 //				.append("-").append(9 < oDate.getDate() ? "" + oDate.getDate(): "0" + oDate.getDate());
 //				if(0 < oDate.getHours() && 0 < oDate.getMinutes())
 //					buf.append(" ").append(9 < oDate.getHours() ? "" + oDate.getHours(): "0" + oDate.getHours())
@@ -155,7 +155,7 @@ public class ObjectToJSON implements Serializable{
 //				buf.append("'");
 				return buf.toString();
 			}
-			// ¼òµ¥ÀàĞÍµÄ¶ÔÏó·â×°Àà
+			// ç®€å•ç±»å‹çš„å¯¹è±¡å°è£…ç±»
 			else if(szClassName.equals("java.lang.Boolean"))
 				return buf.append(((Boolean)o).booleanValue()).toString();
 			else if(szClassName.equals("java.lang.Character"))
@@ -172,7 +172,7 @@ public class ObjectToJSON implements Serializable{
 				return buf.append(((Double)o).doubleValue()).toString();
 			else if(szClassName.equals("java.math.BigDecimal"))
 				return buf.append(((BigDecimal)o).doubleValue()).toString();
-			// ½Ó¿ÚÊÇMap
+			// æ¥å£æ˜¯Map
 			else if(Tools.isInterface(o.getClass(), "java.util.Map"))
 			{
 				Iterator mapIt = ((Map)o).entrySet().iterator();
@@ -200,7 +200,7 @@ public class ObjectToJSON implements Serializable{
 				}
 				return "{" + buf.append("}").toString();
 			}
-			// ½Ó¿ÚÊÇList
+			// æ¥å£æ˜¯List
 			else if(Tools.isInterface(o.getClass(), "java.util.List"))
 			{
 				List lst = (List)o;
@@ -217,7 +217,7 @@ public class ObjectToJSON implements Serializable{
 				
 				return "[" + buf.append("]").toString();
 			}
-			// Êı×éµÄ´¦Àí
+			// æ•°ç»„çš„å¤„ç†
 			else if(pSz.matcher(szClassName).find())
 			{
 				Object []tmp09 = (Object [])this.o;
@@ -234,11 +234,11 @@ public class ObjectToJSON implements Serializable{
     	    	return "[" + buf.append("]").toString();
 			}
 			
-			// µİ¹é¶ÔÏóµÄ·¸´í´¦Àí
+			// é€’å½’å¯¹è±¡çš„çŠ¯é”™å¤„ç†
 			if(null != this.brige && null != this.brige.getSession())
 			{
 				Map mTmp = (Map)this.brige.getSession().getAttribute(JSONRPCBridge.ObjIdMapName);
-				// ÒÑ¾­´¦Àí¹ıµÄ¶ÔÏó£¬·ÀÖ¹µİ¹é¶ÔÏóµÄ´¦Àí
+				// å·²ç»å¤„ç†è¿‡çš„å¯¹è±¡ï¼Œé˜²æ­¢é€’å½’å¯¹è±¡çš„å¤„ç†
 				if(null != mTmp)
 				{
 					if(null != mTmp.get(this.o.hashCode() + ""))
@@ -247,12 +247,12 @@ public class ObjectToJSON implements Serializable{
 				}
 			}
 			
-			// Èç¹ûÊÇÆäËü¸´ºÏ¶ÔÏó£¬¾Í¶ÔÆä·´Éä²¢Éú³ÉÆä·½·¨ĞÅÏ¢¡¢ÊôĞÔĞÅÏ¢
+			// å¦‚æœæ˜¯å…¶å®ƒå¤åˆå¯¹è±¡ï¼Œå°±å¯¹å…¶åå°„å¹¶ç”Ÿæˆå…¶æ–¹æ³•ä¿¡æ¯ã€å±æ€§ä¿¡æ¯
 			if(null != brige)
 				brige.registerObject(this.o.hashCode(), this.o);
-			// ³ÉÔ±·½·¨µÄ´¦Àí
+			// æˆå‘˜æ–¹æ³•çš„å¤„ç†
 			Method []oMs = GetAllSupersProperty.getMethods(c);// c.getMethods();
-			// ¿ÉÄÜÔÚÓ¦ÓÃÖĞĞèÒª¹ıÂË£¬²»½«ÕâĞ©·½·¨Êä³ö£º
+			// å¯èƒ½åœ¨åº”ç”¨ä¸­éœ€è¦è¿‡æ»¤ï¼Œä¸å°†è¿™äº›æ–¹æ³•è¾“å‡ºï¼š
 			// "main","getClass","wait","wait","wait","equals","toString","notify","notifyAll"
 			if(!bJh && 0 < oMs.length)
 			{
@@ -264,7 +264,7 @@ public class ObjectToJSON implements Serializable{
 					String szName = oMs[i].getName();
 					if(0 < szName.replaceAll(szFlt, "").length())
 					{
-						// Í¬ÃûµÄ·½·¨ÃûÖ»Êä³öÒ»´Î
+						// åŒåçš„æ–¹æ³•ååªè¾“å‡ºä¸€æ¬¡
 						if(null != mMTmp.get(szName))
 							continue;
 						if(0 < k)
@@ -273,13 +273,13 @@ public class ObjectToJSON implements Serializable{
 					    mMTmp.put(szName, (k++) + "");
 					}
 				}
-				// ¾Í½ü½â³ı¶ÔÏóµÄÊ¹ÓÃÒıÓÃ¹ØÏµ£¬ÈÃĞéÄâ»ú¾¡¿ì»ØÊÕ¶ÔÏóÊ¹ÓÃµÄÄÚ´æ
+				// å°±è¿‘è§£é™¤å¯¹è±¡çš„ä½¿ç”¨å¼•ç”¨å…³ç³»ï¼Œè®©è™šæ‹Ÿæœºå°½å¿«å›æ”¶å¯¹è±¡ä½¿ç”¨çš„å†…å­˜
 				mMTmp = null;
 				buf.append("]");
 				nPos++;
 			}
 			
-			// ³ÉÔ±±äÁ¿µÄ´¦Àí
+			// æˆå‘˜å˜é‡çš„å¤„ç†
 			Field []f = GetAllSupersProperty.getFields(c);// c.getDeclaredFields(); // c.getFields();
 			if(0 < f.length)
 			{
@@ -287,31 +287,31 @@ public class ObjectToJSON implements Serializable{
 				for(int i = 0; i < f.length; i++)
 				{
 					f[i].setAccessible(true);
-					// Èç¹û²»ÊÇpublicµÄ¾Í¼ÌĞøÏÂÒ»ÂÖµÄ´¦Àí
+					// å¦‚æœä¸æ˜¯publicçš„å°±ç»§ç»­ä¸‹ä¸€è½®çš„å¤„ç†
 //					if (!Modifier.isPublic(f[i].getModifiers()))
 //		                continue;
-					// ÊôĞÔÃû
+					// å±æ€§å
 					if("request".equals(f[i].getName()) || 0 == f[i].getName().replaceAll(szFlter, "").length())
 						continue;
-					// Èç¹û²»ÊÇµÚÒ»´Î
+					// å¦‚æœä¸æ˜¯ç¬¬ä¸€æ¬¡
 					if(0 < nPos)buf.append(",");
 				    buf.append("\"").append(f[i].getName()).append("\":");
-				    // ÀàĞÍ
+				    // ç±»å‹
 				    String szType = f[i].getType().toString();
-				    // Öµ
+				    // å€¼
 				    Object oValue = f[i].get(o);
 				    
-				    // Èç¹ûÎªnull
+				    // å¦‚æœä¸ºnull
 				    if(null == oValue)
 				    	buf.append("null");
 				    else
 				    {
-					    // Èç¹ûÊÇÊı×é
+					    // å¦‚æœæ˜¯æ•°ç»„
 					    Matcher m = pa.matcher(szType);
 					    if(m.find()) 
 					    {
 					    	buf.append("[");
-					    	// LÊÇjava¶ÔÏóÊı×é£¬¶ø²»ÊÇ¼òµ¥ÀàĞÍµÄÊı×é
+					    	// Læ˜¯javaå¯¹è±¡æ•°ç»„ï¼Œè€Œä¸æ˜¯ç®€å•ç±»å‹çš„æ•°ç»„
 					    	switch(m.group(1).charAt(0))
 					    	{
 					    	    case 'Z': // boolean []
@@ -386,7 +386,7 @@ public class ObjectToJSON implements Serializable{
 						    	    		buf.append(",").append(tmp08[j]);
 					    	    	}
 					    	    	break;
-					    	    case 'L': // ÆäËû¶ÔÏóÊı×é
+					    	    case 'L': // å…¶ä»–å¯¹è±¡æ•°ç»„
 					    	    	Object []tmp09 = (Object [])oValue;
 					    	    	if(0 < tmp09.length)
 					    	    	{
@@ -404,18 +404,18 @@ public class ObjectToJSON implements Serializable{
 					    }
 					    else
 					    {
-						    // Èç¹ûÊÇ¼òµ¥ÀàĞÍ
+						    // å¦‚æœæ˜¯ç®€å•ç±»å‹
 						    Matcher m1 = p.matcher(szType);
 						    // m.reset();
 						    if(m1.find())
 						    {
-						    	// »ñÈ¡µ½¼òµ¥ÀàĞÍ±äÁ¿µÄÖµ
+						    	// è·å–åˆ°ç®€å•ç±»å‹å˜é‡çš„å€¼
 						    	buf.append(oValue);
 						    }
-						    // ¶ÔÏóÀàĞÍ
+						    // å¯¹è±¡ç±»å‹
 						    else
 						    {
-						    	// ·ÀÖ¹Ê¹ÓÃÕß²»ÖªÇéµÄÇé¿öÏÂ×¢²áÒ»¸ö·ÇÊµÀı»¯µÄclassÎÄ¼şµ¼ÖÂ¶ÑÕ»Òç³ö
+						    	// é˜²æ­¢ä½¿ç”¨è€…ä¸çŸ¥æƒ…çš„æƒ…å†µä¸‹æ³¨å†Œä¸€ä¸ªéå®ä¾‹åŒ–çš„classæ–‡ä»¶å¯¼è‡´å †æ ˆæº¢å‡º
 						    	if("sun.reflect.ReflectionFactory".equals(oValue.getClass().getName()))
 						    		buf.append("null");
 						    	else

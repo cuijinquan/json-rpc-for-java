@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 public interface ISecureCheck extends Serializable {
 
 	/***
-	 * Òì²½°²È«¼ì²é½Ó¿Ú
+	 * å¼‚æ­¥å®‰å…¨æ£€æŸ¥æ¥å£
 	 * @param request
 	 * @param response
 	 * @return
