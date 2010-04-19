@@ -179,7 +179,7 @@
 	   });
 	   Base.delInvalid(o);HidTip();
 	},
-	updataTBody: function(e)
+	updataTBody: function(e,bNSv)
 	{
 	   /* 上一个月 */
 	   var m = this.month - 1, n = this.getWeek(this.year, this.month, 1),
@@ -204,7 +204,7 @@
        }
        this.xuiCurYear.innerHTML = this.year + "\u5e74" + this.month + "\u6708";
        /*this.setValueD(e); 防止获取焦点的时候自动填写值，但是会导致无法选择新的年月*/
-       this.setValueD(e);
+       if(!bNSv)this.setValueD(e);
        /* ie 下collection编辑列中发生焦点无法移动在不可见位置错误修正 */
 	   !this.dpIpt["xuiBlur"] && this.dpIpt.focus();
 	},addDate: function(n)
@@ -273,6 +273,9 @@
 		    if(oIpt.max && oIpt.max < s || oIpt.min && s < oIpt.min)Base.addInvalid(oIpt),$(oIpt).focus().tip('请注意，日期数据不在有效的数据范围内: <br>'
 		         +  (oIpt.min || '*') + " <= " + s + " <= " + (oIpt.max || "*"));
 	    }
+	    var a = oIpt.value.split(/[\-\/]/);
+	    if(3 <= a.length)
+	       this.initPkData.apply(this, a),this.updataTBody(e, true);
 	}, /* 键盘事件处理 */
     onkeydown:function(e, oIpt)
    {

@@ -78,7 +78,8 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 					buf.append(new String(b1, szCharset));
 				}
 				// buf.toString().trim();//
-				String s = Content.JS(buf.toString().trim());// Content.JS(buf.toString().trim()).replaceAll("\\/\\*[^\\*]+\\*\\/", "");
+				// String s = Content.JS(buf.toString().trim());// Content.JS(buf.toString().trim()).replaceAll("\\/\\*[^\\*]+\\*\\/", "");
+				String s = buf.toString().trim();
 //				s = Content.JS(s);
 //				s = s.replaceFirst("^\\\\ufeff", "");
 				s = s.replaceAll("\\t", "");
