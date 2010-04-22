@@ -496,45 +496,34 @@ U+04000000 – U+7FFFFFFF	  1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxx
 				return true;
 			for(int i = 0; i < b.length; i++)
 			{
-				// 4字节：010000 - 10FFFF 1048576个代码    11110www(F0-F4) 10xxxxxx 10yyyyyy 10zzzzzz
-				if((i + 3) < b.length)
-				{// 11110www(F0-F4) 10xxxxxx 10yyyyyy 10zzzzzz
-					if(    224 == (b[i] & 224)  
-							&& 128 == (b[i + 1]  & 128) 
-							&& 128 == (b[i + 2] & 128)
-							&& 128 == (b[i + 3] & 128))
-						{
-							i +=3;
-							continue;
-						}
-				}
-				// 3字节：0800 - FFFF        1110xxxx 10xxxxxx 10xxxxxx
-				if((i + 2) < b.length)
+				String s = Integer.toString(b[i] & 0xff, 2);
+				// 0xxxxxxx
+				if(8 > s.length())continue;
+				/*  注意UTF-8的最前面n个1，表示整个UTF-8串是由n个字节构成的
+  U-00000080   -   U-000007FF:   110xxxxx   10xxxxxx   
+  U-00000800   -   U-0000FFFF:   1110xxxx   10xxxxxx   10xxxxxx   
+  U-00010000   -   U-001FFFFF:    11110xxx   10xxxxxx   10xxxxxx   10xxxxxx   
+  U-00200000   -   U-03FFFFFF:   111110xx   10xxxxxx   10xxxxxx   10xxxxxx   10xxxxxx   
+  U-04000000   -   U-7FFFFFFF:   1111110x   10xxxxxx   10xxxxxx   10xxxxxx   10xxxxxx   10xxxxxx   
+				 */
+				String []a = s.split("");
+				int x = 0;
+				for(; x < a.length; x++)
 				{
-					// 1110xxxx 10xxxxxx 10xxxxxx
-					if(224 == (b[i] >> 4)  && 128 == (b[i + 1] & 128) && 128 == (b[i + 2] & 128))
-					{
-						i =+ 2;
-						continue;
-					}
+					if(0 == a[x].length() || 0 == x)continue;
+					if(!"1".equals(a[x]))break;
+					if(x > 5)return false; // 没有超过6字节编码的utf-8
+					int nPos = i + x;
+					if(nPos >= b.length)return false;// 超过最大的长度了，就不是utf-8编码了
+					// 下一字节前面是10开头
+					String s1 = Integer.toString(b[nPos] & 0xff, 2);
+					if(8 == s1.length() && s1.startsWith("10"))continue;
+					System.out.println("oh, No: " + s + " == " + i + ", " + nPos  + " -- " + s1 + " ::: " + (char)b[i] + " ::: " + (char)b[nPos] );
+					return false;
 				}
-				// 2字节：0080 - 07FF:110xxxxx 10xxxxxx
-				if((i + 1) < b.length)
-				{
-					// 110xxxxx 10xxxxxx
-					// 变种UTF-8: 空字符（null character，U+0000）使用双字节的0xc0 0x80
-//					if(0xC0 == b[i] && 0x80 == b[i + 1])continue; 
-					if(192 == (b[i] >> 5)  && 128 == (b[i + 1] & 128))
-					{
-						i += 1;
-						continue;
-					}
-				}
-				// 1字节：0000 - 007F: 0xxxxxxx
-				if(0 == (b[i] & 0))continue;
+				i = i + x;
 //				 if(-27 == b[i])
 //				System.out.println("E5:" + b[i] + ", " + Integer.toHexString((byte)b[i]));
-				return false;
 			}
 			return true;
 		}catch(Exception e)
@@ -785,6 +774,32 @@ GBK 亦采用双字节表示.总体编码范围为 8140-FEFE.首字节在 81-FE 
 			return true;
 		}catch(Exception e)
 		{
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * 判断是否GBK
+	 * @param b
+	 * @return
+	 */
+	public static boolean isGBK_Good(byte[] b) {
+		try {
+			String s = new String(b, "GBK");
+			s = s.replaceAll("[\\u0000-\\u00ff]", "");
+			// 0x3447; i < 0x9fa5 常用汉字范围
+			s = s.replaceAll("[\\u3447-\\u9fa5]", "");
+			// 不常用的汉字区域
+//			s = s.replaceAll("[\\uF92C-\\uFA29]", "");
+			// 全角标点符号:　、。〃?々〆〇〈〉《》「」『』【】〒〓〔〕〖〗?????〝〞??〡〢〣〤〥〦〧〨〩
+			s = s.replaceAll("[\\u3000-\\u3029]", "");
+			// 0xFE50; i <= 0xFE6B: ﹐﹑﹒?﹔﹕﹖﹗?﹙﹚﹛﹜﹝﹞﹟﹠﹡﹢﹣﹤﹥﹦?﹨﹩﹪﹫
+			s = s.replaceAll("[\\uFE50-\\uFE6B]", "");
+			// 0xFF01; i <= 0xFFE5: ！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［＼］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～￠￡￢￣￤￥
+			s = s.replaceAll("[\\uFF01-\\uFFE5]", "");			
+			return 0 == s.length();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
