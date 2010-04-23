@@ -16,27 +16,27 @@ import jcore.jsonrpc.tools.Tools;
 
 /***
  * 
- * @author ÏÄÌì
+ * @author å¤å¤©
  *
  */
 public class JSONRPCBridge implements Serializable{
 	private static final long serialVersionUID = 1L;
-	// ÎªÁË¼¯ÈºÖĞÊ¹ÓÃÄÚ´æ¸´ÖÆÊ¹ÓÃ
+	// ä¸ºäº†é›†ç¾¤ä¸­ä½¿ç”¨å†…å­˜å¤åˆ¶ä½¿ç”¨
 	private transient HttpSession session = null;
 	
 	public transient static String ObjIdMapName = "_ObjIdMapName_";
-	// ×¢²áÖĞµÄ¶ÔÏó
+	// æ³¨å†Œä¸­çš„å¯¹è±¡
 	private Map globalMap = Collections.synchronizedMap(new HashMap());
 	
-	// »º´æ¶¥¼¶µÄ±»×¢²á¶ÔÏóµÄJSON¸ñÊ½
+	// ç¼“å­˜é¡¶çº§çš„è¢«æ³¨å†Œå¯¹è±¡çš„JSONæ ¼å¼
 	private Map cache = Collections.synchronizedMap(new HashMap());
-	// ¶¥¼¶¶ÔÏóÁ´Â·
+	// é¡¶çº§å¯¹è±¡é“¾è·¯
 	private Map links = Collections.synchronizedMap(new HashMap());
-	// ¶¥¼¶±»×¢²áµÄÃû×Ö
+	// é¡¶çº§è¢«æ³¨å†Œçš„åå­—
 	private Map topNms = Collections.synchronizedMap(new HashMap());
 	
 	/***
-	 * ·µ»ØËùÓĞ×¢²áÈ«¾ÖµÄ¶ÔÏóÎªJSONµÄ×Ö·û´®¸ñÊ½
+	 * è¿”å›æ‰€æœ‰æ³¨å†Œå…¨å±€çš„å¯¹è±¡ä¸ºJSONçš„å­—ç¬¦ä¸²æ ¼å¼
 	 * @return
 	 */
 	public String getRegObjsToString()
@@ -50,15 +50,15 @@ public class JSONRPCBridge implements Serializable{
 				buf.append(",");
 			Map.Entry oKey = (Map.Entry)oIt.next();
 			
-			// ÎªÁËÌá¸ßĞÔÄÜ£¬²ÉÓÃcache
+			// ä¸ºäº†æé«˜æ€§èƒ½ï¼Œé‡‡ç”¨cache
 			String szTmp  = (String)cache.get(oKey.getKey());
 			if(null == szTmp)
 			{
-				// Ö»¶Ô¶¥¼¶×¢²áµÄ½øĞĞ»ñÈ¡, oKey.getValue()Ö»ÊÇÈ«¾ÖÖĞµÄkey
+				// åªå¯¹é¡¶çº§æ³¨å†Œçš„è¿›è¡Œè·å–, oKey.getValue()åªæ˜¯å…¨å±€ä¸­çš„key
 				szTmp = new ObjectToJSON(getObject(oKey.getValue().toString()), this).toJSON(oKey.getKey().toString());
 				// szTmp = szTmp.replaceFirst("\\{", "{name:\"" + oKey.getKey() + "\",");
 				cache.put(oKey.getKey(), szTmp);
-				// ÔÙ´Îµ÷ÓÃ£¬ÒÔ±ã¼¯Èº»·¾³ÏÂÄÜÕı³£¹¤×÷
+				// å†æ¬¡è°ƒç”¨ï¼Œä»¥ä¾¿é›†ç¾¤ç¯å¢ƒä¸‹èƒ½æ­£å¸¸å·¥ä½œ
 				if(null != session)
 					session.setAttribute(Content.RegSessionJSONRPCName, this);
 			}
@@ -70,12 +70,12 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
-	 * ¹¹Ôìº¯Êı£¬¹¹ÔìºóÒ»¶¨ÒªsetSession
+	 * æ„é€ å‡½æ•°ï¼Œæ„é€ åä¸€å®šè¦setSession
 	 */
 	public JSONRPCBridge(){}
 	
 	/***
-	 * ¹¹ÔìµÄÊ±ºò¿ÉÒÔ´øÉÏsession¶ÔÏó
+	 * æ„é€ çš„æ—¶å€™å¯ä»¥å¸¦ä¸Šsessionå¯¹è±¡
 	 * @param session
 	 */
 	public JSONRPCBridge(HttpSession session)
@@ -84,7 +84,7 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
-	 * ×¢²á¸¸Ç×¶ÔÏóÁ´Â·
+	 * æ³¨å†Œçˆ¶äº²å¯¹è±¡é“¾è·¯
 	 * @param nSelfHashCode
 	 * @param nParentHashCode
 	 * @return
@@ -94,17 +94,17 @@ public class JSONRPCBridge implements Serializable{
 		String szKeyName = nSelfHashCode + "";
 		if(null == links.get(szKeyName))
 		{
-			// ×¢²á
+			// æ³¨å†Œ
 			links.put(szKeyName, nParentHashCode + "");
 		}
-		// ÔÙ´Îµ÷ÓÃ£¬ÒÔ±ã¼¯Èº»·¾³ÏÂÄÜÕı³£¹¤×÷
+		// å†æ¬¡è°ƒç”¨ï¼Œä»¥ä¾¿é›†ç¾¤ç¯å¢ƒä¸‹èƒ½æ­£å¸¸å·¥ä½œ
 		if(null != session)
 			session.setAttribute(Content.RegSessionJSONRPCName, this);
 		return this;
 	}
 	
 	/***
-	 * ÒÆ³ı¶ÔÏó¶ÔÓ¦µÄ¶¥¼¶¶ÔÏóµÄ×¢²áĞÅÏ¢
+	 * ç§»é™¤å¯¹è±¡å¯¹åº”çš„é¡¶çº§å¯¹è±¡çš„æ³¨å†Œä¿¡æ¯
 	 * @param nSelfHashCode
 	 */
 	public void removeParentRegInfo(int nSelfHashCode)
@@ -112,7 +112,7 @@ public class JSONRPCBridge implements Serializable{
 		String szKeyName = nSelfHashCode + "";
 		links.remove(szKeyName);
 		
-		// ÒÆ³ı×Ó¶ÔÏó
+		// ç§»é™¤å­å¯¹è±¡
 		Iterator oIt = links.entrySet().iterator();
 		while(oIt.hasNext())
 		{
@@ -126,13 +126,13 @@ public class JSONRPCBridge implements Serializable{
 		}
 
 		
-		// ÔÙ´Îµ÷ÓÃ£¬ÒÔ±ã¼¯Èº»·¾³ÏÂÄÜÕı³£¹¤×÷
+		// å†æ¬¡è°ƒç”¨ï¼Œä»¥ä¾¿é›†ç¾¤ç¯å¢ƒä¸‹èƒ½æ­£å¸¸å·¥ä½œ
 		if(null != session)
 			session.setAttribute(Content.RegSessionJSONRPCName, this);
 	}
 	
 	/***
-	 * »ñÈ¡¶ÔÏóµÄ¶¥¼¶¶ÔÏó
+	 * è·å–å¯¹è±¡çš„é¡¶çº§å¯¹è±¡
 	 * @param nSelfHashCode
 	 * @return
 	 */
@@ -153,8 +153,8 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
-	 * ×¢²á¶ÔÏó
-	 * @param nHashCodeName ÀûÓÃhashcode×¢²á¶ÔÏó£¬·ÀÖ¹Í¬Ò»ÊµÀı×¢²á¶à´Î
+	 * æ³¨å†Œå¯¹è±¡
+	 * @param nHashCodeName åˆ©ç”¨hashcodeæ³¨å†Œå¯¹è±¡ï¼Œé˜²æ­¢åŒä¸€å®ä¾‹æ³¨å†Œå¤šæ¬¡
 	 * @param o
 	 * @return this
 	 */
@@ -163,10 +163,10 @@ public class JSONRPCBridge implements Serializable{
 		String szKeyName = nHashCodeName + "";
 		if(null == globalMap.get(szKeyName))
 		{
-			// ×¢²á
+			// æ³¨å†Œ
 			globalMap.put(szKeyName, o);
 		}
-		// ÔÙ´Îµ÷ÓÃ£¬ÒÔ±ã¼¯Èº»·¾³ÏÂÄÜÕı³£¹¤×÷
+		// å†æ¬¡è°ƒç”¨ï¼Œä»¥ä¾¿é›†ç¾¤ç¯å¢ƒä¸‹èƒ½æ­£å¸¸å·¥ä½œ
 		if(null != session)
 			session.setAttribute(Content.RegSessionJSONRPCName, this);
 		return this;
@@ -184,23 +184,23 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
-	 * ÒÆ³ı×¢²áµÄ¶ÔÏó
-	 * @param nHashCodeName ÀûÓÃhashcode×¢²á¶ÔÏó£¬·ÀÖ¹Í¬Ò»ÊµÀı×¢²á¶à´Î
+	 * ç§»é™¤æ³¨å†Œçš„å¯¹è±¡
+	 * @param nHashCodeName åˆ©ç”¨hashcodeæ³¨å†Œå¯¹è±¡ï¼Œé˜²æ­¢åŒä¸€å®ä¾‹æ³¨å†Œå¤šæ¬¡
 	 * @return this
 	 */
 	public JSONRPCBridge removeObject(int nHashCodeName)
 	{
 		String szKeyName = nHashCodeName + "";
-		// ÒÆ³ı
+		// ç§»é™¤
 		globalMap.remove(szKeyName);
-		// ÔÙ´Îµ÷ÓÃ£¬ÒÔ±ã¼¯Èº»·¾³ÏÂÄÜÕı³£¹¤×÷
+		// å†æ¬¡è°ƒç”¨ï¼Œä»¥ä¾¿é›†ç¾¤ç¯å¢ƒä¸‹èƒ½æ­£å¸¸å·¥ä½œ
 		if(null != session)
 			session.setAttribute(Content.RegSessionJSONRPCName, this);
 		return this;
 	}
 	
 	/***
-	 * ÒÆ³ı¶ÔÏó
+	 * ç§»é™¤å¯¹è±¡
 	 * @param szKeyName
 	 * @param o
 	 * @return
@@ -216,7 +216,7 @@ public class JSONRPCBridge implements Serializable{
 	}	
 	
 	/***
-	 * Ö´ĞĞJSON-RPCÇëÇóµÄ·½·¨£¬²¢·µ»ØJSON¸ñÊ½µÄ½á¹û
+	 * æ‰§è¡ŒJSON-RPCè¯·æ±‚çš„æ–¹æ³•ï¼Œå¹¶è¿”å›JSONæ ¼å¼çš„ç»“æœ
 	 * @param szParm
 	 * @return
 	 */
@@ -230,22 +230,22 @@ public class JSONRPCBridge implements Serializable{
 			String szName = oJson.getString("_id_"), 
 			       szMeshod = oJson.getString("method");
 			JSONArray oParams = (JSONArray)oJson.get("params");
-			// »ñÈ¡´úÀíµÄ¶ÔÏó
+			// è·å–ä»£ç†çš„å¯¹è±¡
 			Object o = getObject(szName);
 			
 			if(null != o)
 			{
 				int nParentHashCode = o.hashCode();
-				// »ñÈ¡¶ÔÏóµÄ¶¥¼¶¶ÔÏó
+				// è·å–å¯¹è±¡çš„é¡¶çº§å¯¹è±¡
 				Object oParent = this.getParentObject(nParentHashCode);
 				if(null != oParent)
 					nParentHashCode = oParent.hashCode();
 				else oParent = o;
 				
-				// Èç¹ûÊÇÒªÇóÊÍ·Å¶ÔÏóÄÚ´æ×ÊÔ´
+				// å¦‚æœæ˜¯è¦æ±‚é‡Šæ”¾å¯¹è±¡å†…å­˜èµ„æº
 				if("release".equals(szMeshod))
 				{
-					// ÒÆ³ı¶ÔÏó×¢²áĞÅÏ¢
+					// ç§»é™¤å¯¹è±¡æ³¨å†Œä¿¡æ¯
 					removeObject(oParent.hashCode());
 					Iterator oIt = topNms.entrySet().iterator();
 					while(oIt.hasNext())
@@ -257,47 +257,47 @@ public class JSONRPCBridge implements Serializable{
 							break;
 						}
 					}
-					// ÒÆ³ı¶¥¼¶¶ÔÏó×¢²áĞÅÏ¢
+					// ç§»é™¤é¡¶çº§å¯¹è±¡æ³¨å†Œä¿¡æ¯
 					removeParentRegInfo(oParent.hashCode());
 					return "true";
 				}
 				
 				Class c = o.getClass();
-				// »ñÈ¡¶ÔÏóµÄ·½·¨ÁĞ±í
+				// è·å–å¯¹è±¡çš„æ–¹æ³•åˆ—è¡¨
 				Method []m = c.getMethods();
 				
-				// ×¢Èë reqeust ¶ÔÏó start
+				// æ³¨å…¥ reqeust å¯¹è±¡ start
 				IJsonRpcObject json = null;
 				if(Tools.isInterface(o.getClass(), IJsonRpcObject.class.getName()))
 				{
 					json =(IJsonRpcObject)o;
 					json.setRequest(request);
 				}
-				// ×¢Èë reqeust ¶ÔÏó end
+				// æ³¨å…¥ reqeust å¯¹è±¡ end
 				
-				// ÕâÀï²»ÄÜ²ÉÓÃgetSpecifyNameMethod»ñÈ¡·½·¨µÄÔ­ÒòÊÇ£¬ÒòÎª²ÎÊı¿ÉÄÜÓĞ¸´ºÏ¶ÔÏó
-				// ¹¹Ôì²ÎÊı
+				// è¿™é‡Œä¸èƒ½é‡‡ç”¨getSpecifyNameMethodè·å–æ–¹æ³•çš„åŸå› æ˜¯ï¼Œå› ä¸ºå‚æ•°å¯èƒ½æœ‰å¤åˆå¯¹è±¡
+				// æ„é€ å‚æ•°
 				Object []aParam = null;
-				// º¯Êı²ÎÊıÀàĞÍ
+				// å‡½æ•°å‚æ•°ç±»å‹
 				Class []oTyps = null;
 				Method mExec = null;
 				for(int i = 0; i < m.length; i++)
 				{
-					// º¯ÊıÃûÆ¥Åä£¬²ÎÊı¸öÊıÒ²±ØĞëÍ¬Ê±Æ¥Åä£¬²Å½øĞĞÖ´ĞĞ
+					// å‡½æ•°ååŒ¹é…ï¼Œå‚æ•°ä¸ªæ•°ä¹Ÿå¿…é¡»åŒæ—¶åŒ¹é…ï¼Œæ‰è¿›è¡Œæ‰§è¡Œ
 					if(szMeshod.equals(m[i].getName()) && oParams.length() == m[i].getParameterTypes().length)
 					{
 						try {
 							boolean bCnt = false;
-							// ¹¹Ôì²ÎÊı
+							// æ„é€ å‚æ•°
 							aParam = new Object[oParams.length()];
-							// º¯Êı²ÎÊıÀàĞÍ
+							// å‡½æ•°å‚æ•°ç±»å‹
 							oTyps = m[i].getParameterTypes();
-							// ¹¹Ôì²ÎÊı¶ÔÏó
+							// æ„é€ å‚æ•°å¯¹è±¡
 							for(int j = 0; j < aParam.length; j++)
 							{
-								// Èç¹ûÀàĞÍ²»Æ¥Åä£¬¾Í½øĞĞÒ»ÏµÁĞ×ª»»
-								// ½«ÕûÊıÏòÈÕÆÚ½øĞĞ×ª»»
-								// Êı×ÖÀàĞÍ½øĞĞËÉÉ¢Æ¥Åä
+								// å¦‚æœç±»å‹ä¸åŒ¹é…ï¼Œå°±è¿›è¡Œä¸€ç³»åˆ—è½¬æ¢
+								// å°†æ•´æ•°å‘æ—¥æœŸè¿›è¡Œè½¬æ¢
+								// æ•°å­—ç±»å‹è¿›è¡Œæ¾æ•£åŒ¹é…
 								if(-1 == oParams.get(j).getClass().getName().toLowerCase().indexOf(m[i].getParameterTypes()[j].getName().toLowerCase()))
 									bCnt = true;
 								aParam[j] = Tools.convertObject(oTyps[j], aParam[j] = oParams.get(j));
@@ -312,7 +312,7 @@ public class JSONRPCBridge implements Serializable{
 						break;
 					}
 				}
-				// ·½·¨Ñ°ÕÒÍêÖ®ºóÔÙÖ´ĞĞµ÷ÓÃ
+				// æ–¹æ³•å¯»æ‰¾å®Œä¹‹åå†æ‰§è¡Œè°ƒç”¨
 				if(null != mExec)
 				{
 					Object oRst = null;
@@ -333,10 +333,10 @@ public class JSONRPCBridge implements Serializable{
 					aParam = null;
 					if(null != oRst)
 					{
-						// ²»ÊÇ¼òµ¥ÀàĞÍ¾Í×¢²áËû
+						// ä¸æ˜¯ç®€å•ç±»å‹å°±æ³¨å†Œä»–
 						if(!Tools.isSimpleType(oRst))
 						{
-							// ÉèÖÃ¶¥¼¶¶ÔÏó
+							// è®¾ç½®é¡¶çº§å¯¹è±¡
 							registerObject(oRst.hashCode(), oRst).registerParentObject(oRst.hashCode(), nParentHashCode);
 						}
 						String szOut = new ObjectToJSON(oRst, this).toJSON(null);
@@ -351,7 +351,7 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
-	 * ¸ù¾İ×¢²áÂ·¾¶»ñÈ¡×¢²á¶ÔÏó£¬Èç¹ûÕÒ²»µ½¾Í·µ»Ønull
+	 * æ ¹æ®æ³¨å†Œè·¯å¾„è·å–æ³¨å†Œå¯¹è±¡ï¼Œå¦‚æœæ‰¾ä¸åˆ°å°±è¿”å›null
 	 * @param szKeyName
 	 * @return
 	 */
@@ -361,7 +361,7 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
-	 * »ñÈ¡±»×¢²áµÄ¶ÔÏó
+	 * è·å–è¢«æ³¨å†Œçš„å¯¹è±¡
 	 * @param szKeyName
 	 * @return
 	 */
@@ -371,7 +371,7 @@ public class JSONRPCBridge implements Serializable{
 	}
 	
 	/***
-	 * ÉèÖÃsession¶ÔÏó
+	 * è®¾ç½®sessionå¯¹è±¡
 	 * @param session
 	 * @return
 	 */
