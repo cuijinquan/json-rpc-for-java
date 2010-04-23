@@ -9,8 +9,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /***
- * JSON-RPC ·şÎñ¶ÔÏó
- * @author ÏÄÌì
+ * JSON-RPC æœåŠ¡å¯¹è±¡
+ * @author å¤å¤©
  *
  */
 public abstract class JsonRpcObject implements IJsonRpcObject,Serializable
@@ -28,7 +28,7 @@ public abstract class JsonRpcObject implements IJsonRpcObject,Serializable
 	}
 
 	/***
-	 * »ñÈ¡Request¶ÔÏó
+	 * è·å–Requestå¯¹è±¡
 	 * @return
 	 */
 	public HttpServletRequest getRequest()
@@ -39,7 +39,7 @@ public abstract class JsonRpcObject implements IJsonRpcObject,Serializable
 	public String errMsg = "";
 	
 	 /***
-	  * »ñÈ¡Òì³£¡¢´íÎóÏûÏ¢Ê¹ÓÃ
+	  * è·å–å¼‚å¸¸ã€é”™è¯¯æ¶ˆæ¯ä½¿ç”¨
 	  * @return
 	  */
 	public String getErrMsg()
@@ -50,14 +50,14 @@ public abstract class JsonRpcObject implements IJsonRpcObject,Serializable
 	}
 	
 	/***
-	 * ÉèÖÃÒì³£´íÎóÏûÏ¢
+	 * è®¾ç½®å¼‚å¸¸é”™è¯¯æ¶ˆæ¯
 	 */
 	public void setErrMsg(String s)
 	{
 		errMsg = s;
 	}
 
-	/* ÊÍ·Å×ÊÔ´
+	/* é‡Šæ”¾èµ„æº
 	 */
 	public void release(){
 	}

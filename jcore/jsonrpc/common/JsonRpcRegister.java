@@ -3,14 +3,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /***
- * ×¢²áJsonRpc¶ÔÏó
+ * æ³¨å†ŒJsonRpcå¯¹è±¡
  * @author just
  *
  */
 public class JsonRpcRegister{
 	
 	/***
-	 * Í¨¹ırequestÀ´×¢²á¶ÔÏó
+	 * é€šè¿‡requestæ¥æ³¨å†Œå¯¹è±¡
 	 * @param request
 	 * @param szKeyName
 	 * @param o
@@ -21,12 +21,12 @@ public class JsonRpcRegister{
 		if(null == session)
 			session = request.getSession(true);
 		JSONRPCBridge brg = (JSONRPCBridge)session.getAttribute(Content.RegSessionJSONRPCName);
-		// Èç¹ûÊÇµÚÒ»´Î¾Í×¢²á¶ÔÏó
+		// å¦‚æœæ˜¯ç¬¬ä¸€æ¬¡å°±æ³¨å†Œå¯¹è±¡
 		if(null == brg)
 			 session.setAttribute(Content.RegSessionJSONRPCName, brg = new JSONRPCBridge().setSession(session));
 		try
 		{
-			// ·ÀÖ¹¶ÔÏóo¶à´ÎÊµÀı»¯ºÍ×¢²á
+			// é˜²æ­¢å¯¹è±¡oå¤šæ¬¡å®ä¾‹åŒ–å’Œæ³¨å†Œ
 			if(null == brg.getObject(szKeyName))
 				brg.registerObject(szKeyName, o.newInstance());
 		}catch(Exception e)
