@@ -44,13 +44,13 @@
       length = o.value.length;
       if(0 < length && o.maxLength != length){
         Base.addInvalid(o);
-        alert("输入期号不完整！");
+        alt("输入期号不完整！");
       }else if (o.max && o.value > o.max){
         Base.addInvalid(o);
-        alert("输入期号不能大于" + o.max);
+        alt("输入期号不能大于" + o.max);
       } else if (o.min && o.value < o.min){
         Base.addInvalid(o);
-        alert("输入期号不能小于" + o.min);
+        alt("输入期号不能小于" + o.min);
       }
       else{
         Base.delInvalid(o);
@@ -104,7 +104,7 @@
 	    oSel.setEndPoint("StartToStart", srcRange);
 	    var str = oSel.text + inputStr + srcRange.text.substr(oSel.text.length);
 	    return str;
-      }catch(e){"ieGetContent error:" + alert(e.message);}
+      }catch(e){"ieGetContent error:" + alt(e.message);}
     },
     ffGetContent : function(obj, inputStr){
       try{
@@ -112,6 +112,6 @@
         behind=old.substr(n), front=old.substr(0,(old.length-behind.length)),
         str = front + inputStr + behind;
         return str;
-      }catch(e){alert(e.message);}
+      }catch(e){alt(e.message);}
     }
 }
