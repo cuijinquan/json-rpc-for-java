@@ -22,7 +22,7 @@
       	Base.addInvalid(o);
       	o = $(o);
       	window.g_fcsfld = o.attr("name") || o.attr("id");
-        return alert("输入的电话号码无效，请检查并改正"),false;
+        return alt("输入的电话号码无效，请检查并改正"),false;
       }else{
       	Base.delInvalid(o);
       	return true;
