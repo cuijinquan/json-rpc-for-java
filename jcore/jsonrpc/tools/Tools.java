@@ -787,6 +787,7 @@ GBK 亦采用双字节表示.总体编码范围为 8140-FEFE.首字节在 81-FE 
 	public static boolean isGBK_Good(byte[] b) {
 		try {
 			String s = new String(b, "GBK");
+			// 0 ~ 255字符
 			s = s.replaceAll("[\\u0000-\\u00ff]", "");
 			// 0x3447; i < 0x9fa5 常用汉字范围
 			s = s.replaceAll("[\\u3447-\\u9fa5]", "");
