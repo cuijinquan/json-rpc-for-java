@@ -1,5 +1,6 @@
 package jcore.jsonrpc.common;
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +21,17 @@ public abstract class JsonRpcObject implements IJsonRpcObject,Serializable
 	public static final Log log = LogFactory.getLog(JsonRpcObject.class);
    
 	public JsonRpcObject(){}
+
+	
+	/**
+	 * 获取所有的界面中所有输入对象的值，
+	 * @return
+	 */
+	public Map getAllInputParms()
+	{
+		return (Map)getRequest().getAttribute("allPms");
+	}
+	
 	
 	public JsonRpcObject setRequest(HttpServletRequest r)
 	{

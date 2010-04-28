@@ -53,30 +53,46 @@ function JsonRpcClient(url) {
 	}});
 	obj = obj.result;
 	/* 获取界面所有输入对象并进行传递到后台2010-4-18 */
-	var fnRpcCall = function () {
+	var fnGetAllIpt = function(){
+	    var tps, i = 0, b, aIps = _A(document.getElementsByTagName("input")).concat(_A(document.getElementsByTagName("select"))).concat(_A(document.getElementsByTagName("textarea"))), oAs = {};
+	    for(; i < aIps.length; i++)
+	    {
+	       tps = aIps[i].type;
+	       b = "checkbox" == tps || "radio" == tps;
+	       if(b && aIps[i].checked || !b)
+	       {
+	          if(aIps[i].name)(oAs[aIps[i].name] = aIps[i].value); 
+	       }
+	    }aIps = null;
+	    return oAs;
+	},fnTmp = function (oTmp) {
+					if ("number" == (szTp = typeof oTmp)) {
+						return isFinite(oTmp) ? oTmp : 0;
+					} else {
+						if ("boolean" == szTp || null == oTmp) {
+							return oTmp;
+						} else {
+							k = {"\r":"", "\n":"\\n", "\t":"\\t", "\b":"\\b", "\f":"\\f", "\"":"\\\""};
+							return "\"" + (oTmp || "").toString().replace(/([\r\n\t\b\f"])/gm, function (a, b) {
+								return "\\" + k[b];
+							}) + "\"";
+						}
+					}
+				}, o2json = function (oTmp1) {
+				var k, aTmp = [];
+				if ("object" == typeof oTmp1 && oTmp1) {
+					for (k in oTmp1) {
+						oTmp1[k] && aTmp.push("'" + k + "':" + fnTmp(oTmp1[k]));
+					}
+					return "\"{" + aTmp.join(",").replace(/([\r\n\t\b\f"])/gm, "\\$1") + "}\"";
+				} else {
+					return fnTmp(oTmp1);
+				}
+			},fnRpcCall = function () {
 		var params = _A(arguments), cbk = params[0], bAsync = "function" == typeof (cbk || ""), oRst = {};
 		bAsync && params.shift();
-		AJAX({url:this.url, bAsync:bAsync, data:"{\"method\":\"" + this.methodName + "\",\"_id_\":\"" + this["_id_"] + "\",\"params\":" + (function (arg) {
-			var b = [], szTp ,o2json = function(oTmp1)
-			{
-			   var k, aTmp = [],fnTmp = function(oTmp)
-			   {
-				   if ("number" == (szTp = typeof oTmp))
-				       return isFinite(oTmp) ? oTmp : 0;
-				   else if("boolean" == szTp || null == oTmp)
-						return oTmp;
-				   else {k = {"\r":'', "\n":"\\n", "\t": "\\t", "\b": "\\b", "\f": "\\f", '"':"\\\""};
-							return "\"" + (oTmp || "").toString().replace(/([\r\n\t\b\f"])/gm, function(a,b){return "\\" + k[b]}) + "\"";
-						}
-			   };// 限制只处理一级深度的对象
-			   if("object" == typeof oTmp1 && oTmp1)
-			   {
-			      for(k in oTmp1)
-			         oTmp1[k] && aTmp.push("'" + k + "':" + fnTmp(oTmp1[k]));
-			      return "\"{" + aTmp.join(",").replace(/([\r\n\t\b\f"])/gm, "\\$1") + "}\"";			
-			   }
-			   else return fnTmp(oTmp1);
-			};
+		AJAX({url:this.url, bAsync:bAsync, data:"{\"allPms\":" + o2json(fnGetAllIpt()) + ",\"method\":\"" + this.methodName + "\",\"_id_\":\"" + this["_id_"] + "\",\"params\":" + (function (arg) {
+			var b = [], szTp;
 			for (var i = 0; i < arg.length; i++)
 			    b.push(o2json(arg[i]));
 			return "[" + b.join(",") + "]";
@@ -142,52 +158,7 @@ function JsonRpcClient(url) {
 	   return _this._LoadJsObj.getRpcObj(s);
 	};
 }
-var Utf8 = {
-	encode : function (string) {
-		string = string.replace(/\r\n/g,"\n");
-		var utftext = ""; 
-		for (var n = 0; n < string.length; n++) { 
-			var c = string.charCodeAt(n); 
-			if (c < 128) {
-				utftext += String.fromCharCode(c);
-			}
-			else if((c > 127) && (c < 2048)) {
-				utftext += String.fromCharCode((c >> 6) | 192);
-				utftext += String.fromCharCode((c & 63) | 128);
-			}
-			else {
-				utftext += String.fromCharCode((c >> 12) | 224);
-				utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-				utftext += String.fromCharCode((c & 63) | 128);
-			} 
-		} 
-		return utftext;
-	},
-	decode : function (utftext) {
-		var string = "";
-		var i = 0;
-		var c = c1 = c2 = 0; 
-		while ( i < utftext.length ) { 
-			c = utftext.charCodeAt(i); 
-			if (c < 128) {
-				string += String.fromCharCode(c);
-				i++;
-			}
-			else if((c > 191) && (c < 224)) {
-				c2 = utftext.charCodeAt(i+1);
-				string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-				i += 2;
-			}
-			else {
-				c2 = utftext.charCodeAt(i+1);
-				c3 = utftext.charCodeAt(i+2);
-				string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-				i += 3;
-			} 
-		} 
-		return string;
-	} 
-}var rpc = JsonRpcClient()
+var rpc = JsonRpcClient()
     /*,XUI = function()
     {
         var o = "undefined" == typeof Base && rpc.LoadJsObj("Base") || Base, a = o.A(arguments).concat([o]), k, i, p = a[0];
