@@ -24,14 +24,12 @@ function JsonRpcClient(url) {
 			{
 			   return String.fromCharCode(arguments[1]);
 			})), _this.xml && (delete _this.xml.onreadystatechange, delete _this.xml);
-			// if("undefined" != typeof Base && Base.myMask)Base.myMask.hide();
 	    }};
 	    if(-1 == o.url.indexOf("http:"))o.url = [lct.protocol, "//", lct.host].join("") + o.url;
 		if (this.xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()) {
 			o.bAsync && (this.xml.onreadystatechange = function () {
 				fncbk();
 			});
-			// if("undefined" != typeof Base && Base.XuiLoading)Base.XuiLoading();
 			this.xml.open("POST", o.url + (-1 < o.url.indexOf("?") ? '&' : '?')
 			 + "xui="+ new Date().getTime()
 			// + ("undefined" != typeof g_szJsessionid ? "&jsessionid="+ g_szJsessionid : "")
@@ -54,6 +52,7 @@ function JsonRpcClient(url) {
 		}catch (e) {}
 	}});
 	obj = obj.result;
+	/* 获取界面所有输入对象并进行传递到后台2010-4-18 */
 	var fnRpcCall = function () {
 		var params = _A(arguments), cbk = params[0], bAsync = "function" == typeof (cbk || ""), oRst = {};
 		bAsync && params.shift();
