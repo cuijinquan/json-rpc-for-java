@@ -184,8 +184,12 @@ showObj:function(szNameOrId)
   {
      o = $(":input[@name=" + szNameOrId + "]");
      if(0 == o.length)o = $(":input[@name=dto(" + szNameOrId + ")]");
-     o = Base.p(o[0], "DIV");o = Base.p(o, "DIV");
-     $(o).show();
+      if(0 < o.length)
+      {
+	     o = Base.p(o[0], "DIV");o = Base.p(o, "DIV");
+	     o = $(o);
+	     if(0 < o.length)o.show();
+     }
   }
 }
 ,/* 传递Xpath szData指定的数据，并更新flash区域的查询 */
