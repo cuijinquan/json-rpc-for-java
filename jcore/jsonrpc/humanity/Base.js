@@ -167,8 +167,12 @@ hideObj:function(szNameOrId)
   {
      o = $(":input[@name=" + szNameOrId + "]");
      if(0 == o.length)o = $(":input[@name=dto(" + szNameOrId + ")]");
-     o = Base.p(o[0], "DIV");o = Base.p(o, "DIV");
-     $(o).hide();
+     if(0 < o.length)
+     {
+	     o = Base.p(o[0], "DIV");o = Base.p(o, "DIV");
+	     o = $(o);
+	     if(0 < o.length)o.hide();
+     }
   }
 },  /* 显示指定名字或id的对象 */
 showObj:function(szNameOrId)
