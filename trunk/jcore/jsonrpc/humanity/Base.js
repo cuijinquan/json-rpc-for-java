@@ -416,6 +416,7 @@ XuiLoading:function(o)
            }),
            setValue:(_t.setValue = function(s, s2){
               if(!s)return this;
+              if(null == s2 || "undefined" == typeof s2 || "null" == s2 || "undefined" == s2)s2 = "";
               s2 = String(s2);
               s2=("undefined" == typeof s2 ? "" : s2.replace(/"/gm,"&#34;").replace(/>/gm,"&gt;").replace(/</gm,"&lt;"));
               window.bBoBq = true;

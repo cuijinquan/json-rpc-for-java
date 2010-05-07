@@ -4,6 +4,7 @@
   descObj:null,    /* 存放描述的输入对象 */
   oFrom:null,      /* 计算图层宽度的对象 */
   oShdow:null,     /* 阴影图层对象 */
+  bFltFlg: false, /* 过滤的标志 */
   xfcSlctDivId: '_Xui_SelectDiv',
   upi4ajx:function(){
      if(Select.descObj && Select.descObj.id)this.descObj = Select.descObj = document.getElementById(Select.descObj.id);
@@ -174,7 +175,9 @@
       else  if(a[n]["_id"] && -1 < a[n]["_id"].indexOf(s))
          w.push(a[n]);
       else c.push(a[n]);}
-    this.data = b.concat(w).concat(c);
+    this.data = b.concat(w);
+    /*if(Select.bFltFlg)*/
+    this.data = this.data.concat(c),Select.bFltFlg = false;
     return b.length;
   },/* 显示图层 */
   show: function()
@@ -226,6 +229,7 @@
   }, /* 键盘事件处理 */
   onkeydown:function(e, oIpt)
   {
+     /*Select.bFltFlg = true;*/
      e = e || window.event;
      Select.upi4ajx();
      var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getSlctObj(oIpt.id), i = o["_lstNum"] || 0;
