@@ -64,12 +64,12 @@
       {
           for(k in o)
            if(key != k && "_id" != k && "function" != typeof o[k])
-             a1.push("<td><nobr>"), a1.push(o[k]), a1.push("</nobr></td>");
+             a1.push("<td><nobr>"), a1.push(o[k]), a1.push("&nbsp;</nobr></td>");
       }
       else
       {
         for(j = 0; j < b.length; j++)
-          if(key != b[j] && "_id" != b[j])a1.push("<td><nobr>"), a1.push(o[b[j]]), a1.push("</nobr></td>");
+          if(key != b[j] && "_id" != b[j])a1.push("<td><nobr>"), a1.push(o[b[j]]), a1.push("&nbsp;</nobr></td>");
       }
       a1.push("</tr>");
     }
