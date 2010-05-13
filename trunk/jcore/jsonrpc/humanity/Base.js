@@ -51,8 +51,17 @@ PopMsgWin:function(o)
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,callBackFn)
 {
-   mkClctDt();
-   var form, reqCode;
+   mkClctDt();   
+   var form, reqCode, a = arguments, cbk = a[a.length - 1], bHvCbk = "function" == typeof cbk;
+   if(bHvCbk)
+   {
+	   callBackFn = cbk;
+	   if(2 == a.length)szReqCode = null;
+	   else if(3 == a.length)szUrl = null;
+	   else if(4 == a.length)szData = null;
+	   else if(5 == a.length)szDesId = null;
+	   else if(6 == a.length)isAsync = false;
+   } 
    if (!szUrl && (form = $("form:first")[0])
             && form.action && "undefind" != typeof 
               (reqCode = $("input[name=reqCode]")[0]).value){
