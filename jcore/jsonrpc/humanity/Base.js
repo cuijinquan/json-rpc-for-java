@@ -156,6 +156,10 @@ fsubmit:function(n, oWin, bNLd)
 {
     if(false != bNLd)this.XuiLoading();
     mkClctDt();
+ 	$(":input[type=button]").each(function(){
+    	$(this).attr("disabled",true);
+    	$(Base.p(this, "TABLE")).addClass("z-btn-dsb");
+    });
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
 {
