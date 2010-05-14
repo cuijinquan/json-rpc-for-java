@@ -476,7 +476,7 @@ XuiLoading:function(o)
               window.bBoBq = false;
            }),
            setFocus:(_t.setFocus = function(s){
-              var o = this;
+              var o = this,szTitle,arg = arguments;
               $(document).ready(function(){
               if(s)o = $(_t.getObj(s));
               if(0 == o.length)o = ("#" + s);
@@ -489,6 +489,8 @@ XuiLoading:function(o)
                   o = o.find(":input:first");
               window.g_fcsfld = o.attr("name") || o.attr("id");
               o.focus();
+              if(szTitle = o.attr("title") || arg[1])
+              o.bt(szTitle.replace(/\n/gm,"<br>"), {positions: ['left', 'right', 'bottom','top'] }).btOn();
               });
            }),
            setReadOnly:(_t.setReadOnly = function(s, b){
