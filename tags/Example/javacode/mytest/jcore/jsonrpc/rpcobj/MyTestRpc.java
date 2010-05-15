@@ -15,6 +15,7 @@ public class MyTestRpc extends JsonRpcObject {
 	 * @return
 	 */
 	public String getTestMsg() {
+		// 获取界面中所有的输入对象值
 		Map m = this.getAllInputParms();
 		return "噢，成功了！mytest1 = " + m.get("mytest1") + ", mytest2= " + m.get("mytest2") + ", mytest3 = " + m.get("mytest3");
 	}
@@ -31,6 +32,10 @@ public class MyTestRpc extends JsonRpcObject {
 		return lst;
 	}
 	
+	/**
+	 * 返回复合对象
+	 * @return
+	 */
 	public Object getMyObj()
 	{
 		return new MyTestObj();
