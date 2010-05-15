@@ -24,9 +24,10 @@
    </script>
 		<script type="text/javascript" charset="UTF-8" src="JsonRpcClient.js"></script>
 		<script type="text/javascript">
+var i,a, o, k, myrpc = rpc.MyTestRpc;		
+   
    function fnTest()
    {
-      var i,a, o, k, myrpc = rpc.MyTestRpc;
       alert(myrpc.getTestMsg());
       a = myrpc.testGetList();
       // getMyObj返回的复合对象，再调用getList则是级联调用
@@ -94,10 +95,17 @@
    做做更多精彩的内容，请访问：
    http://jxpath.3322.org:82/my3dbarcode/my3DBarcode.html
    </textarea>
-
+<br><br>
 		<button onclick=fnTest()>
 			test
 		</button>
-
+<br>
+		<button onclick="alert(myrpc.setMyBean({name:'summer', age:10000}).name)">
+			myrpc.setMyBean({name:'summer', age:10000})
+		</button>
+<br>
+<button onclick="alert(myrpc.setMyMap({name:'summer', age:10000}).age)">
+			myrpc.setMyMap({name:'summer', age:10000})
+		</button>
 </body>
 </html>
