@@ -97,15 +97,15 @@ var i,a, o, k, myrpc = rpc.MyTestRpc;
    </textarea>
 <br><br>
 		<button onclick=fnTest()>
-			test
+			普通调用、级联调用、获取界面输入对象测试
 		</button>
-<br>
-		<button onclick="alert(myrpc.setMyBean({name:'summer', age:10000}).name)">
-			myrpc.setMyBean({name:'summer', age:10000})
-		</button>
-<br>
+<br><br>
+<button onclick="alert(myrpc.setMyBean({name:'summer', age:10000}).name)">
+传入JavaBean: myrpc.setMyBean({name:'summer', age:10000})
+</button>
+<br><br>
 <button onclick="alert(myrpc.setMyMap({name:'summer', age:10000}).age)">
-			myrpc.setMyMap({name:'summer', age:10000})
-		</button>
+传入Map: myrpc.setMyMap({name:'summer', age:10000})
+</button>
 </body>
 </html>
