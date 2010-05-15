@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import jcore.jsonrpc.common.JsonRpcObject;
+import jcore.jsonrpc.testobj.MyTestObj;
 
 public class MyTestRpc extends JsonRpcObject {
 	/**
@@ -28,5 +29,10 @@ public class MyTestRpc extends JsonRpcObject {
 		lst.add(new String[]{"good1", "测试2", "测试4"});
 		lst.add(new Object[]{new Integer(234), new Boolean(true), new java.math.BigDecimal(3444.454345)});
 		return lst;
+	}
+	
+	public Object getMyObj()
+	{
+		return new MyTestObj();
 	}
 }
