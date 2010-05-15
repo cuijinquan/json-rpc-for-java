@@ -24,6 +24,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       var i,a, o, k, myrpc = rpc.MyTestRpc;
       alert(myrpc.getTestMsg());
       a = myrpc.testGetList();
+      // getMyObj返回的复合对象，再调用getList则是级联调用
+      a = a.concat(myrpc.getMyObj().getList());
+      
+      alert("级联调用：" + myrpc.getMyObj().getSelf().getSelf().getSelf().getList()[2]["key2"]);
+      
       for(i = 0; i < a.length; i++)
       {
          o = a[i];
@@ -35,9 +40,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    }
    
    </script>
-   <input name="mytest1">
-   <input name="mytest2">
-   <input name="mytest3">
+   <input name="mytest1" value="第一个值">
+   <input name="mytest2" value="第er颗值">
+   <input name="mytest3" value="第three value">
    <button onclick=fnTest()>test</button>
   </body>
 </html>

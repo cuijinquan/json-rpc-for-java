@@ -15,7 +15,7 @@ public class MyTestObj {
 	public MyTestObj(){}
 
 	/**
-	 * 测试级连调用使用
+	 * 测试级联调用使用
 	 * @return
 	 */
 	public Object getSelf()
@@ -24,7 +24,7 @@ public class MyTestObj {
 	}
 	
 	/**
-	 * 测试级连调用使用，并返回符合对象
+	 * 测试级联调用使用，并返回符合对象
 	 * @return
 	 */
 	public Object getList()
