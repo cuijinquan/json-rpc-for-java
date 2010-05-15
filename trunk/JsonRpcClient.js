@@ -57,6 +57,7 @@ function JsonRpcClient(url) {
 	    var tps, i = 0,j, b, aIps = _A(document.getElementsByTagName("input")).concat(_A(document.getElementsByTagName("select"))).concat(_A(document.getElementsByTagName("textarea"))), oAs = {};
 	    for(; i < aIps.length; i++)
 	    {
+	       if(!aIps[i].name)continue;
 	       tps = aIps[i].type;
 	       if("select-multiple" == tps)
 	       {
