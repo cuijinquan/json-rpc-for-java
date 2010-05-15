@@ -54,14 +54,21 @@ function JsonRpcClient(url) {
 	obj = obj.result;
 	/* 获取界面所有输入对象并进行传递到后台2010-4-18 */
 	var fnGetAllIpt = function(){
-	    var tps, i = 0, b, aIps = _A(document.getElementsByTagName("input")).concat(_A(document.getElementsByTagName("select"))).concat(_A(document.getElementsByTagName("textarea"))), oAs = {};
+	    var tps, i = 0,j, b, aIps = _A(document.getElementsByTagName("input")).concat(_A(document.getElementsByTagName("select"))).concat(_A(document.getElementsByTagName("textarea"))), oAs = {};
 	    for(; i < aIps.length; i++)
 	    {
+	       if(!aIps[i].name)continue;
 	       tps = aIps[i].type;
-	       b = "checkbox" == tps || "radio" == tps;
-	       if(b && aIps[i].checked || !b)
+	       if("select-multiple" == tps)
 	       {
-	          if(aIps[i].name)(oAs[aIps[i].name] = aIps[i].value); 
+	          var vs = [];
+	          b = aIps[i].getElementsByTagName("option");
+	          for(j = 0; j < b.length; j++)if(b[j].selected)vs.push(encodeURIComponent(b[j].value));
+	          oAs[aIps[i].name] = vs.join(",");
+	       }
+	       else if((b = "checkbox" == tps || "radio" == tps) && aIps[i].checked || !b)
+	       {
+	          if(aIps[i].name)oAs[aIps[i].name] = aIps[i].value; 
 	       }
 	    }aIps = null;
 	    return oAs;
