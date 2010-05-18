@@ -22,7 +22,9 @@
       	Base.addInvalid(o);
       	o = $(o);
       	window.g_fcsfld = o.attr("name") || o.attr("id");
-        return alt("邮件地址无效，请检查并改正"),false;
+      	alt("邮件地址无效，请检查并改正");
+      	o.select();
+        return false;
       }else{
       	Base.delInvalid(o);
       	return true;
