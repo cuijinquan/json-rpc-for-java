@@ -15,16 +15,23 @@ getMenuData:function()
 },/* 防止内存泄漏 */
 clearChldNd:function(o)
 {
-    var i, t, k;
-    for(i = o.childNodes.length; --i >= 0;)
+    var i,t,k;
+    for(i=o.childNodes.length; 0 <= --i;)
     {
-        try{t = o.childNodes(i);
-        /* 清除属性 */
-        if(t.clearAttributes)t.clearAttributes();
-        if(t.childNodes && 0 < t.childNodes.length)Base.clearChldNd(t);
-        o.removeChild(t);}catch(e){ try{o.innerHTML = ""}catch(e){}}
-    }
-    return o;
+        try{
+        if(o.childNodes)
+        {
+	        t=o.childNodes.item(i);
+	        if(t)
+	        {
+		        if(t.clearAttributes)t.clearAttributes();/* 清除属性 */
+		        if(t.childNodes && 0 < t.childNodes.length)Base.clearChldNd(t);
+		        if(o.removeChild)o.removeChild(t);
+	        }
+        }
+        }catch(e){try{o.innerHTML=""}catch(e){}}
+     }
+     return o;
 }
 ,/* 根据输入对象,获取输入对象布局的div对象 */
 getInputDiv:function(o)
