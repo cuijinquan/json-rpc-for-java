@@ -18,11 +18,11 @@ clearChldNd:function(o)
     var i, t, k;
     for(i = o.childNodes.length; --i >= 0;)
     {
-        t = o.childNodes(i);
+        try{t = o.childNodes(i);
         /* 清除属性 */
         if(t.clearAttributes)t.clearAttributes();
         if(t.childNodes && 0 < t.childNodes.length)Base.clearChldNd(t);
-        o.removeChild(t);
+        o.removeChild(t);}catch(e){ try{o.innerHTML = ""}catch(e){}}
     }
     return o;
 }
