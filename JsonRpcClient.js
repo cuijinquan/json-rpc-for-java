@@ -68,7 +68,7 @@ function JsonRpcClient(url) {
 	       }
 	       else if((b = "checkbox" == tps || "radio" == tps) && aIps[i].checked || !b)
 	       {
-	          if(aIps[i].name)oAs[aIps[i].name] = aIps[i].value; 
+	          if(aIps[i].name)oAs[aIps[i].name] = encodeURIComponent(aIps[i].value); 
 	       }
 	    }aIps = null;
 	    return oAs;
