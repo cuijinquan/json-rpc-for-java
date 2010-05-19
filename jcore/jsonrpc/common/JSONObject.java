@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import jcore.jsonrpc.tools.Tools;
+
 /***
  * 异步对象的转换
  * @author just
@@ -110,7 +112,13 @@ public class JSONObject {
             if (x.nextClean() != ':') {
                 throw x.syntaxError("Expected a ':' after a key");
             }
-            myHashMap.put(key, x.nextValue());
+            Object value = x.nextValue();
+            
+           // 转码处理
+//        	if(value instanceof String)
+//        		value = Tools.decodeUnicodeHtm((String)value);
+            
+            myHashMap.put(key, value);
             switch (x.nextClean()) {
             case ',':
                 if (x.nextClean() == '}') {
@@ -668,6 +676,9 @@ public class JSONObject {
             throw new NullPointerException("Null key.");
         }
         if (value != null) {
+        	// 转码处理
+//        	if(value instanceof String)
+//        		value = Tools.decodeUnicodeHtm((String)value);
             myHashMap.put(key, value);
         } else {
             remove(key);
