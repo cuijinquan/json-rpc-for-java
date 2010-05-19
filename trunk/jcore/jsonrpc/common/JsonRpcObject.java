@@ -1,6 +1,5 @@
 package jcore.jsonrpc.common;
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,7 @@ public abstract class JsonRpcObject implements IJsonRpcObject,Serializable
 	 */
 	public Map getAllInputParms()
 	{
-		return new LinkedHashMap((Map)getRequest().getAttribute("allPms"));
+		return new MyMap((Map)getRequest().getAttribute("allPms"));
 	}
 	
 	
