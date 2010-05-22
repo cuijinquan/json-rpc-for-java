@@ -27,6 +27,7 @@ public class TranslateServlet extends HttpServlet{
 			out.write(szOut.getBytes(Charset));
 			szOut = null;
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		out.flush();
 		out.close();
