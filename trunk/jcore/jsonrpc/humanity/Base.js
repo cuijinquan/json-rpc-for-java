@@ -161,7 +161,7 @@ AjaxTab: function(tabId, szReqCode, url, data, destId,szCallBackFn){
 },
 fsubmit:function(n, oWin, bNLd)
 {
-    if(false != bNLd)this.XuiLoading();
+    fnLoadsts(1);
     mkClctDt();
  	$(":input[type=button]").each(function(){
     	$(this).attr("disabled",true);
@@ -249,12 +249,6 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
       }
    }
    return a.join("&");
-},
-/* Ajax转转统一控制 */
-XuiLoading:function(o)
-{
-   /*if("undefined" != typeof Base.AjaxObj)
-   (Base.myMask = new Ext.LoadMask(Base.AjaxObj, {msg:"Please wait..."})).show();*/
 },
   init: function()
   {
@@ -871,6 +865,7 @@ XuiLoading:function(o)
     }/* 防止缓存 */
     if(-1 == o.url.indexOf("?"))o.url += "?tm=" + new Date().getTime();
     else o.url += "&tm=" + new Date().getTime();
+    fnLoadsts(1);
     $.ajax({
     	cache:false,
     	async:o.bAsync && !!o.fn,
@@ -883,7 +878,7 @@ XuiLoading:function(o)
     	type:"post",
     	dataType:"html",
     	complete:function(obj){
-    		if("undefined" != typeof Base && Base.myMask)Base.myMask.hide();//hidden
+    		fnLoadsts();
     		o.fn(obj.responseText);
     	}
     	}); 
