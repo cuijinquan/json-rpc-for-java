@@ -415,8 +415,9 @@
            _t.stopPropagation(e),_t.preventDefault(e);
            return false;
         default:
-           x = oIpt.value.length;k = "";
-           if(0 < x)k = oIpt.value.substr(x - 1, 1);
+            x=oIpt.value.length;k="";var m,allBMth="1,3,5,7,8,10,12";
+           if(0 < x)k=oIpt.value.substr(x - 1,1);
+           if(5 < x)m=parseInt(oIpt.value.substr(5,2));
            if(     ((4 > x || 15 == x || 18 == x) && (48 <= n && n <= 57 || 96 <= n && n <= 105))           /* 年4位 0-9 */
                 || ((4 == x || 7 == x) && (n == 189 || 109 == n))        /* 5、8位 -符号 */
                 || ((12 == x || 15 == x) && n == 186)     /* 13、16位 :符号 */
