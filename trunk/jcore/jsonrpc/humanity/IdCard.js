@@ -32,26 +32,26 @@
       return true;
     },
     
-    check18 : function(input, sex, birthday){
+    check18 : function(input, sex, birthday,bFlg){
       var year,month,day,date; 
       year = input.value.substr(6,4);
 	  month= input.value.substr(10,2);
 	  day  = input.value.substr(12,2);
       if(!Utils.isDateNumberFormat(month,day,year)){
-        alt("身份证号码日期部分错误！"+year+"-"+month+"-"+day);
+        if(!bFlg)alt("身份证号码日期部分错误！"+year+"-"+month+"-"+day);
         setTimeout(function(){input.focus();input.select();},1);
         Base.addInvalid(input);
         return false;
       }
       var tmp = input.value.replace(/\d/gmi,"");
       if (!("" == tmp || "X" == tmp)){
-        alt("输入的身份证中有不合法的字符!");
+        if(!bFlg)alt("输入的身份证中有不合法的字符!");
 	    setTimeout(function(){input.focus();input.select();},1);
 	    Base.addInvalid(input);
 	    return false;
       }
       if (!IdCard.upgrade(input.value)){
-        alt("输入的身份证校验位不合法!!!");
+        if(!bFlg)alt("输入的身份证校验位不合法!!!");
 	    setTimeout(function(){input.focus();input.select();},1);
 	    Base.addInvalid(input);
 	    return false;        
@@ -73,13 +73,13 @@
     setDescByValue : function(o, v){
       Base.setValue(o.name, v);
     },
-    check15 : function(input, sex, birthday){
+    check15 : function(input, sex, birthday,bFlg){
       var year,month,day,date; 
       year = "19" + input.value.substr(6,2);
 	  month = input.value.substr(8,2);
 	  day  = input.value.substr(10,2);
       if(!Utils.isDateNumberFormat(month,day,year)){
-        alt("身份证号码日期部分错误！"+year+"-"+month+"-"+day);
+        if(!bFlg)alt("身份证号码日期部分错误！"+year+"-"+month+"-"+day);
         setTimeout(function(){input.focus();input.select();},1);
         Base.addInvalid(input);
         return false;
