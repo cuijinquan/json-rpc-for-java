@@ -161,8 +161,9 @@ AjaxTab: function(tabId, szReqCode, url, data, destId,szCallBackFn){
 },
 fsubmit:function(n, oWin, bNLd)
 {
-    fnLoadsts(1);
+    if(!bNLd)fnLoadsts(1);
     mkClctDt();
+    if(!bNLd)
  	$(":input[type=button]").each(function(){
     	$(this).attr("disabled",true);
     	$(Base.p(this, "TABLE")).addClass("z-btn-dsb");
@@ -273,7 +274,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
       window.alt = window.alert;
       window.cfm = window.confirm;
       window.alert = function(o)
-      {setTimeout(function(){
+      {
           if("undefined" != typeof g_fcsfld && g_fcsfld)g_fcsfld.setFocus(),g_fcsfld = null;
           if(!("object" == typeof o && null != o && o.hasOwnProperty('message')))return window.alt(o);
           var fnTmp = window.alt;
@@ -300,14 +301,15 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
           }
           else
           {
-              alt(o.message);
+              if(g_bNoTimeoutAlt) alt(o.message);
+              else  setTimeout(function(){alt(o.message);}, 13);
               if(o.okScript){
                     if("function" == typeof o.okScript)o.okScript();
                     else eval(o.okScript);
                }
               if(o.okUrl)location.href = contextPath + o.okUrl;
           }
-          }, 13);
+         
       };
        window.confirm = function(s, fn, fn1)
       {
