@@ -135,6 +135,7 @@ public class JSONRPCServlet extends HttpServlet {
 
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ClassCastException {
+		boolean bDebug = false;
 		// 安全处理
 		if (null != check && !check.secureCheck(request, response))
 			return;
@@ -190,6 +191,8 @@ public class JSONRPCServlet extends HttpServlet {
 			byte[] bout = null;
 			if (null != szData && 0 < szData.length()) {
 				// szData = Tools.decodeUnicodeHtm(szData.trim());
+				if(bDebug)
+					System.out.println(szData);
 				Object obj = brg.ExecObjectMethod(request, szData);
 				if (null != obj) {
 //					System.out.println(obj.toString());
@@ -205,6 +208,8 @@ public class JSONRPCServlet extends HttpServlet {
 			}
 			if (null != bout) {
 				response.setIntHeader("Content-Length", bout.length);
+				if(bDebug)
+					System.out.println(new String(bout, "UTF-8"));
 				out.write(bout);
 			}
 			out.flush();
