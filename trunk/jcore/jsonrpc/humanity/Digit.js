@@ -90,7 +90,7 @@
     ieContentContact : function(obj, reg, inputStr){
       try{
 	    var docSel  = document.selection.createRange();
-	    if(null != docSel && null != docSel.parentElement() && "INPUT" != docSel.parentElement().tagName)
+	    if(null != docSel && null != docSel.parentElement() && "INPUT" != docSel.parentElement().tagName || docSel.parentElement().readOnly)
 	       return false;
 	    oSel = docSel.duplicate(),oSel.text = "";
 	    var srcRange = obj.createTextRange();
