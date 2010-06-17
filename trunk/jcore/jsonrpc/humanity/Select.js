@@ -27,7 +27,7 @@
              if(key != k)
                 s.push(o[k]);
           if(0 < s.length)
-          rst[i][key] = s.join(",");
+          rst[i][key] = s.join(",").toLowerCase();
         }
     }
     if(this.data && 0 == this.data.length)this.data = null;
@@ -170,9 +170,9 @@
     if(!a || 0 == a.length)return 0;
     for(n = 0; n < a.length; n++)
       if(a[n]){
-      if(a[n]["_id"] && -1 < a[n]["_id"].indexOf(s +","))
+      if(a[n]["_id"] && -1 < a[n]["_id"].indexOf(s.toLowerCase() +","))
          b.push(a[n]);
-      else  if(a[n]["_id"] && -1 < a[n]["_id"].indexOf(s))
+      else  if(a[n]["_id"] && -1 < a[n]["_id"].indexOf(s.toLowerCase()))
          w.push(a[n]);
       else c.push(a[n]);}
     this.data = b.concat(w);
