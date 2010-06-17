@@ -61,7 +61,7 @@
 	},
     sz_onblur : function(evt){
       var e = (evt || event || window.event),o = e.srcElement || e.target, _t = this;
-      if(_t.bBoBq)return false;
+      if(_t.bBoBq || o.readOnly)return false;
       _t.fnNoInput(function(){
       if (o.reg.test(o.value)){
         if ("" == o.value || 
