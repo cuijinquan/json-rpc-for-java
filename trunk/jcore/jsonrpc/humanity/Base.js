@@ -575,8 +575,18 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                 o1.find("b").remove();
                 o1.find("input:first").removeAttr("isRequired");
              });
+           }),validateForm: (_t.validateForm = function(s,ids)
+           {
+              var oBts = ids && ids.split(/[;,\t\s\|]/) || [], i = 0;
+              for(i = 0; i < oBts.length; i++)oBts[i].disabledButton();
+              if(!Base.validateForm1(s))
+              {
+                 for(i = 0; i < oBts.length; i++)oBts[i].enabledButton();
+                 return false;
+              }
+              return true;
            }),
-           validateForm: (_t.validateForm = function(s)
+           validateForm1: (_t.validateForm1 = function(s)
            {
              var o = this, bR = true;
              if(s)
