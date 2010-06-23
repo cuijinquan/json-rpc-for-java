@@ -2,6 +2,7 @@
 	  openMultiSelectDiv:function (e,o1,input){
 	  var o = $("#"+o1.id);
 	  input = $(input);
+	  if(input.attr("readonly"))return;
 	  o.attr("class","MultiSelectShow");
 	  oPos=input.position();    
 	  o.css({left:oPos.left+"px",top: (oPos.top+input.height()+4)+"px",width:(o1 && o1.width && parseInt(o1.width) || (input.width()+15))+"px"});
