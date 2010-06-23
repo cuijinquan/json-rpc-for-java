@@ -26,9 +26,6 @@
 	  input.keypress(function(e){
 	  	if(e.keyCode==27)MultiSelect.hiddenMultiSelectDiv(o1.id);
 	  });
-	  $("#MultiSelect-Close-Butt").click(function(){
-	  	MultiSelect.hiddenMultiSelectDiv(o1.id);
-	  });
 	  $("#MultiSelect-OK-Butt").click(function(){
 	  	MultiSelect.selectedOk(o,input,_dg_id);
 	  });
