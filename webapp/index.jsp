@@ -1,6 +1,5 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@page import="java.net.URLDecoder"%>
-
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
