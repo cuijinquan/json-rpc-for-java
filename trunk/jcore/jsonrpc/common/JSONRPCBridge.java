@@ -327,12 +327,11 @@ public class JSONRPCBridge implements Serializable{
 					Object oRst = null;
 					try
 					{
+						// 循环做解码处理
 						for(int i = 0; i < aParam.length; i++)
 						{
 							if(aParam[i] instanceof String)
-							{
 								aParam[i] = Tools.decodeUnicodeHtm((String)aParam[i]);
-							}
 						}
 						oRst = mExec.invoke(o, aParam);
 					} catch (Exception e) 
