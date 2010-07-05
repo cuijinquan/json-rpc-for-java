@@ -139,7 +139,7 @@ public class ObjectToJSON implements Serializable{
 				else if(o instanceof java.sql.Date)
 					   tstp = new Timestamp(((java.sql.Date)o).getTime());
 				// 直接使用Timestamp的toString
-				buf.append("'").append(tstp.toString()).append("'");
+				buf.append("\"").append(tstp.toString()).append("\"");
 //				int m = oDate.getMonth() + 1;
 //				// 来看需要返回JavaScript Date类型，就将下面的注释打开
 //				// return buf.append("new Date(").append(((Date)o).getTime()).append(")").toString();
