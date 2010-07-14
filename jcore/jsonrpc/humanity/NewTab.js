@@ -1,4 +1,4 @@
-closeTab : function(id,szid){
+ closeTab : function(id,szid){
       var tabs = $("#"+id),_t=NewTab.getHeader(szid),nextTab,tab_ul = $("#"+id+"_ul"),allshowTab = tab_ul.find("li").not(".x-tab-item-li-hide");
       if(allshowTab.size() != 1){
 	      if(window["g_active"+id] == szid){
@@ -92,7 +92,7 @@ closeTab : function(id,szid){
 	    	var cur_hdId = $(this).attr("id");
 	    	$("#"+NewTab.getBodyId(cur_hdId)).addClass("x-hide-display").removeAttr("style");
 	    });
-	   try{$("#"+curTab.attr("id")).find(":input[type!=hidden]").eq(0).focus();}catch(e){}
+	   try{$("#"+curTab_body).find(":input[type!=hidden]").eq(0).focus();}catch(e){alt(e.message)}
 	    window["g_active"+id]=curTab_body;
 	    (id+"_Act").setValue(curTab_body);
     },
@@ -138,7 +138,7 @@ closeTab : function(id,szid){
 		"<em>"+o.key+"</em></span>",
 		"<span class='x-tab-item-bg-right'/>",
 		"</li>"
-	    	];    		
+	    	];
     	li = $(itemsCodeArr.join(""));
 	    li.click(function(){
    			NewTab.tabLoad(tabs,li);
@@ -182,18 +182,39 @@ closeTab : function(id,szid){
      var allTab=o.alltab,tabs=$("#"+o.id);
      if($("#"+o.id+'_hdPanel')[0])return;
      var htmlCodeArr=[
-     "<div id='"+o.id+"_hdPanel' class='x-tabs-panel'>",
+     "<div id='"+o.id+"_hdPanel'>",
      "<div id='"+o.id+"_mLeft' class='x-tabs-panel-mleft'></div>",
      "<ul class='x-tab-item-ul' id='"+o.id+"_ul'/>",
-     //"<div id='"+o.id+"_rReft' class='x-tabs-panel-rleft'></div>",
+     "<div id='"+o.id+"_rReft' class='x-tabs-panel-mright'></div>",
      "</div>"
      ];
-     var leftM =  $("#"+o.id+"_rReft");
-     tabs.prepend(htmlCodeArr.join(""));
+     var leftM =  $("#"+o.id+"_rReft"),hPos = o.hPos || "T",tabArr=[],
+     header=$(htmlCodeArr.join("")),hd_panel = header.find("#"+o.id+"_hdPanel");
+     switch(hPos){
+     	case "T":
+     		 header.addClass("x-tabs-panel");
+     		 tabs.prepend(header);
+     	break;
+     	case "L":
+     		header.addClass("x-tabs-panel-left");
+     		header.css("height",o.height);
+     		tabs.find("ol:first").css("width","auto");
+     		tabs.prepend(header);
+     	break;
+     	case "R":
+    		header.addClass("x-tabs-panel-right");
+     		header.css("height",o.height);
+     		tabs.find("ol:first").css({"width":tabs.width()-136,"float":"left"});
+     		tabs.append(header);
+     	break;
+     	case "B":
+     		 header.addClass("x-tabs-panel");
+     		 tabs.append(header);
+     	break;
+     }
      $(allTab).each(function(){
     	 NewTab.createTabItem(o.id,this);
      });
-     //this.addContextMenu(o.id);
      var tab_ul =  $("#"+o.id+"_ul"),
      activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide")[0]
      ,activeTab=$(activeTab);
