@@ -1,4 +1,7 @@
- closeTab : function(id,szid){
+tw :133,  
+  	th :30,  
+  	/* 隐藏指定id的Tab， 参数【tabs的id，需要隐藏的tab的id】 */
+    closeTab : function(id,szid){
       var tabs = $("#"+id),_t=NewTab.getHeader(szid),nextTab,tab_ul = $("#"+id+"_ul"),allshowTab = tab_ul.find("li").not(".x-tab-item-li-hide");
       if(allshowTab.size() != 1){
 	      if(window["g_active"+id] == szid){
@@ -10,6 +13,7 @@
 	      window["no_active"+"_"+szid]=false;
       }
     },
+    /* 隐藏指定id的Tab之外的Tab ，参数【tabs的id，需要隐藏的tab的id】 */
     closeOtherTab : function(tabs,szid){
     	var tab_ul = $("#"+tabs+"_ul"),allshowTab = tab_ul.find("li").not(".x-tab-item-li-hide");
     	if(allshowTab.size() != 1){
@@ -22,11 +26,13 @@
 	    	this.tabLoad(tabs,NewTab.getHeader(szid));
     	}
     },
+     /* 显示指定id的Tab ，参数【tabs的id，需要显示的tab的id】 */
     showTab : function(id,o){
       var myTab=$("#"+id),b=myTab.find("#"+o);
       NewTab.getHeader(o).removeClass("x-tab-item-li-hide");
       window["no_active"+"_"+o]=true;
     },
+     /* 禁用指定id的Tab ，参数【tabs的id，需要禁用的tab的id】 */
     disableTab : function(id,tab){
     	var _t = NewTab.getHeader(tab);
     	_t.find("em").addClass("x-tab-item-li-em-disabled");
@@ -37,6 +43,7 @@
     	}
     	_t.unbind("click");
     },
+    /* 取消禁用指定id的Tab ，参数【tabs的id，需要取消禁用的tab的id】 */
     enableTab : function(id,tab){
     	var _t = NewTab.getHeader(tab);
     	_t.find("em").removeClass("x-tab-item-li-em-disabled");
@@ -48,7 +55,7 @@
     },
     moveToTab : function(id,active){
      },
-     /* 通过TAB ID激活TAB */
+    /* 激活指定id的Tab ，激活【tabs的id，需要取消禁用的tab的id】 */
     setActiveTab : function(id,active){
      var tab_ul=$("#"+id+"_ul"),o;
      if(null != active && "null" != active){
@@ -65,10 +72,62 @@
      },
    	getDisplayWidth : function(id,index){
    	},
+   	/* 向右滑动整个tabs头部 ，参数【tabs的id，滑动速度】 */
   	 tabScrollRightHandler : function(id,speed){
-      },  
+  	 		var n = 3, k = 0, tabs = $("#"+id),tabs_panel = document.getElementById(id+"_hdPanel"),
+  	 		w=$(tabs_panel).width(),tn = $("#"+id+"_ul").find("li:not('.x-tab-item-li-hide')").length,_tw=this.tw;
+  	 		if(w >= tn*_tw || tabs_panel.scrollLeft >= (tn-3)*_tw)return;
+  	 		Base.regTimer(function(){
+  	 		  if(k + n > _tw)n = _tw - k;
+  	 		  tabs_panel.scrollLeft+=n;
+  	 		  k += n;
+  	 		  if(_tw == k )return true;
+  	 		  n *= 7;
+  	 		  return false;
+  	 		}, 13);
+      }, 
+      /* 向左滑动整个tabs头部 ，参数【tabs的id，滑动速度】 */ 
      tabScrollLeftHandler : function(id,speed){
+  	 		var n = 3, k = 0, tabs = $("#"+id),tabs_panel = document.getElementById(id+"_hdPanel"),_tw=this.tw;
+  	 		if(tabs_panel.scrollLeft <= 0)return;
+  	 		Base.regTimer(function(){
+  	 		  if(k + n > _tw)n = _tw - k;
+  	 		  tabs_panel.scrollLeft-=n;
+  	 		  k += n;
+  	 		  if(_tw == k)return true;
+  	 		  n *= 7;
+  	 		  return false;
+  	 		}, 13);
      },
+     /* 向上滑动整个tabs头部 ，用于tab头部左右布局的时候，参数【tabs的id，滑动速度】 */ 
+      tabScrollTopHandler : function(id,speed){
+      		var n = 3, k = 0, tabs = $("#"+id),tabs_panel = document.getElementById(id+"_sc"),_th=this.th;
+  	 		if(tabs_panel.scrollTop <= 0)return;
+  	 		Base.regTimer(function(){
+  	 		  if(k + n > _th)n = _th - k;
+  	 		  tabs_panel.scrollTop-=n;
+  	 		  k += n;
+  	 		  if(_th == k )return true;
+  	 		  n *= 2;
+  	 		  return false;
+  	 		}, 13);
+      },
+      /* 向下滑动整个tabs头部 ，用于tab头部左右布局的时候，参数【tabs的id，滑动速度】 */ 
+      tabScrollDownHandler : function(id,speed){
+      		var n = 3, k = 0, tabs = $("#"+id),tabs_panel = document.getElementById(id+"_sc"),_th=this.th
+      		,tn = $("#"+id+"_ul").find("li:not('.x-tab-item-li-hide')").length,h = $(tabs_panel).height();
+  	 		if(tn*_th <= h || tabs_panel.scrollTop >= (tn-3)*_th)return;
+  	 		Base.regTimer(function(){
+  	 		  if(k + n > _th)n = _th - k;
+  	 		  tabs_panel.scrollTop+=n;
+  	 		  k += n;
+  	 		  if(_th == k)return true;
+  	 		  n *= 2;
+  	 		  return false;
+  	 		}, 13);
+  	 		
+      },
+     /* 加载Tab页 ，参数【tabs的id，需要加载的tab对象】 */
      tabLoad : function(id,span,hide){
       // 1.先显示当前页（若隐藏），设置激活样式
       // 2.保存激活信息（tabs,form）
@@ -106,15 +165,15 @@
     },
     slidet : function(id,o,index){
     },
+    /* 通过tab的id获取tab的头部对象，参数【tab的id】 */
     getHeader : function(id){
     	return $("#"+id+"_hd");
     },
+    /*通过tab的头部id获取tab的id，参数【tab头部的id】 */
     getBodyId : function(id){
     	return id.substr(0,id.length-3);
     },
-    /**
-    *  右键菜单刷新TAB (tabsID,tabID)    
-    **/
+    /*  右键菜单或者单击头部刷新TAB，参数【(tabs的ID,tab的ID】 */
     updateTab : function(tabs,id){
     	var tab = NewTab.getHeader(id),tab_body = $("#"+id);
     	if(typeof tab.attr("reqCode") != "undefined"){
@@ -126,6 +185,7 @@
     	}
     	window["g_Refreshed_"+id]=true;
     },
+    /* 创建tab对象 ，参数【tabs的id，包含创建tab需要的信息的object对象】 */
     createTabItem : function(tabs,o){
 		var li,tab_ul=$("#"+tabs+"_ul"),tabs_o=$("#"+tabs),
 		url=o.url!=null?" url='"+o.url+"'":" ",
@@ -178,39 +238,60 @@
 	   		NewTab.addContextMenu(tabs,li);
 	   	}
      },
+     /* 创建tabs的头部分 ，参数【包含有tabs、所有tab信息的object对象】 */
      createTabsHeader : function(o){
      var allTab=o.alltab,tabs=$("#"+o.id);
      if($("#"+o.id+'_hdPanel')[0])return;
-     var htmlCodeArr=[
-     "<div id='"+o.id+"_hdPanel'>",
-     "<div id='"+o.id+"_mLeft' class='x-tabs-panel-mleft'></div>",
-     "<ul class='x-tab-item-ul' id='"+o.id+"_ul'/>",
-     "<div id='"+o.id+"_rReft' class='x-tabs-panel-mright'></div>",
-     "</div>"
-     ];
-     var leftM =  $("#"+o.id+"_rReft"),hPos = o.hPos || "T",tabArr=[],
-     header=$(htmlCodeArr.join("")),hd_panel = header.find("#"+o.id+"_hdPanel");
-     switch(hPos){
-     	case "T":
-     		 header.addClass("x-tabs-panel");
-     		 tabs.prepend(header);
-     	break;
-     	case "L":
+    
+     var hPos = o.hPos || "T",tabArr=[];
+     if(hPos == "T" || hPos == "B"){
+	   	 var htmlCodeArr=[
+	     "<div id='"+o.id+"_mLeft' ></div>",
+	     "<div id='"+o.id+"_mRight' ></div>",
+	     "<div id='"+o.id+"_hdPanel'>",
+	     "<ul class='x-tab-item-ul' id='"+o.id+"_ul'>",
+	     "</ul>",
+	     "</div>"
+	     ], header=$(htmlCodeArr.join(""));
+   		 header.addClass("x-tabs-panel");
+   		 if(hPos == "T")tabs.prepend(header);else  tabs.append(header);
+   		 $("#"+o.id+"_mRight").click(function(){
+   		 	NewTab.tabScrollRightHandler(o.id);
+   		 }).attr("title","向右滑动").addClass("x-tabs-panel-mright");
+   		 $("#"+o.id+"_mLeft").click(function(){
+   		 	NewTab.tabScrollLeftHandler(o.id);
+   		 }).attr("title","向左滑动").addClass("x-tabs-panel-mleft");
+     }else if(hPos == "L" || hPos == "R"){
+     	header = [
+     	"<div id='"+o.id+"_hdPanel'>",
+    	"<div id='"+o.id+"_mLeft' ></div>",
+     	"<div id='"+o.id+"_sc'><ul id='"+o.id+"_ul'>",
+     	"</ul></div>",
+     	"<div id='"+o.id+"_mRight' ></div>",
+     	"</div>"		
+     	].join("");
+     	header = $(header);
+     	if(hPos == "L"){
      		header.addClass("x-tabs-panel-left");
-     		header.css("height",o.height);
-     		tabs.find("ol:first").css("width","auto");
      		tabs.prepend(header);
-     	break;
-     	case "R":
-    		header.addClass("x-tabs-panel-right");
-     		header.css("height",o.height);
-     		tabs.find("ol:first").css({"width":tabs.width()-136,"float":"left"});
-     		tabs.append(header);
-     	break;
-     	case "B":
-     		 header.addClass("x-tabs-panel");
-     		 tabs.append(header);
-     	break;
+     		tabs.find("ol:first").css("width","auto");
+     	}else{
+     		header.addClass("x-tabs-panel-right");
+     		var ol = tabs.find("ol:first").css({"width":tabs.width()-136,"float":"left"});
+			tabs.append(header);	
+			tabs.resize(function(){
+				ol.css({"width":tabs.width()-136,"float":"left"});
+			});
+     	}
+     	$("#"+o.id+"_mRight").click(function(){
+     		 	NewTab.tabScrollDownHandler(o.id);
+     	}).attr("title","向下滑动").addClass("x-tabs-panel-mdown");
+     	$("#"+o.id+"_mLeft").click(function(){
+     		 	NewTab.tabScrollTopHandler(o.id);
+     	}).attr("title","向上滑动").addClass("x-tabs-panel-mup");
+     	header.css("height",o.height);
+     	header.find("#"+o.id+"_sc").css({"height":header.height()-50,overflow:"hidden"});
+     	tabs.css("background","");
      }
      $(allTab).each(function(){
     	 NewTab.createTabItem(o.id,this);
@@ -219,11 +300,10 @@
      activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide")[0]
      ,activeTab=$(activeTab);
 	 this.tabLoad(o.id,activeTab);
-	 window["g_active"+o.id]=activeTab.attr("id");
      },
+     /* 给一个tab对象的头部添加右键菜单 ，参数【tabs的id，tab头部分的li节点对象】 */
      addContextMenu : function(tabs,li){
-		//alt(li.html());
-		$("#contextMenuSource").remove();
+		$("#contextMenuSource").remove(); 
      	var contextMenuSource=[
      	"<div class='contextMenu' id='contextMenuSource'><ul>",
         "<li id='close'><img src='"+g_sysInfo[2]+"/default/tabs/remove_outline.png' /> 关闭当前</li>",
