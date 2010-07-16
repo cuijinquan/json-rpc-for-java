@@ -301,7 +301,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
           }
           else
           {
-              if(g_bNoTimeoutAlt) alt(o.message);
+              if("undefined" != typeof g_bNoTimeoutAlt && g_bNoTimeoutAlt) alt(o.message);
               else  setTimeout(function(){alt(o.message);}, 13);
               if(o.okScript){
                     if("function" == typeof o.okScript)o.okScript();
