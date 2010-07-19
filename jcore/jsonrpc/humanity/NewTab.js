@@ -185,8 +185,15 @@ tw :133,
     	}
     	window["g_Refreshed_"+id]=true;
     },
-    /* 创建tab对象 ，参数【tabs的id，包含创建tab需要的信息的object对象】 */
-    createTabItem : function(tabs,o){
+    /* 创建tab对象 ，提供给开发人员调用，参数【tabs的id，包含创建tab需要的信息的object对象，是否是通过JavaScriptAPI添加】 */
+    addTab :function(tabs,o){
+    	return createTabItem(tabs,o);
+    },
+     /* 创建tab对象 ，参数【tabs的id，包含创建tab需要的信息的object对象，是否是通过JavaScriptAPI添加】 */
+    createTabItem : function(tabs,o,flg){
+    	var arr = eval("["+window["g_existTabs"]+"]");
+    	if($.inArray(o.id,arr)>0 && flg == null){ alt("新添加的Tab的ID已经存在。");return;}
+    	else if($.inArray(o.id,arr)>0)	return;
 		var li,tab_ul=$("#"+tabs+"_ul"),tabs_o=$("#"+tabs),
 		url=o.url!=null?" url='"+o.url+"'":" ",
 		reqCode=o.reqCode!=null?" reqCode='"+o.reqCode+"'":" ";
@@ -237,6 +244,7 @@ tw :133,
 	   	if(mode.toUpperCase()!="D"){
 	   		NewTab.addContextMenu(tabs,li);
 	   	}
+	   	window["g_existTabs"]+=",'"+o.id+"'";
      },
      /* 创建tabs的头部分 ，参数【包含有tabs、所有tab信息的object对象】 */
      createTabsHeader : function(o){
@@ -294,7 +302,7 @@ tw :133,
      	tabs.css("background","");
      }
      $(allTab).each(function(){
-    	 NewTab.createTabItem(o.id,this);
+    	 NewTab.createTabItem(o.id,this,"_flg");
      });
      var tab_ul =  $("#"+o.id+"_ul"),
      activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide")[0]
@@ -309,8 +317,9 @@ tw :133,
         "<li id='close'><img src='"+g_sysInfo[2]+"/default/tabs/remove_outline.png' /> 关闭当前</li>",
         "<li id='closeOther'><img src='"+g_sysInfo[2]+"/default/tabs/remove.png' /> 关闭其他</li>",
         "<li id='refresh'><img src='"+g_sysInfo[2]+"/default/tabs/refresh.png' /> 刷新当前</li></ul></div>"
-     	];
-     	$("body").append(contextMenuSource.join(""));
+     	],cm=$(contextMenuSource.join("")).addClass("x-tabs-contextMenu");
+     	
+     	$("body").append(cm);
      	li.contextMenu("contextMenuSource",{
      		 bindings:{
      		 	"close":function(_t){
