@@ -1,4 +1,5 @@
-{tw :133,  
+{
+  	tw :133,  
   	th :30,  
   	/* 隐藏指定id的Tab， 参数【tabs的id，需要隐藏的tab的id】 */
     closeTab : function(id,szid){
@@ -285,10 +286,10 @@
      		tabs.find("ol:first").css("width","auto");
      	}else{
      		header.addClass("x-tabs-panel-right");
-     		var ol = tabs.find("ol:first").css({"width":tabs.width()-136,"float":"left"});
+     		var ol = tabs.find("ol:first").css({"width":tabs.width()-142,"float":"left"});
 			tabs.append(header);	
 			tabs.resize(function(){
-				ol.css({"width":tabs.width()-136,"float":"left"});
+				ol.css({"width":tabs.width()-142,"float":"left"});
 			});
      	}
      	$("#"+o.id+"_mRight").click(function(){
@@ -334,4 +335,4 @@
      		 }
      	});
      }
-}
+     }
