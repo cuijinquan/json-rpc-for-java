@@ -1,4 +1,4 @@
-tw :133,  
+{tw :133,  
   	th :30,  
   	/* 隐藏指定id的Tab， 参数【tabs的id，需要隐藏的tab的id】 */
     closeTab : function(id,szid){
@@ -334,3 +334,4 @@ tw :133,
      		 }
      	});
      }
+}
