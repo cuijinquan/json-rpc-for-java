@@ -131,33 +131,8 @@ AjaxSyn : function(id, isAsync){
   return this.AjaxUpdateUi(id, null, null, null, null, isAsync);
 },
 AjaxTab: function(tabId, szReqCode, url, data, destId,szCallBackFn){
-   mkClctDt();
-   var _t = this, separator = url &&  -1 < url.indexOf("?") ? "&" : "?";
-   (szReqCode && (url = contextPath + url + separator + "reqCode=" + szReqCode)) || (url = contextPath + url);
-   data || (data = ":input:not(:checkbox[@checked=false])");
-   if(szReqCode)Base.setValue("reqCode", szReqCode);
-   $(document).ready(function(){
-     var szId = tabId + "_body";
-     _t.updateUi({url:url,bAsync: !destId,postData:[_t.getAllInput(data)],data:[[destId || szId,1,""]],fn:function(s){
-        var o =  _t.getDom(szId);
-        var script = "", n = s.indexOf("<script");
-        if(-1 < n)
-        {
-           script = s.substr(n);
-           script = script.substr(0, script.lastIndexOf("</" + "script>"));
-           script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
-           script = script.replace(/\/\/--><!\]\]>\s*$/, "");
-        }
-        if(!destId)
-        {
-          s = s.replace(/^\s*<div[^>]*>/mi, "");
-          s = s.substr(0, s.lastIndexOf("</div>"));
-        }
-        if(s && -1 < s.indexOf("<div"))Base.clearChldNd(o).innerHTML = s;
-        if($.isFunction(szCallBackFn))szCallBackFn();
-        try{script && eval(script)}catch(e){alert("异步调用错误:执行返回的脚本出错" + ",错误消息是:" + e.message);}
-     }});
-   });
+	if(destId==tabId)destId=null;
+	AjaxUpdateUi(tabId,szReqCode,url,data,destId,szCallBackFn);
 },
 fsubmit:function(n, oWin, bNLd)
 {
