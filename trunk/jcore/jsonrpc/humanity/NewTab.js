@@ -341,5 +341,8 @@
      		 	}
      		 }
      	});
+     },
+     changeTitle : function(tabs,id,s){
+     	$("#"+tabs+"_ul").find("#"+id).text=s;
      }
      }
