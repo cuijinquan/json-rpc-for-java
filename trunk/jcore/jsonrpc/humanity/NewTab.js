@@ -4,7 +4,6 @@
   	/* 隐藏指定id的Tab， 参数【tabs的id，需要隐藏的tab的id】 */
     closeTab : function(id,szid){
       var tabs = $("#"+id),_t=NewTab.getHeader(szid),nextTab,tab_ul = $("#"+id+"_ul"),allshowTab = tab_ul.find("li").not(".x-tab-item-li-hide");
-      if(allshowTab.size() != 1){
 	      if(window["g_active"+id] == szid){
 	      	  nextTab = _t.nextAll(":not('.x-tab-item-li-hide')").not(".x-tab-item-li-disabled")[0]|| _t.prevAll(":not(.x-tab-item-li-hide)").not(".x-tab-item-li-disabled")[0] || _t;
 	      	  this.tabLoad(id,$(nextTab));
@@ -12,11 +11,10 @@
 	      _t.addClass("x-tab-item-li-hide");
 	      $("#"+szid).css("display","none");
 	      window["no_active"+"_"+szid]=false;
-      }
     },
     /* 隐藏指定id的Tab之外的Tab ，参数【tabs的id，需要隐藏的tab的id】 */
     closeOtherTab : function(tabs,szid){
-    	var tab_ul = $("#"+tabs+"_ul"),allshowTab = tab_ul.find("li").not(".x-tab-item-li-hide");
+    	var tab_ul = $("#"+tabs+"_ul"),allshowTab = tab_ul.find("li").not(".x-tab-item-li-hide"),scDiv = $("#"+tabs+"_sc")[0] || $("#"+tabs+"_hdPanel")[0];
     	if(allshowTab.size() != 1){
 	    	tab_ul.find("li[id!="+szid+"_hd]").each(function(){
 	    		$(this).addClass("x-tab-item-li-hide");
@@ -25,6 +23,8 @@
 	    	});
 	    	$("#"+szid).css("display","block");	
 	    	this.tabLoad(tabs,NewTab.getHeader(szid));
+	    	scDiv.scrollLeft = 0;
+    		scDiv.scrollTop = 0;
     	}
     },
      /* 显示指定id的Tab ，参数【tabs的id，需要显示的tab的id】 */
@@ -43,6 +43,7 @@
 	      	this.tabLoad(id,$(nextTab));
     	}
     	_t.unbind("click");
+    	_t.unbind('contextmenu');
     },
     /* 取消禁用指定id的Tab ，参数【tabs的id，需要取消禁用的tab的id】 */
     enableTab : function(id,tab){
@@ -137,7 +138,7 @@
 	    var tabs_ul = $("#"+id+"_ul"),curTab = span,tabs = $("#"+id),
 	    hd_id=curTab.attr("id"),
 	    curTab_body = NewTab.getBodyId(hd_id);
-	    NewTab.showTab(id,curTab.attr("id"));
+	    NewTab.showTab(id,curTab_body);
 	   	var spans = curTab.find("span");
     	spans.filter(".x-tab-item-text").addClass("x-tab-item-text-active");
     	spans.filter(".x-tab-item-bg-right").addClass("x-tab-item-bg-right-active");
@@ -192,11 +193,15 @@
     },
      /* 创建tab对象 ，参数【tabs的id，包含创建tab需要的信息的object对象，是否是通过JavaScriptAPI添加】 */
     createTabItem : function(tabs,o,flg){
-    	var arr = eval("["+window["g_existTabs"]+"]");
-    	if($.inArray(o.id,arr)>0 && flg == null){ alt("新添加的Tab的ID已经存在。");return;}
-    	else if($.inArray(o.id,arr)>0)	return;
-		var li,tab_ul=$("#"+tabs+"_ul"),tabs_o=$("#"+tabs),
-		url=o.url!=null?" url='"+o.url+"'":" ",
+    	var arr = eval("["+window["g_existTabs"]+"]"),
+			    	tab_ul=$("#"+tabs+"_ul"),
+			    	tabs_o=$("#"+tabs),
+			    	bodys=tabs_o.find("ol:first");
+    	if($.inArray(o.id,arr)>0){
+    		bodys[0].removeChild(document.getElementById(o.id));
+    		tab_ul[0].removeChild(document.getElementById(o.id+"_hd"));
+    	}
+		var li,url=o.url!=null?" url='"+o.url+"'":" ",
 		reqCode=o.reqCode!=null?" reqCode='"+o.reqCode+"'":" ";
 		var itemsCodeArr=[
 		"<li  class='x-tab-item-li' isTab='true'",
@@ -227,7 +232,9 @@
 	   			NewTab.closeTab(tabs,o.id);
 	   		break;
 	   		case "D":
-	   			NewTab.disableTab(tabs,o.id)
+	   			if(!(o.id == window["g_initAct"] || o.key == window["g_initAct"]))
+	   				NewTab.disableTab(tabs,o.id);
+	   			else mode="E";
 	   		break;
 	   	}
 	   	var tab_body = tabs_o.find("#"+o.id),ol=tabs_o.find("ol:first");
@@ -251,7 +258,7 @@
      createTabsHeader : function(o){
      var allTab=o.alltab,tabs=$("#"+o.id);
      if($("#"+o.id+'_hdPanel')[0])return;
-    
+     window["g_initAct"] = o.active;
      var hPos = o.hPos || "T",tabArr=[];
      if(hPos == "T" || hPos == "B"){
 	   	 var htmlCodeArr=[
@@ -306,7 +313,7 @@
     	 NewTab.createTabItem(o.id,this,"_flg");
      });
      var tab_ul =  $("#"+o.id+"_ul"),
-     activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide")[0]
+     activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide").not(".x-tab-item-li-disabled")[0]
      ,activeTab=$(activeTab);
 	 this.tabLoad(o.id,activeTab);
      },
