@@ -213,6 +213,7 @@
 		"</li>"
 	    	];
     	li = $(itemsCodeArr.join(""));
+    	li.data("Clk",o.onclick);
 	    li.click(function(){
    			NewTab.tabLoad(tabs,li);
    			if(window["g_Refreshed_"+o.id]==null)
@@ -316,6 +317,7 @@
      activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide").not(".x-tab-item-li-disabled")[0]
      ,activeTab=$(activeTab);
 	 this.tabLoad(o.id,activeTab);
+	 eval(activeTab.data("Clk"));
      },
      /* 给一个tab对象的头部添加右键菜单 ，参数【tabs的id，tab头部分的li节点对象】 */
      addContextMenu : function(tabs,li){
@@ -343,6 +345,7 @@
      	});
      },
      changeTitle : function(tabs,id,s){
-     	$("#"+tabs+"_ul").find("#"+id).text=s;
+     $("#"+tabs+"_ul").find("#"+id+"_hd").find("em").text(s);
+     $("#"+tabs+"_ul").find("#"+id+"_hd").find("span").eq(1).attr("title",s);
      }
      }
