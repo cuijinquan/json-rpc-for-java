@@ -113,14 +113,14 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,ca
           s = s.replace(/^\s*<div[^>]*>/mi, "");
           s = s.substr(0, s.lastIndexOf("</div>"));
         }
+        if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
+        if(o && "#document" != o.attr("nodeName") && s){Base.clearChldNd(o[0]).innerHTML = s;if(szStyle)o.attr('style', szStyle);}
+		if($.isFunction(callBackFn))callBackFn();
+        }
         try{
           if(script){if(false == isAsync)eval(script);else setTimeout(function(){eval(script)}, 777)};
         }catch(e){
           alert("\u5f02\u6b65\u8c03\u7528\u9519\u8bef:\u6267\u884c\u8fd4\u56de\u7684\u811a\u672c\u51fa\u9519" + ",\u9519\u8bef\u6d88\u606f\u662f:" + e.message);
-        }        
-        if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
-        if(o && "#document" != o.attr("nodeName") && s){Base.clearChldNd(o[0]).innerHTML = s;if(szStyle)o.attr('style', szStyle);}
-		if($.isFunction(callBackFn))callBackFn();
         }
     }});
    }); 
