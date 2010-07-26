@@ -347,5 +347,10 @@
      changeTitle : function(tabs,id,s){
      $("#"+tabs+"_ul").find("#"+id+"_hd").find("em").text(s);
      $("#"+tabs+"_ul").find("#"+id+"_hd").find("span").eq(1).attr("title",s);
-     }
+     },
+     init: function()
+   	 {
+    	 XUI(this);
+    	 window.Tab = this;
+ 	 },
      }
