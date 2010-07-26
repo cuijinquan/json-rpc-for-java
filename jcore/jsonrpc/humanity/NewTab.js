@@ -153,7 +153,7 @@
 	    	var cur_hdId = $(this).attr("id");
 	    	$("#"+NewTab.getBodyId(cur_hdId)).addClass("x-hide-display").removeAttr("style");
 	    });
-	   try{$("#"+curTab_body).find(":input[type!=hidden][disabled!=true][readonly!=true]").eq(0).focus();}catch(e){alt(e.message)}
+	   try{$("#"+curTab_body).find(":input[type!=hidden]").eq(0).focus();}catch(e){}
 	    window["g_active"+id]=curTab_body;
 	    (id+"_Act").setValue(curTab_body);
     },
