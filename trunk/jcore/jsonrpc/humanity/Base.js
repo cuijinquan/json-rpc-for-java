@@ -132,7 +132,7 @@ AjaxSyn : function(id, isAsync){
 },
 AjaxTab: function(tabId, szReqCode, url, data, destId,szCallBackFn){
 	if(destId==tabId)destId=null;
-	AjaxUpdateUi(tabId,szReqCode,url,data,destId,szCallBackFn);
+	Base.AjaxUpdateUi(tabId,szReqCode,url,data,destId,szCallBackFn);
 },
 fsubmit:function(n, oWin, bNLd)
 {
