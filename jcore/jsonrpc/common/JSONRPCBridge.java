@@ -235,7 +235,12 @@ public class JSONRPCBridge implements Serializable{
 				oJson = new JSONObject(szPOld);
 			}
 			// 所有界面中的输入对象参数
-			request.setAttribute("allPms",  new JSONObject(oJson.getString("allPms")).getHashMap());
+			try
+			{
+				request.setAttribute("allPms",  new JSONObject(oJson.getString("allPms")).getHashMap());
+			}catch(Exception e10){
+				e10.printStackTrace();
+			}
 			String szName = oJson.getString("_id_"), 
 			       szMeshod = oJson.getString("method");
 			JSONArray oParams = (JSONArray)oJson.get("params");
