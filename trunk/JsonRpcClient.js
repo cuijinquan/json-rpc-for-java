@@ -80,7 +80,7 @@ function JsonRpcClient(url) {
 							return oTmp;
 						} else {
 							k = {"\r":"", "\n":"\\n", "\t":"\\t", "\b":"\\b", "\f":"\\f", "\"":"\\\""};
-							return "\"" + (oTmp || "").toString().replace(/([\r\n\t\b\f"])/gm, function (a, b) {
+							return "\"" + encodeURIComponent(oTmp || "").toString().replace(/([\r\n\t\b\f"])/gm, function (a, b) {
 								return "\\" + k[b];
 							}) + "\"";
 						}
