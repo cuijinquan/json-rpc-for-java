@@ -196,8 +196,7 @@ public class JSONRPCServlet extends HttpServlet {
 				Object obj = brg.ExecObjectMethod(request, szData);
 				if (null != obj) {
 //					System.out.println(obj.toString());
-					bout = Tools.encodeUnicodeHtm(obj.toString()).getBytes(
-							"UTF-8");
+					bout = Tools.encodeUnicodeHtm(obj.toString()).getBytes("UTF-8");
 				}
 			}
 			// 返回注册中的对象

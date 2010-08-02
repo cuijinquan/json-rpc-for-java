@@ -409,7 +409,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
               if(!s)return this;
               if(null == s2 || "undefined" == typeof s2 || "null" == s2 || "undefined" == s2)s2 = "";
               s2 = String(s2);
-              s2=("undefined" == typeof s2 ? "" : s2.replace(/"/gm,"&#34;").replace(/>/gm,"&gt;").replace(/</gm,"&lt;"));
+              s2=("undefined" == typeof s2 ? "" : s2);
               window.bBoBq = true;
               if(2 == arguments.length)
               {
@@ -430,7 +430,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 	                   var oFom = $("form");
 	                   if(0 < oFom.length)oFom = oFom[0];
 	                   else oFom = $("body")[0];
-	                   Base.insertHtml(oFom, "beforeend", "<input type='hidden' value=\"" + s2 + "\" name=\"" + s + "\"  id=\"" + s + "\">");
+	                   Base.insertHtml(oFom, "beforeend", "<input type='hidden' value=\"" + s2.replace(/"/gm,"&#34;").replace(/>/gm,"&gt;").replace(/</gm,"&lt;") + "\" name=\"" + s + "\"  id=\"" + s + "\">");
 	                  }
 	                 else{
 	                     if("hidden" == oIpt.attr("type"))
