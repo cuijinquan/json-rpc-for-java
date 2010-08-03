@@ -31,7 +31,8 @@
         }
     }
     if(this.data && 0 == this.data.length)this.data = null;
-    return this.data || this.getSlctObj(szId)["collection"] || []
+    var oTmp09 = this.getSlctObj(szId);
+    return oTmp09["collection"] = (this.data || oTmp09["collection"] || [])
   }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
   {
@@ -66,7 +67,7 @@
            if(key != k && "_id" != k && "function" != typeof o[k])
              a1.push("<td><nobr>"), a1.push(o[k]), a1.push(" </nobr></td>");
       }
-      else
+      else if(o)
       {
         for(j = 0; j < b.length; j++)
           if(key != b[j] && "_id" != b[j])a1.push("<td><nobr>"), a1.push(o[b[j]]), a1.push(" </nobr></td>");
@@ -178,7 +179,7 @@
       else c.push(a[n]);}
     this.data = b.concat(w);
     /*if(Select.bFltFlg)*/
-    this.data = this.data.concat(c),Select.bFltFlg = false;
+    Select.data = this.data = this.data.concat(c),Select.bFltFlg = false;
     return b.length;
   },/* 显示图层 */
   show: function()
