@@ -408,7 +408,7 @@
                if(s)
                {
                    var aTmp1 = s.split([,]), oTmp1=$("#"+aTmp1[0]);
-                   if(0 < s.length && "undefined"==typeof this.tree.bExecClk && aTmp1[1] ==oTmp1[0].innerText)
+                   if(0 < s.length && "undefined"==typeof this.tree.bExecClk && oTmp1[0] && aTmp1[1] ==oTmp1[0].innerText)
 	               {
 	                  this.tree.bExecClk = true;
 	                  this.select(oTmp1[0], null);
