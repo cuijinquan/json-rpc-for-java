@@ -314,7 +314,7 @@
            XuiTree.curTree = this.tree;
            this.fnSciv($("#" + XuiTree.curTree.id)[0], o.find("a").parent()[0]);
            if(this.tree.bRmOld)
-           $.cookie(this.tree.id, o.attr('id') + o[0].innerText);
+           $.cookie(this.tree.id, o.attr('id') + ',' + o[0].innerText);
            
            if(this.tree.bRmOld || bClick)/* 点击 */
            {
@@ -407,8 +407,8 @@
                s = $.cookie(this.tree.id);
                if(s)
                {
-                   var oTmp1 = $("#" + this.tree.id);
-	               if(0 < s.length && "undefined" == typeof this.tree.bExecClk && s == (this.tree.id + oTmp1[0].innerText))
+                   var aTmp1 = s.split([,]), oTmp1=$("#"+aTmp1[0]);
+                   if(0 < s.length && "undefined"==typeof this.tree.bExecClk && aTmp1[1] ==oTmp1[0].innerText)
 	               {
 	                  this.tree.bExecClk = true;
 	                  this.select(oTmp1[0], null);
