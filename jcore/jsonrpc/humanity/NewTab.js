@@ -1,6 +1,7 @@
 {
   	tw :133,  
-  	th :30,  
+  	th :30, 
+  	moveCount :0, 
   	/* 隐藏指定id的Tab， 参数【tabs的id，需要隐藏的tab的id】 */
     closeTab : function(id,szid){
       var tabs = $("#"+id),_t=NewTab.getHeader(szid),nextTab,tab_ul = $("#"+id+"_ul"),allshowTab = tab_ul.find("li").not(".x-tab-item-li-hide");
@@ -77,29 +78,42 @@
    	/* 向右滑动整个tabs头部 ，参数【tabs的id，滑动速度】 */
   	 tabScrollRightHandler : function(id,speed){
   	 		var n = 3, k = 0, tabs = $("#"+id),tabs_panel = document.getElementById(id+"_hdPanel"),
-  	 		w=$(tabs_panel).width(),tn = $("#"+id+"_ul").find("li:not('.x-tab-item-li-hide')").length,_tw=this.tw;
-  	 		if(w >= tn*_tw || tabs_panel.scrollLeft >= (tn-3)*_tw)return;
+  	 		w=$(tabs_panel).width(),
+  	 		aLi = $("#"+id+"_ul").find("li:not('.x-tab-item-li-hide')"),
+  	 		tn=aLi.length,aW = this.getAllTabWidth(aLi);
+  	 		if(w >= aW || this.moveCount == tn-1)return;
+  	 		_tw = aLi.eq(this.moveCount).attr("offsetWidth");this.moveCount+=1;
   	 		Base.regTimer(function(){
   	 		  if(k + n > _tw)n = _tw - k;
   	 		  tabs_panel.scrollLeft+=n;
   	 		  k += n;
   	 		  if(_tw == k )return true;
-  	 		  n *= 7;
+  	 		  n *= 5;
   	 		  return false;
-  	 		}, 13);
+  	 		}, 33);
       }, 
+      getAllTabWidth :function(aLi){
+      		var w = 0;
+      		aLi.each(function(){
+      			w+=$(this).width();
+      		});
+      		return w;
+      },
       /* 向左滑动整个tabs头部 ，参数【tabs的id，滑动速度】 */ 
      tabScrollLeftHandler : function(id,speed){
-  	 		var n = 3, k = 0, tabs = $("#"+id),tabs_panel = document.getElementById(id+"_hdPanel"),_tw=this.tw;
-  	 		if(tabs_panel.scrollLeft <= 0)return;
+  	 		var n = 3, k = 0, tabs = $("#"+id),tabs_panel = document.getElementById(id+"_hdPanel")
+  	 		,aLi = $("#"+id+"_ul").find("li:not('.x-tab-item-li-hide')"),
+  	 		tn=aLi.length,aW = this.getAllTabWidth(aLi);
+  	 		if(tabs_panel.scrollLeft <= 0 || this.moveCount<=0)return;
+  	 		_tw = aLi.eq(this.moveCount-1).attr("offsetWidth");this.moveCount-=1;
   	 		Base.regTimer(function(){
   	 		  if(k + n > _tw)n = _tw - k;
   	 		  tabs_panel.scrollLeft-=n;
   	 		  k += n;
   	 		  if(_tw == k)return true;
-  	 		  n *= 7;
+  	 		  n *= 5;
   	 		  return false;
-  	 		}, 13);
+  	 		}, 33);
      },
      /* 向上滑动整个tabs头部 ，用于tab头部左右布局的时候，参数【tabs的id，滑动速度】 */ 
       tabScrollTopHandler : function(id,speed){
@@ -250,6 +264,7 @@
 	   		.attr("id",iframe_id)
 	   		.height(ol.height()));
 	   	}
+	   	if(url.trim() != "" || reqCode.trim() != "")window["g"+tabs+"_"+o.id+"_Refresh"]="Refresh";
 	   	if(mode.toUpperCase()!="D"){
 	   		NewTab.addContextMenu(tabs,li);
 	   	}
@@ -313,6 +328,9 @@
      $(allTab).each(function(){
     	 NewTab.createTabItem(o.id,this,"_flg");
      });
+     if(hPos == "L" || hPos == "R"){
+     	$("#"+o.id+"_ul").find(".x-tab-item-text").css("width","122");
+     }
      var tab_ul =  $("#"+o.id+"_ul"),
      activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide").not(".x-tab-item-li-disabled")[0]
      ,activeTab=$(activeTab);
@@ -322,13 +340,13 @@
      /* 给一个tab对象的头部添加右键菜单 ，参数【tabs的id，tab头部分的li节点对象】 */
      addContextMenu : function(tabs,li){
 		$("#contextMenuSource").remove(); 
+		var is_Refresh = window["g"+tabs+"_"+NewTab.getBodyId(li[0].id)+"_Refresh"];
      	var contextMenuSource=[
      	"<div class='contextMenu' id='contextMenuSource'><ul>",
         "<li id='close'><img src='"+g_sysInfo[2]+"/default/tabs/remove_outline.png' /> 关闭当前</li>",
         "<li id='closeOther'><img src='"+g_sysInfo[2]+"/default/tabs/remove.png' /> 关闭其他</li>",
         "<li id='refresh'><img src='"+g_sysInfo[2]+"/default/tabs/refresh.png' /> 刷新当前</li></ul></div>"
      	],cm=$(contextMenuSource.join("")).addClass("x-tabs-contextMenu");
-     	
      	$("body").append(cm);
      	li.contextMenu("contextMenuSource",{
      		 bindings:{
@@ -341,7 +359,8 @@
      		 	"refresh":function(_t){
    		 			NewTab.updateTab(tabs,NewTab.getBodyId(_t.id));
      		 	}
-     		 }
+     		 },
+     		 isRefresh:is_Refresh
      	});
      },
      changeTitle : function(tabs,id,s){
