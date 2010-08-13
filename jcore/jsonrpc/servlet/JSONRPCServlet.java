@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -62,6 +65,10 @@ public class JSONRPCServlet extends HttpServlet {
 	public boolean bInit = false;
 
 	// searchAllClass(JSONRPCServlet.class.getResource(szPkg).getFile());
+	// 2010-8-13 修复json-rpc在Hp unix下不能正确 加载免注册的类【翠哥提出，夏天处理】
+	// hp unix下：
+	// s 为：
+	// /u01/bea/user_projects/domains/testdomain/servers/AdminServer/tmp/_WL_user/jsonrpc/l507ns/war/WEB-INF/lib/_wl_cls_gen.jar!/jcore/jsonrpc/rpcobj
 	public void searchAllClass(HttpServletRequest request, String s) {
 		if (bInit)
 			return;
@@ -69,28 +76,69 @@ public class JSONRPCServlet extends HttpServlet {
 		File f = new File(s);
 		File[] fs = f.listFiles();
 		if (null == fs)
+		{
+			System.out.print("Load Errors(" + s + ")");
+			int n = s.indexOf(".jar");
+			if(-1 < n)
+			{
+				try
+				{
+					s = s.substring(0, n + 4);
+//					 System.out.println(s);
+				   JarFile jarFile = new JarFile(s);
+			       Enumeration enum = jarFile.entries();
+			       int k = 0;
+			       String szPkgTmp = szPkg.substring(1);
+			       while (enum.hasMoreElements()) {
+			    	   JarEntry entry = (JarEntry)enum.nextElement();
+			    	   String szClassName =  entry.getName();
+			    	   k = szClassName.lastIndexOf(".class");
+			    	   // System.out.println(szClassName);
+			    	   if(-1 < k && -1 < szClassName.indexOf(szPkgTmp))
+			    	   {
+			    		   try {
+			    			   szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
+			    			    // System.out.println(szClassName);
+								JsonRpcRegister.registerObject(request, 
+										szClassName.substring(szClassName.lastIndexOf(".") + 1), Class
+										.forName(szClassName));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+			    	   }
+			       }
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			else System.out.print("not find .jar");
 			return;
-		// System.out.println((null == fs) + "[" + fs.length + "]");
-		for (int i = 0; i < fs.length; i++) {
-			if (fs[i].isDirectory())
-				searchAllClass(request, fs[i].getAbsolutePath());
-			else {
-				String s1 = fs[i].getAbsolutePath();
-				if (-1 < s1.indexOf(".svn"))
-					continue;
-				s1 = s1.substring(s1.indexOf("jcore"));
-				if (-1 < s1.indexOf("\\"))
-					s1 = s1.substring(0, s1.indexOf("."));
-				s1 = s1.replaceAll("\\\\", ".");
-				String pknm = "jcore.jsonrpc.rpcobj";
-				if (s1.startsWith(pknm))
-					try {
-						JsonRpcRegister.registerObject(request, s1
-								.substring(pknm.length() + 1), Class
-								.forName(s1));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+		}
+		else
+		{
+			// System.out.println((null == fs) + "[" + fs.length + "]");
+			for (int i = 0; i < fs.length; i++) {
+				if (fs[i].isDirectory())
+					searchAllClass(request, fs[i].getAbsolutePath());
+				else {
+					String s1 = fs[i].getAbsolutePath();
+					if (-1 < s1.indexOf(".svn"))
+						continue;
+					s1 = s1.substring(s1.indexOf("jcore"));
+					if (-1 < s1.indexOf("\\"))
+						s1 = s1.substring(0, s1.indexOf("."));
+					s1 = s1.replaceAll("\\\\", ".");
+					s1 = s1.replaceAll("/", ".");
+					String pknm = "jcore.jsonrpc.rpcobj";
+					if (s1.startsWith(pknm))
+						try {
+							JsonRpcRegister.registerObject(request, s1
+									.substring(pknm.length() + 1), Class
+									.forName(s1));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				}
 			}
 		}
 	}
@@ -158,6 +206,7 @@ public class JSONRPCServlet extends HttpServlet {
 			URL url = JSONRPCServlet.class.getResource(szPkg);
 			if (null != url)
 				searchAllClass(request, url.getFile());
+			else System.out.println("无法加载免配置的类");
 			bInit = true;
 			OutputStream out = null;
 			// String szGzip = request.getHeader("Accept-Encoding");
@@ -196,7 +245,8 @@ public class JSONRPCServlet extends HttpServlet {
 				Object obj = brg.ExecObjectMethod(request, szData);
 				if (null != obj) {
 //					System.out.println(obj.toString());
-					bout = Tools.encodeUnicodeHtm(obj.toString()).getBytes("UTF-8");
+					bout = Tools.encodeUnicodeHtm(obj.toString()).getBytes(
+							"UTF-8");
 				}
 			}
 			// 返回注册中的对象

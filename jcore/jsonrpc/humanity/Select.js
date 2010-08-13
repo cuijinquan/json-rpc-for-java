@@ -150,7 +150,7 @@
      }else o["_over"] = 1;
      this.hidden(e);
      this.delInvalid(oIpt);
-     if("click" == e.type)Select.descObj.focus();
+     if("click" == e.type) window.nxtfcs(e, Select.descObj);
      if(e)this.preventDefault(e), this.stopPropagation(e);
   }, /* 检查当前输入对象的显示图层是否正在显示 */
   isShow: function(e, obj, oE)
