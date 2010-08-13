@@ -77,7 +77,7 @@ public class JSONRPCServlet extends HttpServlet {
 		File[] fs = f.listFiles();
 		if (null == fs)
 		{
-			System.out.print("Load Errors(" + s + ")");
+			//  System.out.print("Load Errors(" + s + ")");
 			int n = s.indexOf(".jar");
 			if(-1 < n)
 			{
