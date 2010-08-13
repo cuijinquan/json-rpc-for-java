@@ -9,10 +9,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +25,69 @@ import jcore.jsonrpc.common.JSONObject;
 
 public class Tools {
 
+	/**
+	 * 传入包名，获取该包下的所有类名，
+	 * @param szPkg
+	 * @param szFltPkg  过滤的包名，也就是包含这个包的才返回
+	 * @return
+	 */
+	public static List getClassName(String szPkg, String szFltPkg)
+	{
+		List lst = new ArrayList();
+		String s = java.net.URLDecoder.decode(szPkg);
+		File f = new File(s);
+		File[] fs = f.listFiles();
+		if (null == fs)
+		{
+			int n = s.indexOf(".jar");
+			if(-1 < n)
+			{
+				try
+				{
+					s = s.substring(0, n + 4);
+				   JarFile jarFile = new JarFile(s);
+			       Enumeration enum = jarFile.entries();
+			       int k = 0;
+			       while (enum.hasMoreElements()) {
+			    	   JarEntry entry = (JarEntry)enum.nextElement();
+			    	   String szClassName =  entry.getName();
+			    	   k = szClassName.lastIndexOf(".class");
+			    	   if(-1 < k && -1 < szClassName.indexOf(szFltPkg))
+			    	   {
+		    			   szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
+		    			   lst.add(szClassName);
+			    	   }
+			       }
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			else System.out.print("not find .jar");
+		}
+		else
+		{
+			// System.out.println((null == fs) + "[" + fs.length + "]");
+			for (int i = 0; i < fs.length; i++) {
+				if (fs[i].isDirectory())
+					lst.addAll(getClassName(fs[i].getAbsolutePath(), szFltPkg));
+				else {
+					String s1 = fs[i].getAbsolutePath();
+					if (-1 < s1.indexOf(".svn"))
+						continue;
+					s1 = s1.substring(s1.indexOf("jcore"));
+					if (-1 < s1.indexOf("\\"))
+						s1 = s1.substring(0, s1.indexOf("."));
+					s1 = s1.replaceAll("\\\\", ".");
+					s1 = s1.replaceAll("/", ".");
+					String pknm = "jcore.jsonrpc.rpcobj";
+					if (s1.startsWith(pknm))
+							lst.add(s1);
+				}
+			}
+		}
+		return lst;
+	}
+	
 	/***************************************************************************
 	 * 通过路径获取File对象
 	 * 
