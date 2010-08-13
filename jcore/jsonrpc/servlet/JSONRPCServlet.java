@@ -65,10 +65,11 @@ public class JSONRPCServlet extends HttpServlet {
 	public boolean bInit = false;
 
 	// searchAllClass(JSONRPCServlet.class.getResource(szPkg).getFile());
-	// 2010-8-13 修复json-rpc在Hp unix下不能正确 加载免注册的类【翠哥提出，夏天处理】
 	// hp unix下：
 	// s 为：
 	// /u01/bea/user_projects/domains/testdomain/servers/AdminServer/tmp/_WL_user/jsonrpc/l507ns/war/WEB-INF/lib/_wl_cls_gen.jar!/jcore/jsonrpc/rpcobj
+	// EAR包的路径为：
+	// C:\ bea\ user_projects\ domains\ cdjydomain\ servers\ AdminServer\ tmp\ _WL_user\ cdsise\ koyjje\ APP-INF\ classes\ jcore\ jsonrpc\ rpcobj\ JsonRpcAuditDepartment.class
 	public void searchAllClass(HttpServletRequest request, String s) {
 		if (bInit)
 			return;
@@ -77,7 +78,7 @@ public class JSONRPCServlet extends HttpServlet {
 		File[] fs = f.listFiles();
 		if (null == fs)
 		{
-			  System.out.print("Load Errors(" + s + ")");
+			System.out.print("Load Errors(" + s + ")");
 			int n = s.indexOf(".jar");
 			if(-1 < n)
 			{
@@ -130,6 +131,8 @@ public class JSONRPCServlet extends HttpServlet {
 					s1 = s1.replaceAll("\\\\", ".");
 					s1 = s1.replaceAll("/", ".");
 					String pknm = "jcore.jsonrpc.rpcobj";
+					if(s1.endsWith(".class"))
+						s1 = s1.substring(0, s1.length() - 6);
 					if (s1.startsWith(pknm))
 						try {
 							JsonRpcRegister.registerObject(request, s1
