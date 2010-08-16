@@ -87,11 +87,11 @@ public class JSONRPCServlet extends HttpServlet {
 					s = s.substring(0, n + 4);
 //					 System.out.println(s);
 				   JarFile jarFile = new JarFile(s);
-			       Enumeration enum = jarFile.entries();
+			       Enumeration myenum = jarFile.entries();
 			       int k = 0;
 			       String szPkgTmp = szPkg.substring(1);
-			       while (enum.hasMoreElements()) {
-			    	   JarEntry entry = (JarEntry)enum.nextElement();
+			       while (myenum.hasMoreElements()) {
+			    	   JarEntry entry = (JarEntry)myenum.nextElement();
 			    	   String szClassName =  entry.getName();
 			    	   k = szClassName.lastIndexOf(".class");
 			    	   // System.out.println(szClassName);
