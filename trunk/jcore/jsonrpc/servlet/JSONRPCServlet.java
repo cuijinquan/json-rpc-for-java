@@ -88,7 +88,7 @@ public class JSONRPCServlet extends HttpServlet {
 //					 System.out.println(s);
 				   JarFile jarFile = new JarFile(s);
 			       Enumeration myenum = jarFile.entries();
-			       int k = 0;
+			       int k = 0; 
 			       String szPkgTmp = szPkg.substring(1);
 			       while (myenum.hasMoreElements()) {
 			    	   JarEntry entry = (JarEntry)myenum.nextElement();
