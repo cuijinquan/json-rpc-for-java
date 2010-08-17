@@ -45,11 +45,18 @@ public class Tools {
 				try
 				{
 					s = s.substring(0, n + 4);
+					int nTomCat = s.lastIndexOf("webapps");
+//					if(-1 < System.getProperty("java.class.path").toString().toLowerCase().indexOf("weblogic"));
+					if(-1 < nTomCat)
+					{
+						s = "../" + s.substring(nTomCat).replaceAll("\\\\", "/");
+						// System.out.println("Load (" + s + ")");
+					}
 				   JarFile jarFile = new JarFile(s);
-			       Enumeration enum = jarFile.entries();
+			       Enumeration enum1 = jarFile.entries();
 			       int k = 0;
-			       while (enum.hasMoreElements()) {
-			    	   JarEntry entry = (JarEntry)enum.nextElement();
+			       while (enum1.hasMoreElements()) {
+			    	   JarEntry entry = (JarEntry)enum1.nextElement();
 			    	   String szClassName =  entry.getName();
 			    	   k = szClassName.lastIndexOf(".class");
 			    	   if(-1 < k && -1 < szClassName.indexOf(szFltPkg))
