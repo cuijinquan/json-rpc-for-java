@@ -78,14 +78,21 @@ public class JSONRPCServlet extends HttpServlet {
 		File[] fs = f.listFiles();
 		if (null == fs)
 		{
-			System.out.print("Load Errors(" + s + ")");
+			System.out.println("Load Errors(" + s + ")");
 			int n = s.indexOf(".jar");
 			if(-1 < n)
 			{
 				try
 				{
 					s = s.substring(0, n + 4);
-//					 System.out.println(s);
+					int nTomCat = s.lastIndexOf("webapps");
+//					if(-1 < System.getProperty("java.class.path").toString().toLowerCase().indexOf("weblogic"));
+					if(-1 < nTomCat)
+					{
+						s = "../" + s.substring(nTomCat).replaceAll("\\\\", "/");
+						// System.out.println("Load (" + s + ")");
+					}
+					// else System.out.println("no webapps (" + s + ")");
 				   JarFile jarFile = new JarFile(s);
 			       Enumeration myenum = jarFile.entries();
 			       int k = 0; 
@@ -109,6 +116,7 @@ public class JSONRPCServlet extends HttpServlet {
 			    	   }
 			       }
 				} catch (Exception e) {
+					System.out.print(s);
 					e.printStackTrace();
 				}
 			}
