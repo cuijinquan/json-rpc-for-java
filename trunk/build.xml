@@ -35,7 +35,7 @@
 	</target>
 	
 	<target name="cmpJar"  depends="init">
-		<javac bootclasspathref="project.class.path" debug="true" deprecation="false" destdir="${build}" encoding="UTF-8" nowarn="false" fork="true" target="1.4">
+		<javac bootclasspathref="project.class.path" debug="true" source="1.4" deprecation="false" destdir="${build}" encoding="UTF-8" nowarn="false" fork="true" target="1.4">
 			<src path="${src.json-rpc}" />
 			<classpath refid="project.class.path" />
 		</javac>
