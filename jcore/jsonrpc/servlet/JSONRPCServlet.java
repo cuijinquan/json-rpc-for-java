@@ -70,7 +70,7 @@ public class JSONRPCServlet extends HttpServlet {
 	// /u01/bea/user_projects/domains/testdomain/servers/AdminServer/tmp/_WL_user/jsonrpc/l507ns/war/WEB-INF/lib/_wl_cls_gen.jar!/jcore/jsonrpc/rpcobj
 	// EAR包的路径为：
 	// C:\ bea\ user_projects\ domains\ cdjydomain\ servers\ AdminServer\ tmp\ _WL_user\ cdsise\ koyjje\ APP-INF\ classes\ jcore\ jsonrpc\ rpcobj\ JsonRpcAuditDepartment.class
-	public void searchAllClass(HttpServletRequest request, String s) {
+	public  void searchAllClass(HttpServletRequest request, String s) {
 		if (bInit)
 			return;
 		s = java.net.URLDecoder.decode(s);
@@ -78,7 +78,7 @@ public class JSONRPCServlet extends HttpServlet {
 		File[] fs = f.listFiles();
 		if (null == fs)
 		{
-			System.out.println("Load Errors(" + s + ")");
+			// System.out.println("Load Errors(" + s + ")");
 			int n = s.indexOf(".jar");
 			if(-1 < n)
 			{
