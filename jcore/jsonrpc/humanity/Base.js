@@ -335,6 +335,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
             if(oI || (document.activeElement && 13 == k))
             {
                var oCur = oI || document.activeElement, szNdNm = oCur.nodeName, a = $(":input"), i = 0, bStart = false;
+               if("function" == typeof oCur.onblur && !oCur.onblur())
+                    return oCur.select(),false;
                 if("BUTTON" == szNdNm)
                    ;// $(oCur).click();
                else if("INPUT" == szNdNm || "SELECT" == szNdNm)
