@@ -232,6 +232,7 @@
   onkeydown:function(e, oIpt)
   {
      /*Select.bFltFlg = true;*/
+     if(oIpt.readOnly || oIpt.disabled)return false;
      e = e || window.event;
      Select.upi4ajx();
      var n = e.which || e.keyCode, o = this.SelectDiv, oT = this.getSlctObj(oIpt.id), i = o["_lstNum"] || 0;
