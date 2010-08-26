@@ -29,7 +29,15 @@
 	  });
 	  $("#MultiSelect-OK-Butt").click(function(){
 	  	MultiSelect.selectedOk(o,input,_dg_id);
-	  });
+	  }).hover(function(){
+		$(this).removeClass("button");
+	  	$(this).addClass("button1");
+	  },
+	  function(){
+	  	$(this).removeClass("button1");
+	  	$(this).addClass("button");
+	  }
+	  );
 	  },
 	  hiddenMultiSelectDiv:function(id)
 	  {  
