@@ -170,6 +170,8 @@
         allowCheck: false,  /* 允许选择 */
         bExpandAll: false, /* 全部展开 */
         lastSlctNd: null,  /* 最后一次选择的对象 */
+        loadLazy:false,  /* 是否异步加载 */
+        nodeId:null, /* 当前节点ID */
 
         /* 方法 */
         /* 获取去除选择的数据 */
@@ -342,7 +344,19 @@
          /* 展开切换 */
         doExpand: function(e, bKgFlg)
         {
-           var oUl = this.Dom, i = 0, j = this.childNodes.length,
+          if(this.loadLazy && this.childNodes.length == 0)
+           {
+           var slctFlag = "",slctIptId = "";
+		   if(window[this.tree.id+"slctFlag"]) slctFlag = window[this.tree.id+"slctFlag"];      
+		   if(window[this.tree.id+"slctIptId"]) slctIptId =  window[this.tree.id+"slctIptId"];
+           var treeId=this.tree.id,aResult=rpc.getRpcObj('com.yinhai.xui.taglib.tree.TreeLoadLazyRpc').getChileTreeNode(treeId.substr(0,treeId.length-4),"",this.nodeId,slctFlag,slctIptId);
+	           if(aResult){
+	              this.childNodes = aResult;
+	              new (XuiTree.TreeNode)(this);
+	              XuiTree.XuiTreeCc[this.tree.id]['allTreeCc'][this.id] = this;
+	           }
+           }
+             var oUl=this.Dom || $("#"+this.id).find("ul.x-tree-node-ct:first"), i = 0, j = this.childNodes.length,
               _t = this, nTm = this.tree.nDelay, s = "x-tree-ec-icon", p = oUl.parent(),
               oDiv = p.find("div.x-tree-node-el:first").removeClass("x-tree-node-collapsed").removeClass("x-tree-node-expanded"),
               oImg = oDiv.find("img." + s + ":first"), x = 0, aH = [], w = 0,
@@ -356,12 +370,13 @@
                }
                else
                {
-                  if(0 == _t.depth || _t.parent && _t.parent.childNodes.length - 1 == _t.seq)
+                  if(_t.loadLazy ||0 == _t.depth || _t.parent && _t.parent.childNodes.length - 1 == _t.seq)
                     s += " x-tree-elbow-end-plus";
                   else s += " x-tree-elbow-plus";
                }
                oImg.attr('class', s);
               };
+              this.Dom = oUl;
            if(bKgFlg)this.isExpand = !this.isExpand;
            if(this.isExpand = (this.isExpand && 0 < this.Dom.length && 0 < j))
            {
@@ -398,9 +413,9 @@
                  _t.doExpandFlg = true;
               }              
               oUl.show(), oDiv.addClass("x-tree-node-expanded");
-              setCls();
+              setCls();XuiTree.XuiTreeCc[this.id] = this;
            }
-           else oUl.hide(), oDiv.addClass("x-tree-node-collapsed"),setCls();
+           else oUl.hide(), oDiv.addClass("x-tree-node-collapsed"),setCls(),XuiTree.XuiTreeCc[this.id] = this;
            e && (this.stopPropagation(e),this.preventDefault(e));
            if(this.tree.bRmOld)
            {
@@ -508,7 +523,7 @@
            /* 树干形式图标 */
            s = ['x-tree-ec-icon'];
            /* 展开 */
-           if(bHvCld)
+           if(bHvCld || this.loadLazy)
            {
               if(this.isExpand)s.push('x-tree-elbow-minus');
               else
@@ -527,7 +542,7 @@
            }
            s = s.join(' ');
            a.push("<img class=\"" + s + "\" src=\"" + g_sysInfo[2] + "default/s.gif\"");
-           if(bHvCld)a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').doExpand(event, true)\"");
+           if(bHvCld || this.loadLazy)a.push(" onclick=\"XuiTree.getTreeNode('" + this.tree.id + "','" + this.id + "').doExpand(event, true)\"");
            a.push("/>");
            /* 当前节点图标 */
             if(-1 < this.nodeIcon.indexOf("."))
@@ -543,7 +558,7 @@
            a.push("</span></a>");
            a.push("</div>");
 
-           if(bHvCld)
+           if(bHvCld || this.loadLazy)
            {
               a.push("<ul style=\"display:" + (this.isExpand ? "block" : "none") + ";\" class=\"x-tree-node-ct\">");
               a.push("</ul>");
@@ -596,6 +611,7 @@
         _t.draw();
         return true;
       }, nTm);
+      if(null == this.tree.id)this.tree.id=this.treeid;
       this.tree.bRmOld=window[this.tree.id.substr(0, this.tree.id.length - 4) + '_bRmOld'] || false;
       return this;
    }
