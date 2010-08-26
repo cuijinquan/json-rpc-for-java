@@ -341,6 +341,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                    ;// $(oCur).click();
                else if("INPUT" == szNdNm || "SELECT" == szNdNm)
                {
+               	  $(oCur).blur();
                   for(i = 0; i <  a.length; i++)
                    {
                       if(bStart)
