@@ -353,6 +353,9 @@
 	           if(aResult){
 	              this.childNodes = aResult;
 	              new (XuiTree.TreeNode)(this);
+	              if(this.parent.target)
+	              for(var i = 0; i < this.childNodes.length; i++)
+	                 if(!this.childNodes[i].target)this.childNodes[i].target = this.parent.target;
 	              XuiTree.XuiTreeCc[this.tree.id]['allTreeCc'][this.id] = this;
 	           }
            }
