@@ -132,7 +132,7 @@
   }, /* 选择的处理 */
   onSelect:function(e, oTr)
   {
-     this.updata(Select.descObj.value);
+     Select.upi4ajx();
      var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getSlctObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
@@ -305,7 +305,7 @@
     {
        oE[szId] = o.id,
        this.addEvent(oE, "blur", function()
-           {  /* 隐藏输入对象为空 */
+           {  window.bBoBq = true;/* 隐藏输入对象为空 */
               var bEdit = "true"==_t.getSlctObj(_t.descObj.id)['allowEdit'] || window['slctIptData'][_t.descObj.id]["allowEdit"];
               /*if(false == bEdit)bEdit = "true" == window['slctIptData'][_t.descObj.id]["allowEdit"];*/
               if(!_t.inputObj.value)
@@ -319,7 +319,8 @@
                     _t.descObj.value = _t.inputObj.value = '';
               }
               if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "";
-              o["_blur_"]=true,_t.hiddenSelectDiv()
+              o["_blur_"]=true,_t.hiddenSelectDiv();
+              window.bBoBq = false;
            });
     }
     _t.updata(oE.value);
