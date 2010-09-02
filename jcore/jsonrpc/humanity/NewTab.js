@@ -272,6 +272,7 @@
      },
      /* 创建tabs的头部分 ，参数【包含有tabs、所有tab信息的object对象】 */
      createTabsHeader : function(o){
+     if(o.haveAjax && window["g_existTabs"]){window["g_existTabs"]=[]};
      var allTab=o.alltab,tabs=$("#"+o.id);
      if($("#"+o.id+'_hdPanel')[0])return;
      window["g_initAct"] = o.active;
@@ -331,6 +332,7 @@
      if(hPos == "L" || hPos == "R"){
      	$("#"+o.id+"_ul").find(".x-tab-item-text").css("width","122");
      }
+     if(o.alltab.length==0)return;
      var tab_ul =  $("#"+o.id+"_ul"),
      activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide").not(".x-tab-item-li-disabled")[0]
      ,activeTab=$(activeTab);
