@@ -263,23 +263,10 @@
 	   window.bBoBq = true;fn();setTimeout(function(){window.bBoBq = false},13);
 	}/* 数据有效检查 */
 	,onkeyup:function(e, oIpt){
-	    DatePicker.upi4ajx();
-	    var n = oIpt.maxLength, s = oIpt.value.trim(), nL = s.length;
-	    Base.delInvalid(oIpt);HidTip();
-	    if(0 < nL)
-	    {
-		    if(4 <= n && 25 >= n)
-		       if(n != nL && 10 > nL)Base.addInvalid(oIpt),$(oIpt).focus().tip('请注意，日期数据长度不够: ' + nL + "/" + n);
-		    if(oIpt.max && oIpt.max < s || oIpt.min && s < oIpt.min)Base.addInvalid(oIpt),$(oIpt).focus().tip('请注意，日期数据不在有效的数据范围内: <br>'
-		         +  (oIpt.min || '*') + " <= " + s + " <= " + (oIpt.max || "*"));
-	    }
-	    var a = oIpt.value.split(/[\-\/]/);
-	    if(3 <= a.length)
-	       this.initPkData.apply(this, a),this.updataTBody(e, true);
 	}, /* 键盘事件处理 */
     onkeydown:function(e, oIpt)
    {
-     e = e || window.event;
+    e = e || window.event;
      var n = e.which || e.keyCode, _t = this, x, k;
      if(!_t.XuiDatePicker)return false;
      DatePicker.upi4ajx();
@@ -318,6 +305,8 @@
            break;
         /* 回车选择 */
         case 13:
+           $(oIpt).blur();
+           if(window[oIpt.id+"_validate"]){this.stopPropagation(e),this.preventDefault(e);oIpt.focus();return false;}
            if(e.ctrlKey)
            {
               _t.selectToday();
@@ -415,33 +404,20 @@
            _t.stopPropagation(e),_t.preventDefault(e);
            return false;
         default:
-            x=oIpt.value.length;k="";var m,allBMth="1,3,5,7,8,10,12";
-           if(0 < x)k=oIpt.value.substr(x - 1,1);
-           if(5 < x)m=parseInt(oIpt.value.substr(5,2));
-           if(     ((4 > x || 15 == x || 18 == x) && (48 <= n && n <= 57 || 96 <= n && n <= 105))           /* 年4位 0-9 */
-                || ((4 == x || 7 == x) && (n == 189 || 109 == n))        /* 5、8位 -符号 */
-                || ((13==x || 16==x) && e.shiftKey && n==186)     /* 13、16位 :符号 */
-                || (10 == x && n == 32)                         /* 10位 空格 */
-                || (5 == x && (48 <= n && n <= 49 || 96 <= n && n <= 97))          /* 月第一位, 0 -1 */
-                /* 月第二位：0[1 - 9], 1[0-2] */
-                || (6 == x && ((0 == k && (49 <= n && n <= 57 || 97 <= n && n <= 105)) || (1 == k && (48 <= n && n <= 50 || 96 <= n && n <= 98))))
-                || (8==x && ((m == 2 && (48 <=n && n <=50 || 96 <=n && n <=98))||m != 2&&(48 <=n && n <=51 || 96 <=n && n <=99)))    
-                /* 日第二位，[0-2][0-9],[3][0-1] */
-                || (9==x && (48 <=n || 96 <=n) && ( ($.inArray(m,allBMth)>-1 && k==3 && (48 <=n && n <=49 || 96 <=n && n <=97))|| ((!_t.isLeapYear(_t.year))&&k==2&&m==2&&(48 <=n && n <=56 || 96 <=n && n <=104))||(0==k && (49 <=n && n <=57 || 97 <=n && n <=105))|| (k==1&&(48 <=n && n <=57 || 96 <=n && n <=105))|| (m!=2&& k==2&&(48 <=n && n <=57 || 96 <=n && n <=105))|| (_t.isLeapYear(_t.year)&&m==2&& k==2&&(48 <=n && n <=57 || 96 <=n && n <=105)) || ($.inArray(m,allBMth)<0&& 3==k && (48 ==n || 96 ==n ))))
-                /* 小时第一位 */ 
-                || (11 == x && (48 <= n && n <= 50 || 96 <= n && n <= 98))
-                /* 小时第二位 */ 
-                || (12 == x && ((1 >= k && (48 <= n && n <= 57 || 96 <= n && n <= 105)) || (2 == k && (48 <= n && n <= 51 || 96 <= n && n <= 99))))
-                /* 分、秒第一位 */
-                || ((14 == x || 17 == x) && (48 <= n && n <= 53 || 96 <= n && n <= 101))
-              )
-              {
-                 /*var okvl = (oIpt['okvl'] || "") + String.fromCharCode(n); 
-                  oIpt['okvl'] = okvl;
-                  oIpt.value = okvl + oIpt.value.substr(okvl.length); 
-                  $(oIpt).selection(okvl.length, oIpt.value.length);*/
-                 return true;
-             }
+           if(!e.shiftKey){
+           		if((n > 47 && n < 58) || (n > 95 && n < 106))
+           			return true;
+           		if((n > 188 && n<192) || (n > 108 && n < 112) || n == 32)
+           		{
+           			var _d = oIpt.value,l = _d.length;
+           			_d = _d.replace(new RegExp("[\/|\.|\-|\ \:]","gm"),"-");
+           			if(l != 0 &&  _d.lastIndexOf("-") != l-1) 
+           			return true;
+           		}
+           }else{
+           		var _d = oIpt.value,l = _d.length;
+           		if(n == 186 && 1!=l && _d.lastIndexOf(":") != l-1) return true;
+           }
            _t.stopPropagation(e),_t.preventDefault(e);
            return false;
      }
@@ -471,6 +447,7 @@
 	}, /*显示图层*/
 	showSelectDiv: function(e,o)
 	{
+		if(window.bBoBq)return;
 	    window.bBoBq = true;
 	    this.event = e = e || window.event;
 	    e && (this.stopPropagation(e),this.preventDefault(e));
@@ -501,13 +478,143 @@
 		  if(!(o.readOnly || o.disabled))
 		     _t.showDiv(o, oDiv, _t.bIE ? 170: 175, 0, 0);/* IE8: 173 * 201 */
 		  (oDiv = $(oDiv)).height(oDiv.height());
+		   _t.validateIptDateTime(o);
 		  });
+		  window.bBoBq = false;
 	},onblur: function(e, oIpt)
-	{
-	    var _t = DatePicker, o = _t.XuiDatePicker;
-	    if(o)o["tmer"] = _t.regTimer(function(e)
+	{	
+		if(window.bBoBq)return true;
+		var _t = DatePicker, o = _t.XuiDatePicker, bRsr = true;
+		_t.fnNoInput(function(){
+		if(o)o["tmer"] = _t.regTimer(function(e)
 	    {
 		    return _t.hidden(), true;
 	    }, 333);
+	    if(oIpt.value != ""){_t.convertIptDate(oIpt);bRsr = _t.validateIptDateTime(oIpt)}else{ Base.delInvalid(oIpt);HidTip();}
+	    });
+	    try{if(!bRsr)oIpt.focus();}catch(e){}
+	    return bRsr;
+	},
+	convertIptDate:function(oIpt){
+		var _t = oIpt,s = oIpt.value,l = s.length,_m,_d,
+		    _s = s.replace(new RegExp("[\/|\.|\-]","gm"),"-"),
+		    dArr = _s.split(" ")[0].split("-");
+		    if(null != dArr[0] && ""!= dArr[0]){
+		    	var _y = parseInt(dArr[0],10);
+		    	 if(_y <= 30 && _y > 9) _y = "20" + _y;
+		    	 else if(_y < 10) _y = "200"+_y;
+		    	 else if(_y >= 30 && _y < 100) _y = "19" + _y;
+		    	 else if(_y >= 100 && _y < 1000) _y = _y + "0";
+		    	 dArr[0] = _y;
+		    }
+		    if(null != dArr[1] && "" != dArr[1]){
+		    	_m = parseInt(dArr[1],10);
+		    	if(_m < 10)_m = "0" + _m;
+		    	dArr[1] = _m;
+		    	if(_m == 0)  _m="01";
+		    }else{dArr[1]="01"}
+		    if(null != dArr[2] && ""!= dArr[2]){
+		    	_d = parseInt(dArr[2],10);
+		    	if(_d < 10)_d = "0" + _d;
+		    	dArr[2] = _d;
+		    }
+		    else{dArr[2] = "01"};
+		    dArr.splice(3, dArr.length-3);
+		    _d = dArr.join("-");
+		    //处理时分秒
+		    t = _s.split(" ")[1];
+		    if(t){
+		    	tArr = t.split(":");
+		    	if(tArr[0] != null && ""!= tArr[0]){
+		    		var _h = parseInt(tArr[0],10);
+		    		if(_h < 10)tArr[0] = "0"+_h;
+		    	}
+		    	if(tArr[1] != null && ""!= tArr[1]){
+		    		var _mm = parseInt(tArr[1],10);
+		    		if(_mm < 10)tArr[1] = "0"+_mm;
+		    	}else tArr[1]="00";
+		    	if(tArr[2] != null && ""!= tArr[2]){
+		    		var _s ,_ss,sArr = tArr[2].split("-");
+		    		if(sArr.length == 1){
+		    			_s = parseInt(sArr[0],10);
+		    			if(_s < 10)tArr[2] = "0"+_s;
+		    			}
+		    		else{
+		    			if(null != sArr[0] && ""!= sArr[0]){
+		    			_s = parseInt(sArr[0],10);
+		    			if(_s < 10)_s = "0"+_s;
+		    			}
+		    			else _s="00";
+		    			if(null != sArr[1] && ""!= sArr[1]){
+		    			_ss = parseInt(sArr[1],10);
+		    			tArr[2] = _s+"."+_ss;
+		    			}
+		    			else tArr[2] = _s+".0";
+		    		}
+		    	}else tArr[2]="00.0";
+		    	tArr.splice(3, tArr.length-3);
+		    	t =" "+tArr.join(":");
+		    }else
+		    {
+		    	t = " 00:00:00.0";	
+		    }
+		    oIpt.value = (_d + t).substr(0,oIpt.maxLength);
+	},
+	validateIptDateTime :function(oIpt){
+		var _t=oIpt,maxL = _t.maxLength,val = _t.value,date,time,msg;
+		if(maxL > 10){
+			date = val.split(" ")[0];
+			time = val.split(" ")[1];
+		}else{
+			date = val;
+		}
+		window.validateDate = function(){
+		    var noArr = date.split("-"),year = eval(noArr[0]),month = eval(noArr[1]),day = eval(noArr[2]);
+		    if (month > 12 ) {msg = "输入的[月份]值无效，超出最大范围。";return false;}
+		    else if (year > 9999 ) {msg = "输入的[年份]值无效，超出最大范围。";return false;}
+		    else if (day > 31 ) {msg = "输入的[日期]值无效，超出最大范围。";return false;}
+		    if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30){
+		    	msg = "输入的["+month+"月]为小月，日最大为30。";
+		    	return false;
+		    }
+		    if (month == 2){
+			    if (year % 4 == 0){
+     			if(year % 100 == 0 && year % 400 != 0 && day > 28){msg = "输入的["+year+"]年不是闰年，2月不能大于28天。" ;return false;}
+     			if(year % 400 == 0 && day > 29){msg = "输入的["+year+"]年是闰年，2月不能大于29天。" ;return false;}
+     			if(year % 100 != 0 && day > 29){msg = "输入的["+year+"]年是闰年，2月不能大于29天。" ;return false;}
+    			}else if (year % 4 != 0 && day > 28){msg = "输入的["+year+"]不是闰年，2月不能大于28天。" ; return false;}
+ 			 }
+   			 return true;
+    	};
+    	window.validateTime = function(){
+    	if(time != "" && time != null){
+	    		var noArr = time.split(":"),hour = eval(noArr[0]),min = eval(noArr[1]),sec = eval(noArr[2].split(".")[0]),ss = eval(noArr[2].split(".")[1]); 
+	    		if(hour >23){{msg = "输入的[小时]值无效，超出最大范围。";return false;}}
+	    		if(min > 59){{msg = "输入的[分钟]值无效，超出最大范围。";return false;}}
+	    		if(sec > 59){{msg = "输入的[秒钟]值无效，超出最大范围。";return false;}}
+	    		if(ss > 999){{msg = "输入的[毫秒]值无效，超出最大范围。";return false;}}
+	    		return true;
+    		}
+    		return true;
+    	};
+    	if(!validateDate() || !validateTime()){
+    		window[oIpt.id+"_validate"] = true;
+    		return this.setErrMsg(msg,oIpt);
+    	}
+    	else{
+    		 Base.delInvalid(oIpt);HidTip();
+    		 window[oIpt.id+"_validate"] = false;
+    		 return true;
+    	}
+	},
+	setErrMsg :function(msg,oIpt){
+		msg = msg.replace(new RegExp("[\\[]","gm"),"[<b>");
+		msg = msg.replace(new RegExp("[\\]]","gm"),"</b>]");
+		$(oIpt).focus().tip(msg);
+		Base.addInvalid(oIpt);
+		var e = window.event;
+		this.stopPropagation(e),this.preventDefault(e)
+		return false;
 	}
+	
 }
