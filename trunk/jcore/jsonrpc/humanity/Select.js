@@ -264,6 +264,7 @@
   }, /* 显示下拉列表图层 */
   showSelectDiv: function(e, obj, oE)
   {
+   if(oE.readOnly || oE.disabled)return false;
     var b3 = (3 == arguments.length), _t = this;
     e = e || window.event;
     return this.RunOne(function(){
