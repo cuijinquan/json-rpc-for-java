@@ -272,6 +272,8 @@
      DatePicker.upi4ajx();
      if("none" == _t.XuiDatePicker.style.display)
      {
+        window.bBoBq = false;
+        _t.showSelectDiv(e, oIpt);
         if(40 == n && e.ctrlKey)_t.showSelectDiv(e, oIpt);
         return true;
      }
@@ -506,7 +508,7 @@
 		    	 else if(_y >= 30 && _y < 100) _y = "19" + _y;
 		    	 else if(_y >= 100 && _y < 1000) _y = _y + "0";
 		    	 dArr[0] = _y;
-		    }
+		    }else{dArr[0] = "1900"}
 		    if(null != dArr[1] && "" != dArr[1]){
 		    	_m = parseInt(dArr[1],10);
 		    	if(_m < 10)_m = "0" + _m;
