@@ -555,6 +555,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
              });
            }),validateForm: (_t.validateForm = function(s,ids)
            {
+              if(s == document.forms[0])s = ":input";
               var oBts = ids && ids.split(/[;,\t\s\|]/) || [], i = 0;
               for(i = 0; i < oBts.length; i++)oBts[i].disabledButton();
               if(!Base.validateForm1(s))
