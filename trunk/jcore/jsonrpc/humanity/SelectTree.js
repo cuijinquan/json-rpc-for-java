@@ -1,6 +1,6 @@
 {
     /* 初始化下拉树，包括事件的一次性绑定 */
-     initSlctTree:function(o)
+     initSlctTree:function(o,oStyle)
     {
        var id = o;
        o = $("#" + o);
@@ -11,7 +11,8 @@
            window.hdAll.start();
            var oSlct = $(XuiTree.slctCls), i,
                  oPos = oI.position();
-	       o.css({left:oPos.left + "px", top: (oPos.top + oI.height()) + "px", width:oTb.width() + 'px'});
+	       o.css({left:oPos.left + "px", top: (oPos.top + oI.height()) + "px", width:oStyle.width.replace("\\d","") || oTb.width() + 'px'});
+	       if(oStyle.height)o.css("height",oStyle.height);
 	       o.show();
 	       
           if(1 < oSlct.length)
