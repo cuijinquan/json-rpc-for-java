@@ -33,6 +33,7 @@
       var myTab=$("#"+id),b=myTab.find("#"+o);
       NewTab.getHeader(o).removeClass("x-tab-item-li-hide");
       window["no_active"+"_"+o]=true;
+      window.btInit();
     },
      /* 禁用指定id的Tab ，参数【tabs的id，需要禁用的tab的id】 */
     disableTab : function(id,tab){
