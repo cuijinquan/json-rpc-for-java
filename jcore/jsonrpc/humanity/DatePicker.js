@@ -450,7 +450,7 @@
 	showSelectDiv: function(e,o)
 	{
 		if(window.bBoBq)return;
-	    window.bBoBq = true;
+	   // window.bBoBq = true;
 	    this.event = e = e || window.event;
 	    e && (this.stopPropagation(e),this.preventDefault(e));
 	    var _t = this;$(o).selection(0, o.value.length);
