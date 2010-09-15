@@ -496,9 +496,10 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                     return this;
                  }
               }
-              if("undefined" == typeof b || true == b)
-                   o.attr("readonly", "readonly").addClass("readOnly");
-              else o.removeAttr("readonly").removeClass("readOnly");
+               if("undefined"==typeof b || true==b){
+                   $(o.find(":input")[0]).attr("readonly","readonly");o.addClass("readOnly");
+                   }
+            	else {$(o.find(":input")[0]).removeAttr("readonly");o.removeClass("readOnly");}
            }),
           enabledButton:(_t.enabledButton = function(s){
  			 var o = this;
