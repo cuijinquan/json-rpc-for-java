@@ -145,7 +145,7 @@
   	 		
       },
      /* 加载Tab页 ，参数【tabs的id，需要加载的tab对象】 */
-     tabLoad : function(id,span,hide){
+     tabLoad : function(id,span,hide,ld){
       // 1.先显示当前页（若隐藏），设置激活样式
       // 2.保存激活信息（tabs,form）
       // 3.除去其他激活样式
@@ -168,7 +168,7 @@
 	    	var cur_hdId = $(this).attr("id");
 	    	$("#"+NewTab.getBodyId(cur_hdId)).addClass("x-hide-display").removeAttr("style");
 	    });
-	   try{$("#"+curTab_body).find(":input[type!=hidden]").eq(0).focus();}catch(e){}
+	   try{if(!ld)$("#"+curTab_body).find(":input[type!=hidden]").eq(0).focus();}catch(e){}
 	    window["g_active"+id]=curTab_body;
 	    (id+"_Act").setValue(curTab_body);
     },
@@ -337,7 +337,7 @@
      var tab_ul =  $("#"+o.id+"_ul"),
      activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide").not(".x-tab-item-li-disabled")[0]
      ,activeTab=$(activeTab);
-	 this.tabLoad(o.id,activeTab);
+	 this.tabLoad(o.id,activeTab,null,true);
 	 eval(activeTab.data("Clk"));
      },
      /* 给一个tab对象的头部添加右键菜单 ，参数【tabs的id，tab头部分的li节点对象】 */
