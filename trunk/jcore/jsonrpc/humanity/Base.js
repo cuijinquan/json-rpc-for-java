@@ -334,7 +334,9 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
             /* 回车进入下一输入焦点*/
             if(oI || (document.activeElement && 13 == k))
             {
+            	e.returnValue = false;  e.cancelBubble = true;
                var oCur = oI || document.activeElement, szNdNm = oCur.nodeName, a = $(":input"), i = 0, bStart = false;
+               oCur.onchange && oCur.onchange();
                if("function" == typeof oCur.onblur && !oCur.onblur())
                     return oCur.select(),false;
                 if("BUTTON" == szNdNm)
