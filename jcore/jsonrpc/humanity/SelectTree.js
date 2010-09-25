@@ -12,8 +12,9 @@
            var oSlct = $(XuiTree.slctCls), i,
                  oPos = oI.position();
 	       o.css({left:oPos.left + "px", top: (oPos.top + oI.height()) + "px"});
-	       o.css("width",(oStyle.width && oStyle.width.replace(/[^\d]/g,"") || oTb.width())+'px');
-	       if(oStyle.height)o.css("height",oStyle.height.replace(/[^\d]/g,"") +'px');
+	        if(oStyle && oStyle.width )o.css("width", oStyle.width.replace(/[^\d]/g,""));
+       		else o.css("width",oTb.width()+'px');
+       		if(oStyle && oStyle.height)o.css("height",oStyle.height.replace(/[^\d]/g,"")+'px');
 	       o.show();
 	       
           if(1 < oSlct.length)
