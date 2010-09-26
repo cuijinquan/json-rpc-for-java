@@ -526,6 +526,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                   if(0 == o.find("b").length)
                   _t.insertHtml(o.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
                   o.find("input:first").attr("isRequired", "true");
+                  if(o.find("input")[1])o.find("input").eq(1).attr("isRequired","true");
                 }
              }
              else o.each(function()
@@ -534,6 +535,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                 if(0 == o1.find("b").length)
                 _t.insertHtml(o1.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
                 o1.find("input:first").attr("isRequired", "true");
+                if(o1.find("input")[1])o1.find("input").eq(1).attr("isRequired","true");
              });
            }),
            delRedStar:(_t.delRedStar = function(s)
@@ -548,6 +550,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                   o = Base.getInputDiv(a[i]);// _t.getObj(a[i]).parent().parent();
                   o.find("b").remove();
                   o.find("input:first").removeAttr("isRequired");
+                  if(o.find("input")[1])o.find("input").eq(1).removeAttr("isRequired");
                 }
              }
              else o.each(function()
@@ -555,6 +558,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                 var o1 = Base.getInputDiv(this);// $(this).parent("div").parent("div");
                 o1.find("b").remove();
                 o1.find("input:first").removeAttr("isRequired");
+                if(o1.find("input")[1])o1.find("input").eq(1).removeAttr("isRequired");
              });
            }),validateForm: (_t.validateForm = function(s,ids)
            {
