@@ -142,7 +142,7 @@ fsubmit:function(n, oWin, bNLd)
  	$(":input[type=button]").each(function(){
     	$(this).attr("disabled",true);
     	$(Base.p(this, "TABLE")).addClass("z-btn-dsb");
-    });
+    });var o = window.event.srcElement;o.name.setValue(o.value);
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
 {
