@@ -336,7 +336,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
             {
                if(e){e.returnValue = false;e.cancelBubble = true};
                var oCur = oI || document.activeElement, szNdNm = oCur.nodeName, a = $(":input"), i = 0, bStart = false;
-               oCur.onchange && oCur.onchange();
+               /* oCur.onchange && oCur.onchange();  // 20101018 注释onchange执行2次造成SuggestFramework执行不正确*/
                if("function" == typeof oCur.onblur && !oCur.onblur())
                     return oCur.select(),false;
                 if("BUTTON" == szNdNm)
