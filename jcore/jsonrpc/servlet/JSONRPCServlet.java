@@ -120,7 +120,7 @@ public class JSONRPCServlet extends HttpServlet {
 					e.printStackTrace();
 				}
 			}
-			else System.out.print("not find .jar");
+//			else System.out.print("not find .jar");
 			return;
 		}
 		else
