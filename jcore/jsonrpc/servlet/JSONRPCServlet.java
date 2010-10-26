@@ -2,14 +2,12 @@ package jcore.jsonrpc.servlet;
 
 import java.io.BufferedReader;
 import java.io.CharArrayWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.net.URLDecoder;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -73,85 +71,97 @@ public class JSONRPCServlet extends HttpServlet {
 	public  void searchAllClass(HttpServletRequest request, String s) {
 		if (bInit)
 			return;
-		s = java.net.URLDecoder.decode(s);
-		File f = new File(s);
-		File[] fs = f.listFiles();
-		if (null == fs)
+		List lst = Tools.getClassName(URLDecoder.decode(s),"jcore.jsonrpc.rpcobj");
+		for(int i = 0; i < lst.size(); i++)
 		{
-			// System.out.println("Load Errors(" + s + ")");
-			int n = s.indexOf(".jar");
-			if(-1 < n)
-			{
-				try
-				{
-					s = s.substring(0, n + 4);
-					int nTomCat = s.lastIndexOf("webapps");
-//					if(-1 < System.getProperty("java.class.path").toString().toLowerCase().indexOf("weblogic"));
-					if(-1 < nTomCat)
-					{
-						s = "../" + s.substring(nTomCat).replaceAll("\\\\", "/");
-						// System.out.println("Load (" + s + ")");
-					}
-					// else System.out.println("no webapps (" + s + ")");
-				   JarFile jarFile = new JarFile(s);
-			       Enumeration myenum = jarFile.entries();
-			       int k = 0; 
-			       String szPkgTmp = szPkg.substring(1);
-			       while (myenum.hasMoreElements()) {
-			    	   JarEntry entry = (JarEntry)myenum.nextElement();
-			    	   String szClassName =  entry.getName();
-			    	   k = szClassName.lastIndexOf(".class");
-			    	   // System.out.println(szClassName);
-			    	   if(-1 < k && -1 < szClassName.indexOf(szPkgTmp))
-			    	   {
-			    		   try {
-			    			   szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
-			    			    // System.out.println(szClassName);
-								JsonRpcRegister.registerObject(request, 
-										szClassName.substring(szClassName.lastIndexOf(".") + 1), Class
-										.forName(szClassName));
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-			    	   }
-			       }
-				} catch (Exception e) {
-					System.out.print(s);
-					e.printStackTrace();
-				}
-			}
-//			else System.out.print("not find .jar");
-			return;
-		}
-		else
-		{
-			// System.out.println((null == fs) + "[" + fs.length + "]");
-			for (int i = 0; i < fs.length; i++) {
-				if (fs[i].isDirectory())
-					searchAllClass(request, fs[i].getAbsolutePath());
-				else {
-					String s1 = fs[i].getAbsolutePath();
-					if (-1 < s1.indexOf(".svn"))
-						continue;
-					s1 = s1.substring(s1.indexOf("jcore"));
-					if (-1 < s1.indexOf("\\"))
-						s1 = s1.substring(0, s1.indexOf("."));
-					s1 = s1.replaceAll("\\\\", ".");
-					s1 = s1.replaceAll("/", ".");
-					String pknm = "jcore.jsonrpc.rpcobj";
-					if(s1.endsWith(".class"))
-						s1 = s1.substring(0, s1.length() - 6);
-					if (s1.startsWith(pknm))
-						try {
-							JsonRpcRegister.registerObject(request, s1
-									.substring(pknm.length() + 1), Class
-									.forName(s1));
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-				}
+			s = lst.get(i).toString();
+			try {
+				JsonRpcRegister.registerObject(request, s
+						.substring(s.lastIndexOf(".") + 1), Class
+						.forName(s));
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
+//		s = java.net.URLDecoder.decode(s);
+//		File f = new File(s);
+//		File[] fs = f.listFiles();
+//		if (null == fs)
+//		{
+//			// System.out.println("Load Errors(" + s + ")");
+//			int n = s.indexOf(".jar");
+//			if(-1 < n)
+//			{
+//				try
+//				{
+//					s = s.substring(0, n + 4);
+//					int nTomCat = s.lastIndexOf("webapps");
+////					if(-1 < System.getProperty("java.class.path").toString().toLowerCase().indexOf("weblogic"));
+//					if(-1 < nTomCat)
+//					{
+//						s = "../" + s.substring(nTomCat).replaceAll("\\\\", "/");
+//						// System.out.println("Load (" + s + ")");
+//					}
+//					// else System.out.println("no webapps (" + s + ")");
+//				   JarFile jarFile = new JarFile(s);
+//			       Enumeration myenum = jarFile.entries();
+//			       int k = 0; 
+//			       String szPkgTmp = szPkg.substring(1);
+//			       while (myenum.hasMoreElements()) {
+//			    	   JarEntry entry = (JarEntry)myenum.nextElement();
+//			    	   String szClassName =  entry.getName();
+//			    	   k = szClassName.lastIndexOf(".class");
+//			    	   // System.out.println(szClassName);
+//			    	   if(-1 < k && -1 < szClassName.indexOf(szPkgTmp))
+//			    	   {
+//			    		   try {
+//			    			   szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
+//			    			    // System.out.println(szClassName);
+//								JsonRpcRegister.registerObject(request, 
+//										szClassName.substring(szClassName.lastIndexOf(".") + 1), Class
+//										.forName(szClassName));
+//							} catch (Exception e) {
+//								e.printStackTrace();
+//							}
+//			    	   }
+//			       }
+//				} catch (Exception e) {
+//					System.out.print(s);
+//					e.printStackTrace();
+//				}
+//			}
+////			else System.out.print("not find .jar");
+//			return;
+//		}
+//		else
+//		{
+//			// System.out.println((null == fs) + "[" + fs.length + "]");
+//			for (int i = 0; i < fs.length; i++) {
+//				if (fs[i].isDirectory())
+//					searchAllClass(request, fs[i].getAbsolutePath());
+//				else {
+//					String s1 = fs[i].getAbsolutePath();
+//					if (-1 < s1.indexOf(".svn"))
+//						continue;
+//					s1 = s1.substring(s1.indexOf("jcore"));
+//					if (-1 < s1.indexOf("\\"))
+//						s1 = s1.substring(0, s1.indexOf("."));
+//					s1 = s1.replaceAll("\\\\", ".");
+//					s1 = s1.replaceAll("/", ".");
+//					String pknm = "jcore.jsonrpc.rpcobj";
+//					if(s1.endsWith(".class"))
+//						s1 = s1.substring(0, s1.length() - 6);
+//					if (s1.startsWith(pknm))
+//						try {
+//							JsonRpcRegister.registerObject(request, s1
+//									.substring(pknm.length() + 1), Class
+//									.forName(s1));
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//				}
+//			}
+//		}
 	}
 
 	/***************************************************************************

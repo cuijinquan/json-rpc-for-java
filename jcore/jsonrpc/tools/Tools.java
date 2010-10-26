@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -25,16 +26,21 @@ import jcore.jsonrpc.common.JSONObject;
 
 public class Tools {
 
+	private static boolean bGetClassName = false;
+	private static List className = null;
 	/**
 	 * 传入包名，获取该包下的所有类名，
-	 * @param szPkg
+	 * @param szPkg     "/jcore/jsonrpc/rpcobj"
 	 * @param szFltPkg  过滤的包名，也就是包含这个包的才返回
 	 * @return
 	 */
 	public static List getClassName(String szPkg, String szFltPkg)
 	{
+		if(bGetClassName)return className;
+		bGetClassName = true;
+		// String szFltPkg
 		List lst = new ArrayList();
-		String s = java.net.URLDecoder.decode(szPkg);
+		String s = URLDecoder.decode(szPkg);
 		File f = new File(s);
 		File[] fs = f.listFiles();
 		if (null == fs)
@@ -46,37 +52,40 @@ public class Tools {
 				{
 					s = s.substring(0, n + 4);
 					int nTomCat = s.lastIndexOf("webapps");
-//					if(-1 < System.getProperty("java.class.path").toString().toLowerCase().indexOf("weblogic"));
 					if(-1 < nTomCat)
 					{
 						s = "../" + s.substring(nTomCat).replaceAll("\\\\", "/");
-						// System.out.println("Load (" + s + ")");
 					}
+					// else System.out.println("no webapps (" + s + ")");
 				   JarFile jarFile = new JarFile(s);
-			       Enumeration enum1 = jarFile.entries();
-			       int k = 0;
-			       while (enum1.hasMoreElements()) {
-			    	   JarEntry entry = (JarEntry)enum1.nextElement();
+			       Enumeration myenum = jarFile.entries();
+			       int k = 0; 
+			       while (myenum.hasMoreElements()) {
+			    	   JarEntry entry = (JarEntry)myenum.nextElement();
 			    	   String szClassName =  entry.getName();
 			    	   k = szClassName.lastIndexOf(".class");
+			    	   // System.out.println(szClassName);
 			    	   if(-1 < k && -1 < szClassName.indexOf(szFltPkg))
 			    	   {
-		    			   szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
-		    			   lst.add(szClassName);
+			    			   szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
+			    			   if(-1 < szClassName.indexOf(szFltPkg))
+			    				   lst.add(szClassName);
+			    			    // System.out.println(szClassName);
 			    	   }
 			       }
 				} catch (Exception e) {
+					System.out.print(s);
 					e.printStackTrace();
 				}
 			}
-			else System.out.print("not find .jar");
+//			else System.out.print("not find .jar");
 		}
 		else
 		{
 			// System.out.println((null == fs) + "[" + fs.length + "]");
 			for (int i = 0; i < fs.length; i++) {
 				if (fs[i].isDirectory())
-					lst.addAll(getClassName(fs[i].getAbsolutePath(), szFltPkg));
+					getClassName(fs[i].getAbsolutePath(), szFltPkg);
 				else {
 					String s1 = fs[i].getAbsolutePath();
 					if (-1 < s1.indexOf(".svn"))
@@ -87,12 +96,22 @@ public class Tools {
 					s1 = s1.replaceAll("\\\\", ".");
 					s1 = s1.replaceAll("/", ".");
 					String pknm = "jcore.jsonrpc.rpcobj";
+					if(s1.endsWith(".class"))
+						s1 = s1.substring(0, s1.length() - 6);
 					if (s1.startsWith(pknm))
-							lst.add(s1);
+						lst.add(s1);
+//						try {
+//							
+//							JsonRpcRegister.registerObject(request, s1
+//									.substring(pknm.length() + 1), Class
+//									.forName(s1));
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
 				}
 			}
 		}
-		return lst;
+		return className = lst;
 	}
 	
 	/***************************************************************************
