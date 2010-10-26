@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -25,94 +26,157 @@ import java.util.regex.Pattern;
 import jcore.jsonrpc.common.JSONObject;
 
 public class Tools {
-
+	public static boolean bDebug = true;
 	private static boolean bGetClassName = false;
-	private static List className = null;
+	private static Class[] className = null;
+	
+	
+	/**
+	 * 包处理
+	 * @param packageName
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public static Class[] getClasses(String packageName)
+			throws Exception {
+		if(bGetClassName)return className;
+		
+		ClassLoader classLoader = Tools.class.getClassLoader();// Thread.currentThread().getContextClassLoader();
+		assert classLoader != null;
+		String path = "/" + packageName.replace('.', '/');
+		Enumeration resources = classLoader.getResources(path);
+		List dirs = new ArrayList();
+		while (resources.hasMoreElements()) {
+			URL resource = (URL) resources.nextElement();
+			if(bDebug)System.out.println(resource.toString());
+			dirs.add(new File(URLDecoder.decode(resource.getFile(), "UTF-8")));
+		}
+		ArrayList classes = new ArrayList();
+		for (int j = 0; j < dirs.size(); j++) {
+			File directory = (File) dirs.get(j);
+			classes.addAll(findClasses(directory, packageName));
+		}
+		Class []cs = new Class[classes.size()];
+		for(int i = 0; i < cs.length; i++)
+			cs[i] = (Class)classes.get(i);
+		bGetClassName = true;
+		return cs;
+	}
+	
+	/**
+	 * 包搜索
+	 * @param directory
+	 * @param packageName
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
+	private static List findClasses(File directory, String packageName) throws Exception {
+        List classes = new ArrayList();
+        if (!directory.exists()) {
+        	if(bDebug)System.out.println("目录不存在：" + directory.getAbsoluteFile());
+            return classes;
+        }
+        File[] files = directory.listFiles();
+        for (int i = 0; i < files.length; i++)
+        {
+        	File file  = files[i];
+            if (file.isDirectory())
+            {
+                if(-1 == file.getName().indexOf("."));
+                	classes.addAll(findClasses(file, packageName + "." + URLDecoder.decode(file.getName(), "UTF-8")));
+            } else if (file.getName().endsWith(".class")) {
+                classes.add(Class.forName(packageName + '.' + URLDecoder.decode(file.getName(), "UTF-8").substring(0, file.getName().length() - 6)));
+                if(bDebug)System.out.println("搞定一个");
+            }
+        }
+        return classes;
+    }
+	
 	/**
 	 * 传入包名，获取该包下的所有类名，
 	 * @param szPkg     "/jcore/jsonrpc/rpcobj"
 	 * @param szFltPkg  过滤的包名，也就是包含这个包的才返回
 	 * @return
 	 */
-	public static List getClassName(String szPkg, String szFltPkg)
-	{
-		if(bGetClassName)return className;
-		bGetClassName = true;
-		// String szFltPkg
-		List lst = new ArrayList();
-		String s = URLDecoder.decode(szPkg);
-		File f = new File(s);
-		File[] fs = f.listFiles();
-		if (null == fs)
-		{
-			int n = s.indexOf(".jar");
-			if(-1 < n)
-			{
-				try
-				{
-					s = s.substring(0, n + 4);
-					int nTomCat = s.lastIndexOf("webapps");
-					if(-1 < nTomCat)
-					{
-						s = "../" + s.substring(nTomCat).replaceAll("\\\\", "/");
-					}
-					// else System.out.println("no webapps (" + s + ")");
-				   JarFile jarFile = new JarFile(s);
-			       Enumeration myenum = jarFile.entries();
-			       int k = 0; 
-			       while (myenum.hasMoreElements()) {
-			    	   JarEntry entry = (JarEntry)myenum.nextElement();
-			    	   String szClassName =  entry.getName();
-			    	   k = szClassName.lastIndexOf(".class");
-			    	   // System.out.println(szClassName);
-			    	   if(-1 < k && -1 < szClassName.indexOf(szFltPkg))
-			    	   {
-			    			   szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
-			    			   if(-1 < szClassName.indexOf(szFltPkg))
-			    				   lst.add(szClassName);
-			    			    // System.out.println(szClassName);
-			    	   }
-			       }
-				} catch (Exception e) {
-					System.out.print(s);
-					e.printStackTrace();
-				}
-			}
-//			else System.out.print("not find .jar");
-		}
-		else
-		{
-			// System.out.println((null == fs) + "[" + fs.length + "]");
-			for (int i = 0; i < fs.length; i++) {
-				if (fs[i].isDirectory())
-					getClassName(fs[i].getAbsolutePath(), szFltPkg);
-				else {
-					String s1 = fs[i].getAbsolutePath();
-					if (-1 < s1.indexOf(".svn"))
-						continue;
-					s1 = s1.substring(s1.indexOf("jcore"));
-					if (-1 < s1.indexOf("\\"))
-						s1 = s1.substring(0, s1.indexOf("."));
-					s1 = s1.replaceAll("\\\\", ".");
-					s1 = s1.replaceAll("/", ".");
-					String pknm = "jcore.jsonrpc.rpcobj";
-					if(s1.endsWith(".class"))
-						s1 = s1.substring(0, s1.length() - 6);
-					if (s1.startsWith(pknm))
-						lst.add(s1);
-//						try {
-//							
-//							JsonRpcRegister.registerObject(request, s1
-//									.substring(pknm.length() + 1), Class
-//									.forName(s1));
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
-				}
-			}
-		}
-		return className = lst;
-	}
+//	public static List getClassName(String szPkg, String szFltPkg)
+//	{
+//		if(bGetClassName)return className;
+//		// String szFltPkg
+//		List lst = new ArrayList();
+//		String s = URLDecoder.decode(szPkg);
+//		File f = new File(s);
+//		File[] fs = f.listFiles();
+//		int n = s.indexOf(".jar");
+//		if (null == fs && -1 < n)
+//		{
+//			// war部署的时候
+////			if(-1 == n)n = s.indexOf(".war");
+//			try
+//			{
+//				s = s.substring(0, n + 4);
+//				int nTomCat = s.lastIndexOf("webapps");
+//				if(-1 < nTomCat)
+//				{
+//					s = "../" + s.substring(nTomCat).replaceAll("\\\\", "/");
+//				}
+//				else if(bDebug)System.out.println("no webapps (" + s + ")");
+//			   JarFile jarFile = new JarFile(s);
+//		       Enumeration myenum = jarFile.entries();
+//		       int k = 0; 
+//		       while (myenum.hasMoreElements()) {
+//		    	   JarEntry entry = (JarEntry)myenum.nextElement();
+//		    	   String szClassName =  entry.getName();
+//		    	   k = szClassName.lastIndexOf(".class");
+//		    	   // System.out.println(szClassName);
+//		    	   if(-1 < k && -1 < szClassName.indexOf(szFltPkg))
+//		    	   {
+//		    			   szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
+//		    			   if(-1 < szClassName.indexOf(szFltPkg))
+//		    				   lst.add(szClassName);
+//		    			    // System.out.println(szClassName);
+//		    	   }
+//		       }
+//			} catch (Exception e) {
+//				System.out.print(s);
+//				e.printStackTrace();
+//			}
+////			else if(bDebug)System.out.print("not find .jar: " + s);
+//		}
+//		else if(null != fs)// war部署的时候
+//		{
+////			if(bDebug)System.out.println((null == fs) + "[" + fs.length + "]");
+//			for (int i = 0; i < fs.length; i++) {
+//				if (fs[i].isDirectory())
+//					getClassName(fs[i].getAbsolutePath(), szFltPkg);
+//				else {
+//					String s1 = fs[i].getAbsolutePath();
+//					if (-1 < s1.indexOf(".svn"))
+//						continue;
+//					s1 = s1.substring(s1.indexOf("jcore"));
+//					if (-1 < s1.indexOf("\\"))
+//						s1 = s1.substring(0, s1.indexOf("."));
+//					s1 = s1.replaceAll("\\\\", ".");
+//					s1 = s1.replaceAll("/", ".");
+//					String pknm = "jcore.jsonrpc.rpcobj";
+//					if(s1.endsWith(".class"))
+//						s1 = s1.substring(0, s1.length() - 6);
+//					if (s1.startsWith(pknm))
+//						lst.add(s1);
+////						try {
+////							
+////							JsonRpcRegister.registerObject(request, s1
+////									.substring(pknm.length() + 1), Class
+////									.forName(s1));
+////						} catch (Exception e) {
+////							e.printStackTrace();
+////						}
+//				}
+//			}
+//		}
+//		bGetClassName = true;
+//		return className = lst;
+//	}
 	
 	/***************************************************************************
 	 * 通过路径获取File对象
@@ -899,4 +963,49 @@ public class Tools {
 		}
 		return false;
 	}
+//	
+//	public static Class[] getClassesFromFileJarFile(String pckgname, String baseDirPath) throws ClassNotFoundException
+//	{
+//		ArrayList classes = new ArrayList();
+//		String path = pckgname.replace('.', '/') + "/";
+//		File mF = new File(baseDirPath);
+//		String[] files = mF.list();
+//		ArrayList jars = new ArrayList();
+//		for (int i = 0; i < files.length; i++)
+//			if (files[i].endsWith(".jar")) jars.add(files[i]);
+//		
+//		for (int i = 0; i < jars.size(); i++)
+//		{
+//			try
+//			{
+//				JarFile currentFile = new JarFile(jars.get(i).toString());
+//				for (Enumeration e = currentFile.entries(); e.hasMoreElements(); ) 
+//				{
+//					JarEntry current = (JarEntry) e.nextElement();
+//					if(current.getName().length() > path.length() && current.getName().substring(0, path.length()).equals(path) && current.getName().endsWith(".class"))
+//						classes.add(Class.forName(current.getName().replaceAll("/", ".").replaceAll(".class", "")));
+//				}
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+//		Class[] classesA = new Class[classes.size()];
+//		classes.toArray(classesA);
+//		return classesA;
+//	}
+//	
+//	public static void main(String args[])
+//	{
+//		try
+//		{
+//			Class []c = Tools.getClassesFromFileJarFile("jcore.jsonrpc.rpcobj", "/");
+//	//		Package[] pkg = Tools.class.getClassLoader().getSystemClassLoader()..getPackage()..getPackages();
+//	//		Class.forName("").getClasses();
+//			System.out.println(c.length);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
