@@ -37,7 +37,6 @@ function JsonRpcClient(url) {
 			this.xml.setRequestHeader("XUIAJAX",1);
 			this.xml.setRequestHeader("CMHS","JsonRpc");
 			this.xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-			this.xml.setRequestHeader("user-agent", navigator.userAgent);
 			this.xml.send(o.data && o.data.replace(/[\u4E00-\u9FA5]/gm, function()
 			{
 			   return "&#" + arguments[0].charCodeAt(0) + ";";
