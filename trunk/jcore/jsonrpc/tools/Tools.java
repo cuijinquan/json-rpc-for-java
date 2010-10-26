@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import jcore.jsonrpc.common.JSONObject;
 
 public class Tools {
-	public static boolean bDebug = true;
+	public static boolean bDebug = false;
 	private static boolean bGetClassName = false;
 	private static Class[] className = null;
 	
