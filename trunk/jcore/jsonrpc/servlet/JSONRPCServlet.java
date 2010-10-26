@@ -2,11 +2,14 @@ package jcore.jsonrpc.servlet;
 
 import java.io.BufferedReader;
 import java.io.CharArrayWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -67,101 +70,111 @@ public class JSONRPCServlet extends HttpServlet {
 	// s 为：
 	// /u01/bea/user_projects/domains/testdomain/servers/AdminServer/tmp/_WL_user/jsonrpc/l507ns/war/WEB-INF/lib/_wl_cls_gen.jar!/jcore/jsonrpc/rpcobj
 	// EAR包的路径为：
-	// C:\ bea\ user_projects\ domains\ cdjydomain\ servers\ AdminServer\ tmp\ _WL_user\ cdsise\ koyjje\ APP-INF\ classes\ jcore\ jsonrpc\ rpcobj\ JsonRpcAuditDepartment.class
-	public  void searchAllClass(HttpServletRequest request, String s) {
+	// C:\ bea\ user_projects\ domains\ cdjydomain\ servers\ AdminServer\ tmp\
+	// _WL_user\ cdsise\ koyjje\ APP-INF\ classes\ jcore\ jsonrpc\ rpcobj\
+	// JsonRpcAuditDepartment.class
+	public void searchAllClass(HttpServletRequest request)
+	{
 		if (bInit)
 			return;
-		List lst = Tools.getClassName(URLDecoder.decode(s),"jcore.jsonrpc.rpcobj");
-		for(int i = 0; i < lst.size(); i++)
+		try
 		{
-			s = lst.get(i).toString();
-			try {
-				JsonRpcRegister.registerObject(request, s
-						.substring(s.lastIndexOf(".") + 1), Class
-						.forName(s));
-			} catch (Exception e) {
-				e.printStackTrace();
+			// Tools.getClassesFromFileJarFile("jcore.jsonrpc.rpcobj", "/");// 
+			Class[]lst = Tools.getClasses("jcore.jsonrpc.rpcobj");
+			String s;
+			if(Tools.bDebug && 0 == lst.length)System.out.println("没有找到---遗憾吧");
+			for (int i = 0; i < lst.length; i++) {
+				s = lst[i].getName();
+				try {
+					if(Tools.bDebug)System.out.println("开始初始化：" + s);
+					JsonRpcRegister.registerObject(request, s.substring(s.lastIndexOf(".") + 1), lst[i]);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-//		s = java.net.URLDecoder.decode(s);
-//		File f = new File(s);
-//		File[] fs = f.listFiles();
-//		if (null == fs)
-//		{
-//			// System.out.println("Load Errors(" + s + ")");
-//			int n = s.indexOf(".jar");
-//			if(-1 < n)
-//			{
-//				try
-//				{
-//					s = s.substring(0, n + 4);
-//					int nTomCat = s.lastIndexOf("webapps");
-////					if(-1 < System.getProperty("java.class.path").toString().toLowerCase().indexOf("weblogic"));
-//					if(-1 < nTomCat)
-//					{
-//						s = "../" + s.substring(nTomCat).replaceAll("\\\\", "/");
-//						// System.out.println("Load (" + s + ")");
-//					}
-//					// else System.out.println("no webapps (" + s + ")");
-//				   JarFile jarFile = new JarFile(s);
-//			       Enumeration myenum = jarFile.entries();
-//			       int k = 0; 
-//			       String szPkgTmp = szPkg.substring(1);
-//			       while (myenum.hasMoreElements()) {
-//			    	   JarEntry entry = (JarEntry)myenum.nextElement();
-//			    	   String szClassName =  entry.getName();
-//			    	   k = szClassName.lastIndexOf(".class");
-//			    	   // System.out.println(szClassName);
-//			    	   if(-1 < k && -1 < szClassName.indexOf(szPkgTmp))
-//			    	   {
-//			    		   try {
-//			    			   szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
-//			    			    // System.out.println(szClassName);
-//								JsonRpcRegister.registerObject(request, 
-//										szClassName.substring(szClassName.lastIndexOf(".") + 1), Class
-//										.forName(szClassName));
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//			    	   }
-//			       }
-//				} catch (Exception e) {
-//					System.out.print(s);
-//					e.printStackTrace();
-//				}
-//			}
-////			else System.out.print("not find .jar");
-//			return;
-//		}
-//		else
-//		{
-//			// System.out.println((null == fs) + "[" + fs.length + "]");
-//			for (int i = 0; i < fs.length; i++) {
-//				if (fs[i].isDirectory())
-//					searchAllClass(request, fs[i].getAbsolutePath());
-//				else {
-//					String s1 = fs[i].getAbsolutePath();
-//					if (-1 < s1.indexOf(".svn"))
-//						continue;
-//					s1 = s1.substring(s1.indexOf("jcore"));
-//					if (-1 < s1.indexOf("\\"))
-//						s1 = s1.substring(0, s1.indexOf("."));
-//					s1 = s1.replaceAll("\\\\", ".");
-//					s1 = s1.replaceAll("/", ".");
-//					String pknm = "jcore.jsonrpc.rpcobj";
-//					if(s1.endsWith(".class"))
-//						s1 = s1.substring(0, s1.length() - 6);
-//					if (s1.startsWith(pknm))
-//						try {
-//							JsonRpcRegister.registerObject(request, s1
-//									.substring(pknm.length() + 1), Class
-//									.forName(s1));
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
-//				}
-//			}
-//		}
+		// s = java.net.URLDecoder.decode(s);
+		// File f = new File(s);
+		// File[] fs = f.listFiles();
+		// if (null == fs)
+		// {
+		// // System.out.println("Load Errors(" + s + ")");
+		// int n = s.indexOf(".jar");
+		// if(-1 < n)
+		// {
+		// try
+		// {
+		// s = s.substring(0, n + 4);
+		// int nTomCat = s.lastIndexOf("webapps");
+		// // if(-1 <
+		// System.getProperty("java.class.path").toString().toLowerCase().indexOf("weblogic"));
+		// if(-1 < nTomCat)
+		// {
+		// s = "../" + s.substring(nTomCat).replaceAll("\\\\", "/");
+		// // System.out.println("Load (" + s + ")");
+		// }
+		// // else System.out.println("no webapps (" + s + ")");
+		// JarFile jarFile = new JarFile(s);
+		// Enumeration myenum = jarFile.entries();
+		// int k = 0;
+		// String szPkgTmp = szPkg.substring(1);
+		// while (myenum.hasMoreElements()) {
+		// JarEntry entry = (JarEntry)myenum.nextElement();
+		// String szClassName = entry.getName();
+		// k = szClassName.lastIndexOf(".class");
+		// // System.out.println(szClassName);
+		// if(-1 < k && -1 < szClassName.indexOf(szPkgTmp))
+		// {
+		// try {
+		// szClassName = szClassName.substring(0, k).replaceAll("[/]", ".");
+		// // System.out.println(szClassName);
+		// JsonRpcRegister.registerObject(request,
+		// szClassName.substring(szClassName.lastIndexOf(".") + 1), Class
+		// .forName(szClassName));
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// }
+		// }
+		// } catch (Exception e) {
+		// System.out.print(s);
+		// e.printStackTrace();
+		// }
+		// }
+		// // else System.out.print("not find .jar");
+		// return;
+		// }
+		// else
+		// {
+		// // System.out.println((null == fs) + "[" + fs.length + "]");
+		// for (int i = 0; i < fs.length; i++) {
+		// if (fs[i].isDirectory())
+		// searchAllClass(request, fs[i].getAbsolutePath());
+		// else {
+		// String s1 = fs[i].getAbsolutePath();
+		// if (-1 < s1.indexOf(".svn"))
+		// continue;
+		// s1 = s1.substring(s1.indexOf("jcore"));
+		// if (-1 < s1.indexOf("\\"))
+		// s1 = s1.substring(0, s1.indexOf("."));
+		// s1 = s1.replaceAll("\\\\", ".");
+		// s1 = s1.replaceAll("/", ".");
+		// String pknm = "jcore.jsonrpc.rpcobj";
+		// if(s1.endsWith(".class"))
+		// s1 = s1.substring(0, s1.length() - 6);
+		// if (s1.startsWith(pknm))
+		// try {
+		// JsonRpcRegister.registerObject(request, s1
+		// .substring(pknm.length() + 1), Class
+		// .forName(s1));
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// }
+		// }
+		// }
 	}
 
 	/***************************************************************************
@@ -202,6 +215,7 @@ public class JSONRPCServlet extends HttpServlet {
 		config = null;
 	}
 
+
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ClassCastException {
 		boolean bDebug = false;
@@ -224,10 +238,12 @@ public class JSONRPCServlet extends HttpServlet {
 				myInit(this.config, brg);
 			JsonRpcRegister.registerObject(request, "_LoadJsObj",
 					LoadJsObj.class);
-			URL url = JSONRPCServlet.class.getResource(szPkg);
-			if (null != url)
-				searchAllClass(request, url.getFile());
-			else System.out.println("无法加载免配置的类");
+//			URL url = JSONRPCServlet.class.getResource(szPkg);
+//					.getResources(szPkg);
+//			if (null != url)
+			searchAllClass(request);
+//			else
+//				System.out.println("无法加载免配置的类");
 			bInit = true;
 			OutputStream out = null;
 			// String szGzip = request.getHeader("Accept-Encoding");
@@ -261,11 +277,11 @@ public class JSONRPCServlet extends HttpServlet {
 			byte[] bout = null;
 			if (null != szData && 0 < szData.length()) {
 				// szData = Tools.decodeUnicodeHtm(szData.trim());
-				if(bDebug)
+				if (bDebug)
 					System.out.println(szData);
 				Object obj = brg.ExecObjectMethod(request, szData);
 				if (null != obj) {
-//					System.out.println(obj.toString());
+					// System.out.println(obj.toString());
 					bout = Tools.encodeUnicodeHtm(obj.toString()).getBytes(
 							"UTF-8");
 				}
@@ -278,7 +294,7 @@ public class JSONRPCServlet extends HttpServlet {
 			}
 			if (null != bout) {
 				response.setIntHeader("Content-Length", bout.length);
-				if(bDebug)
+				if (bDebug)
 					System.out.println(new String(bout, "UTF-8"));
 				out.write(bout);
 			}
