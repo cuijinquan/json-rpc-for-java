@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import jcore.jsonrpc.common.JSONObject;
 
 public class Tools {
-	public static boolean bDebug = false;
+	public static boolean bDebug =  false;
 	private static boolean bGetClassName = false;
 	private static Class[] className = null;
 	
@@ -45,7 +45,7 @@ public class Tools {
 		List dirs = new ArrayList();
 		while (resources.hasMoreElements()) {
 			URL resource = (URL) resources.nextElement();
-			if(bDebug)System.out.println(resource.toString());
+			if(bDebug)System.out.println(resource.getFile());
 			dirs.add(new File(URLDecoder.decode(resource.getFile(), "UTF-8")));
 		}
 		ArrayList classes = new ArrayList();
