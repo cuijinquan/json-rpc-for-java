@@ -8,7 +8,6 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -18,8 +17,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +26,6 @@ public class Tools {
 	public static boolean bDebug = true;
 	private static boolean bGetClassName = false;
 	private static Class[] className = null;
-	
 	
 	/**
 	 * 包处理

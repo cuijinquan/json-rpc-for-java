@@ -35,7 +35,6 @@ public class JSONRPCServlet extends HttpServlet {
 	private final static int buf_size = 4096;
 
 	private final static long serialVersionUID = 2;
-
 	private String charset = "UTF-8";
 
 	// 支持Gzip，默认不支持
