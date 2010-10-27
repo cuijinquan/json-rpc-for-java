@@ -472,8 +472,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                   o = o.find(":input:first");
               window.g_fcsfld = o.attr("name") || o.attr("id");
               o.focus();
-              if(szTitle = o.attr("title") || arg[1])
-              o.bt(szTitle.replace(/\n/gm,"<br>"), {positions: ['left', 'right', 'bottom','top'] }).btOn();
+              if(szTitle = (o.attr("title") || arg[1] || o.parent("div").parent("div.xuiInput").attr("title")))
+              o.attr("title",szTitle = szTitle.replace(/\n/gm,"<br>")), fnSetATip(o, szTitle);/* o.bt(szTitle.replace(/\n/gm,"<br>"), {positions: ['left', 'right', 'bottom','top'] }).btOn();*/
               });
            }),
            setReadOnly:(_t.setReadOnly = function(s, b){
