@@ -80,6 +80,7 @@ public class JSONRPCServlet extends HttpServlet {
 		{
 			// Tools.getClassesFromFileJarFile("jcore.jsonrpc.rpcobj", "/");// 
 			Class[]lst = Tools.getClasses("jcore.jsonrpc.rpcobj");
+			if(null == lst)return;
 			String s;
 			if(Tools.bDebug && 0 == lst.length)System.out.println("没有找到---遗憾吧");
 			for (int i = 0; i < lst.length; i++) {
