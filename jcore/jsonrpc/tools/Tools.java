@@ -36,7 +36,7 @@ public class Tools {
 	 */
 	public static Class[] getClasses(String packageName)
 			throws Exception {
-		if(bGetClassName)return className;
+		if(bGetClassName && null != className)return className;
 		
 		ClassLoader classLoader = Tools.class.getClassLoader();// Thread.currentThread().getContextClassLoader();
 		assert classLoader != null;
@@ -79,8 +79,11 @@ public class Tools {
         	File file  = files[i];
             if (file.isDirectory())
             {
-                if(-1 == file.getName().indexOf("."));
+                if(-1 == file.getName().indexOf("."))
+                {
+                	if(bDebug)System.out.println(file.getName());
                 	classes.addAll(findClasses(file, packageName + "." + URLDecoder.decode(file.getName(), "UTF-8")));
+                }
             } else if (file.getName().endsWith(".class")) {
                 classes.add(Class.forName(packageName + '.' + URLDecoder.decode(file.getName(), "UTF-8").substring(0, file.getName().length() - 6)));
                 if(bDebug)System.out.println("搞定一个");
