@@ -282,10 +282,10 @@
         case 46: /* del */
                  return true; 
         case 8: /* 退格键盘 */
-               _t.fnNoInput(function(){
+              /* _t.fnNoInput(function(){
                   if(document.selection)document.selection.clear();
                   _t.fnMvIstPoint(oIpt, oIpt.value.length, oIpt.value.length, null);
-               });
+               });*/
                return true;
         case 35:
         case 36:
