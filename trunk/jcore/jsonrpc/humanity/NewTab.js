@@ -166,9 +166,16 @@
 	    	spans.filter(".x-tab-item-bg-right").removeClass("x-tab-item-bg-right-active");
 	    	spans.filter(".x-tab-item-bg-left").removeClass("x-tab-item-bg-left-active");
 	    	var cur_hdId = $(this).attr("id");
-	    	$("#"+NewTab.getBodyId(cur_hdId)).addClass("x-hide-display").removeAttr("style");
+	    	$("#"+NewTab.getBodyId(cur_hdId)).addClass("x-hide-display");
 	    });
-	   try{if(!ld)$("#"+curTab_body).find(":input[type!=hidden]").eq(0).focus();}catch(e){}
+	    var tabs_h=$("#"+id).find("ol:first").height(),_tabbody=$("#"+NewTab.getBodyId(curTab.attr("id"))),tab_h=_tabbody.height();
+	    if(window["g_"+id+"_hgt"]){
+	    if(tab_h && _tabbody.attr("havHgt"))
+		    	$("#"+id).find("ol:first").height(tab_h);
+		    else  
+		    	$("#"+id).find("ol:first").height(window["g_"+id+"_hgt"]);
+	    }
+	    try{if(!ld)$("#"+curTab_body).find(":input[type!=hidden]").eq(0).focus();}catch(e){}
 	    window["g_active"+id]=curTab_body;
 	    (id+"_Act").setValue(curTab_body);
     },
@@ -255,7 +262,7 @@
 	   	}
 	   	var tab_body = tabs_o.find("#"+o.id),ol=tabs_o.find("ol:first");
 	   	if(null==tab_body[0]){
-	   		ol.append($("<div/>").addClass("newTab_body x-hide-display").attr("id",o.id));
+	   		ol.append($("<div/>").addClass("newTab_body x-hide-display").attr("id",o.id).css("height",o.height || "auto"));
 	   	}
 	   	if(null != o.url){
 	   		var iframe_id = "iframe_"+o.id;
@@ -269,76 +276,83 @@
 	   	if(mode.toUpperCase()!="D"){
 	   		NewTab.addContextMenu(tabs,li);
 	   	}
+	   	if(o.height){
+	   		tabs_o.find("#"+o.id).css("height",o.height).attr("havHgt",true);
+	   	}else
+	   	{
+	   		tabs_o.find("#"+o.id).css("height","auto");
+	   	}
 	   	window["g_existTabs"]+=",'"+o.id+"'";
      },
      /* 创建tabs的头部分 ，参数【包含有tabs、所有tab信息的object对象】 */
      createTabsHeader : function(o){
-     if(o.haveAjax && window["g_existTabs"]){window["g_existTabs"]=[]};
-     var allTab=o.alltab,tabs=$("#"+o.id);
-     if($("#"+o.id+'_hdPanel')[0])return;
-     window["g_initAct"] = o.active;
-     var hPos = o.hPos || "T",tabArr=[];
-     if(hPos == "T" || hPos == "B"){
-	   	 var htmlCodeArr=[
-	     "<div id='"+o.id+"_mLeft' ></div>",
-	     "<div id='"+o.id+"_mRight' ></div>",
-	     "<div id='"+o.id+"_hdPanel'>",
-	     "<ul class='x-tab-item-ul' id='"+o.id+"_ul'>",
-	     "</ul>",
-	     "</div>"
-	     ], header=$(htmlCodeArr.join(""));
-   		 header.addClass("x-tabs-panel");
-   		 if(hPos == "T")tabs.prepend(header);else  tabs.append(header);
-   		 $("#"+o.id+"_mRight").click(function(){
-   		 	NewTab.tabScrollRightHandler(o.id);
-   		 }).attr("title","向右滑动").addClass("x-tabs-panel-mright");
-   		 $("#"+o.id+"_mLeft").click(function(){
-   		 	NewTab.tabScrollLeftHandler(o.id);
-   		 }).attr("title","向左滑动").addClass("x-tabs-panel-mleft");
-     }else if(hPos == "L" || hPos == "R"){
-     	header = [
-     	"<div id='"+o.id+"_hdPanel'>",
-    	"<div id='"+o.id+"_mLeft' ></div>",
-     	"<div id='"+o.id+"_sc'><ul id='"+o.id+"_ul'>",
-     	"</ul></div>",
-     	"<div id='"+o.id+"_mRight' ></div>",
-     	"</div>"		
-     	].join("");
-     	header = $(header);
-     	if(hPos == "L"){
-     		header.addClass("x-tabs-panel-left");
-     		tabs.prepend(header);
-     		tabs.find("ol:first").css("width","auto");
-     	}else{
-     		header.addClass("x-tabs-panel-right");
-     		var ol = tabs.find("ol:first").css({"width":tabs.width()-142,"float":"left"});
-			tabs.append(header);	
-			tabs.resize(function(){
-				ol.css({"width":tabs.width()-142,"float":"left"});
-			});
-     	}
-     	$("#"+o.id+"_mRight").click(function(){
-     		 	NewTab.tabScrollDownHandler(o.id);
-     	}).attr("title","向下滑动").addClass("x-tabs-panel-mdown");
-     	$("#"+o.id+"_mLeft").click(function(){
-     		 	NewTab.tabScrollTopHandler(o.id);
-     	}).attr("title","向上滑动").addClass("x-tabs-panel-mup");
-     	header.css("height",o.height);
-     	header.find("#"+o.id+"_sc").css({"height":header.height()-50,overflow:"hidden"});
-     	tabs.css("background","");
-     }
-     $(allTab).each(function(){
-    	 NewTab.createTabItem(o.id,this,"_flg");
-     });
-     if(hPos == "L" || hPos == "R"){
-     	$("#"+o.id+"_ul").find(".x-tab-item-text").css("width","122");
-     }
-     if(o.alltab.length==0)return;
-     var tab_ul =  $("#"+o.id+"_ul"),
-     activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide").not(".x-tab-item-li-disabled")[0]
-     ,activeTab=$(activeTab);
-	 this.tabLoad(o.id,activeTab,null,true);
-	 eval(activeTab.data("Clk"));
+	     if(o.haveAjax && window["g_existTabs"]){window["g_existTabs"]=[]};
+	     var allTab=o.alltab,tabs=$("#"+o.id);
+	     if($("#"+o.id+'_hdPanel')[0])return;
+	     window["g_initAct"] = o.active;
+	     window["g_"+o.id+"_hgt"] = o.height;
+	     var hPos = o.hPos || "T",tabArr=[];
+	     if(hPos == "T" || hPos == "B"){
+		   	 var htmlCodeArr=[
+		     "<div id='"+o.id+"_mLeft' ></div>",
+		     "<div id='"+o.id+"_mRight' ></div>",
+		     "<div id='"+o.id+"_hdPanel'>",
+		     "<ul class='x-tab-item-ul' id='"+o.id+"_ul'>",
+		     "</ul>",
+		     "</div>"
+		     ], header=$(htmlCodeArr.join(""));
+	   		 header.addClass("x-tabs-panel");
+	   		 if(hPos == "T")tabs.prepend(header);else  tabs.append(header);
+	   		 $("#"+o.id+"_mRight").click(function(){
+	   		 	NewTab.tabScrollRightHandler(o.id);
+	   		 }).attr("title","向右滑动").addClass("x-tabs-panel-mright");
+	   		 $("#"+o.id+"_mLeft").click(function(){
+	   		 	NewTab.tabScrollLeftHandler(o.id);
+	   		 }).attr("title","向左滑动").addClass("x-tabs-panel-mleft");
+	     }else if(hPos == "L" || hPos == "R"){
+	     	header = [
+	     	"<div id='"+o.id+"_hdPanel'>",
+	    	"<div id='"+o.id+"_mLeft' ></div>",
+	     	"<div id='"+o.id+"_sc'><ul id='"+o.id+"_ul'>",
+	     	"</ul></div>",
+	     	"<div id='"+o.id+"_mRight' ></div>",
+	     	"</div>"		
+	     	].join("");
+	     	header = $(header);
+	     	if(hPos == "L"){
+	     		header.addClass("x-tabs-panel-left");
+	     		tabs.prepend(header);
+	     		tabs.find("ol:first").css("width","auto");
+	     	}else{
+	     		header.addClass("x-tabs-panel-right");
+	     		var ol = tabs.find("ol:first").css({"width":tabs.width()-142,"float":"left"});
+				tabs.append(header);	
+				tabs.resize(function(){
+					ol.css({"width":tabs.width()-142,"float":"left"});
+				});
+	     	}
+	     	$("#"+o.id+"_mRight").click(function(){
+	     		 	NewTab.tabScrollDownHandler(o.id);
+	     	}).attr("title","向下滑动").addClass("x-tabs-panel-mdown");
+	     	$("#"+o.id+"_mLeft").click(function(){
+	     		 	NewTab.tabScrollTopHandler(o.id);
+	     	}).attr("title","向上滑动").addClass("x-tabs-panel-mup");
+	     	header.css("height",o.height);
+	     	header.find("#"+o.id+"_sc").css({"height":header.height()-50,overflow:"hidden"});
+	     	tabs.css("background","");
+	     }
+	     $(allTab).each(function(){
+	    	 NewTab.createTabItem(o.id,this,"_flg");
+	     });
+	     if(hPos == "L" || hPos == "R"){
+	     	$("#"+o.id+"_ul").find(".x-tab-item-text").css("width","122");
+	     }
+	     if(o.alltab.length==0)return;
+	     var tab_ul =  $("#"+o.id+"_ul"),
+	     activeTab = tab_ul.find("#"+o.active+"_hd")[0] || tab_ul.find("li:contains("+o.active+")")[0] || tab_ul.find("li").not(".x-tab-item-li-hide").not(".x-tab-item-li-disabled")[0]
+	     ,activeTab=$(activeTab);
+		 this.tabLoad(o.id,activeTab,null,true);
+		 eval(activeTab.data("Clk"));
      },
      /* 给一个tab对象的头部添加右键菜单 ，参数【tabs的id，tab头部分的li节点对象】 */
      addContextMenu : function(tabs,li){
