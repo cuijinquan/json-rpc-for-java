@@ -240,7 +240,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
      }).load(function(){
         var  n = new Date().getTime();
         "undefined" == typeof top.g_nPgCntTm && (top.g_nPgCntTm = n);
-        "undefined" == typeof g_nJspTmCnt && (g_nJspTmCnt = 0);
+        if("undefined" != typeof g_nJspTmCnt)
         top.status = "\u9875\u9762\u52a0\u8f7d\u7528\u65f6: " +  g_nJspTmCnt + "/" + ((n - top.g_nPgCntTm) / 1000) + "\u79d2";
      });
      

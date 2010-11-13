@@ -17,8 +17,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class JsonRpcObject implements IJsonRpcObject,Serializable
 {
 	private transient HttpServletRequest request = null;
-	private static final long serialVersionUID = -5362330504532103641L;
-	public static final Log log = LogFactory.getLog(JsonRpcObject.class);
+	public transient Log log = LogFactory.getLog(JsonRpcObject.class);
    
 	public JsonRpcObject(){}
 
