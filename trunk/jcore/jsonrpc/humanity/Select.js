@@ -91,8 +91,9 @@
      else if(descObj && inputObj)
         inputObj.value = descObj.value = s;
       if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "";
-     if(e)this.preventDefault(e), this.stopPropagation(e);
-     return this;
+     if(e)this.preventDefault(e), this.stopPropagation(e);<%if(Const.noLockPage){%>
+     if(0 == String(descObj.value).trim().length)descObj.value = "<%=Const.pleaseSelect%>";
+     <%}%>return this;
   },/* 通过value获得描述 */
   getDescByValue:function(s,o){
       o || (o = this.descObj.id);
@@ -321,8 +322,10 @@
                     _t.descObj.value = _t.inputObj.value = '';
               }
               if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "";
-              o["_blur_"]=true,_t.hiddenSelectDiv();
-              window.bBoBq = false;
+              o["_blur_"]=true,_t.hiddenSelectDiv();<%
+              if(Const.noLockPage){
+                  %>if(0 == String(_t.descObj.value).trim().length)_t.descObj.value = "<%=Const.pleaseSelect%>";<%
+              }%>window.bBoBq = false;
            });
     }
     _t.updata(oE.value);
