@@ -83,6 +83,7 @@
 	{
 	   this.xuiSlctMY.style.display = "none";
 	   this.dpIpt.focus();
+	   window.bBoBq=false;
 	}, /* 初始化要显示的日期div */
 	initDivHtml:function()
 	{
