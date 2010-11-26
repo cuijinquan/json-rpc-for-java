@@ -244,7 +244,14 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
      
       if(-1 == String(window.alert).indexOf("g_fcsfld"))
       {
-      window.alt = window.alert;
+      window._alt = window.alert;
+      window.alt=function(){
+      	var msgs = top["g_allMsg"] || [],s = arguments[0];
+      	msgs.push({msg:s,now:new Date()});
+      	top["g_allMsg"] = msgs;
+      	hisMsgTip();
+      	return _alt(s);
+      };
       window.cfm = window.confirm;
       window.alert = function(o)
       {
