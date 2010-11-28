@@ -56,6 +56,7 @@
      if(bDisp)
         b = window['slctIptData']["S" + oE.id]["displayFields"], bDisp = !b;
     !bDisp && (b = b.split(/[,;\|\/]/));
+    if(!a ||!a.length || 0 == a.length)return "";
     for(i = 0; i < a.length; i++)
     {
       o = a[i];
@@ -329,14 +330,23 @@
            });
     }
     _t.updata(oE.value);
-    o.innerHTML = _t.getSelectDataStr(oE, w); 
-    if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"] = 0);
-    var nTm = new Date().getTime();
+     <%if(Const.noLockPage){%>if(o.innerHTML=_t.getSelectDataStr(oE,w)){<%}%>
+    if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"]=0);
+    var nTm=new Date().getTime();
     window.hdAll.start();
     _t.show();
+    _t.fnResize();/*高度计算*/<%if(Const.noLockPage){%>}<%}%>
     e && this.stopPropagation(e),this.preventDefault(e);
     });    
-  }, /* 隐藏图层的方法 */
+  },
+   fnResize:function(){<%
+  if(Const.noLockPage){
+  %>var oDiv = $("#_Xui_SelectDiv"), oT = $(oDiv.find("table")[0]), n;
+  if((n = oT.height()) < parseInt('<%=Const.slctHeight%>'))oDiv.height(n + 'px');
+  /*else oDiv.height('<%=Const.slctHeight%>');*/
+  <%
+  }
+  %>},,/* 隐藏图层的方法 */
   hiddenSelectDiv:function()
   {
     var _t = Select, o = _t.SelectDiv;
