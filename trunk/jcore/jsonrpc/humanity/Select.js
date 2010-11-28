@@ -346,7 +346,7 @@
   /*else oDiv.height('<%=Const.slctHeight%>');*/
   <%
   }
-  %>},,/* 隐藏图层的方法 */
+  %>},/* 隐藏图层的方法 */
   hiddenSelectDiv:function()
   {
     var _t = Select, o = _t.SelectDiv;
