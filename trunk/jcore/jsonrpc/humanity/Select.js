@@ -329,7 +329,7 @@
            });
     }
     _t.updata(oE.value);
-    o.innerHTML = _t.getSelectDataStr(oE, w);
+    o.innerHTML = _t.getSelectDataStr(oE, w); 
     if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"] = 0);
     var nTm = new Date().getTime();
     window.hdAll.start();
