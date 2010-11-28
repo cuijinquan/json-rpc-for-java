@@ -302,13 +302,13 @@
 		     "</div>"
 		     ], header=$(htmlCodeArr.join(""));
 	   		 header.addClass("x-tabs-panel");
-	   		 if(hPos == "T")tabs.prepend(header);else  tabs.append(header);
-	   		 $("#"+o.id+"_mRight").click(function(){
+	   		 if(hPos == "T")tabs.prepend(header);else  tabs.append(header);<%if(!Const.noLockPage){
+	   		 %>$("#"+o.id+"_mRight").click(function(){
 	   		 	NewTab.tabScrollRightHandler(o.id);
 	   		 }).attr("title","向右滑动").addClass("x-tabs-panel-mright");
 	   		 $("#"+o.id+"_mLeft").click(function(){
 	   		 	NewTab.tabScrollLeftHandler(o.id);
-	   		 }).attr("title","向左滑动").addClass("x-tabs-panel-mleft");
+	   		 }).attr("title","向左滑动").addClass("x-tabs-panel-mleft");<%}%>
 	     }else if(hPos == "L" || hPos == "R"){
 	     	header = [
 	     	"<div id='"+o.id+"_hdPanel'>",
