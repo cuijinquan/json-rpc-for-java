@@ -330,7 +330,8 @@
            });
     }
     _t.updata(oE.value);
-     <%if(Const.noLockPage){%>if(o.innerHTML=_t.getSelectDataStr(oE,w)){<%}%>
+     o.innerHTML=_t.getSelectDataStr(oE,w)
+     <%if(Const.noLockPage){%>if(o.innerHTML){<%}%>
     if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"]=0);
     var nTm=new Date().getTime();
     window.hdAll.start();
