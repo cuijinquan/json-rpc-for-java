@@ -79,9 +79,9 @@ function JsonRpcClient(url) {
 							return oTmp;
 						} else {
 							k = {"\r":"", "\n":"\\n", "\t":"\\t", "\b":"\\b", "\f":"\\f", "\"":"\\\""};
-							return "\"" + encodeURIComponent(oTmp || "").toString().replace(/([\r\n\t\b\f"])/gm, function (a, b) {
+							return "'" + encodeURIComponent(oTmp || "").toString().replace(/([\r\n\t\b\f"])/gm, function (a, b) {
 								return "\\" + k[b];
-							}) + "\"";
+							}) + "'";
 						}
 					}
 				}, o2json = function (oTmp1) {
