@@ -136,6 +136,7 @@ AjaxTab: function(tabId, szReqCode, url, data, destId,szCallBackFn){
 },
 fsubmit:function(n, oWin, bNLd)
 {
+    if("undefined" != typeof window.g_bSubmit && window.g_bSubmit)return alert("请不要重复提交");
     if(!bNLd)fnLoadsts(1);
     mkClctDt();
     if(!bNLd)
@@ -143,6 +144,7 @@ fsubmit:function(n, oWin, bNLd)
     	$(this).attr("disabled",true);
     	$(Base.p(this, "TABLE")).addClass("z-btn-dsb");
     });try{var o = window.event.srcElement;if(o.type == 'button')o.name.setValue(o.value);}catch(e){}
+    window.g_bSubmit = true;
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
 {
