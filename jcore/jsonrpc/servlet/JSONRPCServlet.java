@@ -374,8 +374,9 @@ public class JSONRPCServlet extends HttpServlet {
 			bInit = true;
 			OutputStream out = null;
 			HttpServletRequest r = (HttpServletRequest)request;
+			String s = java.net.URLDecoder.decode(request.getQueryString());
 			// 处理来自Flash的远程过程调用
-			if(null != r.getParameter("XT_MTRPC"))
+			if(null != r.getHeader("XT_MTRPC") || (null != s && -1 < s.indexOf("XT_MTRPC")))
 			{
 				flashRpc(r, (HttpServletResponse)response);
 				return;
@@ -423,7 +424,7 @@ public class JSONRPCServlet extends HttpServlet {
 			}
 			// 返回注册中的对象
 			else {
-				String s = brg.getRegObjsToString();
+				s = brg.getRegObjsToString();
 				// System.out.println(s);
 				bout = s.getBytes();
 			}
