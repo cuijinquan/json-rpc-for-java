@@ -2,29 +2,34 @@ package jcore.jsonrpc.servlet;
 
 import java.io.BufferedReader;
 import java.io.CharArrayWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import jcore.jsonrpc.common.Content;
+import jcore.jsonrpc.common.JSONArray;
+import jcore.jsonrpc.common.JSONObject;
 import jcore.jsonrpc.common.JSONRPCBridge;
 import jcore.jsonrpc.common.JsonRpcRegister;
 import jcore.jsonrpc.common.face.ISecureCheck;
 import jcore.jsonrpc.humanity.LoadJsObj;
 import jcore.jsonrpc.tools.Tools;
+import flex.messaging.io.SerializationContext;
+import flex.messaging.io.amf.Amf3Input;
+import flex.messaging.io.amf.Amf3Output;
 
 /*******************************************************************************
  * JSON-RPC对web的服务通道
@@ -32,8 +37,13 @@ import jcore.jsonrpc.tools.Tools;
  * @author 夏天
  */
 public class JSONRPCServlet extends HttpServlet {
-	private final static int buf_size = 4096;
-
+	private final static int buf_size = 1024;
+	
+	/**
+	 * 调试的标志
+	 */
+	private static boolean bDebug = false;
+	
 	private final static long serialVersionUID = 2;
 	private String charset = "UTF-8";
 
@@ -215,10 +225,127 @@ public class JSONRPCServlet extends HttpServlet {
 		config = null;
 	}
 
+	/**
+	 * 读取来自Flash的对象
+	 * @param request
+	 * @param context
+	 * @return
+	 */
+	public static Map readMapObject(ServletRequest request, SerializationContext context)
+	{
+		Amf3Input in = new Amf3Input(context);
+		InflaterInputStream stream =  null;
+		try{
+			stream = new InflaterInputStream(request.getInputStream());
+			in.setInputStream(stream);
+			Object o = in.readObject();
+			if(o instanceof Map)
+				return (Map)o;
+		}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				try
+				{
+					in.close();
+					if(null != stream)stream.close();
+				}catch(Exception e){e.printStackTrace();}
+			}
+		return null;
+	}
+	
+	/**
+	 * 输出压缩对象
+	 * @param response
+	 * @param context
+	 * @param o
+	 */
+	public static void writeObject(HttpServletResponse response, SerializationContext context, Object o)
+	{
+		Amf3Output out = new Amf3Output(context);
+		DeflaterOutputStream stream =  null;
+		try{
+			stream = new DeflaterOutputStream(response.getOutputStream());
+			out.setOutputStream(stream);
+			out.writeObject(o);
+			out.flush();
+			out.close();
+		}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				try
+				{
+					out.close();
+					if(null != stream)stream.close();
+				}catch(Exception e){e.printStackTrace();}
+			}
+	}
+	
+	private Object [] JSONArraytoObjects(JSONArray o)
+	{
+		ArrayList lst = o.getArrayList();
+		Object []os = new Object[lst.size()];
+		Map m = null;
+		for(int i = 0; i < os.length; i++)
+		{
+			Object o1 = lst.get(i);
+			if(o1 instanceof JSONObject)
+			{
+				o1 = ((JSONObject)o1).getHashMap();
+				m = (Map)o1;
+				if(null != m.get("methods") && m.get("methods") instanceof JSONArray)
+				{
+					m.put("methods", JSONArraytoObjects((JSONArray)m.get("methods")));
+				}
+			}
+			os[i] = o1;
+		}
+		return os;
+	}
+	
+	/**
+	 * 来自flash的Rpc
+	 * @param request
+	 * @param response
+	 */
+	public void flashRpc(HttpServletRequest request, HttpServletResponse response)
+	{
+		SerializationContext context = new SerializationContext();
+		HttpSession session = request.getSession(false);
+		if(null == session)return;
+		JSONRPCBridge brg = (JSONRPCBridge) session.getAttribute(Content.RegSessionJSONRPCName);
+		try
+		{
+			// 读取数据和调用过程
+			if("POST".equals(request.getMethod()))
+			{
+				Map m = readMapObject(request,context);
+//				if (bDebug)
+					System.out.println(m);
+			}
+			// 获取注册的服务
+			else if("GET".equals(request.getMethod()))
+			{
+				JSONObject o = new JSONObject(brg.getRegObjsToString());
+				Map m = new HashMap();
+				String key = "result";
+				Object []os = JSONArraytoObjects((JSONArray)o.get(key));				
+				m.put(key, os);
+				writeObject(response, context, m);
+				m = null;
+				o  = null;
+			}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			context = null;
+		}
+	}
 
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ClassCastException {
-		boolean bDebug = false;
 		// 安全处理
 		if (null != check && !check.secureCheck(request, response))
 			return;
@@ -246,6 +373,14 @@ public class JSONRPCServlet extends HttpServlet {
 //				System.out.println("无法加载免配置的类");
 			bInit = true;
 			OutputStream out = null;
+			HttpServletRequest r = (HttpServletRequest)request;
+			// 处理来自Flash的远程过程调用
+			if(null != r.getParameter("XT_MTRPC"))
+			{
+				flashRpc(r, (HttpServletResponse)response);
+				return;
+			}
+			
 			// String szGzip = request.getHeader("Accept-Encoding");
 			// if (null != szGzip && -1 < szGzip.indexOf("gzip")
 			// && (bGzip || "1".equals("JSONAccept-Encoding"))){

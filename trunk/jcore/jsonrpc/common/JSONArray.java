@@ -131,7 +131,7 @@ public class JSONArray {
      * Get the ArrayList which is holding the elements of the JSONArray.
      * @return      The ArrayList.
      */
-    ArrayList getArrayList() {
+    public ArrayList getArrayList() {
         return myArrayList;
     }
 
