@@ -44,7 +44,7 @@ fnSciv:function(c, a, b, n)
 {
 		if("string" == typeof c)
 		c = $("#" + c)[0], a = $("#" + a)[0];
-		if(0 == (c.scrollTop = a.offsetTop))
+		if(a && 0 == (c.scrollTop = a.offsetTop))
 		   c.scrollTop = $(a).position().top;
 		c.scrollTop = c.scrollTop;
 		if(!c.scrollTop)return;
