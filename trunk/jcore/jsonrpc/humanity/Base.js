@@ -248,10 +248,10 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
       {
       window._alt = window.alert;
       window.alt=function(){
-      	var msgs = top["g_allMsg"] || [],s = arguments[0];
+      	/*var msgs = top["g_allMsg"] || [],s = arguments[0];
       	msgs.push({msg:s,now:new Date()});
       	top["g_allMsg"] = msgs;
-      	hisMsgTip();
+      	hisMsgTip();*/
       	return _alt(s);
       };
       window.cfm = window.confirm;
