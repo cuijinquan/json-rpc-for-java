@@ -402,7 +402,10 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
              var s1, oI, szTp;
              if(s)
              {
-                 s1 = (oI = $(_t.getObj(s))).val();
+                 oI = $(_t.getObj(s));
+                 if("DIV" == oI.attr("nodeName"))
+                    oI = $(oI.find("input")[0]);
+                 s1 = oI.val();
                  if("checkbox" == (szTp = $(oI[0]).attr("type")) && !oI.attr("checked"))
                      s1 = null;
                  if("radio" == szTp)
@@ -435,6 +438,10 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                      fnT = null;
                  }
                  var oIpt = $(_t.getObj(s)), szNm = $(oIpt[0]).attr("nodeName");
+                 if("DIV" == szNm)
+                 {
+                    oIpt=$(oIpt.find("input")[0]),szNm=$(oIpt[0]).attr("nodeName")
+                 }
                  if("TEXTAREA" != szNm)
                  {
 	                 if(0 == oIpt.length || "INPUT" != szNm)
