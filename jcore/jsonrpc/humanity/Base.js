@@ -144,7 +144,7 @@ fsubmit:function(n, oWin, bNLd)
     	$(this).attr("disabled",true);
     	$(Base.p(this, "TABLE")).addClass("z-btn-dsb");
     });try{var o = window.event.srcElement;if(o.type == 'button')o.name.setValue(o.value);}catch(e){}
-    window.g_bSubmit = true;
+    window.g_bSubmit = !bNLd;
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
 {
