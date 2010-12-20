@@ -27,9 +27,9 @@ import jcore.jsonrpc.common.JsonRpcRegister;
 import jcore.jsonrpc.common.face.ISecureCheck;
 import jcore.jsonrpc.humanity.LoadJsObj;
 import jcore.jsonrpc.tools.Tools;
-import flex.messaging.io.SerializationContext;
-import flex.messaging.io.amf.Amf3Input;
-import flex.messaging.io.amf.Amf3Output;
+//import flex.messaging.io.SerializationContext;
+//import flex.messaging.io.amf.Amf3Input;
+//import flex.messaging.io.amf.Amf3Output;
 
 /*******************************************************************************
  * JSON-RPC对web的服务通道
@@ -225,125 +225,7 @@ public class JSONRPCServlet extends HttpServlet {
 		config = null;
 	}
 
-	/**
-	 * 读取来自Flash的对象
-	 * @param request
-	 * @param context
-	 * @return
-	 */
-	public static Map readMapObject(ServletRequest request, SerializationContext context)
-	{
-		Amf3Input in = new Amf3Input(context);
-		InflaterInputStream stream =  null;
-		try{
-			stream = new InflaterInputStream(request.getInputStream());
-			in.setInputStream(stream);
-			Object o = in.readObject();
-			if(o instanceof Map)
-				return (Map)o;
-		}catch(Exception e){
-				e.printStackTrace();
-			}finally{
-				try
-				{
-					in.close();
-					if(null != stream)stream.close();
-				}catch(Exception e){e.printStackTrace();}
-			}
-		return null;
-	}
 	
-	/**
-	 * 输出压缩对象
-	 * @param response
-	 * @param context
-	 * @param o
-	 */
-	public static void writeObject(HttpServletResponse response, SerializationContext context, Object o)
-	{
-		Amf3Output out = new Amf3Output(context);
-		DeflaterOutputStream stream =  null;
-		try{
-			stream = new DeflaterOutputStream(response.getOutputStream());
-			out.setOutputStream(stream);
-			out.writeObject(o);
-			out.flush();
-			out.close();
-		}catch(Exception e){
-				e.printStackTrace();
-			}finally{
-				try
-				{
-					out.close();
-					if(null != stream)stream.close();
-				}catch(Exception e){e.printStackTrace();}
-			}
-	}
-	
-	private Object [] JSONArraytoObjects(JSONArray o)
-	{
-		ArrayList lst = o.getArrayList();
-		Object []os = new Object[lst.size()];
-		Map m = null;
-		for(int i = 0; i < os.length; i++)
-		{
-			Object o1 = lst.get(i);
-			if(o1 instanceof JSONObject)
-			{
-				o1 = ((JSONObject)o1).getHashMap();
-				m = (Map)o1;
-				if(null != m.get("methods") && m.get("methods") instanceof JSONArray)
-				{
-					m.put("methods", JSONArraytoObjects((JSONArray)m.get("methods")));
-				}
-			}
-			os[i] = o1;
-		}
-		return os;
-	}
-	
-	/**
-	 * 来自flash的Rpc
-	 * @param request
-	 * @param response
-	 */
-	public void flashRpc(HttpServletRequest request, HttpServletResponse response)
-	{
-		SerializationContext context = new SerializationContext();
-		HttpSession session = request.getSession(false);
-		if(null == session)return;
-		JSONRPCBridge brg = (JSONRPCBridge) session.getAttribute(Content.RegSessionJSONRPCName);
-		try
-		{
-			// 读取数据和调用过程
-			if("POST".equals(request.getMethod()))
-			{
-				Map m = readMapObject(request,context);
-//				if (bDebug)
-					System.out.println(m);
-			}
-			// 获取注册的服务
-			else if("GET".equals(request.getMethod()))
-			{
-				JSONObject o = new JSONObject(brg.getRegObjsToString());
-				Map m = new HashMap();
-				String key = "result";
-				Object []os = JSONArraytoObjects((JSONArray)o.get(key));				
-				m.put(key, os);
-				writeObject(response, context, m);
-				m = null;
-				o  = null;
-			}
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			context = null;
-		}
-	}
-
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ClassCastException {
 		// 安全处理
@@ -376,11 +258,11 @@ public class JSONRPCServlet extends HttpServlet {
 			HttpServletRequest r = (HttpServletRequest)request;
 			String s = java.net.URLDecoder.decode(request.getQueryString());
 			// 处理来自Flash的远程过程调用
-			if(null != r.getHeader("XT_MTRPC") || (null != s && -1 < s.indexOf("XT_MTRPC")))
-			{
-				flashRpc(r, (HttpServletResponse)response);
-				return;
-			}
+//			if(null != r.getHeader("XT_MTRPC") || (null != s && -1 < s.indexOf("XT_MTRPC")))
+//			{
+//				flashRpc(r, (HttpServletResponse)response);
+//				return;
+//			}
 			
 			// String szGzip = request.getHeader("Accept-Encoding");
 			// if (null != szGzip && -1 < szGzip.indexOf("gzip")
