@@ -487,7 +487,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
               window.g_fcsfld = o.attr("name") || o.attr("id");
               o.focus();
               if(szTitle = (o.attr("title") || arg[1] || o.parent("div").parent("div.<%=Const.xuiInputStyleClass%>").attr("title")))
-              o.attr("title",szTitle = szTitle.replace(/\n/gm,"<br>")), fnSetATip(o, szTitle);/* o.bt(szTitle.replace(/\n/gm,"<br>"), {positions: ['left', 'right', 'bottom','top'] }).btOn();*/
+              o.attr("title",szTitle = szTitle.replace(/\n/gm,"<br>"));
               });
            }),
            setReadOnly:(_t.setReadOnly = function(s, b){
