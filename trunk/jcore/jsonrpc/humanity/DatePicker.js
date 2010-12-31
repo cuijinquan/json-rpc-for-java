@@ -450,8 +450,7 @@
 	}, /*显示图层*/
 	showSelectDiv: function(e,o)
 	{
-		if(window.bBoBq)return;
-	   // window.bBoBq = true;
+		  /*if(window.bBoBq)return;// window.bBoBq = true;*/
 	    this.event = e = e || window.event;
 	    e && (this.stopPropagation(e),this.preventDefault(e));
 	    var _t = this;$(o).selection(0, o.value.length);
@@ -498,10 +497,9 @@
 	    return bRsr;
 	},
 	convertIptDate:function(oIpt){
-		var _t = oIpt,s = oIpt.value,l = s.length,_m,_d,
-		    _s = s.replace(new RegExp("[\/|\.|\-]","gm"),"-"),
-		    dArr = _s.split(" ")[0].split("-");
-		    if(null != dArr[0] && ""!= dArr[0]){
+		var _t=oIpt,s=oIpt.value,l=s.length,_m,_d,_s=s.replace(/[^\d\/\.\-]/g,'').replace(/[\/\.\-]/g,"-"),dArr=_s.split(" ")[0].split("-");
+    if(!_s)return oIpt.value='', false;
+    if(null !=dArr[0] && ""!=dArr[0]){
 		    	var _y = parseInt(dArr[0],10);
 		    	 if(_y <= 30 && _y > 9) _y = "20" + _y;
 		    	 else if(_y < 10) _y = "200"+_y;
