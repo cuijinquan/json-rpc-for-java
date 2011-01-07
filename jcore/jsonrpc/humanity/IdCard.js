@@ -1,5 +1,7 @@
 {
     check : function(input, sex, birthday, empty){
+      if(window.bBoBq)return true;
+      window.bBoBq = true;
       sex = $("input[name='" + sex + "']")[0];
       birthday = $("input[name='" + birthday + "']")[0];
       if("undefined" != typeof birthday && "INPUT" != birthday.nodeName)birthday = $(birthday).find(":input:first")[0];
@@ -8,7 +10,7 @@
           alt("身份证号码录入的数据不能为空" );
           setTimeout(function(){input.focus();input.select();},1);
           Base.addInvalid(input);
-	      return false;
+	      return window.bBoBq = false;
         }
       }
       input.value = Utils.trim(input.value).replace(/[^\dXx]/g,"");
@@ -16,19 +18,20 @@
       	 input.value = input.value.toUpperCase();
       if(true == empty && Utils.isStrEmpty(input.value)){
         Base.delInvalid(input);
-        return true;
+        return window.bBoBq = false,true;
       }  
       if (15 == Utils.trim(input.value).length)
         return IdCard.check15(input, sex, birthday);
       else if (18 == Utils.trim(input.value).length){
-        return IdCard.check18(input, sex, birthday);
+        return window.bBoBq = false,IdCard.check18(input, sex, birthday);
       } else {
         alt("身份证号码长度错误！");
         setTimeout(function(){input.focus();input.select();},1);
         Base.addInvalid(input);
-        return false;
+        return window.bBoBq = false;
       } 
       Base.delInvalid(input);
+      window.bBoBq = false;
       return true;
     },
     
