@@ -2,31 +2,27 @@
     executed:false,
     check : function(o){
            var o = arguments[0];
-           var reg = /^[1-9]\d{5}$/;
-           o.reg = eval(reg + ";");
-           o = $(o);
-           if(!o.attr("_blr"))
-           {
-              o.attr("_blr", true);
-              o.blur(this.sz_onblur.bind(this));
-           }
+           o.reg = /^[1-9]\d{5}$/;
     },    
     sz_onblur : function(evt){
+      if(window.bBoBq)return true;window.bBoBq = true;
       var e = (evt || event || window.event),o = e.srcElement || e.target;
       o.value = o.value.trim();
       if(0 == o.value.length){
         Base.delInvalid(o);
-      	return true;
+      	return window.bBoBq = false,true;
       }
       if (!o.reg.test(o.value)){
       	Base.addInvalid(o);
       	o = $(o);
       	window.g_fcsfld = o.attr("name") || o.attr("id");
         alt("输入的邮政编码无效，请检查并改正");
-        o.select();
-        return false;
+        setTimeout(function(){o.focus();
+        o.select();},1);
+        return window.bBoBq = false;
       }else{
       	Base.delInvalid(o);
+      	window.bBoBq = false;
       	return true;
       }
     },
