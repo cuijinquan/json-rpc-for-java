@@ -19,10 +19,17 @@
 	       
           if(1 < oSlct.length)
            {
-             for(i = oSlct.length - 2; 0 <= --i; )
-               $(oSlct[i]).removeClass("x-tree-selected");
-              oSlct = oSlct[oSlct.length - 1];
-              XuiTree.curTree.select(oSlct, null);
+             /*只去除没有值的节点的状态*/
+             var xxx = -1, kk;
+             o.find(".x-tree-selected").each(function(){
+               xxx++;
+               if(-1 == this.innerHTML.indexOf(oI[0].nextSibling.value))
+                 $(this).removeClass("x-tree-selected");
+               else kk = xxx;
+             });
+             /* 必须模拟点击，设置最后的点击状态 */
+              oSlct=oSlct[kk];XuiTree.curTree.select(oSlct,null,null);
+
               Base.fnSciv($("#" + id)[0], oSlct);
            }
        }).keydown(function(e)

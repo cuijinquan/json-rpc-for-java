@@ -318,7 +318,7 @@
            if(this.tree.bRmOld)
            $.cookie(this.tree.id, o.attr('id') + ',' + o[0].innerText);
            
-           if(this.tree.bRmOld || bClick)/* 点击 */
+           if(this.tree.bRmOld || bClick)/* 模拟点击，与选择状态无关 */
            {
                  var key = $("#" + this.tree.id).find(XuiTree.slctCls);
 		         o = key.find("a");
