@@ -32,7 +32,7 @@
     }
     if(this.data && 0 == this.data.length)this.data = null;
     var oTmp09 = this.getSlctObj(szId);
-    return (this.data || oTmp09["collection"] || [])
+    return (oTmp09["collection"] || this.data || [])
   }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
   {
