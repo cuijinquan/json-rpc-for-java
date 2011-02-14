@@ -191,8 +191,10 @@
    	 if(null == obj.displayWidth)obj.displayWidth = obj.clientWidth;
    	 /*if(0 < this.getData(this.descObj.id).length) 没有数据也显示图层，表示是下拉只是没有数据 */
        this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
-         parseInt(obj.displayWidth, 10), 150);
-  },/* 使得中心fn的过程中不触发oninput */
+         parseInt(obj.displayWidth, 10), 150);<%
+  if(Const.noLockPage){
+  %>this.fnResize();<%}
+  %>},/* 使得中心fn的过程中不触发oninput */
 	fnNoInput:function(fn){
 	  var _t = this;
 	   window.bBoBq = true;fn();setTimeout(function(){window.bBoBq = false},13);
@@ -336,7 +338,7 @@
     var nTm=new Date().getTime();
     window.hdAll.start();
     _t.show();
-    _t.fnResize();/*高度计算*/<%if(Const.noLockPage){%>}<%}%>
+    /*高度计算*/<%if(Const.noLockPage){%>}<%}%>
     e && this.stopPropagation(e),this.preventDefault(e);
     });    
   },
