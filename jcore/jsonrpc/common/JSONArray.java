@@ -174,7 +174,7 @@ public class JSONArray {
             return ((Number) o).doubleValue();
         }
         if (o instanceof String) {
-            return new Double((String)o).doubleValue();
+            return Double.valueOf((String)o).doubleValue();
         }
         throw new NumberFormatException("JSONObject[" +
             index + "] is not a number.");
@@ -375,7 +375,7 @@ public class JSONArray {
                 return ((Number) o).doubleValue();
             }
             try {
-                return new Double((String)o).doubleValue();
+                return Double.valueOf((String)o).doubleValue();
             }
             catch (Exception e) {
             }
@@ -490,7 +490,7 @@ public class JSONArray {
      * @return this.
      */
     public JSONArray put(boolean value) {
-        put(new Boolean(value));
+        put(Boolean.toString(value));
         return this;
     }
 
@@ -502,7 +502,7 @@ public class JSONArray {
      * @return this.
      */
     public JSONArray put(double value) {
-        put(new Double(value));
+        put(Double.valueOf("" + value));
         return this;
     }
 
@@ -514,7 +514,7 @@ public class JSONArray {
      * @return this.
      */
     public JSONArray put(int value) {
-        put(new Integer(value));
+        put(Integer.valueOf("" + value));
         return this;
     }
 
@@ -542,7 +542,7 @@ public class JSONArray {
      * @return this.
      */
     public JSONArray put(int index, boolean value) {
-        put(index, new Boolean(value));
+        put(index, Boolean.valueOf(value));
         return this;
     }
 
@@ -557,7 +557,7 @@ public class JSONArray {
      * return this.
      */
     public JSONArray put(int index, double value) {
-        put(index, new Double(value));
+        put(index, Double.valueOf("" + value));
         return this;
     }
 
@@ -572,7 +572,7 @@ public class JSONArray {
      * @return this.
      */
     public JSONArray put(int index, int value) {
-        put(index, new Integer(value));
+        put(index, Integer.valueOf("" + value));
         return this;
     }
 

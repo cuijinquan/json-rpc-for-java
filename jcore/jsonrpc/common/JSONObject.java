@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import jcore.jsonrpc.tools.Tools;
-
 /***
  * 异步对象的转换
  * @author just
@@ -236,7 +234,7 @@ public class JSONObject {
             return ((Number)o).doubleValue();
         }
         if (o instanceof String) {
-            return new Double((String)o).doubleValue();
+            return Double.valueOf((String)o).doubleValue();
         }
         throw new NumberFormatException("JSONObject[" +
             quote(key) + "] is not a number.");
@@ -510,7 +508,7 @@ public class JSONObject {
                 return ((Number)o).doubleValue();
             }
             try {
-                return new Double((String)o).doubleValue();
+                return Double.valueOf((String)o).doubleValue();
             }
             catch (Exception e) {
             }
@@ -630,7 +628,7 @@ public class JSONObject {
      * @return this.
      */
     public JSONObject put(String key, boolean value) {
-        put(key, new Boolean(value));
+        put(key, Boolean.valueOf(value));
         return this;
     }
 
@@ -643,7 +641,7 @@ public class JSONObject {
      * @return this.
      */
     public JSONObject put(String key, double value) {
-        put(key, new Double(value));
+        put(key, Double.valueOf("" + value));
         return this;
     }
 
@@ -656,7 +654,7 @@ public class JSONObject {
      * @return this.
      */
     public JSONObject put(String key, int value) {
-        put(key, new Integer(value));
+        put(key, Integer.valueOf("" + value));
         return this;
     }
 
