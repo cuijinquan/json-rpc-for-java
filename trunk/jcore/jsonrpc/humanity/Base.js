@@ -350,7 +350,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                    ;// $(oCur).click();
                else if("INPUT" == szNdNm || "SELECT" == szNdNm)
                {
-               	  $(oCur).blur();
+               	  /*$(oCur).blur(); 加后会导致自定义onchange后无法保持焦点在当前输入框内的问题 */
                   for(i = 0; i <  a.length; i++)
                    {
                       if(bStart)
