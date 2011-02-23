@@ -491,7 +491,7 @@
 	    {
 		    return _t.hidden(), true;
 	    }, 333);
-	    if(oIpt.value != ""){_t.convertIptDate(oIpt);bRsr = _t.validateIptDateTime(oIpt)}else{ Base.delInvalid(oIpt);HidTip();}
+	    if(oIpt.value != "" && oIpt.readOnly != true){_t.convertIptDate(oIpt);bRsr = _t.validateIptDateTime(oIpt)}else{ Base.delInvalid(oIpt);HidTip();}
 	    });
 	    try{if(!bRsr)oIpt.focus();}catch(e){}
 	    return bRsr;
