@@ -270,7 +270,7 @@
 	   		.append($("<iframe frameborder='no' border='0' marginwidth='0' marginheight='0'/>")
 	   		.attr("src",o.url).addClass("x-tab-iten-body-iframe")
 	   		.attr("id",iframe_id)
-	   		.height(ol.height()));
+	   		.height("100%"));/*ol.height()*/
 	   	}
 	   	if(url.trim() != "" || reqCode.trim() != "")window["g"+tabs+"_"+o.id+"_Refresh"]="Refresh";
 	   	if(mode.toUpperCase()!="D"){
