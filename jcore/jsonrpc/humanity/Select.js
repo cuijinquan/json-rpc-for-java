@@ -9,7 +9,7 @@
   upi4ajx:function(){
      if(Select.descObj && Select.descObj.id)this.descObj = Select.descObj = document.getElementById(Select.descObj.id);
      if(this.descObj && this.descObj.id)this.descObj = Select.descObj = document.getElementById(this.descObj.id);
-     this.inputObj = Select.inputObj = $(this.descObj).next()[0];
+     this.inputObj = Select.inputObj = $(this.descObj).next()[0];/* 下一行是2011-3-8新增加的，尝试解决getData最后一行的问题，未测试 */
   },
   getSlctObj:function(szId)
   {
@@ -32,7 +32,9 @@
     }
     if(this.data && 0 == this.data.length)this.data = null;
     var oTmp09 = this.getSlctObj(szId);
-    return (oTmp09["collection"] || this.data || [])
+    /* oTmp09["collection"]优先，则异步下拉列表没有问题，否则中文首字母定位存在问题 */
+    if(fnSetSelectAjax[szId.substring(1)])return (oTmp09["collection"] || this.data || []);
+    return (this.data || oTmp09["collection"] || [])
   }, /* 高亮显示指定的行 */
   lightRow:function(n,flg,e)
   {

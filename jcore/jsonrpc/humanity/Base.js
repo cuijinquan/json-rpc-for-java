@@ -601,7 +601,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
                       window.g_fcsfld = oCur.attr("name") || oCur.attr("id");
-                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text().replace(/^\s*\**/, "") + " 不能为空");
+                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("label").text().replace(/^\s*\**/, "") + " 不能为空");
                       return false;
                    }
                 }
@@ -618,7 +618,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
                       g_fcsfld = oCur.attr("name") || oCur.attr("id");
-                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("nobr").text().replace(/^\s*\**/, "") + "  不能为空");
+                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("label").text().replace(/^\s*\**/, "") + "  不能为空");
                       bR = false;
                       throw "stop";
                    }
