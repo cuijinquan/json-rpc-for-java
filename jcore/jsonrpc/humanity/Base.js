@@ -95,8 +95,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,ca
         {
            script = s.substr(n);
            script = script.substr(0, script.lastIndexOf("</" + "script>"));
-           script = script.replace(/^\s*<script[^>]*>\s*<!--\/\/--><!\[CDATA\[\/\/><!--/, "");
-           script = script.replace(/\/\/--><!\]\]>\s*$/, "");
+           script=script.replace(/^\s*<script[^>]*>\s*/,"");
+           script=script.replace(/\s*$/,"");
            s = s.substr(0, n);
         }
          if(!szDesId)
