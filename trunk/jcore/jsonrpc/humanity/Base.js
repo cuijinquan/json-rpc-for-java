@@ -530,27 +530,33 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
               if(0 == o.size())o = $("button[name=" + s + "]");
               o.btn().disable();
            }),
-           addRedStar:(_t.addRedStar = function(s)
+           addRedStar:(_t.addRedStar=function(s)
            {
-             var o = this;
+             var o=this;
              if(s)
              {
-                var i,a = s.split(/[,;\|\s]/);
-                for(i = 0; i < a.length; i++)
+                var i,a=s.split(/[,;\|\s]/);
+                for(i=0; i < a.length; i++)
                 {
-                  o = _t.getInputDiv(a[i]);
-                  if(0 == o.find("b").length)
-                  _t.insertHtml(o.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
-                  o.find("input:first").attr("isRequired", "true");
+                  o=_t.getInputDiv(a[i]);
+                  if(0==o.find("b").length)
+                  {
+                      var o34 = o.find("nobr");
+                      if(0 == o34.size())o34 = o.find("label");
+                        _t.insertHtml(o34[0],"AfterBegin","<b class=\"redStar\">*</b>");
+                  }
+                  o.find("input:first").attr("isRequired","true");
                   if(o.find("input")[1])o.find("input").eq(1).attr("isRequired","true");
-                }
-             }
-             else o.each(function()
+                }}else o.each(function()
              {
-                var o1 = _t.getInputDiv(this);
-                if(0 == o1.find("b").length)
-                _t.insertHtml(o1.find("nobr")[0], "AfterBegin", "<b class=\"redStar\">*</b>");
-                o1.find("input:first").attr("isRequired", "true");
+                var o1=_t.getInputDiv(this);
+                if(0==o1.find("b").length)
+                {
+                   var o34 = o1.find("nobr");
+                   if(0 == o34.size())o34 = o1.find("label");
+                   _t.insertHtml(o34[0],"AfterBegin","<b class=\"redStar\">*</b>");
+                }
+                o1.find("input:first").attr("isRequired","true");
                 if(o1.find("input")[1])o1.find("input").eq(1).attr("isRequired","true");
              });
            }),
