@@ -322,7 +322,7 @@
            }
            _t.hidden();
            _t.bIE ? (e.keyCode = 9) : '';
-           _t.setValueD();
+          /* _t.setValueD();*/
            break;
         case 38: /* 上 */
            n = -7;
