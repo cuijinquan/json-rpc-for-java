@@ -451,13 +451,13 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 	                   else oFom = $("body")[0];
 	                   Base.insertHtml(oFom, "beforeend", "<input type='hidden' value=\"" + s2.replace(/"/gm,"&#34;").replace(/>/gm,"&gt;").replace(/</gm,"&lt;") + "\" name=\"" + s + "\"  id=\"" + s + "\">");
 	                  }
-	                 else{
+	                 else{/*下拉列表、下拉树的情况*/
 	                     if("hidden" == oIpt.attr("type"))
 	                     {
 	                         oIpt.val(s2);
 		                     oIpt = Base.getInputDiv(oIpt)[0];
 		                     oIpt = $(Base.A(oIpt.getElementsByTagName("INPUT")));
-		                     if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("Select"))
+		                     if(2 == oIpt.length && -1 < String($(oIpt[0]).attr("onkeydown")).indexOf("sok(this)"))
 		                        $(oIpt[0]).val(Select.getDescByValue(s2, oIpt[0]));
 	                     }
 	                     else if("checkbox" == oIpt.attr("type"))oIpt.attr("checked", true),(oIpt.attr("name") + "__").setValue(s2);
