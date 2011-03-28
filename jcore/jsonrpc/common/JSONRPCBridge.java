@@ -239,7 +239,7 @@ public class JSONRPCBridge implements Serializable{
 			{
 				request.setAttribute("allPms",  new JSONObject(oJson.getString("allPms")).getHashMap());
 			}catch(Exception e10){
-				e10.printStackTrace();
+				// e10.printStackTrace();
 			}
 			String szName = oJson.getString("_id_"), 
 			       szMeshod = oJson.getString("method");
