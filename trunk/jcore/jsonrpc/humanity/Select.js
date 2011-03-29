@@ -276,7 +276,6 @@
     e = e || window.event;
     return this.RunOne(function(){
        _t.data = [];
-       oE.select && oE.select();
       if(0 == _t.getData(oE.id).length)$('#' + Select.xfcSlctDivId).hide();
       if(oE.readOnly || oE.disabled || (this.isShow(e, obj, oE) && b3))return false;
       var o = this.SelectDiv, szId, oTable = (this.oFrom = this.p(oE,"TABLE")),
