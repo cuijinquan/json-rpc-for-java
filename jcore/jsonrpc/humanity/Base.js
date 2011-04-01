@@ -952,7 +952,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
       if(fn(_t))window.clearInterval(nTime);
     }, n || 13);
     return nTime;
-  },clearTimer:function(n){n && window.clearInterval(n)},
+  },clearTimer:function(n){n && window.clearInterval(n)/* && window.clearTimeout(n)*/},
    addInvalid: function(o)
    {
       this.addClass("x-form-invalid", o);

@@ -39,6 +39,7 @@
   lightRow:function(n,flg,e)
   {
     var o = this.SelectDiv, tb = this.getByTagName("table",o), b = 0 < tb.length && 0 < tb[0].rows.length, r = b ? tb[0].rows : null;
+    /*o["tmer"] && this.clearTimer(o["tmer"]);*/
     if(!b || !o)return  false;
     if(r.length > o["_lstNum"])
        r[0 <= o["_lstNum"]? o["_lstNum"] : 0].className='slcthand';
@@ -53,7 +54,7 @@
   },
   getSelectDataStr:function(oE, w, data)
   {
-    var _t = Select, a = data || _t.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=\"0\" border=\"0\" class=\"xuiTable\" cellSpacing=\"0\" style=\"border:0px;width:100%;margin:0px;padding:0px;position: relative;left:0;top:0\">"], i, j, o, k,
+    var _t = Select, a = data || _t.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=0 border=0 class=xuiTable cellSpacing=0 style=\"border:0px;width:100%;margin:0px;padding:0px;position: relative;left:0;top:0\">"], i, j, o, k,
         b = _t.getSlctObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
      if(bDisp)
         b = window['slctIptData']["S" + oE.id]["displayFields"], bDisp = !b;
@@ -62,27 +63,35 @@
     for(i = 0; i < a.length; i++)
     {
       o = a[i];
-      a1.push("<tr class=\"cursor\"");<%if(Const.noLockPage){%>
+      a1.push("<tr data='" + $.toJSON(o) + "' class=cursor");<%if(Const.noLockPage){%>
       if(1 == i % 2)a1.push(" style=\"background-color:<%=Const.slctRowBgColor2%>\"");
       <%}%>a1.push(" onclick=\"Select.onSelect(event, this)\" onmouseover=\"return Select.lightRow(this.rowIndex,true,event)\"\">");
+      var szK1 = String((_t.descObj || oE || {value:''}).value || "").trim().replace(/([()\|\$\.\\])/g,"\\\1"), reg9 = new RegExp("(" + szK1 + ")", "gmi"), fnTrpc = function(s89){
+         if(0 == szK1.length)return s89;
+         s89 || (s89 = "");
+         return s89.replace(reg9, "<b>$1</b>");      
+      };
       if(bDisp)
       {
           for(k in o)
            if(key != k && "_id" != k && "function" != typeof o[k])
-             a1.push("<td><nobr>"), a1.push(o[k]), a1.push(" </nobr></td>");
+           {
+             a1.push("<td><nobr>"), a1.push(fnTrpc(o[k])), a1.push(" </nobr></td>");
+           }
       }
       else if(o)
       {
         for(j = 0; j < b.length; j++)
-          if(key != b[j] && "_id" != b[j])a1.push("<td><nobr>"), a1.push(o[b[j]]), a1.push(" </nobr></td>");
+          if(key != b[j] && "_id" != b[j])
+          {
+             a1.push("<td><nobr>"), a1.push(fnTrpc(o[b[j]])), a1.push(" </nobr></td>");
+          }
       }
       a1.push("</tr>");
     }
     a1.push("</table></div>");
     var s = a1.join("");
     _t.bHvRplc = false;
-    if(0 < _t.descObj.value.length)
-        s = s.replace(new RegExp("(>[^><]*)(" + _t.descObj.value.replace(/([()\|\$\.\\])/g, "\\\1") + ")([^><]*<)", "gm"), (_t.bHvRplc = true, "$1<b>$2</b>$3"));
     return s;
   }, /* 给对象设置value */
   setValueX:function(s, n,e)
@@ -138,11 +147,14 @@
   onSelect:function(e, oTr)
   {
      Select.upi4ajx();
-     var o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
+     var rData = null, o = this.SelectDiv, id = o.id, oIpt = o[id] && this.getDom(o[id]) || null,a,
          n = "number" == typeof oTr.rowIndex ? oTr.rowIndex : oTr, oT = this.getSlctObj(oIpt.id) || {},
          dt = this.getData(oIpt.id) || [], cbk = oT['selectCallBack'];
+     try{rData = eval("1," + oTr.data);}catch(e){}
      if(0 <= n && dt.length > n)
      {
+       if(rData)
+       for(var kr in rData)dt[n][kr] = rData[kr];
        /* 处理选择 */
        if(oT['valueField'])
        { /* value处理 */
@@ -348,7 +360,6 @@
   if(Const.noLockPage){
   %>var oDiv = $("#_Xui_SelectDiv"), oT = $(oDiv.find("table")[0]), n;
   if((n = oT.height()) < parseInt('<%=Const.slctHeight%>'))oDiv.height(n + 'px');
-  /*else oDiv.height('<%=Const.slctHeight%>');*/
   <%
   }
   %>},/* 隐藏图层的方法 */
