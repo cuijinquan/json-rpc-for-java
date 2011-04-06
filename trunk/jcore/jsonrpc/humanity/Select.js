@@ -54,7 +54,7 @@
   },
   getSelectDataStr:function(oE, w, data)
   {
-    var _t = Select, a = data || _t.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=0 border=0 class=xuiTable cellSpacing=0 style=\"border:0px;width:100%;margin:0px;padding:0px;position: relative;left:0;top:0\">"], i, j, o, k,
+    var _t = Select, a = data || _t.getData(oE.id), a1 = ["<div class=\"cursor selectInput_FloatDiv\"><table cellPadding=0 border=0 class=xuiTable cellSpacing=0 style=\"border:0;width:100%;margin:0;padding:0;\">"], i, j, o, k,
         b = _t.getSlctObj(oE.id)["displayFields"], bDisp = !b, key = "_id_";
      if(bDisp)
         b = window['slctIptData']["S" + oE.id]["displayFields"], bDisp = !b;
@@ -360,7 +360,7 @@
   if(Const.noLockPage){
   %>var oDiv = $("#_Xui_SelectDiv"), oT = $(oDiv.find("table")[0]), n;
   if((n = oT.height()) < parseInt('<%=Const.slctHeight%>'))oDiv.height(n + 'px');
-  <%
+  oDiv.width($(oDiv.find("table")[0]).width());<%
   }
   %>},/* 隐藏图层的方法 */
   hiddenSelectDiv:function()
