@@ -521,14 +521,13 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
  			 var o = this;
              if(s)o = $("#" + s);
              if(0 == o.size())o = $("button[name=" + s + "]");
-             o.btn().enable();
-              
+             o.removeAttr('disabled');
            }),
            disabledButton:(_t.disabledButton = function(s){
               var o = this;
               if(s)o = $("#" + s);
               if(0 == o.size())o = $("button[name=" + s + "]");
-              o.btn().disable();
+              o.attr('disabled',"true");
            }),
            addRedStar:(_t.addRedStar=function(s)
            {
