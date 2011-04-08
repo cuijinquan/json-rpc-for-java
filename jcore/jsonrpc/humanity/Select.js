@@ -111,7 +111,10 @@
       o || (o = this.descObj.id);
       if("string" != typeof o)o = o.id;
       if("undefined" == typeof window['slctIptData'])return "";
-      var obj = window['slctIptData'][o],a = obj.valueField.split(/[,;\|\s]/), d = a[a.length - 1], i, v = a[0];
+      var obj=window['slctIptData'][o];
+      /* 服务器转码，没有valueField所以直接返回 */
+      if(!obj)return $("#" + o).parent().find(":input")[1].value;
+      var a=obj.valueField.split(/[,;\|\s]/),d=a[a.length - 1],i,v=a[0];
       a = obj.collection;
       if(a)
       for(i = a.length; 0 <= --i;)
