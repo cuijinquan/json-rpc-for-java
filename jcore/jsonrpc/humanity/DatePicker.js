@@ -497,9 +497,11 @@
 	    return bRsr;
 	},
 	convertIptDate:function(oIpt){
-		var _t=oIpt,s=oIpt.value,l=s.length,_m,_d,_s=s.replace(/[^\d\/\.\-]/g,'').replace(/[\/\.\-]/g,"-"),dArr=_s.split(" ")[0].split("-");
-    if(!_s)return oIpt.value='', false;
-    if(null !=dArr[0] && ""!=dArr[0]){
+			var _t = oIpt,s = oIpt.value,l = s.length,_m,_d,
+		    _s = s.replace(new RegExp("[\/|\.|\-]","gm"),"-"),
+		    __s = s.replace(new RegExp("[\/|\.|\-]","gm"),""),
+		    dArr = _s.split(" ")[0].split("-");
+		    if(null != dArr[0] && ""!= dArr[0]){
 		    	var _y = parseInt(dArr[0],10);
 		    	 if(_y <= 30 && _y > 9) _y = "20" + _y;
 		    	 else if(_y < 10) _y = "200"+_y;
@@ -519,6 +521,11 @@
 		    	dArr[2] = _d;
 		    }
 		    else{dArr[2] = "01"};
+		    if(__s.length == 8){
+		    	dArr[0] = __s.substr(0,4);
+		    	dArr[1] = __s.substr(4,2);
+		    	dArr[2] = __s.substr(6,2);
+		    }
 		    dArr.splice(3, dArr.length-3);
 		    _d = dArr.join("-");
 		    //处理时分秒
