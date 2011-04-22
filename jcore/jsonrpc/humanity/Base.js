@@ -623,9 +623,10 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                    {
                       if("hidden" == oCur.attr("type"))oCur = oCur.prev();
                       g_fcsfld = oCur.attr("name") || oCur.attr("id");
-                      alert($(_t.p(oCur[0], "DIV")).parent("div").find("label").text().replace(/^\s*\**/, "") + "  不能为空");
+                      var oDv9 = $(_t.p(oCur[0], "DIV")).parent("div");
+                      if('none' != oDv9.css("display")){alert(oDv9.find("label").text().replace(/^\s*\**/, "") + "  不能为空");
                       bR = false;
-                      throw "stop";
+                      throw "stop";}
                    }
                  });
                }catch(e){}
