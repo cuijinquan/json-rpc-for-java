@@ -9,7 +9,7 @@
 	}
 }, radioOut:function (o) {
 	var radio = this.getByTagName("input", o)[0];
-	if (radio.readOnly || radio.disabled) {
+	if (radio && (radio.readOnly || radio.disabled)) {
 		return false;
 	}
 	if (-1 == o.className.indexOf("x-form-check-checked")) {
