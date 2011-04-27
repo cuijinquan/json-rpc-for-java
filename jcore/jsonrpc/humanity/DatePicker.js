@@ -452,10 +452,11 @@
 	{
 		  /*if(window.bBoBq)return;// window.bBoBq = true;*/
 	    this.event = e = e || window.event;
-	    e && (this.stopPropagation(e),this.preventDefault(e));
-	    var _t = this;$(o).selection(0, o.value.length);
+	    var _t = this;
 	      o = _t.dpIpt = (o || _t.FromEventObj(e))
 	    if(o.readOnly || o.disabled || "undefined" == typeof o.value)return false;
+	    e && (this.stopPropagation(e),this.preventDefault(e));
+	    $(o).selection(0, o.value.length);
 		  var bFirst = !_t.XuiDatePicker, s = (o['value'] || "").trim(),
 		      oDiv = _t.XuiDatePicker || (_t.XuiDatePicker = _t.createDiv({className: "x-menu x-menu-plain x-date-menu",id:"_Xui_DatePicker"}));
 		 _t.fnNoInput(function(){
