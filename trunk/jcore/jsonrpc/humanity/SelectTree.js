@@ -9,6 +9,7 @@
        oI.focus(function()
        {
            window.hdAll.start();
+           if(oI.readOnly || oI.disabled)return false;
            var oSlct = $(XuiTree.slctCls), i,
                  oPos = oI.position();
 	       o.css({left:oPos.left + "px", top: (oPos.top + oI.height()) + "px"});
@@ -35,6 +36,7 @@
        }).keydown(function(e)
        {
            if(9 == e.which)return o.hide(),true;
+           if(oI.readOnly || oI.disabled)return false;
            o.show();
            XuiTree.curTree = XuiTree.XuiTreeCc[id];
            o.keydown(e);
