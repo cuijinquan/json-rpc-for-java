@@ -1,4 +1,4 @@
-﻿{ data:null,
+{ data:null,
   SelectDiv:false, /* 下拉列表图层 */
   inputObj:null,   /* 存放value值输入对象 */
   descObj:null,    /* 存放描述的输入对象 */
