@@ -1,5 +1,5 @@
-﻿{
-    dpIpt: null, /* 输入对象 */
+{
+    dpIpt: null, /* 输入对象*/
     XuiDatePicker: null,  /* 显示日期的图层 */
     xuiDPRows: null, /* body */
     xuiCurYear:null, xuiSlctMY:null,
@@ -624,5 +624,4 @@
 		this.stopPropagation(e),this.preventDefault(e)
 		return false;
 	}
-	
 }
