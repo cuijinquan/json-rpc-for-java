@@ -99,7 +99,8 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,ca
            script=script.replace(/\s*$/,"");
            s = s.substr(0, n);
         }
-         if(!szDesId)
+        s = s.replace(/(^\s*)|(\s*$)/gmi,'');
+        if(!szDesId && s)
         {
           if(-1 < (n = s.indexOf(">")))
           {
@@ -111,10 +112,11 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,ca
                }else szStyle = ""; 
           }
           s = s.replace(/^\s*<div[^>]*>/mi, "");
-          s = s.substr(0, s.lastIndexOf("</div>"));
+          var nT = s.lastIndexOf("</div>");
+          if(0 < nT)s = s.substr(0, nT);
         }
         if ("undefined" == typeof Base.PopMsgWin.obj || 3 != Base.PopMsgWin.obj.type ){
-        if(o && "#document" != o.attr("nodeName") && s){Base.clearChldNd(o[0]).innerHTML = s;if(szStyle)o.attr('style', szStyle);}
+        if(s && o && "#document" != o.attr("nodeName") && s){Base.clearChldNd(o[0]).innerHTML = s;if(szStyle)o.attr('style', szStyle);}
 		if($.isFunction(callBackFn))callBackFn();
         }
         try{
