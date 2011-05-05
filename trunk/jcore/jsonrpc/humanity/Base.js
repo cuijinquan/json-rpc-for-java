@@ -669,8 +669,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
          try{document.execCommand("BackgroundImageCache", false, true)}catch(e){}
       }
       _t.trim = String.prototype.trim = function(s){return (s||this.toString()).replace(/(^\s*)|(\s*$)/gm, "")};
-      String.prototype.swf = function(){
-         var id = this + "S";
+      window.swf = String.prototype.swf = function(s){
+         var id = (s || this) + "S";
          return -1 != navigator.appName.indexOf("Microsoft") ? window[id] || document.getElementById(id): document[id];
       };
       Array.prototype.indexOf = function(f){
