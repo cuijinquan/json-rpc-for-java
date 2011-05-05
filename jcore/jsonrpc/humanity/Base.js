@@ -885,8 +885,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
         if(-1 == o.url.indexOf("?"))o.url += "?jsessionid=" + g_szJsessionid;
         else o.url += "&jsessionid=" + g_szJsessionid;
     }/* 防止缓存 */
-    if(-1 == o.url.indexOf("?"))o.url += "?tm=" + new Date().getTime();
-    else o.url += "&tm=" + new Date().getTime();
+    if(-1 == o.url.indexOf("?"))o.url += "?_ntm_=" + new Date().getTime();
+    else o.url += "&_ntm_=" + new Date().getTime();
     fnLoadsts(1);
     $.ajax({
     	cache:false,
