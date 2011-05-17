@@ -17,15 +17,24 @@
   }, setData:function(szId,a){this.getSlctObj("S" + szId)["collection"] = a;},
   getData:function(szId) /* 获取下拉列表数据 */
   {
-    var rst = this.getSlctObj(szId)["collection"], i, s, o, k, key = "_id";
+    var slcObj = this.getSlctObj(szId),rst = slcObj["collection"], i, s, o, k, key = "_id", aT;
     if(rst && 0 < rst.length && rst[0] && (!rst[0][key] || "" == rst[0][key].replace(/\d/g, "")))
     {
         for(i = 0; i < rst.length; i++)
         {
           s = [], o = rst[i];
-          for(k in o)
-             if(key != k)
+          if(slcObj.filterFields)
+          {
+             aT = String(slcObj.filterFields).split(/[,;\s]/);
+             for(k = 0; k < aT.length; k++)
+               if(key != aT[k])
+                s.push(o[aT[k]]);
+          }
+          else{
+            for(k in o)
+              if(key != k)
                 s.push(o[k]);
+          }
           if(0 < s.length)
           rst[i][key] = s.join(",").toLowerCase();
         }
