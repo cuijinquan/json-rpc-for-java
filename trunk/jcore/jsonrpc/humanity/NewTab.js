@@ -175,7 +175,7 @@
 		    else  
 		    	$("#"+id).find("ol:first").height(window["g_"+id+"_hgt"]);
 	    }
-	    try{if(!ld)$("#"+curTab_body).find(":input[type!=hidden]").eq(0).focus();}catch(e){}
+	    try{if(!ld){var _t = $("#"+curTab_body).find(":input[type!=hidden]").eq(0);if(_t.next(":input[type=hidden]")[0] ==null)_t.focus();}}catch(e){}
 	    window["g_active"+id]=curTab_body;
 	    (id+"_Act").setValue(curTab_body);
     },
