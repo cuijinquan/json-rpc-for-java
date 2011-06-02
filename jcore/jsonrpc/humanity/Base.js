@@ -1272,7 +1272,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 	   this.openWin(o, null);
 	},
     showDiv: function(o, oDiv, w, h, left)
-	{
+	{if(!o)return;
 	if(this.bIE)
 	{
 	  var nS = document.body.scrollHeight;
