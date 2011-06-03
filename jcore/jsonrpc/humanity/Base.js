@@ -200,6 +200,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
      /*setTimeout(function(){*/
      o = szCollectionId.swf();
      mkClctDt();
+      if(!o)return AjaxUpdateUi(szCollectionId,szReqCode,null,szData);
       if($.isFunction(argF))
       {
          window[s = szCollectionId + "DataChgCbk"] = argF;
