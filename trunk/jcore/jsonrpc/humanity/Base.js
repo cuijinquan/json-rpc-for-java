@@ -58,7 +58,7 @@ PopMsgWin:function(o)
 },/* 异步更新指定property或者id的对象，包括：输入对象、panel、grid */
 AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,callBackFn)
 {
-   mkClctDt();   
+//   mkClctDt();   
    var form, reqCode, a = arguments, cbk = a[a.length - 1], bHvCbk = "function" == typeof cbk;
    if(bHvCbk)
    {
@@ -199,8 +199,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
   $(document).ready(function(){
      /*setTimeout(function(){*/
      o = szCollectionId.swf();
-     mkClctDt();
       if(!o)return AjaxUpdateUi(szCollectionId,szReqCode,null,szData);
+      mkClctDt();
       if($.isFunction(argF))
       {
          window[s = szCollectionId + "DataChgCbk"] = argF;
@@ -396,9 +396,11 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
         window.getAllInput = _t.getAllInput;
         window.mkClctDt = function(){
                $("#_Xui_SelectDiv").hide();
-               var a = window.mkClct || [], i,o;
+               var a = window.mkClct || [], i,o,b =window.g_tCltId || [],j;
                for(i = a.length; 0 <= --i;)
                    if((o = a[i].swf()) && "function" == typeof o.mkSubmit)o.mkSubmit();
+               for(j = b.length;0 <= j--;)
+               		fnGetTableData(b[j]);    
            };
         jQuery.fn.extend({
            getValue:(_t.getValue = function(s){
