@@ -596,7 +596,7 @@
     	};
     	window.validateTime = function(){
     	if(time != "" && time != null){
-	    		var noArr = time.split(":"),hour = eval(noArr[0]),min = eval(noArr[1]),sec = eval(noArr[2].split(".")[0]),ss = eval(noArr[2].split(".")[1]); 
+	    		var noArr=time.split(":"),hour=eval(noArr[0] ||"0" ),min=eval(noArr[1] || "0"),sec=noArr[2]||"0",ss=eval(sec.split(".")[1] || "0"),sec = eval(sec.split(".")[0] || "0"); 
 	    		if(hour >23){{msg = "输入的[小时]值无效，超出最大范围。";return false;}}
 	    		if(min > 59){{msg = "输入的[分钟]值无效，超出最大范围。";return false;}}
 	    		if(sec > 59){{msg = "输入的[秒钟]值无效，超出最大范围。";return false;}}
