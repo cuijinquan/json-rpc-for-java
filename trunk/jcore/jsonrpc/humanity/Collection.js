@@ -149,13 +149,13 @@
   addResize: function(szId)
   {
      if(40 > $("#" + szId + " div.x-grid3-scroller").height())return this;
-     var _t = this, b = $("#" + szId + " td[@class*='" + szId + "_hd_']");/* 标题部分的td，包含锁定、非锁定部分 */
+     var _t = this, b = $("#" + szId + " td[class*='" + szId + "_hd_']");/* 标题部分的td，包含锁定、非锁定部分 */
      _t.oCur = _t.getDom(szId); /* 当前操作的collection对象 */
      _t.onResize = function(szId)
      {
-         var a = $("#" + szId + " td[@class*='" + szId + "_fst_']").not(":hidden"), /* 通过第一行数据反向设置标题的宽度 */ 
-             w, o, o1,b = $("#" + szId + " td[@class*='" + szId + "_hd_']").not(":hidden"), /* 排除隐藏列的标题行td */
-             b1 = $("#" + szId + " td[@class*='" + szId + "_ft_']").not(":hidden"), i; /* 尾部行中的Td */
+         var a = $("#" + szId + " td[class*='" + szId + "_fst_']").not(":hidden"), /* 通过第一行数据反向设置标题的宽度 */ 
+             w, o, o1,b = $("#" + szId + " td[class*='" + szId + "_hd_']").not(":hidden"), /* 排除隐藏列的标题行td */
+             b1 = $("#" + szId + " td[class*='" + szId + "_ft_']").not(":hidden"), i; /* 尾部行中的Td */
          i = 0;
          if(0 < a.size())
          _t.atRsLkWidth(szId),b.each(function()
@@ -169,13 +169,13 @@
             o1 = $(a[i]);w = o1.width();
             if(3 < w)
               setTdw(o, w), b1.length > i && setTdw($(b1[i]), w),
-              setTdw($(o).find("div[@class*=x-grid3-hd-]"), w);
+              setTdw($(o).find("div[class*=x-grid3-hd-]"), w);
             i++;
          });
      };
      
      /* 滚动条图层宽度的设置 */
-     $("#" + szId + " div[@class=x-grid3-scroller]").each(function()
+     $("#" + szId + " div[class=x-grid3-scroller]").each(function()
      {
         w = $(this);
         if(_t.isSafari || _t.chrome)w.width("100%");
@@ -184,10 +184,10 @@
      {
         var o = $(this);
         $("#" + szId + "_scroll").attr("scrollTop", o.attr("scrollTop"));
-        $("#" + szId + " div[@class=x-grid3-header-inner]").attr("scrollLeft", o.attr("scrollLeft"));
+        $("#" + szId + " div[class=x-grid3-header-inner]").attr("scrollLeft", o.attr("scrollLeft"));
      });
      i = 0;
-     w = $("#" + szId + "_xh div[@class*=x-grid3-row][@id*=" + szId + "_R_]");
+     w = $("#" + szId + "_xh div[class*=x-grid3-row][id*=" + szId + "_R_]");
      i = 0;
      b.each(function()
      {
@@ -207,7 +207,7 @@
            {
               var o1 = _t.RsProxy.style, o2 = _t.RsMarker.style;
               o2.left = offset.left + "px", o1.left = (offset.left + w) + "px",
-              o1.height = o2.height = ($("#" + szId + " div[@class=x-grid3-scroller]").height() + o.height()) + "px",
+              o1.height = o2.height = ($("#" + szId + " div[class=x-grid3-scroller]").height() + o.height()) + "px",
               o1.top = o2.top = offset.top + "px", o1.display = o2.display = "block";
               _t.RsMarker["_x"] = e.screenX;
               $(document).bind("mouseup", function(e)
@@ -222,8 +222,8 @@
 		                 _t.oTd.css({width: w, cursor:"default"});
 		                 /* 远控设置style */
                          rpc.XuiRpc.setCollectionColWidth(szId, parseInt(/(\d+)$/g.exec(s[1])[1]) - 1, w);
-		                 $("#" + szId + " td[@class*=" + s[1] + "]").css({width: w}).find
-		                 ("[@class*=x-grid3-hd]").each(function()
+		                 $("#" + szId + " td[class*=" + s[1] + "]").css({width: w}).find
+		                 ("[class*=x-grid3-hd]").each(function()
 		                 {
 		                    if("TD" == this.nodeName || "DIV" == this.nodeName)
 		                    $(this).css({width: w});
@@ -319,8 +319,8 @@
   /* 导出 */
   clkExport:function(szId)
   {
-    var _t = this, o = $(_t.oCur = _t.getDom(szId)), oP = {all: o.find(":input:checked[@name=" + szId + "_Expt_all]").val(), 
-        type: o.find(":input[@name=" + szId + "_Expt_type]").val()}, 
+    var _t = this, o = $(_t.oCur = _t.getDom(szId)), oP = {all: o.find(":input:checked[name=" + szId + "_Expt_all]").val(), 
+        type: o.find(":input[name=" + szId + "_Expt_type]").val()}, 
         p = $(_t.p(_t.oCur, "FORM")), act = p.attr("action");
     p.attr("action", (contextPath || '') + "/Expt?XUIExportClctId=" + szId);
     p.submit();    
@@ -355,7 +355,7 @@
   {
     var _t = this, a = [], szId = _t.oCur.id,
        o2 = $(_t.clctSlctCols), i = 1;
-    $("#" + szId + " td[@class*=" + szId + "_hd_]").each(function()
+    $("#" + szId + " td[class*=" + szId + "_hd_]").each(function()
     {
        var o = $(this), s = o.attr("class");
        if(-1 < s.indexOf("-" + i))
@@ -421,8 +421,8 @@
      oI["xuiBlur"] = function()
      {
         var pall = $(fnG(oI)), bRst = false, szVal = pall.find(":input:first").val(), szErr = '',
-            oTds = $("#" + szClctId + " div." + szRcls + " td[@class*=x-grid3-td-]").not(".x-grid3-td-numberer"),
-            oHds = $("#" + szClctId + " td[@class*=" + szClctId + "_hd_]"),
+            oTds = $("#" + szClctId + " div." + szRcls + " td[class*=x-grid3-td-]").not(".x-grid3-td-numberer"),
+            oHds = $("#" + szClctId + " td[class*=" + szClctId + "_hd_]"),
             oParm = {}, aF = [], y = 0, oRst = null, 
             oDv = o.find(":first"), szOldvl = oDv.text();
         oDv.text(szVal);
@@ -519,11 +519,11 @@
     var _t = this, a = [], i = 0;
     
     /*将表格中的数据放入数组*/
-    oRows = $(_t.oCur).find("div[@class^=x-grid3-row R]");
+    oRows = $(_t.oCur).find("div[class^=x-grid3-row R]");
     oRows.each(function()
     {
       a[i] = [];
-      $(this).find("div[@class^=x-grid3-cell-inner x-grid3-col-]:not([@class$=x-grid3-col-numberer])").each(function()
+      $(this).find("div[class^=x-grid3-cell-inner x-grid3-col-]:not([class$=x-grid3-col-numberer])").each(function()
       {
         a[i].push(Base.trim($(this).text()));
       });
@@ -589,7 +589,7 @@
     oRows.each(function()
     {
       j = 0;
-      $(this).find("div[@class^=x-grid3-cell-inner x-grid3-col-]:not([@class$=x-grid3-col-numberer])").each(function()
+      $(this).find("div[class^=x-grid3-cell-inner x-grid3-col-]:not([class$=x-grid3-col-numberer])").each(function()
       {
         $(this).text(a[i][j]);
         j++;
@@ -649,7 +649,7 @@
      _t.RsMarker = _t.getDom("x-grid3-resize-marker");/* 前 */
      _t.RsProxy  = _t.getDom("x-grid3-resize-proxy"); /* 后 */
      $(_t.sortClct = _t.getDom("sortClct"))
-     .mousemove(_t.clearTm).mouseover(_t.clearTm).find("li[@class=x-menu-list-item]")
+     .mousemove(_t.clearTm).mouseover(_t.clearTm).find("li[class=x-menu-list-item]")
      .mouseover(function()
      {
        $(this).addClass('x-menu-item-active');

@@ -76,7 +76,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,ca
      var separator = szUrl &&  -1 < szUrl.indexOf("?") ? "&" : "?";
      szReqCode && (szUrl = contextPath + szUrl + separator + "reqCode=" + szReqCode) || (szUrl = contextPath + szUrl);  
    }
-   szData || (szData = ":input:not(:checkbox[@checked=false])");
+   szData || (szData = ":input:not(:checkbox[checked=false])");
    var _t = this;
    if(szReqCode)Base.setValue("reqCode", szReqCode);
    $(document).ready(function()
@@ -164,8 +164,8 @@ hideObj:function(szNameOrId)
      o.hide();
   else
   {
-     o = $(":input[@name=" + szNameOrId + "]");
-     if(0 == o.length)o = $(":input[@name=dto(" + szNameOrId + ")]");
+     o = $(":input[name=" + szNameOrId + "]");
+     if(0 == o.length)o = $(":input[name=dto(" + szNameOrId + ")]");
      if(0 < o.length)
      {
 	     o = Base.p(o[0], "DIV");o = Base.p(o, "DIV");
@@ -181,8 +181,8 @@ showObj:function(szNameOrId)
      o.show();
   else
   {
-     o = $(":input[@name=" + szNameOrId + "]");
-     if(0 == o.length)o = $(":input[@name=dto(" + szNameOrId + ")]");
+     o = $(":input[name=" + szNameOrId + "]");
+     if(0 == o.length)o = $(":input[name=dto(" + szNameOrId + ")]");
       if(0 < o.length)
       {
 	     o = Base.p(o[0], "DIV");o = Base.p(o, "DIV");
@@ -211,7 +211,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 },getAllInput:function(s)
 {
 	mkClctDt();
-   var a = [], _t = Base,o = $(s || ":input:not(:checkbox[@checked=false])"), ecd = _t.decodeStr;
+   var a = [], _t = Base,o = $(s || ":input:not(:checkbox[checked=false])"), ecd = _t.decodeStr;
    if(0 < o.size())
    o.each(function(){
       if ("checkbox" == this.type && false == this.checked)return true; //排除没有勾选的checkbox
@@ -617,7 +617,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
              }
              else
              {
-               if("undefined" == typeof o.length)o = $(":input:not(:checkbox[@checked=false])");
+               if("undefined" == typeof o.length)o = $(":input:not(:checkbox[checked=false])");
                if(o.length)
                try{
                  o.each(function()
@@ -865,8 +865,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
     o.postData && o.postData.each(function()
     {
        o1 = $(this.toString());
-       if(o1[0] && !o1[0].nodeName)o1 = $("#"+ this + " :input:not(:checkbox[@checked=false])");
-       if(o1[0] && !o1[0].nodeName)o1 = $(":input[@name=" + this + "]");
+       if(o1[0] && !o1[0].nodeName)o1 = $("#"+ this + " :input:not(:checkbox[checked=false])");
+       if(o1[0] && !o1[0].nodeName)o1 = $(":input[name=" + this + "]");
        if(o1 && 0 < o1.length)
        {
           o1.each(function()
