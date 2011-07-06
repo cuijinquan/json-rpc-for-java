@@ -159,7 +159,7 @@ fsubmit:function(n, oWin, bNLd)
       o = $("#"+s);
       if(0 < o.length)return o;
    }
-   return s;
+   return $(s);
 }, /* 隐藏指定名字或id的对象 */
 hideObj:function(szNameOrId)
 {
