@@ -149,12 +149,16 @@ fsubmit:function(n, oWin, bNLd)
     (oWin || window).document.forms[n || 0].submit();
 },getObj: function(s)
 {
-   var o = document.getElementsByName(s);
-   if(o && 0 < o.length)return $(Base.A(o));
-   o =  document.getElementsByName("dto(" + s + ")");
-   if(o && 0 < o.length)return $(Base.A(o));
-   o = $("#" + s);
-   if(0 < o.length)return o;
+   var o = null;
+   if("string" == typeof s)
+   {
+      o = document.getElementsByName(s);
+      if(o && 0 < o.length)return $(Base.A(o));
+      o =  document.getElementsByName("dto(" + s + ")");
+      if(o && 0 < o.length)return $(Base.A(o));
+      o = $("#"+s);
+      if(0 < o.length)return o;
+   }
    return s;
 }, /* 隐藏指定名字或id的对象 */
 hideObj:function(szNameOrId)
