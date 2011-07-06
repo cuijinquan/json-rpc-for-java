@@ -735,11 +735,11 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
   p:function(o,szTagName, n)
   {
     var i = 0;
-    while(o && i++ < (n || 500))
+    while(o && i++ < (n || 50))
     {
       if(o = o.parentNode)
       {
-        if("BODY" == o.nodeName)return null;
+        if(!o || "BODY" == o.nodeName || "HTML" == o.nodeName)return null;
         if(o.nodeName === szTagName)return o;
       }else break;
     }
