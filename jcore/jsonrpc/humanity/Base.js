@@ -150,6 +150,7 @@ fsubmit:function(n, oWin, bNLd)
 },getObj: function(s)
 {
    var o = null;
+   if(s == s.toString())s = s.toString();
    if("string" == typeof s)
    {
       o = document.getElementsByName(s);
