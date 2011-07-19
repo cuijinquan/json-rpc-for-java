@@ -413,7 +413,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
              {
                  oI = $(_t.getObj(s));
                  if("DIV" == oI.attr("nodeName"))
-                    oI = $(oI.find("input")[0]);
+                    oI = $(oI.find("input,textarea")[0]);
                  s1 = oI.val();
                  if("checkbox" == (szTp = $(oI[0]).attr("type")) && !oI.attr("checked"))
                      s1 = null;
@@ -449,7 +449,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                  var oIpt = $(_t.getObj(s)), szNm = $(oIpt[0]).attr("nodeName");
                  if("DIV" == szNm)
                  {
-                    oIpt=$(oIpt.find("input")[0]),szNm=$(oIpt[0]).attr("nodeName")
+                    oIpt=$(oIpt.find("input,textarea")[0]),szNm=$(oIpt[0]).attr("nodeName")
                  }
                  if("TEXTAREA" != szNm)
                  {
@@ -564,8 +564,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                    if(0 == o34.size())o34 = o1.find("label");
                    _t.insertHtml(o34[0],"AfterBegin","<b class=\"redStar\">*</b>");
                 }
-                o1.find("input:first").attr("isRequired","true");
-                if(o1.find("input")[1])o1.find("input").eq(1).attr("isRequired","true");
+                o1.find("input,textarea:first").attr("isRequired","true");
+                if(o1.find("input,textarea")[1])o1.find("input,textarea").eq(1).attr("isRequired","true");
              });
            }),
            delRedStar:(_t.delRedStar = function(s)
@@ -579,16 +579,16 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                   if(0 >=$(Base.getObj(a[i])).length)continue;
                   o = Base.getInputDiv(a[i]);// _t.getObj(a[i]).parent().parent();
                   o.find("b").remove();
-                  o.find("input:first").removeAttr("isRequired");
-                  if(o.find("input")[1])o.find("input").eq(1).removeAttr("isRequired");
+                  o.find("input,textarea:first").removeAttr("isRequired");
+                  if(o.find("input,textarea")[1])o.find("input,textarea").eq(1).removeAttr("isRequired");
                 }
              }
              else o.each(function()
              {
                 var o1 = Base.getInputDiv(this);// $(this).parent("div").parent("div");
                 o1.find("b").remove();
-                o1.find("input:first").removeAttr("isRequired");
-                if(o1.find("input")[1])o1.find("input").eq(1).removeAttr("isRequired");
+                o1.find("input,textarea:first").removeAttr("isRequired");
+                if(o1.find("input,textarea")[1])o1.find("input,textarea").eq(1).removeAttr("isRequired");
              });
            }),validateForm: (_t.validateForm = function(s,ids)
            {
