@@ -266,7 +266,8 @@
 	,onkeyup:function(e, oIpt){
 	    var s = oIpt.value;
 	    s = s.replace(/[^\d]/g, '');
-	    if(8 == s.length)DatePicker.convertIptDate(oIpt);
+	    if(8 == s.length){DatePicker.convertIptDate(oIpt);
+	    if(oIpt.onchange)oIpt.onchange(oIpt);}
 	}, /* 键盘事件处理 */
     onkeydown:function(e, oIpt)
    {
