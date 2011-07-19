@@ -553,8 +553,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
                       if(0 == o34.size())o34 = o.find("label");
                         _t.insertHtml(o34[0],"AfterBegin","<b class=\"redStar\">*</b>");
                   }
-                  o.find("input:first").attr("isRequired","true");
-                  if(o.find("input")[1])o.find("input").eq(1).attr("isRequired","true");
+                  o.find("input,textarea:first").attr("isRequired","true");
+                  if(o.find("input,textarea")[1])o.find("input,textarea").eq(1).attr("isRequired","true");
                 }}else o.each(function()
              {
                 var o1=_t.getInputDiv(this);
