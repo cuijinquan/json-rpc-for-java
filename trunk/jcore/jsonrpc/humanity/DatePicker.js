@@ -264,6 +264,9 @@
 	   window.bBoBq = true;fn();setTimeout(function(){window.bBoBq = false},13);
 	}/* 数据有效检查 */
 	,onkeyup:function(e, oIpt){
+	    var s = oIpt.value;
+	    s = s.replace(/[^\d]/g, '');
+	    if(8 == s.length)DatePicker.convertIptDate(oIpt);
 	}, /* 键盘事件处理 */
     onkeydown:function(e, oIpt)
    {
