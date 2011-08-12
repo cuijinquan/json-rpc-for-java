@@ -1276,16 +1276,12 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 	{if(!o)return;
 	if(this.bIE)
 	{
-	  var nS = document.body.scrollHeight;
+	  var nS = document.documentElement.scrollHeight, oD = $(oDiv);
 	  obj = o.getBoundingClientRect();
-	  oDiv.style.left = (obj.left + document.documentElement.scrollLeft) + "px";
-	  oDiv.style.top  = (obj.bottom + document.documentElement.scrollTop)+ "px";
-	  oDiv.style.width = (w || (obj.right - obj.left)) + "px";
-	  if(h)$(oDiv).height(h);
-	  oDiv.style.position = "absolute";
-	  oDiv.style.zIndex = 10000;
-	  oDiv.style.display = 'block';
-	  if(document.body.scrollHeight > nS)oDiv.style.top = (obj.bottom - $(o).height() - $(oDiv).height()) + "px";
+	  oD.css({left:(obj.left + document.documentElement.scrollLeft) + "px", top:(obj.bottom + document.documentElement.scrollTop)+ "px", width:(w || (obj.right - obj.left)) + "px"});
+	  if(h)oD.height(h);
+	  oD.css({position: "absolute",zIndex: 10000,display: 'block'});
+	  if(document.documentElement.scrollHeight > nS)oDiv.style.top = (obj.bottom - $(o).height() - oD.height()) + "px";
 	}else
 	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
