@@ -1278,10 +1278,10 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 	{
 	  var nS = document.documentElement.scrollHeight, oD = $(oDiv);
 	  obj = o.getBoundingClientRect();
-	  oD.css({left:(obj.left + document.documentElement.scrollLeft) + "px", top:(obj.bottom + document.documentElement.scrollTop)+ "px", width:(w || (obj.right - obj.left)) + "px"});
-	  if(h)oD.height(h);
+	  oD.css({left:(obj.left + document.documentElement.scrollLeft) + "px", top:(obj.bottom + document.documentElement.scrollTop + document.body.scrollTop)+ "px", width:(w || (obj.right - obj.left)) + "px"});
+	  if(h)oD.css({height:h + "px"});
 	  oD.css({position: "absolute",zIndex: 10000,display: 'block'});
-	  if(document.documentElement.scrollHeight > nS)oDiv.style.top = (obj.bottom - $(o).height() - oD.height()) + "px";
+	  if(document.documentElement.scrollHeight > nS)oDiv.style.top = (obj.bottom - $(o).height() - oD.height() + document.documentElement.scrollTop + document.body.scrollTop) + "px";
 	}else
 	{
 	  var oR = this.getOffset(o), style = oDiv.style, k, 
