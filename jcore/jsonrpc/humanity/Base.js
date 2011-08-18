@@ -81,7 +81,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,ca
    if(szReqCode)Base.setValue("reqCode", szReqCode);
    $(document).ready(function()
    {
-     var obj = szProperty && _t.getObj(szProperty) || $(document), szId;
+     var obj = $(szProperty && _t.getObj(szProperty) || $(document)), szId;
      obj.attr('id', szId = obj.attr('id') || szProperty);
      ("undefined" == typeof isAsync)&&(isAsync = !szDesId);
      if(!szReqCode && obj.attr('reqCode'))Base.setValue("reqCode", szReqCode = obj.attr('reqCode'));
@@ -110,6 +110,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,ca
                  szStyle = szStyle.substr(0, szStyle.indexOf('"'));
                }else szStyle = ""; 
           }
+          s=s.replace(/<!--[^\-]*-->/gmi,"").replace(/(^\s*)|(\s*$)/gmi,"");
           s = s.replace(/^\s*<div[^>]*>/mi, "");
           var nT = s.lastIndexOf("</div>");
           if(0 < nT)s = s.substr(0, nT);
@@ -196,9 +197,10 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 {
   var o, _t = this,s, argF = arguments[arguments.length - 1];
   $(document).ready(function(){
+     /* 注释setTimeout则异步刷新区域时表格的数据不会成功加载 */
      /*setTimeout(function(){*/
      o = szCollectionId.swf();
-      if(!o)return AjaxUpdateUi(szCollectionId,szReqCode,null,szData);
+      if(!o)return  AjaxUpdateUi(szCollectionId,szReqCode,null,szData);
       if($.isFunction(argF))
       {
          window[s = szCollectionId + "DataChgCbk"] = argF;
