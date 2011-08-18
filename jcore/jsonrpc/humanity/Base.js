@@ -201,7 +201,7 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
      /* 注释setTimeout则异步刷新区域时表格的数据不会成功加载 */
      /*setTimeout(function(){*/
      o = szCollectionId.swf();
-      if(!o)return  AjaxUpdateUi(szCollectionId,szReqCode,null,szData);
+      if(!o)return AjaxUpdateUi(szCollectionId,szReqCode,null,szData);
       if($.isFunction(argF))
       {
          window[s = szCollectionId + "DataChgCbk"] = argF;
