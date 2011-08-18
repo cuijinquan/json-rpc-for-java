@@ -110,6 +110,7 @@ AjaxUpdateUi: function(szProperty, szReqCode, szUrl, szData, szDesId, isAsync,ca
                  szStyle = szStyle.substr(0, szStyle.indexOf('"'));
                }else szStyle = ""; 
           }
+          /* 处理jsp中的注释 */
           s=s.replace(/<!--[^\-]*-->/gmi,"").replace(/(^\s*)|(\s*$)/gmi,"");
           s = s.replace(/^\s*<div[^>]*>/mi, "");
           var nT = s.lastIndexOf("</div>");
