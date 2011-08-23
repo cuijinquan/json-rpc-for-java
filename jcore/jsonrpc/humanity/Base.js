@@ -433,6 +433,13 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
               s2 = String(s2);
               s2=("undefined" == typeof s2 ? "" : s2);
               window.bBoBq = true;
+              var n, fnMl = function(s,o)
+              {
+                  s = String(s); 
+                  n = o.attr("maxlength") || 999999;
+                  if(s.length > n)s = s.substr(0, n);
+                  return s;
+              };
               if(2 == arguments.length)
               {
                  s2 || (s2 = "");
@@ -472,11 +479,11 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
 	                         oIpt.each(function(){
 	                             if(this.value == s2)this.checked = true,(this.name + "__").setValue(s2);
 	                         });
-	                     else oIpt.val(s2);
+	                     else oIpt.val(fnMl(s2, oIpt));
 	                 }
-                 }else oIpt.val(s2);
+                 }else oIpt.val(fnMl(s2, oIpt));
               }
-              else this.val(s || "");
+              else this.val(fnMl(s || "", this));
               window.bBoBq = false;
            }),
            setFocus:(_t.setFocus = function(s){
