@@ -486,7 +486,7 @@
 		  else s = new Date(), _t.setDate(s.getFullYear(), s.getMonth() + 1, s.getDate());
 		  _t.updataTBody();
 		  if(!(o.readOnly || o.disabled))
-		     _t.showDiv(o, oDiv, 173,244, 0);
+		     _t.showDiv(o, oDiv, 173,188, 0);
 		   _t.validateIptDateTime(o);
 		  });
 		  window.bBoBq = false;
