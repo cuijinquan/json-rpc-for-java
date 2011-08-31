@@ -11,7 +11,7 @@
 	  var _o=o.find("#buttons");_o.css({"background-position":"1px","margin-top":"10px","margin-right":(o.width()-_o.width())/2});
 	  _o.find(".z-btn").css({"margin-right":"10px"});
 	  //处理文本框过滤
-	  var colsArr = eval($(o.find(".x-hide-display")[0]).text()),s="";
+	  var colsArr=eval(top.fnUnBase64Gzip($(o.find(".x-hide-display")[0]).text())),s="";
 	  for(i = 0;i<colsArr.length;i++){
 	  	s+=colsArr[i]["name"]+",";
 	  }
