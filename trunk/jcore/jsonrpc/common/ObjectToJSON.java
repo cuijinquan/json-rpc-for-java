@@ -126,11 +126,15 @@ public class ObjectToJSON implements Serializable{
 			// 数组的处理
 			Pattern pSz = Pattern.compile("^\\[L.+$");
 			
+			if(null == o)
+				return buf.append("null").toString();
 			// 特殊对象的处理
-			if(szClassName.equals("java.lang.String"))
+			else if(szClassName.equals("java.lang.String"))
 				return buf.append(quote(o.toString(), bJh)).toString();
 			else if(szClassName.equals("java.lang.Object"))
+			{
 				return buf.append(quote(o.toString(), bJh)).toString();
+			}
 			else if(szClassName.equals("java.util.Date") || szClassName.equals("java.sql.Date") || szClassName.equals("java.sql.Timestamp"))
 			{
 				Timestamp tstp = null;
@@ -227,8 +231,9 @@ public class ObjectToJSON implements Serializable{
     	    	    buf.append(new ObjectToJSON(tmp09[0], brige).setBJh(bJh).toJSON(null));
 	    	    	for(int j = 1; j < tmp09.length; j++)
 	    	    	{
-	    	    		if(null != tmp09[j])
-	    	    			buf.append(",").append(new ObjectToJSON(tmp09[j], brige).setBJh(bJh).toJSON(null));
+    	    			if(null == tmp09[j])
+    	    				buf.append(",null");
+    	    			else buf.append(",").append(new ObjectToJSON(tmp09[j], brige).setBJh(bJh).toJSON(null));
 	    	    	}
     	    	}
     	    	return "[" + buf.append("]").toString();
@@ -416,7 +421,7 @@ public class ObjectToJSON implements Serializable{
 						    else
 						    {
 						    	// 防止使用者不知情的情况下注册一个非实例化的class文件导致堆栈溢出
-						    	if("sun.reflect.ReflectionFactory".equals(oValue.getClass().getName()) )// || -1 == oValue.getClass().getName().indexOf("java.lang."))
+						    	if(null == oValue || "sun.reflect.ReflectionFactory".equals(oValue.getClass().getName()) )// || -1 == oValue.getClass().getName().indexOf("java.lang."))
 						    		buf.append("null");
 						    	else
 						    		buf.append(new ObjectToJSON(oValue, brige).setBJh(bJh).toJSON(null));
