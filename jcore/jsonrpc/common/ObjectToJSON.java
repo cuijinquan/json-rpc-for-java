@@ -112,6 +112,8 @@ public class ObjectToJSON implements Serializable{
 	 */
 	public String toJSON(String szObjName)
 	{
+		if(null == o)
+			return "null";
 		StringBuffer buf = new StringBuffer();
 		// 简单类型模式
 		String szSimpleTypeReg = "^(boolean|char|byte|short|int|long|float|double)$";
@@ -119,17 +121,15 @@ public class ObjectToJSON implements Serializable{
 		Pattern p = Pattern.compile(szSimpleTypeReg);
 		Pattern pa = Pattern.compile(szSimpleArrTypeReg); 
 		int nPos = 0;
+		
 		try
 		{
 			Class c = o.getClass();
 			String szClassName = c.getName();
 			// 数组的处理
 			Pattern pSz = Pattern.compile("^\\[L.+$");
-			
-			if(null == o)
-				return buf.append("null").toString();
 			// 特殊对象的处理
-			else if(szClassName.equals("java.lang.String"))
+			if(szClassName.equals("java.lang.String"))
 				return buf.append(quote(o.toString(), bJh)).toString();
 			else if(szClassName.equals("java.lang.Object"))
 			{
