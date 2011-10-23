@@ -196,15 +196,11 @@ showObj:function(szNameOrId)
 ,/* 传递Xpath szData指定的数据，并更新flash区域的查询 */
 doUpdateCollection:function(szCollectionId, szData, szReqCode)
 {
-  var o, _t = this,s, argF = arguments[arguments.length - 1];/*
-  if(window[XTDataGrid])
-  {
-      o = XTDataGrid.getXTDataGrid(szCollectionId);
-      if(o)
-      {
-         ;
-      }
-  }*/
+  var o, _t = this,s, argF = arguments[arguments.length - 1];
+  try{
+     if(window["XTDataGrid"] && (o = XTDataGrid.getXTDataGrid(szCollectionId)))
+         return Base.AjaxUpdateUi(szCollectionId, szReqCode || o.opt.reqCode);
+  }catch(e){alert(e.message)}
   $(document).ready(function(){
      /* 注释setTimeout则异步刷新区域时表格的数据不会成功加载 */
      /*setTimeout(function(){*/
