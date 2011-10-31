@@ -80,11 +80,10 @@ public class LoadJsObj extends JsonRpcObject implements IJsonRpcObject, Serializ
 				// String s = buf.toString().trim();
 //				s = Content.JS(s);
 //				s = s.replaceFirst("^\\\\ufeff", "");
+			    
 				s = s.replaceAll("\\t", "");
-				s = s.replaceAll("}\\s*", "}");
 				s = s.replaceAll("\\s*=\\s*", "=");
 				s = s.replaceAll("\\s*,\\s*", ",");
-				s = s.replaceAll("\\s*\\+\\s*", "+");
 				s = s.replaceAll("\\/\\*[^\\r\\n\\*\\/]*\\*\\/", "");
 				s = s.replaceAll("\\/\\/[^\\r\\n]\\n", "\\n");
 				oRst.setResult(s);
