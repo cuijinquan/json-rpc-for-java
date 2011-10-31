@@ -72,9 +72,9 @@
     for(i = 0; i < a.length; i++)
     {
       o = a[i];
-      a1.push("<tr data='" + $.toJSON(o) + "' class=cursor");<%if(Const.noLockPage){%>
-      if(1 == i % 2)a1.push(" style=\"background-color:<%=Const.slctRowBgColor2%>\"");
-      <%}%>a1.push(" onclick=\"Select.onSelect(event, this)\" onmouseover=\"return Select.lightRow(this.rowIndex,true,event)\"\">");
+      a1.push("<tr data='" + $.toJSON(o) + "' class=cursor");
+      if(noLockPage && 1 == i % 2)a1.push(" style=\"background-color" + slctRowBgColor2 + ":\"");
+      a1.push(" onclick=\"Select.onSelect(event, this)\" onmouseover=\"return Select.lightRow(this.rowIndex,true,event)\"\">");
       var szK1 = String((_t.descObj || oE || {value:''}).value || "").trim().replace(/([()\|\$\.\\])/g,"\\\1"), reg9 = new RegExp("(" + szK1 + ")", "gmi"), fnTrpc = function(s89){
          if(0 == szK1.length)return s89;
          s89 || (s89 = "");
@@ -112,9 +112,9 @@
      else if(descObj && inputObj)
         inputObj.value = descObj.value = s;
       if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "";
-     if(e)this.preventDefault(e), this.stopPropagation(e);<%if(Const.noLockPage){%>
-     if(0 == String(descObj.value).trim().length)descObj.value = "<%=Const.pleaseSelect%>";
-     <%}%>return this;
+     if(e)this.preventDefault(e), this.stopPropagation(e);
+     if(noLockPage && 0 == String(descObj.value).trim().length)descObj.value = pleaseSelect;
+     return this;
   },/* 通过value获得描述 */
   getDescByValue:function(s,o){
       o || (o = this.descObj.id);
@@ -217,10 +217,9 @@
    	 if(null == obj.displayWidth)obj.displayWidth = obj.clientWidth;
    	 /*if(0 < this.getData(this.descObj.id).length) 没有数据也显示图层，表示是下拉只是没有数据 */
        this.showDiv(this.p(this.descObj, "DIV"), this.SelectDiv, 
-         parseInt(obj.displayWidth, 10), 150);<%
-  if(Const.noLockPage){
-  %>this.fnResize();<%}
-  %>},/* 使得中心fn的过程中不触发oninput */
+         parseInt(obj.displayWidth, 10), 150);
+      if(noLockPage) this.fnResize();
+  },/* 使得中心fn的过程中不触发oninput */
 	fnNoInput:function(fn){
 	  var _t = this;
 	   window.bBoBq = true;fn();setTimeout(function(){window.bBoBq = false},13);
@@ -351,30 +350,31 @@
                     _t.descObj.value = _t.inputObj.value = '';
               }
               if("" == _t.descObj.value && !bEdit)_t.inputObj.value = "";
-              o["_blur_"]=true,_t.hiddenSelectDiv();<%
-              if(Const.noLockPage){
-                  %>if(0 == String(_t.descObj.value).trim().length)_t.descObj.value = "<%=Const.pleaseSelect%>";<%
-              }%>window.bBoBq = false;
+              o["_blur_"]=true,_t.hiddenSelectDiv();
+              if(noLockPage && 0 == String(_t.descObj.value).trim().length)_t.descObj.value = pleaseSelect;
+              window.bBoBq = false;
            });
     }
     _t.updata(oE.value);
      o.innerHTML=_t.getSelectDataStr(oE,w)
-     <%if(Const.noLockPage){%>if(o.innerHTML){<%}%>
-    if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"]=0);
-    var nTm=new Date().getTime();
-    window.hdAll.start();
-    _t.show();
-    /*高度计算*/<%if(Const.noLockPage){%>}<%}%>
+    if(o.innerHTML)
+    {
+        if(this.bHvRplc)this.lightRow(this.SelectDiv["_lstNum"]=0);
+        var nTm=new Date().getTime();
+        window.hdAll.start();
+        _t.show();
+    }
+    /*高度计算*/
     e && this.stopPropagation(e),this.preventDefault(e);
     });    
   },
-   fnResize:function(){<%
-  if(Const.noLockPage){
-  %>var oDiv = $("#_Xui_SelectDiv"), oT = $(oDiv.find("table")[0]), n;
-  if((n = oT.height()) < parseInt('<%=Const.slctHeight%>'))oDiv.height(n + 'px');
-  oDiv.width($(oDiv.find("table")[0]).width());<%
-  }
-  %>},/* 隐藏图层的方法 */
+   fnResize:function(){
+    if(noLockPage){
+      var oDiv = $("#_Xui_SelectDiv"), oT = $(oDiv.find("table")[0]), n;
+      if((n = oT.height()) < parseInt(slctHeight))oDiv.height(n + 'px');
+      oDiv.width($(oDiv.find("table")[0]).width());
+    }
+  },/* 隐藏图层的方法 */
   hiddenSelectDiv:function()
   {
     var _t = Select, o = _t.SelectDiv;
