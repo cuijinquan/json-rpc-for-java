@@ -308,7 +308,8 @@ doUpdateCollection:function(szCollectionId, szData, szReqCode)
          var o = {type:1, message:String(s)};
          if(fn)o.okScript = fn;if(fn1)o.errScript = fn1;
          return Base.PopMsgWin(o);
-      };window.opn = window.open;
+      };
+      window.opn = window.open;
       window.open = function(s, t,p)
       {
           var i,a = (p||"").toLowerCase().replace(/\s/g, '').split(","), b, g = "=", u = s.split(/\?/);
