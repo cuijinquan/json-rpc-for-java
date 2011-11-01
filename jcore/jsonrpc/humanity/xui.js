@@ -1506,7 +1506,7 @@ function outSwf(szId, height, szSwfName, isIE, flashVars,ver)
 		c = Base.getDom(szId);
 		b = c.getElementsByTagName("div");
 		if(0 < b.length)c = b[b.length - 1];
-		c.insertAdjacentHTML("afterBegin", a.join(""));
+		$(c).insertBefore($(a.join("")));
 }
 /* 功能描述：增加判断指定区域输入对象是否已经输入值,s是指定区域的id，如果不为真则判断整个form */
 /* 返回信息：有输入返回true, 否则返回false */
