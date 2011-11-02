@@ -9,7 +9,7 @@
 function XTDataGrid(options)
 {
     var ext =   XTDataGrid.extend;
-    if("undefined" === typeof window.XtZPS)window.XtZPS = new XtZPStream(window['contextPath'] || "", "/");
+    if(g_myTPWin && !g_myTPWin.frames["topFrame"].XtZPS && "undefined" === typeof window.XtZPS)window.XtZPS = new XtZPStream(window['contextPath'] || "", "/");
     
     ext(ext(this.opt = {}, this.getOpt()), options || {});
     this.id = "string" === typeof this.opt.container ? this.opt.container : "";
