@@ -305,7 +305,9 @@ var rpc = JsonRpcClient(), XUI = function () {
 		}
 	}
 	return p;
-};window.onerror=document.documentElement.oncontextmenu=function(){var s = window.event.srcElement.nodeName;if("INPUT" == s || "TEXTAREA" == s)return true;return "undefined" == typeof g_bMenu? false: g_bMenu};
+};var fnEC = function(event){var s = event.target.nodeName;if("INPUT" == s || "TEXTAREA" == s)return true;return "undefined" == typeof g_bMenu? false: g_bMenu};
+$(window).bind("error",fnEC);
+$(document.documentElement).bind("contextmenu",fnEC);
 top.g_myTPWin = window.g_myTPWin = top.g_myTPWin || fnGetPWin();
 try{if(!noPrint){
 top.printWin = window.printWin = top.printWin  || (top.g_myTPWin.printWin || top.printWin || g_myTPWin.frames["prtFrm"]);
@@ -919,8 +921,8 @@ function fnAct()
 }
 $(document).keydown(fnAct).mousemove(fnAct);
 /* maxlength的统一检查，主要是对汉字长度的检查 */
-$(document).click(function(e){
-	var o = window.event.srcElement;
+$(document).click(function(event){
+	var o = event.target;
 	if(o.type && o.readOnly && (o.type == "text" || o.type == "textarea"))window.clipboardData.setData("text",o.value);
 }).keydown(function(e){
 if(e && 8 == e.keyCode)
@@ -1311,45 +1313,44 @@ function fnHidMask()
 }
 if(!noLockPage){
 /*输入长度提示*/
-/*输入长度提示*/
 var oPB = null;
 if("function"==typeof $)
 {
 	$(document).ready(function(){
-	document.onkeyup = function()
-	{
-	 if(!oPB)
-	 {
-		 oPB = document.createElement("div");
-		oPB.id="g_oPopWin";
-		oPB.style.display="none";
-		if(document.body)document.body.appendChild(oPB),
-		oPB.style.backgroundColor="lightyellow",
-		oPB.style.border="1px solid #000000",
-		oPB.style.position="absolute",
-		oPB.style.fontSize="9pt",
-		oPB.style.overflow = "visible",
-		oPB.style.width="25px";
-		oPB.style.zIndex = 99999999;
-	 }
-	 var e = window.event,o = e.target || e.srcElement;
-	 if(13 == e.keyCode || e.repeat)
-	    return $(oPB).hide(),false;
-	 if(o.type && -1 < "text,textarea".indexOf(o.type) && 0 < o.value.length && !o.readOnly)
-	 {
-	        var r=document.selection.createRange();
-	        var oTmp=r.getBoundingClientRect();
-	        var nHeight=oTmp.bottom - oTmp.top;
-	        var nW=20;
-	        var nL=oTmp.right;
-	        nHeight=18 < nHeight ? 15 : nHeight;
-	        oPB.style.left=nL;
-	        oPB.style.top=oTmp.bottom - 2 * nHeight + $(document).scrollTop();
-	        if(oPB.innerHTML != o.value.length)oPB.innerHTML=String(o.value).replace(/[^\u00-\uff\-: \.a-zA-Z0-9]/gm,"dd").length;          
-	        $(oPB).show();
-	 }
-	 else $(oPB).hide();
-	}
+			$(document).keyup(function(e)
+			{
+					 if(!oPB)
+					 {
+						 oPB = document.createElement("div");
+						oPB.id="g_oPopWin";
+						oPB.style.display="none";
+						if(document.body)document.body.appendChild(oPB),
+						oPB.style.backgroundColor="lightyellow",
+						oPB.style.border="1px solid #000000",
+						oPB.style.position="absolute",
+						oPB.style.fontSize="9pt",
+						oPB.style.overflow = "visible",
+						oPB.style.width="25px";
+						oPB.style.zIndex = 99999999;
+					 }
+					 var o = e.target || e.srcElement;
+					 if(13 == e.keyCode || e.repeat)
+					    return $(oPB).hide(),false;
+					 if(o.type && -1 < "text,textarea".indexOf(o.type) && 0 < o.value.length && !o.readOnly)
+					 {
+					        var r=document.selection.createRange();
+					        var oTmp=r.getBoundingClientRect();
+					        var nHeight=oTmp.bottom - oTmp.top;
+					        var nW=20;
+					        var nL=oTmp.right;
+					        nHeight=18 < nHeight ? 15 : nHeight;
+					        oPB.style.left=nL;
+					        oPB.style.top=oTmp.bottom - 2 * nHeight + $(document).scrollTop();
+					        if(oPB.innerHTML != o.value.length)oPB.innerHTML=String(o.value).replace(/[^\u00-\uff\-: \.a-zA-Z0-9]/gm,"dd").length;          
+					        $(oPB).show();
+					 }
+					 else $(oPB).hide();
+			});
 	});
 }
 window.onblur = function()
@@ -6239,9 +6240,12 @@ i+=j?(n.w||d.w)+(n.k&&n.k[h[j]]||0):0;r&&r.d&&g[F](this.path(r.d).attr({fill:"#0
 				    $(this).removeClass("button1").addClass("button");
 				  }
 				); 
-				var o = this, oR = o.createTextRange();
-		        if(0 < oR.boundingWidth)o.style.width = oR.boundingWidth + 12;
-	            oR = null;
+				if(this.createTextRange)
+				{
+				    var o = this, oR = o.createTextRange();
+		            if(0 < oR.boundingWidth)o.style.width = oR.boundingWidth + 12;
+	                oR = null;
+	            }
             }
 			else $(this).removeAttr("class").btn().init();
 		});/*
